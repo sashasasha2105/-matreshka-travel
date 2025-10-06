@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Демо: Интерактивная Карта с Карточками 2ГИС</title>
+    <link rel="stylesheet" href="maps/maps2gis_new.css">
+    <link rel="stylesheet" href="maps/organization_card.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+        }
+        .demo-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .demo-header h1 {
+            margin: 0;
+        }
+        #demoMapContainer {
+            width: 100%;
+            height: calc(100vh - 80px);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>🗺️ Демо: Интерактивная Карта 2ГИС Москва</h1>
+        <p>Введите в поиск "кафе", "ресторан" или "музей" и кликайте по маркерам!</p>
+    </div>
+
+    <div id="demoMapContainer"></div>
+
+    <!-- MapGL API -->
+    <script src="https://mapgl.2gis.com/api/js/v1"></script>
+
+    <!-- Наши модули -->
+    <script src="maps/organization_card.js"></script>
+    <script src="maps/maps2gis_new.js"></script>
+
+    <script>
+        // Данные Москвы
+        const moscowData = {
+            id: 'moscow',
+            name: 'Москва',
+            attractions: []
+        };
+
+        // Инициализация при загрузке
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 Запуск демо карты');
+
+            if (!window.matryoshka2GIS) {
+                console.error('❌ Модуль карт не загружен');
+                document.getElementById('demoMapContainer').innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white;">
+                        <div style="text-align: center;">
+                            <h2>❌ Ошибка загрузки модуля карт</h2>
+                            <p>Проверьте консоль браузера</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                // Создаем карту
+                await window.matryoshka2GIS.createMap(moscowData, 'demoMapContainer');
+                console.log('✅ Карта успешно создана!');
+                console.log('💡 Введите "кафе" в поиск и нажмите Enter');
+            } catch (error) {
+                console.error('❌ Ошибка создания карты:', error);
+                document.getElementById('demoMapContainer').innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: white;">
+                        <div style="text-align: center;">
+                            <h2>❌ Ошибка создания карты</h2>
+                            <p>${error.message}</p>
+                            <pre style="background: rgba(0,0,0,0.5); padding: 20px; border-radius: 8px; text-align: left; overflow: auto;">
+${error.stack}
+                            </pre>
+                        </div>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

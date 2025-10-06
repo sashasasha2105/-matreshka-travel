@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Матрешка - Путешествуй по России</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="profile/profile.css">
+    <link rel="stylesheet" href="qr/qr.css">
+    <link rel="stylesheet" href="maps/maps2gis_new.css">
+    <link rel="stylesheet" href="maps/organization_card.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Главная страница с регионами -->
+        <div id="mainSection">
+            <div class="hero-section">
+                <!-- 3D-модель — чистая, без интерфейса -->
+                <div class="hero-model-container">
+                    <iframe
+                        src="https://sketchfab.com/models/1a34ab2a901c47fa9dd753ebfe97bbed/embed?autostart=1&preload=1&ui_infos=0&ui_stop=0&ui_inspector=0&ui_settings=0&ui_help=0&ui_annotations=0&ui_vr=0&ui_fullscreen=0&ui_watermark=0&ui_controls=0&ui_ar=0&ui_color=transparent&camera=0&transparent=1&autospin=0.2"
+                        frameborder="0"
+                        allow="autoplay; fullscreen; xr-spatial-tracking"
+                        allowfullscreen
+                        mozallowfullscreen="true"
+                        webkitallowfullscreen="true"
+                        loading="eager"
+                    ></iframe>
+                </div>
+
+                <div class="hero-overlay">
+                    <div class="header-row">
+                        <div class="logo-container">
+                            <div class="matryoshka-logo">🪆</div>
+                            <div class="matryoshka-name">Матрешка</div>
+                        </div>
+                        <div class="user-profile-btn" onclick="showProfile()">
+                            <div class="profile-icon">👤</div>
+                            <span>Профиль</span>
+                        </div>
+                    </div>
+                    <h1 class="hero-title">Исследуйте Россию<br>вместе с Матрешкой</h1>
+                    <p class="hero-subtitle">Откройте для себя красоту и разнообразие нашей великой страны</p>
+                    <button class="generate-btn" disabled>
+                        <span class="btn-icon">✨</span>
+                        <span class="btn-text">Сгенерировать путешествие</span>
+                        <span class="btn-subtext">по предпочтениям</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Поиск регионов -->
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="search-icon">🔍</div>
+                    <input
+                        type="text"
+                        id="regionSearch"
+                        class="search-input"
+                        placeholder="Найти регион или город..."
+                        oninput="searchRegions(this.value)"
+                    >
+                    <button class="search-clear" onclick="clearSearch()" style="display: none;">✕</button>
+                </div>
+            </div>
+
+            <div class="regions-grid" id="regionsGrid">
+                <!-- Регионы будут загружены здесь -->
+            </div>
+
+            <!-- Готовые пакеты путешествий -->
+            <div class="packages-section">
+                <h2 class="packages-title">
+                    <span class="packages-icon">🎁</span>
+                    Готовые пакеты путешествий
+                    <span class="packages-subtitle">Выбирайте и путешествуйте</span>
+                </h2>
+                <div class="packages-grid" id="packagesGrid">
+                    <!-- Пакеты будут загружены здесь -->
+                </div>
+            </div>
+
+            <!-- Лента путешествий -->
+            <div class="travel-feed-section">
+                <h2 class="feed-title">
+                    <span class="feed-icon">🌟</span>
+                    Лента путешествий
+                    <span class="feed-subtitle">Делимся впечатлениями</span>
+                </h2>
+                <div class="travel-feed" id="travelFeed">
+                    <!-- Публикации будут загружены здесь -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Детали региона -->
+        <div id="regionDetails" class="region-details">
+            <button id="backBtn" class="back-btn">
+                ← Назад
+            </button>
+
+            <div class="region-header">
+                <div class="region-title" id="regionTitle">Загрузка...</div>
+                <div class="region-subtitle" id="regionDescription">Загрузка описания...</div>
+            </div>
+
+            <div class="region-image-container">
+                <img id="regionImage" src="" alt="Фото региона" class="region-image">
+            </div>
+
+            <div class="section">
+                <h2 class="section-title"><span>ℹ️</span> О регионе</h2>
+                <div class="section-content">
+                    <p id="regionAbout" class="region-about">Загрузка информации...</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title"><span>🏛️</span> Достопримечательности</h2>
+                <div class="section-content">
+                    <ul id="attractionsList" class="attractions-list">
+                        <!-- Достопримечательности будут загружены здесь -->
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title"><span>🍽️</span> Партнеры</h2>
+                <div class="section-content">
+                    <div id="partnersGrid" class="partners-grid">
+                        <!-- Партнеры будут загружены здесь -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title"><span>🗺️</span> Карта города</h2>
+                <div class="section-content">
+                    <div id="mapContainer" class="map-container">
+                        <div class="map-placeholder">
+                            <p class="map-text">Дальнейшая интеграция Y.api</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Профиль -->
+        <div id="profileSection" class="profile-section" style="display: none;">
+            <button id="profileBackBtn" class="back-btn">
+                ← Назад
+            </button>
+
+            <div class="profile-content">
+                <!-- Сюда загрузится профиль -->
+            </div>
+        </div>
+
+        <!-- Лоадер -->
+        <div id="loader" class="loader">
+            <div class="loader-spinner"></div>
+            <div id="loaderText" class="loader-text">Загрузка...</div>
+        </div>
+
+        <div class="footer">
+            © 2025 Матрешка — Путешествуй по России 🇷🇺
+        </div>
+    </div>
+
+    <script>
+        // Имитация глобальной функции addToGlobalFeed
+        function addToGlobalFeed(travel) {
+            console.log('🌟 Путешествие добавлено в ленту:', travel);
+        }
+
+        // Функция очистки поиска
+        function clearSearch() {
+            const searchInput = document.getElementById('regionSearch');
+            const clearBtn = document.querySelector('.search-clear');
+            searchInput.value = '';
+            clearBtn.style.display = 'none';
+            searchRegions('');
+        }
+
+        // Обновляем отображение кнопки очистки при вводе
+        function updateSearchUI() {
+            const searchInput = document.getElementById('regionSearch');
+            const clearBtn = document.querySelector('.search-clear');
+            if (searchInput.value.trim()) {
+                clearBtn.style.display = 'block';
+            } else {
+                clearBtn.style.display = 'none';
+            }
+        }
+
+        // Добавляем слушатель для отображения кнопки очистки
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('regionSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', updateSearchUI);
+            }
+        });
+    </script>
+    <!-- Подключаем официальный MapGL API -->
+    <script src="https://mapgl.2gis.com/api/js/v1"></script>
+
+    <!-- Сначала загружаем данные -->
+    <script src="data/regions.js"></script>
+    <script src="data/packages.js"></script>
+
+    <!-- Потом модули -->
+    <script src="qr/qr.js"></script>
+    <script src="maps/organization_card.js"></script>
+    <script src="maps/maps2gis_new.js"></script>
+
+    <!-- Основная логика -->
+    <script src="script.js"></script>
+    <script src="packages.js"></script>
+    <script src="profile/profile.js"></script>
+    <script src="profile/avatar_fix.js"></script>
+</body>
+</html>

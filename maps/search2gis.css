@@ -1,0 +1,480 @@
+/**
+ * 🔍 Стили для поиска заведений и отзывов 2GIS
+ */
+
+/* === ПОИСКОВАЯ ПАНЕЛЬ === */
+.search-panel {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 204, 0, 0.2);
+    box-shadow:
+        0 8px 32px rgba(0,0,0,0.15),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+}
+
+.search-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 16px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.search-form {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    min-width: 200px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.search-input::placeholder {
+    color: rgba(255,255,255,0.6);
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: rgba(255, 204, 0, 0.5);
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+}
+
+.city-select {
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    min-width: 120px;
+}
+
+.city-select:focus {
+    outline: none;
+    border-color: rgba(255, 204, 0, 0.5);
+    box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+}
+
+.city-select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+.search-btn {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #ffcc00, #ff8e53);
+    border: none;
+    border-radius: 12px;
+    color: #1a1a2e;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow:
+        0 4px 16px rgba(255, 204, 0, 0.3),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 8px 24px rgba(255, 204, 0, 0.4),
+        inset 0 1px 0 rgba(255,255,255,0.3);
+}
+
+.search-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* === РЕЗУЛЬТАТЫ ПОИСКА === */
+.search-results {
+    margin-bottom: 20px;
+}
+
+.results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.results-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.results-count {
+    color: #ffcc00;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.results-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.results-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.results-list::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+}
+
+.results-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 204, 0, 0.5);
+    border-radius: 3px;
+}
+
+.result-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.result-item:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: rgba(255, 204, 0, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.result-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.result-type {
+    font-size: 0.85rem;
+    color: #ffcc00;
+    margin-bottom: 8px;
+}
+
+.result-address {
+    font-size: 0.9rem;
+    color: #d0d0d0;
+    margin-bottom: 8px;
+}
+
+.result-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.rating-stars {
+    color: #ffcc00;
+    font-size: 0.9rem;
+}
+
+.rating-value {
+    color: #fff;
+    font-weight: 600;
+}
+
+.rating-count {
+    color: #999;
+}
+
+/* === МАРКЕРЫ ЗАВЕДЕНИЙ === */
+.place-marker {
+    position: relative;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.place-marker-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #ff8e53, #ffcc00);
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 2px solid #fff;
+    box-shadow:
+        0 3px 12px rgba(255, 142, 83, 0.4),
+        0 0 15px rgba(255, 142, 83, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.place-marker-icon:hover {
+    transform: rotate(-45deg) scale(1.15);
+    box-shadow:
+        0 6px 20px rgba(255, 142, 83, 0.6),
+        0 0 25px rgba(255, 142, 83, 0.3);
+}
+
+.place-marker .marker-number {
+    color: #1a1a2e;
+    font-weight: 700;
+    font-size: 14px;
+    transform: rotate(45deg);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+/* === ПОПАПЫ ЗАВЕДЕНИЙ === */
+.place-popup {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.98), rgba(22, 33, 62, 0.98));
+    border-radius: 16px;
+    min-width: 350px;
+    max-width: 450px;
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    box-shadow:
+        0 16px 48px rgba(0,0,0,0.4),
+        0 8px 24px rgba(255, 204, 0, 0.2),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+}
+
+.place-info {
+    padding: 20px 20px 16px 20px;
+}
+
+.place-type {
+    font-size: 0.9rem;
+    color: #ffcc00;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.place-address {
+    font-size: 0.95rem;
+    color: #d0d0d0;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.place-address::before {
+    content: '📍';
+    font-size: 0.8rem;
+}
+
+.place-rating {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(255, 204, 0, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 204, 0, 0.1);
+}
+
+.rating-stars {
+    font-size: 1.1rem;
+}
+
+.rating-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffcc00;
+}
+
+.rating-count {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+/* === ОТЗЫВЫ === */
+.place-reviews {
+    padding: 0 20px 20px 20px;
+}
+
+.reviews-loading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #d0d0d0;
+    font-size: 0.9rem;
+    padding: 16px;
+    text-align: center;
+    justify-content: center;
+}
+
+.reviews-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 204, 0, 0.2);
+    border-top: 2px solid #ffcc00;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.reviews-header {
+    margin-bottom: 12px;
+}
+
+.reviews-header h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.reviews-list {
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.reviews-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.reviews-list::-webkit-scrollbar-track {
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+}
+
+.reviews-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 204, 0, 0.5);
+    border-radius: 2px;
+}
+
+.review-item {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.review-item:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.review-author {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.review-rating {
+    font-size: 0.8rem;
+    color: #ffcc00;
+}
+
+.review-text {
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.review-date {
+    font-size: 0.8rem;
+    color: #999;
+    text-align: right;
+}
+
+.no-reviews {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: #999;
+    font-size: 0.9rem;
+    padding: 20px;
+    text-align: center;
+}
+
+.no-reviews-icon {
+    font-size: 1.2rem;
+    opacity: 0.7;
+}
+
+/* === АДАПТИВНОСТЬ === */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-input,
+    .city-select,
+    .search-btn {
+        width: 100%;
+    }
+
+    .results-list {
+        grid-template-columns: 1fr;
+    }
+
+    .place-popup {
+        min-width: 300px;
+        max-width: 320px;
+    }
+
+    .result-item {
+        padding: 12px;
+    }
+}
+
+/* === АНИМАЦИИ === */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.result-item {
+    animation: fadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}

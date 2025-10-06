@@ -1,0 +1,656 @@
+/**
+ * 🎨 СТИЛИ ПОЛНОЙ КАРТОЧКИ ОРГАНИЗАЦИИ 2GIS
+ * Максимально близко к оригинальному дизайну 2ГИС
+ */
+
+/* === ОСНОВНОЙ КОНТЕЙНЕР === */
+.org-card-full {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* === ГАЛЕРЕЯ ФОТО === */
+.org-photo-gallery {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.photo-main {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.photo-controls {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10px;
+    pointer-events: none;
+}
+
+.photo-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    color: #333;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.photo-btn:hover {
+    background: #fff;
+    transform: scale(1.1);
+}
+
+.photo-counter {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.org-photo-placeholder {
+    width: 100%;
+    height: 250px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-icon {
+    font-size: 80px;
+    opacity: 0.9;
+}
+
+/* === ШАПКА КАРТОЧКИ === */
+.org-card-header {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.org-name {
+    font-size: 24px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+}
+
+.org-category {
+    color: #666;
+    font-size: 14px;
+    margin: 0 0 12px 0;
+}
+
+.org-rating-block {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.rating-stars {
+    color: #ffa500;
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+.rating-value {
+    font-weight: 700;
+    font-size: 18px;
+    color: #000;
+}
+
+.rating-count {
+    color: #999;
+    font-size: 14px;
+}
+
+.org-address {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #333;
+    font-size: 15px;
+}
+
+.address-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.address-text {
+    flex: 1;
+    line-height: 1.4;
+}
+
+/* === ТАБЫ === */
+.org-card-tabs {
+    border-bottom: 1px solid #e0e0e0;
+    background: #fafafa;
+}
+
+.tab-list {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.tab-list::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-btn {
+    padding: 14px 20px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #666;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.tab-btn:hover {
+    color: #333;
+    background: rgba(0,0,0,0.03);
+}
+
+.tab-btn.active {
+    color: #2196f3;
+    border-bottom-color: #2196f3;
+    background: #fff;
+}
+
+/* === КОНТЕНТ ТАБОВ === */
+.org-card-content {
+    min-height: 300px;
+    max-height: 500px;
+}
+
+.org-tab-pane {
+    display: none;
+    animation: fadeInTab 0.3s ease;
+}
+
+.org-tab-pane.active {
+    display: block;
+}
+
+@keyframes fadeInTab {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tab-content-scroll {
+    max-height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+/* === СЕКЦИИ === */
+.org-section {
+    margin-bottom: 24px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 12px 0;
+}
+
+/* === ГРАФИК РАБОТЫ === */
+.working-hours {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 12px;
+}
+
+.work-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 12px;
+}
+
+.status-open {
+    color: #4caf50;
+}
+
+.status-closed {
+    color: #f44336;
+}
+
+.status-icon {
+    font-size: 20px;
+}
+
+.hours-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.hours-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.day-name {
+    color: #666;
+    font-weight: 500;
+}
+
+.day-hours {
+    color: #000;
+    font-weight: 600;
+}
+
+/* === КОНТАКТЫ === */
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+    transition: background 0.2s ease;
+}
+
+.contact-item.clickable {
+    cursor: pointer;
+}
+
+.contact-item.clickable:hover {
+    background: #e9ecef;
+}
+
+.contact-icon {
+    font-size: 20px;
+    width: 24px;
+    text-align: center;
+}
+
+.contact-value {
+    flex: 1;
+    font-size: 15px;
+    color: #000;
+    word-break: break-word;
+}
+
+.contact-value a {
+    color: #2196f3;
+    text-decoration: none;
+}
+
+.contact-value a:hover {
+    text-decoration: underline;
+}
+
+/* === СОЦИАЛЬНЫЕ СЕТИ === */
+.social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.social-icon {
+    font-size: 16px;
+}
+
+/* === ОПИСАНИЕ === */
+.org-description {
+    color: #333;
+    line-height: 1.6;
+    font-size: 15px;
+    margin: 0;
+}
+
+/* === КАТЕГОРИИ === */
+.categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.category-tag {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* === ОТЗЫВЫ === */
+.reviews-summary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    padding: 24px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.big-rating {
+    font-size: 48px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.reviews-summary .rating-stars {
+    font-size: 24px;
+    color: #ffd700;
+    margin-bottom: 8px;
+}
+
+.reviews-summary .rating-text {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.review-item {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 12px;
+    border-left: 3px solid #2196f3;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.review-author {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.author-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.author-name {
+    font-weight: 700;
+    color: #000;
+    font-size: 15px;
+}
+
+.review-date {
+    color: #999;
+    font-size: 13px;
+}
+
+.review-rating .rating-stars {
+    color: #ffa500;
+    font-size: 14px;
+}
+
+.review-text {
+    color: #333;
+    line-height: 1.5;
+    font-size: 14px;
+    margin: 0;
+}
+
+.no-reviews {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+}
+
+.no-reviews p {
+    margin: 8px 0;
+}
+
+.text-muted {
+    font-size: 14px;
+}
+
+/* === ФОТО === */
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 20px;
+}
+
+.photo-item {
+    position: relative;
+    padding-top: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.photo-item:hover {
+    transform: scale(1.05);
+}
+
+.photo-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.no-photos {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+/* === ДЕЙСТВИЯ === */
+.org-actions {
+    display: flex;
+    gap: 12px;
+    padding: 20px;
+    border-top: 1px solid #f0f0f0;
+    background: #fafafa;
+}
+
+.action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2196f3, #1976d2);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(33, 150, 243, 0.4);
+}
+
+.btn-secondary {
+    background: #fff;
+    color: #333;
+    border: 2px solid #e0e0e0;
+}
+
+.btn-secondary:hover {
+    background: #f5f5f5;
+    border-color: #ccc;
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+/* === СОСТОЯНИЯ === */
+.org-card-loading,
+.org-card-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(33, 150, 243, 0.2);
+    border-top-color: #2196f3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.error-icon {
+    font-size: 60px;
+    margin-bottom: 16px;
+}
+
+.error-message {
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.btn-retry {
+    background: #2196f3;
+    color: #fff;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-retry:hover {
+    background: #1976d2;
+}
+
+/* === АДАПТИВНОСТЬ === */
+@media (max-width: 768px) {
+    .org-photo-gallery {
+        height: 200px;
+    }
+
+    .org-card-header {
+        padding: 16px;
+    }
+
+    .org-name {
+        font-size: 20px;
+    }
+
+    .tab-content-scroll {
+        padding: 16px;
+    }
+
+    .photos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 16px;
+    }
+
+    .org-actions {
+        flex-direction: column;
+    }
+
+    .action-btn {
+        width: 100%;
+    }
+}

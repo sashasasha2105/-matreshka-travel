@@ -995,19 +995,18 @@ class Matryoshka2GISMaps {
         const center = this.getRegionCenter(regionData.id);
 
         container.innerHTML = `
-            <div style="display: flex; width: 100%; height: 100%; min-height: 300px; flex-direction: column; background: rgba(255,255,255,0.04); border-radius: 16px; overflow: hidden; position: relative;">
+            <div style="width: 100%; height: 500px; min-height: 500px; background: rgba(255,255,255,0.04); border-radius: 16px; overflow: hidden;">
                 <div style="padding: 15px 20px; background: linear-gradient(135deg, rgba(255, 204, 0, 0.1), rgba(255, 107, 107, 0.05)); border-bottom: 1px solid rgba(255, 204, 0, 0.2);">
-                    <h3 style="margin: 0 0 5px 0; color: white; font-size: clamp(1rem, 3vw, 1.3rem);">${regionData.name}</h3>
-                    <p style="margin: 0; color: rgba(255, 204, 0, 0.8); font-size: clamp(0.8rem, 2vw, 0.9rem);">Интерактивная карта города</p>
+                    <h3 style="margin: 0 0 5px 0; color: white; font-size: 1.2rem;">${regionData.name}</h3>
+                    <p style="margin: 0; color: rgba(255, 204, 0, 0.8); font-size: 0.9rem;">Интерактивная карта города</p>
                 </div>
-                <div style="flex: 1; position: relative; min-height: 250px;">
+                <div style="width: 100%; height: calc(100% - 70px);">
                     <iframe
                         src="https://widgets.2gis.com/widget?id=DgWidget_map&opt=%7B%22pos%22%3A%7B%22lat%22%3A${center.coordinates[1]}%2C%22lon%22%3A${center.coordinates[0]}%2C%22zoom%22%3A${center.zoom}%7D%2C%22opt%22%3A%7B%22city%22%3A%22${encodeURIComponent(regionData.name)}%22%7D%7D"
                         width="100%"
                         height="100%"
                         frameborder="0"
-                        style="display: block; border: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-                        loading="lazy"
+                        style="display: block; border: none;"
                         allowfullscreen
                     ></iframe>
                 </div>

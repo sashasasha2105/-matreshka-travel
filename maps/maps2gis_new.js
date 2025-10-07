@@ -78,6 +78,13 @@ class Matryoshka2GISMaps {
         // Получаем центр региона
         const center = this.getRegionCenter(regionData.id);
 
+        // Проверяем доступность MapGL API
+        if (typeof mapgl === 'undefined') {
+            console.warn('⚠️ MapGL API не загружен, используем fallback');
+            this.createFallbackInterface(container, regionData);
+            return;
+        }
+
         try {
             // СНАЧАЛА создаем структуру интерфейса
             this.createMapStructure(container, regionData);
@@ -988,30 +995,24 @@ class Matryoshka2GISMaps {
         const center = this.getRegionCenter(regionData.id);
 
         container.innerHTML = `
-            <div style="display: flex; height: 500px;">
-                <div class="map-sidebar" id="mapSidebar">
-                    <div class="sidebar-header">
-                        <h2>${regionData.name}</h2>
-                        <p>⚠️ Использую резервный режим</p>
-                    </div>
-                    <div class="sidebar-content" id="sidebarContent">
-                        <div class="fallback-message">
-                            <h3>🗺️ Карта недоступна</h3>
-                            <p>Карта отображается в базовом режиме</p>
-                        </div>
-                    </div>
+            <div style="display: flex; height: 500px; flex-direction: column; background: rgba(255,255,255,0.04); border-radius: 16px; overflow: hidden;">
+                <div style="padding: 20px; background: linear-gradient(135deg, rgba(255, 204, 0, 0.1), rgba(255, 107, 107, 0.05)); border-bottom: 1px solid rgba(255, 204, 0, 0.2);">
+                    <h3 style="margin: 0 0 8px 0; color: white; font-size: 1.3rem;">${regionData.name}</h3>
+                    <p style="margin: 0; color: rgba(255, 204, 0, 0.8); font-size: 0.9rem;">Интерактивная карта города</p>
                 </div>
-                <div style="flex: 1;">
+                <div style="flex: 1; position: relative;">
                     <iframe
                         src="https://widgets.2gis.com/widget?id=DgWidget_map&opt=%7B%22pos%22%3A%7B%22lat%22%3A${center.coordinates[1]}%2C%22lon%22%3A${center.coordinates[0]}%2C%22zoom%22%3A${center.zoom}%7D%2C%22opt%22%3A%7B%22city%22%3A%22${encodeURIComponent(regionData.name)}%22%7D%7D"
                         width="100%"
                         height="100%"
                         frameborder="0"
-                        style="border-radius: 0 16px 16px 0;"
+                        style="display: block;"
+                        loading="lazy"
                     ></iframe>
                 </div>
             </div>
         `;
+        console.log('✅ Fallback карта создана для', regionData.name);
     }
 
     /**

@@ -143,39 +143,24 @@ class Matryoshka2GISMaps {
      * Создание структуры карты (ДО создания самой карты)
      */
     createMapStructure(container, regionData) {
-        // Создаем контейнер с flex-раскладкой
-        container.style.display = 'flex';
+        // Создаем простой контейнер для карты на всю ширину
+        container.style.width = '100%';
         container.style.height = '500px';
         container.style.position = 'relative';
-
-        // Создаем боковую панель
-        const sidebar = document.createElement('div');
-        sidebar.className = 'map-sidebar';
-        sidebar.id = 'mapSidebar';
-        sidebar.innerHTML = `
-            <div class="sidebar-header">
-                <h2 class="region-title">${regionData.name}</h2>
-            </div>
-            <div class="sidebar-content" id="sidebarContent">
-                <div class="welcome-message" style="padding: 20px; text-align: center; color: rgba(255,255,255,0.6);">
-                    <p style="font-size: 0.95rem;">Достопримечательности и места на карте</p>
-                </div>
-            </div>
-        `;
 
         // Создаем div для карты
         const mapDiv = document.createElement('div');
         mapDiv.id = 'map2gisCanvas';
-        mapDiv.style.flex = '1';
+        mapDiv.style.width = '100%';
+        mapDiv.style.height = '100%';
         mapDiv.style.position = 'relative';
         mapDiv.style.minHeight = '500px';
-        mapDiv.style.zIndex = '1'; // Важно для интерактивности
+        mapDiv.style.zIndex = '1';
 
-        // Добавляем элементы в контейнер
-        container.appendChild(sidebar);
+        // Добавляем только карту
         container.appendChild(mapDiv);
 
-        console.log('✅ Структура карты создана');
+        console.log('✅ Структура карты создана (только карта, без sidebar)');
     }
 
     /**

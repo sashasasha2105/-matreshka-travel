@@ -5,7 +5,7 @@
 const TRAVEL_PACKAGES = [
     {
         id: 'golden-ring-classic',
-        name: 'Золотое кольцо России - Классический',
+        name: 'Золотое кольцо России',
         duration: '5 дней / 4 ночи',
         price: 25900,
         oldPrice: 35900,
@@ -20,14 +20,16 @@ const TRAVEL_PACKAGES = [
                     {
                         name: 'Гостиница "Золотое кольцо" 4*',
                         city: 'Владимир',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/vladimir/firm/70000001018194711'
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Владимир&dest_type=city',
+                        mapLink: 'https://2gis.ru/vladimir/firm/70000001018194711',
+                        coordinates: { lat: 56.1290, lon: 40.4060 }
                     },
                     {
                         name: 'Отель "Пушкарская слобода" 4*',
                         city: 'Суздаль',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/suzdal/firm/70000001045558503'
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Суздаль&dest_type=city',
+                        mapLink: 'https://2gis.ru/suzdal/firm/70000001045558503',
+                        coordinates: { lat: 56.4186, lon: 40.4456 }
                     }
                 ],
                 programs: [
@@ -36,14 +38,16 @@ const TRAVEL_PACKAGES = [
                         description: 'Посещение Успенского и Дмитриевского соборов',
                         duration: '3 часа',
                         link: 'https://www.tripadvisor.ru',
-                        mapLink: 'https://2gis.ru/vladimir/geo/70000001057919154'
+                        mapLink: 'https://2gis.ru/vladimir/geo/70000001057919154',
+                        coordinates: { lat: 56.1296, lon: 40.4138 }
                     },
                     {
                         name: 'Экскурсия по Суздальскому кремлю',
                         description: 'Древнейшая часть города с уникальной архитектурой',
                         duration: '2.5 часа',
                         link: 'https://www.tripadvisor.ru',
-                        mapLink: 'https://2gis.ru/suzdal/geo/4504235284644536'
+                        mapLink: 'https://2gis.ru/suzdal/geo/4504235284644536',
+                        coordinates: { lat: 56.4204, lon: 40.4467 }
                     }
                 ]
             },
@@ -54,14 +58,16 @@ const TRAVEL_PACKAGES = [
                     {
                         name: 'Гостиница "Заря" 3*',
                         city: 'Владимир',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/vladimir/firm/70000001018428266'
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Владимир&dest_type=city',
+                        mapLink: 'https://2gis.ru/vladimir/firm/70000001018428266',
+                        coordinates: { lat: 56.1367, lon: 40.3959 }
                     },
                     {
                         name: 'Мини-отель "Светлый терем" 3*',
                         city: 'Суздаль',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/suzdal'
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Суздаль&dest_type=city',
+                        mapLink: 'https://2gis.ru/suzdal',
+                        coordinates: { lat: 56.4167, lon: 40.4489 }
                     }
                 ],
                 programs: [
@@ -70,61 +76,74 @@ const TRAVEL_PACKAGES = [
                         description: 'Знакомство с городом и его историей',
                         duration: '2 часа',
                         link: 'https://www.tripadvisor.ru',
-                        mapLink: 'https://2gis.ru/vladimir'
+                        mapLink: 'https://2gis.ru/vladimir',
+                        coordinates: { lat: 56.1290, lon: 40.4060 }
                     },
                     {
                         name: 'Прогулка по Суздалю',
                         description: 'Посещение основных достопримечательностей',
                         duration: '2 часа',
                         link: 'https://www.tripadvisor.ru',
-                        mapLink: 'https://2gis.ru/suzdal'
+                        mapLink: 'https://2gis.ru/suzdal',
+                        coordinates: { lat: 56.4186, lon: 40.4456 }
                     }
                 ]
             }
         ]
     },
     {
-        id: 'spb-express',
-        name: 'Санкт-Петербург Экспресс',
-        duration: '3 дня / 2 ночи',
-        price: 18900,
-        oldPrice: 26900,
-        image: 'city_photos/__medium_утр.jpg.jpg',
-        description: 'Интенсивное знакомство с Северной столицей за 3 дня',
-        cities: ['Санкт-Петербург', 'Петергоф', 'Пушкин'],
+        id: 'caucasus-mountains',
+        name: 'Кавказ - горы и традиции',
+        duration: '6 дней / 5 ночей',
+        price: 32900,
+        oldPrice: 45900,
+        image: 'city_photos/kazan.jpg',
+        description: 'Путешествие по самым красивым местам Северного Кавказа с посещением горных курортов',
+        cities: ['Пятигорск', 'Кисловодск', 'Минеральные Воды', 'Домбай'],
         routes: [
             {
                 id: 1,
-                name: 'Маршрут 1: Премиум',
+                name: 'Маршрут 1: Комфорт плюс',
                 hotels: [
                     {
-                        name: 'Отель "Астория" 5*',
-                        city: 'Санкт-Петербург',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/spb/firm/5348267584968002'
+                        name: 'Гранд Отель "Бристоль" 4*',
+                        city: 'Пятигорск',
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Пятигорск&dest_type=city',
+                        mapLink: 'https://2gis.ru/pyatigorsk/firm/70000001019138815',
+                        coordinates: { lat: 44.0391, lon: 43.0707 }
+                    },
+                    {
+                        name: 'Отель "Грейс Империал" 4*',
+                        city: 'Кисловодск',
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Кисловодск&dest_type=city',
+                        mapLink: 'https://2gis.ru/kislovodsk/firm/70000001025426074',
+                        coordinates: { lat: 43.9088, lon: 42.7228 }
                     }
                 ],
                 programs: [
                     {
-                        name: 'Обзорная экскурсия по Петербургу',
-                        description: 'Дворцовая площадь, Невский проспект, Петропавловская крепость',
-                        duration: '4 часа',
-                        link: 'https://www.sputnik8.com',
-                        mapLink: 'https://2gis.ru/spb/geo/4504735310190933'
+                        name: 'Экскурсия в Домбай',
+                        description: 'Посещение горнолыжного курорта, канатные дороги',
+                        duration: '8 часов',
+                        link: 'https://www.dombay.info',
+                        mapLink: 'https://2gis.ru/dombay',
+                        coordinates: { lat: 43.2971, lon: 41.6240 }
                     },
                     {
-                        name: 'Эрмитаж - главный музей России',
-                        description: 'Экскурсия по залам Эрмитажа с гидом',
+                        name: 'Прогулка по Кисловодскому парку',
+                        description: 'Крупнейший рукотворный парк Европы',
                         duration: '3 часа',
-                        link: 'https://www.hermitagemuseum.org',
-                        mapLink: 'https://2gis.ru/spb/firm/5348139525657555'
+                        link: 'https://visit-kmv.ru',
+                        mapLink: 'https://2gis.ru/kislovodsk/geo/4504416886926398',
+                        coordinates: { lat: 43.9061, lon: 42.7132 }
                     },
                     {
-                        name: 'Петергоф - Русский Версаль',
-                        description: 'Посещение дворцово-паркового ансамбля с фонтанами',
-                        duration: '4 часа',
-                        link: 'https://peterhofmuseum.ru',
-                        mapLink: 'https://2gis.ru/spb/firm/70000001023143971'
+                        name: 'Озеро Провал и грот Дианы',
+                        description: 'Природные достопримечательности Пятигорска',
+                        duration: '2 часа',
+                        link: 'https://visit-kmv.ru',
+                        mapLink: 'https://2gis.ru/pyatigorsk/firm/70000001019506506',
+                        coordinates: { lat: 44.0428, lon: 43.0988 }
                     }
                 ]
             },
@@ -133,73 +152,102 @@ const TRAVEL_PACKAGES = [
                 name: 'Маршрут 2: Стандарт',
                 hotels: [
                     {
-                        name: 'Отель "Невский Форум" 4*',
-                        city: 'Санкт-Петербург',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/spb/firm/5348165887890948'
+                        name: 'Отель "Пятигорск" 3*',
+                        city: 'Пятигорск',
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Пятигорск&dest_type=city',
+                        mapLink: 'https://2gis.ru/pyatigorsk',
+                        coordinates: { lat: 44.0375, lon: 43.0708 }
+                    },
+                    {
+                        name: 'Санаторий "Нарзан" 3*',
+                        city: 'Кисловодск',
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Кисловодск&dest_type=city',
+                        mapLink: 'https://2gis.ru/kislovodsk/firm/70000001031595688',
+                        coordinates: { lat: 43.9025, lon: 42.7209 }
                     }
                 ],
                 programs: [
                     {
-                        name: 'Обзорная экскурсия по центру',
-                        description: 'Главные достопримечательности Петербурга',
+                        name: 'Обзорная экскурсия по Пятигорску',
+                        description: 'Места Лермонтова, смотровая площадка',
                         duration: '3 часа',
-                        link: 'https://www.sputnik8.com',
-                        mapLink: 'https://2gis.ru/spb'
+                        link: 'https://visit-kmv.ru',
+                        mapLink: 'https://2gis.ru/pyatigorsk',
+                        coordinates: { lat: 44.0391, lon: 43.0707 }
                     },
                     {
-                        name: 'Посещение Эрмитажа',
-                        description: 'Самостоятельный осмотр с аудиогидом',
-                        duration: '2.5 часа',
-                        link: 'https://www.hermitagemuseum.org',
-                        mapLink: 'https://2gis.ru/spb/firm/5348139525657555'
+                        name: 'Нарзанная галерея',
+                        description: 'Дегустация минеральных вод',
+                        duration: '1.5 часа',
+                        link: 'https://visit-kmv.ru',
+                        mapLink: 'https://2gis.ru/kislovodsk/firm/70000001031594835',
+                        coordinates: { lat: 43.9083, lon: 42.7190 }
                     }
                 ]
             }
         ]
     },
     {
-        id: 'kazan-weekend',
-        name: 'Казань - выходные в столице Татарстана',
-        duration: '2 дня / 1 ночь',
-        price: 12900,
-        oldPrice: 18900,
-        image: 'city_photos/kazan.jpg',
-        description: 'Короткое, но насыщенное знакомство с третьей столицей России',
-        cities: ['Казань', 'Свияжск'],
+        id: 'ural-mountains',
+        name: 'Урал - сердце России',
+        duration: '5 дней / 4 ночи',
+        price: 28900,
+        oldPrice: 38900,
+        image: 'city_photos/Снимок экрана 2025-10-07 в 13.34.49.png',
+        description: 'Путешествие по живописным местам Урала с посещением природных парков и исторических городов',
+        cities: ['Екатеринбург', 'Невьянск', 'Нижний Тагил'],
         routes: [
             {
                 id: 1,
-                name: 'Маршрут 1: Делюкс',
+                name: 'Маршрут 1: Классический',
                 hotels: [
                     {
-                        name: 'Отель "Ногай" 5*',
-                        city: 'Казань',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/kazan/firm/70000001019472524'
+                        name: 'Гранд Отель "Екатеринбург" 4*',
+                        city: 'Екатеринбург',
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Екатеринбург&dest_type=city',
+                        mapLink: 'https://2gis.ru/ekaterinburg/firm/70000001018816355',
+                        coordinates: { lat: 56.8389, lon: 60.6057 }
+                    },
+                    {
+                        name: 'Отель "Демидов Плаза" 4*',
+                        city: 'Нижний Тагил',
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Нижний+Тагил&dest_type=city',
+                        mapLink: 'https://2gis.ru/nizhnytagil',
+                        coordinates: { lat: 57.9195, lon: 59.9658 }
                     }
                 ],
                 programs: [
                     {
-                        name: 'Экскурсия по Казанскому Кремлю',
-                        description: 'Посещение мечети Кул-Шариф, Благовещенского собора',
+                        name: 'Обзорная экскурсия по Екатеринбургу',
+                        description: 'Храм на Крови, плотина, исторический центр',
+                        duration: '3.5 часа',
+                        link: 'https://екатеринбург.рф',
+                        mapLink: 'https://2gis.ru/ekaterinburg/geo/4504723122082063',
+                        coordinates: { lat: 56.8431, lon: 60.6454 }
+                    },
+                    {
+                        name: 'Невьянская падающая башня',
+                        description: 'Уникальный памятник промышленной архитектуры',
                         duration: '2.5 часа',
-                        link: 'https://kazan-kremlin.ru',
-                        mapLink: 'https://2gis.ru/kazan/firm/70000001020796215'
+                        link: 'https://башня-невьянск.рф',
+                        mapLink: 'https://2gis.ru/nevyansk/firm/70000001063669767',
+                        coordinates: { lat: 57.4921, lon: 60.2053 }
                     },
                     {
-                        name: 'Экскурсия на остров-град Свияжск',
-                        description: 'Древний город на острове с уникальной историей',
-                        duration: '5 часов',
-                        link: 'https://www.visit-tatarstan.com',
-                        mapLink: 'https://2gis.ru/sviyazhsk'
+                        name: 'Музей-заповедник горнозаводского дела',
+                        description: 'История горного дела на Урале',
+                        duration: '2 часа',
+                        link: 'https://museum-nt.ru',
+                        mapLink: 'https://2gis.ru/nizhnytagil/firm/70000001022172655',
+                        coordinates: { lat: 57.9148, lon: 59.9642 }
                     },
                     {
-                        name: 'Прогулка по улице Баумана',
-                        description: 'Казанский Арбат с кафе, ресторанами и сувенирами',
-                        duration: '1.5 часа',
-                        link: 'https://www.visit-tatarstan.com',
-                        mapLink: 'https://2gis.ru/kazan/geo/4504235284397051'
+                        name: 'Природный парк "Оленьи Ручьи"',
+                        description: 'Пешие прогулки, скалы, пещеры',
+                        duration: '6 часов',
+                        link: 'https://olen-park.ru',
+                        mapLink: 'https://2gis.ru/ekaterinburg',
+                        coordinates: { lat: 56.5217, lon: 59.3614 }
                     }
                 ]
             },
@@ -208,121 +256,29 @@ const TRAVEL_PACKAGES = [
                 name: 'Маршрут 2: Бюджетный',
                 hotels: [
                     {
-                        name: 'Хостел "Kremlin" 3*',
-                        city: 'Казань',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/kazan'
+                        name: 'Отель "Урал" 3*',
+                        city: 'Екатеринбург',
+                        link: 'https://www.booking.com/searchresults.ru.html?ss=Екатеринбург&dest_type=city',
+                        mapLink: 'https://2gis.ru/ekaterinburg/firm/70000001018745988',
+                        coordinates: { lat: 56.8370, lon: 60.6097 }
                     }
                 ],
                 programs: [
                     {
-                        name: 'Самостоятельная прогулка по Кремлю',
-                        description: 'Осмотр территории с аудиогидом',
-                        duration: '2 часа',
-                        link: 'https://kazan-kremlin.ru',
-                        mapLink: 'https://2gis.ru/kazan/firm/70000001020796215'
-                    },
-                    {
-                        name: 'Прогулка по центру города',
-                        description: 'Улица Баумана, набережная Казанки',
-                        duration: '2 часа',
-                        link: 'https://www.visit-tatarstan.com',
-                        mapLink: 'https://2gis.ru/kazan'
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        id: 'baikal-adventure',
-        name: 'Байкал - жемчужина Сибири',
-        duration: '7 дней / 6 ночей',
-        price: 42900,
-        oldPrice: 59900,
-        image: 'city_photos/baikal.jpg',
-        description: 'Удивительное путешествие к самому глубокому озеру планеты',
-        cities: ['Иркутск', 'Листвянка', 'Остров Ольхон'],
-        routes: [
-            {
-                id: 1,
-                name: 'Маршрут 1: Активный',
-                hotels: [
-                    {
-                        name: 'База отдыха "Байкальская Ривьера" 4*',
-                        city: 'Листвянка',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/listvyanka'
-                    },
-                    {
-                        name: 'Гостевой дом на Ольхоне',
-                        city: 'Остров Ольхон',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/olkhon'
-                    }
-                ],
-                programs: [
-                    {
-                        name: 'Экскурсия по Иркутску',
-                        description: 'Знакомство с сибирским Парижем',
-                        duration: '3 часа',
-                        link: 'https://www.irkutsk.ru',
-                        mapLink: 'https://2gis.ru/irkutsk'
-                    },
-                    {
-                        name: 'Круиз по Байкалу',
-                        description: 'Водное путешествие с посещением бухт',
-                        duration: '6 часов',
-                        link: 'https://www.baikaltravel.ru',
-                        mapLink: 'https://2gis.ru/listvyanka'
-                    },
-                    {
-                        name: 'Джип-тур по острову Ольхон',
-                        description: 'Посещение скалы Шаманка, мыса Хобой',
-                        duration: '8 часов',
-                        link: 'https://www.olkhon.ru',
-                        mapLink: 'https://2gis.ru/olkhon'
-                    },
-                    {
-                        name: 'Байкальский нерпинарий',
-                        description: 'Представление с участием байкальских нерп',
-                        duration: '1.5 часа',
-                        link: 'https://www.baikaltravel.ru',
-                        mapLink: 'https://2gis.ru/listvyanka/firm/70000001021527764'
-                    }
-                ]
-            },
-            {
-                id: 2,
-                name: 'Маршрут 2: Спокойный',
-                hotels: [
-                    {
-                        name: 'Турбаза "Байкал" 3*',
-                        city: 'Листвянка',
-                        link: 'https://www.booking.com',
-                        mapLink: 'https://2gis.ru/listvyanka'
-                    }
-                ],
-                programs: [
-                    {
-                        name: 'Обзорная экскурсия по Иркутску',
-                        description: 'Центр города, набережная Ангары',
+                        name: 'Прогулка по центру Екатеринбурга',
+                        description: 'Плотина, Набережная, Исторический сквер',
                         duration: '2.5 часа',
-                        link: 'https://www.irkutsk.ru',
-                        mapLink: 'https://2gis.ru/irkutsk'
+                        link: 'https://екатеринбург.рф',
+                        mapLink: 'https://2gis.ru/ekaterinburg',
+                        coordinates: { lat: 56.8389, lon: 60.6057 }
                     },
                     {
-                        name: 'Отдых на Байкале',
-                        description: 'Свободное время, прогулки по берегу',
-                        duration: 'весь день',
-                        link: 'https://www.baikaltravel.ru',
-                        mapLink: 'https://2gis.ru/listvyanka'
-                    },
-                    {
-                        name: 'Музей Байкала',
-                        description: 'Знакомство с уникальной экосистемой озера',
-                        duration: '1.5 часа',
-                        link: 'https://www.baikaltravel.ru',
-                        mapLink: 'https://2gis.ru/listvyanka'
+                        name: 'Посещение Невьянска',
+                        description: 'Падающая башня и музей',
+                        duration: '3 часа',
+                        link: 'https://башня-невьянск.рф',
+                        mapLink: 'https://2gis.ru/nevyansk',
+                        coordinates: { lat: 57.4921, lon: 60.2053 }
                     }
                 ]
             }

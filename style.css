@@ -47,11 +47,22 @@ body {
     z-index: 1;
 }
 
+.header-row {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 10;
+}
+
 .logo-container {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 30px;
     animation: fadeInUp 1.2s ease;
 }
 
@@ -466,6 +477,39 @@ body {
     opacity: 1;
 }
 
+.toggle-description-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 204, 0, 0.25);
+    color: rgba(255, 204, 0, 0.85);
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    backdrop-filter: blur(5px);
+}
+
+.toggle-description-btn:hover {
+    background: rgba(255, 204, 0, 0.1);
+    border-color: rgba(255, 204, 0, 0.5);
+    color: rgba(255, 204, 0, 1);
+    transform: translateY(-1px);
+}
+
+.toggle-description-btn .toggle-icon {
+    font-size: 0.75rem;
+    transition: transform 0.3s ease;
+}
+
+.toggle-description-btn .toggle-text {
+    font-size: 0.85rem;
+}
+
 /* Partners Grid */
 .partners-grid {
     display: grid;
@@ -768,9 +812,6 @@ body {
 
 /* User Profile Button */
 .user-profile-btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
     background: linear-gradient(135deg, rgba(255, 204, 0, 0.15), rgba(255, 107, 107, 0.1));
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 204, 0, 0.2);
@@ -781,7 +822,6 @@ body {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.4s ease;
-    z-index: 10;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -1161,8 +1201,14 @@ body {
     }
 
     .generate-btn {
-        padding: 14px 24px;
-        font-size: 0.95rem;
+        padding: 24px 40px;
+        font-size: 1.1rem;
+        width: 90%;
+        max-width: 400px;
+    }
+
+    .generate-btn .btn-icon {
+        font-size: 1.8rem;
     }
 
     .region-name {
@@ -1197,6 +1243,67 @@ body {
 
     .package-name {
         font-size: 1.4rem;
+    }
+
+    /* Hide profile text on mobile, show only icon */
+    .user-profile-btn .profile-text {
+        display: none;
+    }
+
+    .user-profile-btn {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        min-width: auto;
+        justify-content: center;
+    }
+
+    .profile-icon {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+
+    /* Smaller logo on mobile */
+    .matryoshka-logo {
+        font-size: 2.5rem;
+    }
+
+    .matryoshka-name {
+        font-size: 1.5rem;
+    }
+
+    .header-row {
+        padding: 0 15px;
+    }
+
+    /* Адаптация достопримечательностей для мобильных */
+    .attraction-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .route-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+
+    .route-btn .route-text {
+        display: inline;
+    }
+
+    .attraction-name {
+        font-size: 1.1rem;
+        width: 100%;
+    }
+
+    .toggle-description-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 10px 16px;
     }
 }
 
@@ -1799,5 +1906,135 @@ body {
         width: 100%;
         padding: 14px;
         font-size: 1rem;
+    }
+}
+
+/* ========================================
+   BREADCRUMBS НАВИГАЦИЯ
+   ======================================== */
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 0;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.breadcrumb-item {
+    color: rgba(255, 204, 0, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.breadcrumb-item:hover {
+    color: rgba(255, 204, 0, 1);
+    background: rgba(255, 204, 0, 0.1);
+    transform: translateX(-2px);
+}
+
+.breadcrumb-item.active {
+    color: white;
+    font-weight: 600;
+    cursor: default;
+}
+
+.breadcrumb-separator {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 1.2rem;
+    user-select: none;
+}
+
+/* ========================================
+   КНОПКА "НАВЕРХ"
+   ======================================== */
+
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgba(255, 204, 0, 0.9), rgba(255, 107, 107, 0.8));
+    border: 2px solid rgba(255, 204, 0, 0.3);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.3);
+    backdrop-filter: blur(10px);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.8);
+    z-index: 9999;
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.scroll-to-top:hover {
+    background: linear-gradient(135deg, rgba(255, 204, 0, 1), rgba(255, 107, 107, 0.9));
+    border-color: rgba(255, 204, 0, 0.6);
+    box-shadow: 0 12px 32px rgba(255, 204, 0, 0.5);
+    transform: translateY(-4px) scale(1.05);
+}
+
+.scroll-to-top:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+.scroll-to-top svg {
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s ease;
+}
+
+.scroll-to-top:hover svg {
+    transform: translateY(-3px);
+    animation: bounce 0.6s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(-3px);
+    }
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .scroll-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .scroll-to-top svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .breadcrumbs {
+        font-size: 0.85rem;
+        padding: 10px 0;
+        margin-bottom: 15px;
+    }
+
+    .breadcrumb-item {
+        padding: 3px 6px;
     }
 }

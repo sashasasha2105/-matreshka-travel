@@ -82,6 +82,11 @@ class MatryoshkaProfile {
             return;
         }
 
+        // Автоматически пересчитываем счетчики при загрузке
+        if (this.travelStories.length > 0) {
+            this.updateTravelCounters();
+        }
+
         profileContent.innerHTML = `
             <div class="profile-header" data-animate="fadeInUp">
                 <div class="profile-header-top">
@@ -886,6 +891,10 @@ class MatryoshkaProfile {
 
         // Обновляем данные
         this.travelStories.push(newTravel);
+
+        // Автоматически обновляем счетчики
+        this.updateTravelCounters();
+
         this.updateTravelCards();
         this.saveToSession();
 
@@ -899,11 +908,56 @@ class MatryoshkaProfile {
     }
 
     /**
+     * Автоматическое обновление счетчиков путешествий и городов
+     */
+    updateTravelCounters() {
+        // Обновляем количество путешествий
+        this.profileData.travels = this.travelStories.length;
+
+        // Собираем уникальные города из всех путешествий
+        const uniqueCities = new Set();
+        this.travelStories.forEach(travel => {
+            if (travel.title) {
+                // Извлекаем название города из заголовка (до первой запятой или целиком)
+                const city = travel.title.split(',')[0].trim();
+                uniqueCities.add(city);
+            }
+        });
+        this.profileData.cities = uniqueCities.size;
+
+        // Обновляем отображение статистики
+        this.updateStatsDisplay();
+    }
+
+    /**
+     * Обновление отображения статистики на экране
+     */
+    updateStatsDisplay() {
+        const profileStats = document.querySelectorAll('.profile-stat');
+        profileStats.forEach(stat => {
+            const key = stat.dataset.key;
+            if (key === 'travels') {
+                const valueEl = stat.querySelector('.stat-value');
+                if (valueEl) valueEl.textContent = this.profileData.travels;
+                stat.dataset.value = this.profileData.travels;
+            } else if (key === 'cities') {
+                const valueEl = stat.querySelector('.stat-value');
+                if (valueEl) valueEl.textContent = this.profileData.cities;
+                stat.dataset.value = this.profileData.cities;
+            }
+        });
+    }
+
+    /**
      * Удаление истории путешествия
      */
     deleteTravelStory(travelId) {
         if (confirm('Удалить это путешествие?')) {
             this.travelStories = this.travelStories.filter(t => t.id !== travelId);
+
+            // Автоматически обновляем счетчики
+            this.updateTravelCounters();
+
             this.updateTravelCards();
             this.saveToSession();
             this.showToast('🗑️ Путешествие удалено');

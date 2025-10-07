@@ -34,10 +34,10 @@
                             <div class="matryoshka-logo">🪆</div>
                             <div class="matryoshka-name">Матрешка</div>
                         </div>
-                        <div class="user-profile-btn" onclick="showProfile()">
+                        <button class="user-profile-btn" onclick="showProfile()">
                             <div class="profile-icon">👤</div>
-                            <span>Профиль</span>
-                        </div>
+                            <span class="profile-text">Профиль</span>
+                        </button>
                     </div>
                     <h1 class="hero-title">Исследуйте Россию<br>вместе с Матрешкой</h1>
                     <p class="hero-subtitle">Откройте для себя красоту и разнообразие нашей великой страны</p>
@@ -98,6 +98,13 @@
             <button id="backBtn" class="back-btn">
                 ← Назад
             </button>
+
+            <!-- Breadcrumbs навигация -->
+            <nav class="breadcrumbs" id="breadcrumbs" aria-label="Навигация">
+                <a href="#" class="breadcrumb-item" onclick="showMainSection(); return false;">Главная</a>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-item active" id="breadcrumbRegion">Регион</span>
+            </nav>
 
             <div class="region-header">
                 <div class="region-title" id="regionTitle">Загрузка...</div>
@@ -166,6 +173,13 @@
             © 2025 Матрешка — Путешествуй по России 🇷🇺
         </div>
     </div>
+
+    <!-- Кнопка "Наверх" -->
+    <button id="scrollToTop" class="scroll-to-top" aria-label="Прокрутить наверх" title="Наверх">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 19V5M12 5L5 12M12 5L19 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
 
     <script>
         // Имитация глобальной функции addToGlobalFeed

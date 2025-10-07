@@ -453,6 +453,9 @@ function showRegionDetails(regionId) {
             if (regionImage) regionImage.src = region.image;
             if (regionAbout) regionAbout.textContent = region.about;
 
+            // Обновляем breadcrumbs
+            updateBreadcrumbs(region.name);
+
             // Заполняем достопримечательности
             loadAttractions(region.attractions);
 
@@ -479,7 +482,7 @@ function showRegionDetails(regionId) {
     }, 800);
 }
 
-// Функция загрузки достопримечательностей (автоматическое отображение информации)
+// Функция загрузки достопримечательностей (скрытое описание с кнопкой раскрыть)
 function loadAttractions(attractions) {
     const attractionsList = document.getElementById('attractionsList');
     if (!attractionsList) return;
@@ -487,6 +490,7 @@ function loadAttractions(attractions) {
     attractionsList.innerHTML = '';
     attractions.forEach((attraction, index) => {
         const li = document.createElement('li');
+        const uniqueId = `attraction-${index}`;
         li.innerHTML = `
             <div class="attraction-header">
                 <span class="attraction-name">${attraction.name}</span>
@@ -495,7 +499,11 @@ function loadAttractions(attractions) {
                     <span class="route-text">Маршрут</span>
                 </button>
             </div>
-            <div class="attraction-info-auto">${attraction.info}</div>
+            <div class="attraction-info-auto" id="${uniqueId}" style="display: none;">${attraction.info}</div>
+            <button class="toggle-description-btn" onclick="toggleAttractionDescription('${uniqueId}', this)">
+                <span class="toggle-icon">▼</span>
+                <span class="toggle-text">Раскрыть описание</span>
+            </button>
         `;
         li.style.opacity = '0';
         li.style.transform = 'translateX(-30px)';
@@ -503,13 +511,25 @@ function loadAttractions(attractions) {
 
         // Анимация появления через CSS
         li.style.animation = `fadeInLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${index * 100}ms forwards`;
-
-        // Анимация появления информации с задержкой
-        setTimeout(() => {
-            const infoElement = li.querySelector('.attraction-info-auto');
-            infoElement.style.animation = 'fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
-        }, (index * 100) + 300);
     });
+}
+
+// Функция переключения видимости описания достопримечательности
+function toggleAttractionDescription(elementId, button) {
+    const infoElement = document.getElementById(elementId);
+    const icon = button.querySelector('.toggle-icon');
+    const text = button.querySelector('.toggle-text');
+
+    if (infoElement.style.display === 'none') {
+        infoElement.style.display = 'block';
+        infoElement.style.animation = 'fadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+        icon.textContent = '▲';
+        text.textContent = 'Скрыть описание';
+    } else {
+        infoElement.style.display = 'none';
+        icon.textContent = '▼';
+        text.textContent = 'Раскрыть описание';
+    }
 }
 
 // Функция загрузки партнеров с QR-кодами
@@ -906,3 +926,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
     console.log('🚀 Матрешка - приложение готово к работе');
 });
+// ========================================
+// BREADCRUMBS НАВИГАЦИЯ
+// ========================================
+
+function updateBreadcrumbs(regionName) {
+    const breadcrumbRegion = document.getElementById('breadcrumbRegion');
+    if (breadcrumbRegion && regionName) {
+        breadcrumbRegion.textContent = regionName;
+    }
+}
+
+// ========================================
+// КНОПКА "НАВЕРХ"
+// ========================================
+
+(function initScrollToTop() {
+    const scrollToTopBtn = document.getElementById('scrollToTop');
+    
+    if (!scrollToTopBtn) return;
+
+    // Показываем/скрываем кнопку при скролле
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        
+        const scrolled = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrolled > 400) {
+            scrollToTopBtn.classList.add('visible');
+        } else {
+            scrollToTopBtn.classList.remove('visible');
+        }
+        
+        // Добавляем небольшую задержку для плавности
+        scrollTimeout = setTimeout(() => {
+            // Дополнительная логика если нужна
+        }, 100);
+    }, { passive: true });
+
+    // Плавная прокрутка наверх при клике
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+    console.log('✅ Кнопка "Наверх" инициализирована');
+})();

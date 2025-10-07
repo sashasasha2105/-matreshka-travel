@@ -458,22 +458,24 @@
 }
 
 .travel-content {
-    padding: 16px;
+    padding: 20px;
     position: relative;
+    padding-top: 50px;
 }
 
 .travel-title {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: #ffcc00;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    line-height: 1.4;
 }
 
 .travel-text {
-    font-size: 0.9rem;
-    color: #ccc;
-    line-height: 1.4;
+    font-size: 0.95rem;
+    color: #d0d0d0;
+    line-height: 1.6;
     margin-bottom: 0;
     white-space: pre-wrap;
     word-wrap: break-word;
@@ -482,17 +484,18 @@
 
 .delete-travel-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(255, 0, 0, 0.7);
-    border: none;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 0, 0, 0.85);
+    border: 1px solid rgba(255, 0, 0, 0.3);
     color: white;
-    padding: 6px 8px;
-    border-radius: 6px;
+    padding: 8px 12px;
+    border-radius: 8px;
     cursor: pointer;
-    font-size: 0.8rem;
-    opacity: 0;
+    font-size: 0.85rem;
+    opacity: 1;
     transition: all 0.3s ease;
+    z-index: 10;
 }
 
 .travel-card:hover .delete-travel-btn {

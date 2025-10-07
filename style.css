@@ -1228,7 +1228,21 @@ body {
     }
 
     .map-container {
-        height: 350px;
+        height: 300px;
+        min-height: 300px;
+        border-radius: 12px;
+    }
+
+    /* Мобильная адаптация для iframe карты 2GIS */
+    .map-container iframe {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 300px;
+    }
+
+    .map-container > div {
+        width: 100% !important;
+        height: 100% !important;
     }
 
     .section {

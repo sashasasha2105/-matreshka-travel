@@ -600,69 +600,43 @@ class MatryoshkaProfile {
         const modal = document.createElement('div');
         modal.className = 'travel-modal';
         modal.innerHTML = `
-            <div class="modal-content">
+            <div class="modal-content travel-add-modal">
                 <div class="modal-header">
                     <h3>📸 Добавить путешествие</h3>
                     <button class="modal-close">✕</button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="travelTitle" placeholder="Название путешествия" maxlength="50">
-                    <textarea id="travelText" placeholder="Расскажите о своем путешествии..." maxlength="300"></textarea>
-                    <div class="photo-upload-section">
-                        <label class="photo-upload-label" style="
-                            display: block;
-                            padding: 20px;
-                            border: 2px dashed rgba(255,204,0,0.5);
-                            border-radius: 12px;
-                            text-align: center;
-                            cursor: pointer;
-                            margin-bottom: 15px;
-                            transition: all 0.3s ease;
-                        ">
+                    <div class="form-section">
+                        <label class="form-label">Название</label>
+                        <input type="text" id="travelTitle" placeholder="Например: Москва, Красная площадь" maxlength="50" class="form-input">
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">Описание</label>
+                        <textarea id="travelText" placeholder="Поделитесь впечатлениями о поездке..." maxlength="300" class="form-textarea"></textarea>
+                    </div>
+
+                    <div class="form-section">
+                        <label class="form-label">Фотографии</label>
+                        <label class="photo-upload-area">
                             <input type="file" id="travelImages" accept="image/*" multiple style="display: none;">
-                            <div style="font-size: 48px; margin-bottom: 10px;">📸</div>
-                            <div style="color: #ffcc00; font-weight: 600; margin-bottom: 5px;">Добавить фото</div>
-                            <div style="color: #888; font-size: 12px;">До 10 фотографий • JPG, PNG</div>
+                            <div class="upload-icon-large">📷</div>
+                            <div class="upload-title">Загрузить фото</div>
+                            <div class="upload-subtitle">До 10 фотографий • JPG, PNG</div>
                         </label>
 
-                        <div id="imagesPreview" style="
-                            display: grid;
-                            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                            gap: 10px;
-                            max-height: 300px;
-                            overflow-y: auto;
-                            padding: 10px 0;
-                            margin-bottom: 15px;
-                        "></div>
+                        <div id="imagesPreview" class="images-preview-grid"></div>
 
-                        <div id="uploadActions" style="display: none; text-align: center;">
-                            <div style="
-                                background: rgba(255,204,0,0.1);
-                                border-radius: 12px;
-                                padding: 15px;
-                                margin-bottom: 20px;
-                                border: 1px solid rgba(255,204,0,0.3);
-                            ">
-                                <div id="photoCount" style="color: #ffcc00; font-weight: 600; margin-bottom: 8px;">0 фотографий выбрано</div>
-                                <div style="color: #888; font-size: 13px;">Фотографии будут красиво сгруппированы в вашем посте</div>
+                        <div id="uploadActions" class="upload-actions-section" style="display: none;">
+                            <div class="photo-count-badge">
+                                <span id="photoCount">0 фото</span>
                             </div>
-                            <button type="button" id="savePhotosBtn" style="
-                                background: linear-gradient(135deg, #ffcc00, #ff8e53);
-                                border: none;
-                                color: #1a1a2e;
-                                padding: 15px 30px;
-                                border-radius: 25px;
-                                font-weight: 600;
-                                cursor: pointer;
-                                font-size: 16px;
-                                transition: all 0.3s ease;
-                                box-shadow: 0 4px 15px rgba(255,204,0,0.3);
-                            ">✨ Опубликовать путешествие</button>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer modal-footer-sticky">
                     <button class="modal-btn cancel">Отмена</button>
+                    <button class="modal-btn publish" id="savePhotosBtn" style="display: none;">Опубликовать</button>
                 </div>
             </div>
         `;
@@ -699,6 +673,7 @@ class MatryoshkaProfile {
         const preview = modal.querySelector('#imagesPreview');
         const actions = modal.querySelector('#uploadActions');
         const photoCount = modal.querySelector('#photoCount');
+        const publishBtn = modal.querySelector('#savePhotosBtn');
 
         console.log(`Выбрано ${files.length} файлов`);
 
@@ -711,13 +686,15 @@ class MatryoshkaProfile {
         if (files.length === 0) {
             preview.innerHTML = '';
             actions.style.display = 'none';
+            publishBtn.style.display = 'none';
             return;
         }
 
-        // Показываем действия и обновляем счетчик
-        actions.style.display = 'block';
-        const fileText = files.length === 1 ? 'фотография' : files.length < 5 ? 'фотографии' : 'фотографий';
-        photoCount.textContent = `${files.length} ${fileText} выбрано`;
+        // Показываем действия, счетчик и кнопку публикации
+        actions.style.display = 'flex';
+        publishBtn.style.display = 'block';
+        const fileText = files.length === 1 ? 'фото' : files.length < 5 ? 'фото' : 'фото';
+        photoCount.textContent = `${files.length} ${fileText}`;
 
         // Очищаем превью
         preview.innerHTML = '';
@@ -731,53 +708,15 @@ class MatryoshkaProfile {
                 console.log(`Файл ${index + 1} загружен`);
 
                 const imageContainer = document.createElement('div');
-                imageContainer.className = 'image-preview-item';
+                imageContainer.className = 'preview-image-item';
                 imageContainer.dataset.fileIndex = index;
-                imageContainer.style.cssText = `
-                    position: relative;
-                    aspect-ratio: 1;
-                    border-radius: 10px;
-                    overflow: hidden;
-                    background: #333;
-                    border: 2px solid rgba(255,204,0,0.3);
-                `;
 
                 imageContainer.innerHTML = `
-                    <img src="${e.target.result}"
-                         style="width: 100%; height: 100%; object-fit: cover;"
-                         alt="Фото ${index + 1}"
-                         loading="lazy">
-                    <div style="
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        right: 0;
-                        background: linear-gradient(transparent, rgba(0,0,0,0.8));
-                        color: white;
-                        font-size: 11px;
-                        padding: 8px 5px 5px;
-                        text-align: center;
-                    ">${index + 1}</div>
-                    <button class="remove-image-btn"
-                            data-file-index="${index}"
-                            style="
-                                position: absolute;
-                                top: 5px;
-                                right: 5px;
-                                background: rgba(255,107,107,0.9);
-                                border: none;
-                                color: white;
-                                width: 22px;
-                                height: 22px;
-                                border-radius: 50%;
-                                cursor: pointer;
-                                font-size: 11px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-weight: bold;
-                            "
-                            title="Удалить фото">×</button>
+                    <img src="${e.target.result}" alt="Фото ${index + 1}">
+                    <div class="preview-number">${index + 1}</div>
+                    <button class="remove-image-btn" data-file-index="${index}" title="Удалить">
+                        <span>×</span>
+                    </button>
                 `;
 
                 // Добавляем обработчик удаления
@@ -786,6 +725,15 @@ class MatryoshkaProfile {
                     e.stopPropagation();
                     console.log(`Удаляем фото ${index + 1}`);
                     imageContainer.remove();
+
+                    // Проверяем, остались ли еще фото
+                    const remainingPhotos = preview.querySelectorAll('.preview-image-item');
+                    if (remainingPhotos.length === 0) {
+                        actions.style.display = 'none';
+                        publishBtn.style.display = 'none';
+                    } else {
+                        photoCount.textContent = `${remainingPhotos.length} фото`;
+                    }
                 });
 
                 preview.appendChild(imageContainer);

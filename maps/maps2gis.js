@@ -11,7 +11,7 @@
 
 class Matryoshka2GISMaps {
     constructor() {
-        this.apiKey = '8a7c9b28-b45f-4f45-9784-d34db72416db';
+        this.apiKey = '20d959b9-d5ec-4578-abe3-1d414e8edfc3';
         this.mapInstance = null;
         this.mapContainer = null;
         this.markers = [];
@@ -503,12 +503,22 @@ class Matryoshka2GISMaps {
             console.log('📦 Используем локальные данные достопримечательностей');
         }
 
+        // Получаем партнеров региона
+        const partners = this.getRegionPartners(regionData);
+        console.log(`🤝 Партнеры для ${regionData.name}:`, partners.length, 'партнеров');
+
         // Отображаем результаты (всегда есть fallback данные)
         if (attractions.length > 0) {
             // Добавляем маркеры на карту (если карта интерактивная)
             if (this.mapInstance) {
-                console.log('🗺️ Добавляем маркеры на интерактивную карту');
+                console.log('🗺️ Добавляем маркеры достопримечательностей на интерактивную карту');
                 this.addMarkersToMap(attractions);
+
+                // Добавляем маркеры партнеров
+                if (partners.length > 0) {
+                    console.log('🤝 Добавляем маркеры партнеров на карту');
+                    this.addPartnerMarkersToMap(partners);
+                }
             } else {
                 console.log('📱 Iframe карта - показываем все в sidebar');
             }
@@ -1275,6 +1285,121 @@ class Matryoshka2GISMaps {
         });
 
         return marker;
+    }
+
+    /**
+     * Получение партнеров региона
+     */
+    getRegionPartners(regionData) {
+        if (!regionData || !regionData.partners) {
+            return [];
+        }
+
+        // Преобразуем партнеров в формат с координатами
+        return regionData.partners
+            .filter(partner => partner.coordinates && partner.coordinates.lat && partner.coordinates.lon)
+            .map((partner, index) => ({
+                id: `partner_${index}`,
+                name: partner.name,
+                type: partner.type,
+                description: partner.description,
+                emoji: partner.emoji,
+                rating: partner.rating,
+                specialOffer: partner.specialOffer,
+                point: {
+                    lat: partner.coordinates.lat,
+                    lon: partner.coordinates.lon
+                },
+                isPartner: true // Флаг для идентификации партнера
+            }));
+    }
+
+    /**
+     * Добавление маркеров партнеров на карту
+     */
+    addPartnerMarkersToMap(partners) {
+        partners.forEach((partner, index) => {
+            if (partner.point) {
+                const marker = this.createPartnerMarker(partner, index);
+                this.markers.push(marker);
+            }
+        });
+    }
+
+    /**
+     * Создание маркера партнера
+     */
+    createPartnerMarker(partner, index) {
+        const coordinates = [partner.point.lon, partner.point.lat];
+
+        const markerElement = document.createElement('div');
+        markerElement.className = 'partner-marker';
+        markerElement.innerHTML = `
+            <div class="partner-marker-icon">
+                <span class="partner-emoji">${partner.emoji || '🏪'}</span>
+            </div>
+            <div class="partner-tooltip">${partner.name}</div>
+        `;
+
+        const marker = new mapgl.Marker(this.mapInstance, {
+            coordinates: coordinates,
+            element: markerElement,
+        });
+
+        // Обработчик клика на маркер партнера
+        markerElement.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.displayPartnerInSidebar(partner);
+            this.mapInstance.setCenter(coordinates);
+        });
+
+        return marker;
+    }
+
+    /**
+     * Отображение партнера в боковой панели
+     */
+    displayPartnerInSidebar(partner) {
+        const sidebarContent = document.getElementById('sidebarContent');
+
+        sidebarContent.innerHTML = `
+            <div class="place-detail partner-detail">
+                <div class="place-header">
+                    <h2 class="place-name">${partner.emoji || '🏪'} ${partner.name}</h2>
+                    <div class="place-type">${partner.type}</div>
+                    <div class="place-badge partner-badge">Партнер Матрешка</div>
+                </div>
+
+                <div class="partner-description">
+                    ${partner.description}
+                </div>
+
+                ${partner.rating ? `
+                    <div class="place-rating enhanced-rating">
+                        <div class="rating-display">
+                            <div class="rating-stars">${this.generateStars(parseFloat(partner.rating))}</div>
+                            <span class="rating-value">${partner.rating}</span>
+                        </div>
+                        <div class="rating-bar">
+                            <div class="rating-fill" style="width: ${(parseFloat(partner.rating) / 5) * 100}%"></div>
+                        </div>
+                    </div>
+                ` : ''}
+
+                ${partner.specialOffer ? `
+                    <div class="special-offer">
+                        <h4>🎁 Специальное предложение</h4>
+                        <p>${partner.specialOffer}</p>
+                    </div>
+                ` : ''}
+
+                <div class="place-actions">
+                    <button class="action-btn route-btn" onclick="matryoshkaMap.openRoute(${partner.point.lat}, ${partner.point.lon})">
+                        🗺️ Маршрут
+                    </button>
+                </div>
+            </div>
+        `;
     }
 
     /**

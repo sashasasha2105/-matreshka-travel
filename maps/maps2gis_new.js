@@ -5,7 +5,7 @@
 
 class Matryoshka2GISMaps {
     constructor() {
-        this.apiKey = '8a7c9b28-b45f-4f45-9784-d34db72416db';
+        this.apiKey = '20d959b9-d5ec-4578-abe3-1d414e8edfc3';
         this.mapInstance = null;
         this.markers = [];
         this.currentPopup = null;
@@ -109,11 +109,14 @@ class Matryoshka2GISMaps {
             // Настраиваем обработчики событий
             this.setupEventHandlers();
 
-            // Загружаем достопримечательности
-            await this.loadRegionAttractions(regionData);
+            // НЕ загружаем достопримечательности - они делают карту перегруженной
+            // await this.loadRegionAttractions(regionData);
+            console.log('ℹ️ Достопримечательности НЕ загружаются - только партнёры');
 
-            // АВТОМАТИЧЕСКИ загружаем популярные места для клика
-            await this.loadPopularPlaces(regionData.name);
+            // Загружаем партнеров региона (ОСНОВНОЕ - маркеры партнёров)
+            await this.loadRegionPartners(regionData);
+
+            console.log('✅ Партнёры загружены!');
 
             console.log('✅ Карта успешно создана');
 
@@ -633,6 +636,174 @@ class Matryoshka2GISMaps {
         regionData.attractions.forEach((attraction, index) => {
             this.addAttractionMarker(attraction, index);
         });
+    }
+
+    /**
+     * Загрузка партнеров региона
+     */
+    async loadRegionPartners(regionData) {
+        console.log('🤝 Загружаем партнеров для:', regionData.name);
+        console.log('📦 Данные региона:', regionData);
+
+        if (!regionData.partners || regionData.partners.length === 0) {
+            console.log('⚠️ Нет партнеров для региона!');
+            console.log('regionData.partners:', regionData.partners);
+            return;
+        }
+
+        console.log(`✅ Найдено ${regionData.partners.length} партнёров`);
+        console.log('Список партнёров:', regionData.partners);
+
+        // Добавляем маркеры партнеров
+        for (let i = 0; i < regionData.partners.length; i++) {
+            const partner = regionData.partners[i];
+            console.log(`➡️ Обрабатываем партнёра ${i + 1}/${regionData.partners.length}:`, partner.name);
+            await this.addPartnerMarker(partner);
+        }
+
+        console.log(`✅ Все ${regionData.partners.length} партнёров обработаны`);
+    }
+
+    /**
+     * Добавление маркера партнера
+     */
+    async addPartnerMarker(partner) {
+        try {
+            // ТОЛЬКО используем координаты из данных - НЕ ищем через API!
+            if (!partner.coordinates || !partner.coordinates.lon || !partner.coordinates.lat) {
+                console.warn(`⚠️ У партнёра "${partner.name}" нет координат!`);
+                return;
+            }
+
+            const coordinates = [partner.coordinates.lon, partner.coordinates.lat];
+            console.log(`✅ Создаём маркер для партнёра: ${partner.name} на координатах:`, coordinates);
+
+            if (coordinates) {
+                const markerElement = document.createElement('div');
+                markerElement.className = 'partner-marker';
+                markerElement.innerHTML = `
+                    <div class="partner-marker-icon">
+                        <span class="partner-emoji">${partner.emoji || '🤝'}</span>
+                    </div>
+                    <div class="partner-tooltip">
+                        <strong>${partner.name}</strong>
+                        ${partner.type ? `<br><small>${partner.type}</small>` : ''}
+                    </div>
+                `;
+
+                // Делаем маркер интерактивным
+                markerElement.style.pointerEvents = 'auto';
+                markerElement.style.cursor = 'pointer';
+                markerElement.style.position = 'absolute';
+                markerElement.style.zIndex = '1002';
+
+                const marker = new mapgl.Marker(this.mapInstance, {
+                    coordinates: coordinates,
+                    element: markerElement,
+                });
+
+                // Обработчик клика
+                const clickHandler = (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    console.log('🤝 Клик по партнеру:', partner.name);
+                    this.showPartnerInfo(partner, coordinates);
+                };
+
+                markerElement.addEventListener('click', clickHandler, true);
+                markerElement.addEventListener('touchend', clickHandler, true);
+
+                // Hover эффект
+                markerElement.addEventListener('mouseenter', () => {
+                    markerElement.style.transform = 'scale(1.2)';
+                    markerElement.style.zIndex = '10002';
+                });
+
+                markerElement.addEventListener('mouseleave', () => {
+                    markerElement.style.transform = 'scale(1)';
+                    markerElement.style.zIndex = '1002';
+                });
+
+                this.markers.push(marker);
+                console.log('✅ Маркер партнера добавлен на карту:', partner.name);
+            } else {
+                console.warn('⚠️ Нет координат для партнера:', partner.name);
+            }
+        } catch (error) {
+            console.warn('⚠️ Ошибка добавления маркера партнера:', partner.name, error);
+        }
+    }
+
+    /**
+     * Показ информации о партнере
+     */
+    showPartnerInfo(partner, coordinates) {
+        const sidebarContent = document.getElementById('sidebarContent');
+
+        if (!sidebarContent) {
+            // Если нет sidebar (на мобильных), показываем уведомление
+            this.showToast(`🤝 ${partner.name} - партнер Матрешка Тревел`);
+
+            // Центрируем карту на партнёре
+            if (this.mapInstance && coordinates) {
+                this.mapInstance.setCenter(coordinates);
+                this.mapInstance.setZoom(16);
+            }
+            return;
+        }
+
+        sidebarContent.innerHTML = `
+            <div class="partner-detail">
+                <div class="partner-header">
+                    <div class="partner-badge">
+                        <span style="font-size: 2rem;">${partner.emoji || '🤝'}</span>
+                    </div>
+                    <h2 class="partner-name">${partner.name}</h2>
+                    <p class="partner-type">${partner.type || 'Партнер'}</p>
+                </div>
+
+                ${partner.rating ? `
+                    <div class="partner-rating">
+                        <span class="stars">${this.generateStars(parseFloat(partner.rating))}</span>
+                        <span class="rating-value">${partner.rating}</span>
+                    </div>
+                ` : ''}
+
+                <div class="partner-description">
+                    <h4>📋 О заведении</h4>
+                    <p>${partner.description || 'Партнер платформы Матрешка Тревел'}</p>
+                </div>
+
+                ${partner.specialOffer ? `
+                    <div class="special-offer">
+                        <h4>🎁 Специальное предложение</h4>
+                        <p>${partner.specialOffer}</p>
+                    </div>
+                ` : ''}
+
+                <div class="partner-actions">
+                    <button onclick="matryoshka2GIS.centerOnCoordinates(${coordinates[0]}, ${coordinates[1]})" class="action-btn primary">
+                        🎯 Показать на карте
+                    </button>
+                    <button onclick="matryoshka2GIS.searchNearPlace('${partner.name.replace(/'/g, "\\'")}  ${this.currentRegionData?.name || ''}')" class="action-btn">
+                        🔍 Найти в 2ГИС
+                    </button>
+                </div>
+
+                <div class="route-tip">
+                    <span class="tip-icon">💡</span>
+                    <div class="tip-text">
+                        <strong>Совет:</strong> Покажите эту карточку в заведении, чтобы получить специальное предложение!
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Центрируем карту на партнёре
+        if (this.mapInstance && coordinates) {
+            this.mapInstance.setCenter(coordinates);
+            this.mapInstance.setZoom(16);
+        }
     }
 
     /**

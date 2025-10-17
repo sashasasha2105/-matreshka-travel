@@ -7,8 +7,8 @@ const TRAVEL_PACKAGES = [
         id: 'golden-ring-classic',
         name: 'Золотое кольцо России',
         duration: '5 дней / 4 ночи',
-        price: 25900,
-        oldPrice: 35900,
+        price: 900,
+        oldPrice: null,
         image: 'city_photos/GOLDRING.jpg',
         description: 'Путешествие по древним городам России с посещением главных достопримечательностей',
         cities: ['Москва', 'Владимир', 'Суздаль', 'Ярославль', 'Кострома'],
@@ -16,22 +16,6 @@ const TRAVEL_PACKAGES = [
             {
                 id: 1,
                 name: 'Маршрут 1: Комфорт',
-                hotels: [
-                    {
-                        name: 'Гостиница "Золотое кольцо" 4*',
-                        city: 'Владимир',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Владимир&dest_type=city',
-                        mapLink: 'https://2gis.ru/vladimir/firm/70000001018194711',
-                        coordinates: { lat: 56.1290, lon: 40.4060 }
-                    },
-                    {
-                        name: 'Отель "Пушкарская слобода" 4*',
-                        city: 'Суздаль',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Суздаль&dest_type=city',
-                        mapLink: 'https://2gis.ru/suzdal/firm/70000001045558503',
-                        coordinates: { lat: 56.4186, lon: 40.4456 }
-                    }
-                ],
                 programs: [
                     {
                         name: 'Экскурсия "Владимирские святыни"',
@@ -54,22 +38,6 @@ const TRAVEL_PACKAGES = [
             {
                 id: 2,
                 name: 'Маршрут 2: Эконом',
-                hotels: [
-                    {
-                        name: 'Гостиница "Заря" 3*',
-                        city: 'Владимир',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Владимир&dest_type=city',
-                        mapLink: 'https://2gis.ru/vladimir/firm/70000001018428266',
-                        coordinates: { lat: 56.1367, lon: 40.3959 }
-                    },
-                    {
-                        name: 'Мини-отель "Светлый терем" 3*',
-                        city: 'Суздаль',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Суздаль&dest_type=city',
-                        mapLink: 'https://2gis.ru/suzdal',
-                        coordinates: { lat: 56.4167, lon: 40.4489 }
-                    }
-                ],
                 programs: [
                     {
                         name: 'Обзорная экскурсия по Владимиру',
@@ -95,8 +63,8 @@ const TRAVEL_PACKAGES = [
         id: 'caucasus-mountains',
         name: 'Кавказ - горы и традиции',
         duration: '6 дней / 5 ночей',
-        price: 32900,
-        oldPrice: 45900,
+        price: 900,
+        oldPrice: null,
         image: 'city_photos/kazan.jpg',
         description: 'Путешествие по самым красивым местам Северного Кавказа с посещением горных курортов',
         cities: ['Пятигорск', 'Кисловодск', 'Минеральные Воды', 'Домбай'],
@@ -104,22 +72,6 @@ const TRAVEL_PACKAGES = [
             {
                 id: 1,
                 name: 'Маршрут 1: Комфорт плюс',
-                hotels: [
-                    {
-                        name: 'Гранд Отель "Бристоль" 4*',
-                        city: 'Пятигорск',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Пятигорск&dest_type=city',
-                        mapLink: 'https://2gis.ru/pyatigorsk/firm/70000001019138815',
-                        coordinates: { lat: 44.0391, lon: 43.0707 }
-                    },
-                    {
-                        name: 'Отель "Грейс Империал" 4*',
-                        city: 'Кисловодск',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Кисловодск&dest_type=city',
-                        mapLink: 'https://2gis.ru/kislovodsk/firm/70000001025426074',
-                        coordinates: { lat: 43.9088, lon: 42.7228 }
-                    }
-                ],
                 programs: [
                     {
                         name: 'Экскурсия в Домбай',
@@ -150,22 +102,6 @@ const TRAVEL_PACKAGES = [
             {
                 id: 2,
                 name: 'Маршрут 2: Стандарт',
-                hotels: [
-                    {
-                        name: 'Отель "Пятигорск" 3*',
-                        city: 'Пятигорск',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Пятигорск&dest_type=city',
-                        mapLink: 'https://2gis.ru/pyatigorsk',
-                        coordinates: { lat: 44.0375, lon: 43.0708 }
-                    },
-                    {
-                        name: 'Санаторий "Нарзан" 3*',
-                        city: 'Кисловодск',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Кисловодск&dest_type=city',
-                        mapLink: 'https://2gis.ru/kislovodsk/firm/70000001031595688',
-                        coordinates: { lat: 43.9025, lon: 42.7209 }
-                    }
-                ],
                 programs: [
                     {
                         name: 'Обзорная экскурсия по Пятигорску',
@@ -191,8 +127,8 @@ const TRAVEL_PACKAGES = [
         id: 'ural-mountains',
         name: 'Урал - сердце России',
         duration: '5 дней / 4 ночи',
-        price: 28900,
-        oldPrice: 38900,
+        price: 900,
+        oldPrice: null,
         image: 'city_photos/Снимок экрана 2025-10-07 в 13.34.49.png',
         description: 'Путешествие по живописным местам Урала с посещением природных парков и исторических городов',
         cities: ['Екатеринбург', 'Невьянск', 'Нижний Тагил'],
@@ -200,22 +136,6 @@ const TRAVEL_PACKAGES = [
             {
                 id: 1,
                 name: 'Маршрут 1: Классический',
-                hotels: [
-                    {
-                        name: 'Гранд Отель "Екатеринбург" 4*',
-                        city: 'Екатеринбург',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Екатеринбург&dest_type=city',
-                        mapLink: 'https://2gis.ru/ekaterinburg/firm/70000001018816355',
-                        coordinates: { lat: 56.8389, lon: 60.6057 }
-                    },
-                    {
-                        name: 'Отель "Демидов Плаза" 4*',
-                        city: 'Нижний Тагил',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Нижний+Тагил&dest_type=city',
-                        mapLink: 'https://2gis.ru/nizhnytagil',
-                        coordinates: { lat: 57.9195, lon: 59.9658 }
-                    }
-                ],
                 programs: [
                     {
                         name: 'Обзорная экскурсия по Екатеринбургу',
@@ -254,15 +174,6 @@ const TRAVEL_PACKAGES = [
             {
                 id: 2,
                 name: 'Маршрут 2: Бюджетный',
-                hotels: [
-                    {
-                        name: 'Отель "Урал" 3*',
-                        city: 'Екатеринбург',
-                        link: 'https://www.booking.com/searchresults.ru.html?ss=Екатеринбург&dest_type=city',
-                        mapLink: 'https://2gis.ru/ekaterinburg/firm/70000001018745988',
-                        coordinates: { lat: 56.8370, lon: 60.6097 }
-                    }
-                ],
                 programs: [
                     {
                         name: 'Прогулка по центру Екатеринбурга',

@@ -1601,6 +1601,292 @@
     }
 }
 
+/* === МАРКЕРЫ ПАРТНЕРОВ === */
+.partner-marker {
+    position: relative;
+    cursor: pointer;
+    z-index: 1002;
+    animation: partnerAppear 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.partner-marker-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #00c853, #64dd17);
+    border-radius: 50%;
+    border: 4px solid #fff;
+    box-shadow:
+        0 8px 32px rgba(0, 200, 83, 0.6),
+        0 0 40px rgba(100, 221, 23, 0.4),
+        0 0 80px rgba(100, 221, 23, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    animation: partnerMarkerPulse 2.5s infinite;
+    position: relative;
+}
+
+.partner-marker-icon::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 2px solid rgba(0, 200, 83, 0.3);
+    border-radius: 50%;
+    animation: partnerRipple 2.5s ease-out infinite;
+}
+
+.partner-marker-icon:hover {
+    transform: scale(1.35);
+    box-shadow:
+        0 12px 48px rgba(0, 200, 83, 0.8),
+        0 0 60px rgba(100, 221, 23, 0.6),
+        0 0 120px rgba(100, 221, 23, 0.3);
+}
+
+.partner-emoji {
+    font-size: 28px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.partner-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background: linear-gradient(135deg, rgba(0, 200, 83, 0.95), rgba(100, 221, 23, 0.95));
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 1003;
+}
+
+.partner-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: rgba(0, 200, 83, 0.95);
+}
+
+.partner-marker:hover .partner-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-12px);
+}
+
+.partner-badge {
+    background: linear-gradient(135deg, #00c853, #64dd17);
+    color: #fff;
+}
+
+.partner-detail .partner-description {
+    color: #e0e0e0;
+    line-height: 1.6;
+    margin: 16px 0;
+    padding: 16px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.special-offer {
+    background: linear-gradient(135deg, rgba(255, 204, 0, 0.1), rgba(255, 142, 83, 0.1));
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+}
+
+.special-offer h4 {
+    color: #ffcc00;
+    font-size: 1rem;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.special-offer p {
+    color: #e0e0e0;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+@keyframes partnerMarkerPulse {
+    0%, 100% {
+        box-shadow:
+            0 8px 32px rgba(0, 200, 83, 0.6),
+            0 0 40px rgba(100, 221, 23, 0.4),
+            0 0 80px rgba(100, 221, 23, 0.2);
+    }
+    50% {
+        box-shadow:
+            0 12px 48px rgba(0, 200, 83, 0.8),
+            0 0 60px rgba(100, 221, 23, 0.6),
+            0 0 120px rgba(100, 221, 23, 0.3);
+    }
+}
+
+@keyframes partnerAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.3) translateY(-40px);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.2) translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes partnerRipple {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.3;
+    }
+    100% {
+        transform: scale(1.6);
+        opacity: 0;
+    }
+}
+
+/* === ДЕТАЛИ ПАРТНЁРА === */
+.partner-detail {
+    animation: slideInLeft 0.4s ease-out;
+}
+
+.partner-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 204, 0, 0.2);
+}
+
+.partner-badge {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #00c853, #64dd17);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 8px 32px rgba(0, 200, 83, 0.4),
+        0 0 40px rgba(100, 221, 23, 0.3);
+    border: 4px solid rgba(255, 255, 255, 0.2);
+}
+
+.partner-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 8px 0;
+}
+
+.partner-type {
+    font-size: 0.95rem;
+    color: #64dd17;
+    font-weight: 500;
+}
+
+.partner-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 12px;
+    background: rgba(0, 200, 83, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(0, 200, 83, 0.2);
+}
+
+.partner-rating .stars {
+    color: #ffcc00;
+    font-size: 1.1rem;
+}
+
+.partner-rating .rating-value {
+    color: #64dd17;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.partner-description {
+    margin-bottom: 20px;
+}
+
+.partner-description h4 {
+    color: #64dd17;
+    font-size: 1rem;
+    margin: 0 0 12px 0;
+    font-weight: 600;
+}
+
+.partner-description p {
+    color: #e0e0e0;
+    line-height: 1.6;
+    margin: 0;
+}
+
+.special-offer {
+    background: linear-gradient(135deg, rgba(255, 204, 0, 0.15), rgba(255, 142, 83, 0.1));
+    border: 2px solid rgba(255, 204, 0, 0.4);
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    animation: specialOfferGlow 2s ease-in-out infinite;
+}
+
+.special-offer h4 {
+    color: #ffcc00;
+    font-size: 1rem;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.special-offer p {
+    color: #fff;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: 500;
+}
+
+@keyframes specialOfferGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 204, 0, 0.2);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 204, 0, 0.4);
+    }
+}
+
 /* === МАРШРУТНАЯ ИНФОРМАЦИЯ === */
 .route-info {
     background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(22, 33, 62, 0.95));

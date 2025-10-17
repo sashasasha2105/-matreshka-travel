@@ -5,7 +5,7 @@
 
 class Matryoshka2GISMaps {
     constructor() {
-        this.apiKey = '8a7c9b28-b45f-4f45-9784-d34db72416db';
+        this.apiKey = '20d959b9-d5ec-4578-abe3-1d414e8edfc3';
         this.mapInstance = null;
         this.markers = [];
         this.searchApiUrl = 'https://catalog.api.2gis.com/3.0/items';

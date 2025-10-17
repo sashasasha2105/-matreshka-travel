@@ -539,9 +539,28 @@ function loadPartners(partners) {
 
     partnersGrid.innerHTML = '';
 
+    // Сохраняем партнеров в глобальную переменную для доступа из общей кнопки
+    window.currentPartners = partners;
+
+    // Проверяем статус оплаты для текущего региона
+    const currentRegionId = getCurrentRegionId();
+    const isPaid = isRegionPaid(currentRegionId);
+
     partners.forEach((partner, index) => {
         const card = document.createElement('div');
         card.className = 'partner-card';
+
+        // Создаем кнопку QR для каждого партнера
+        const qrButtonHTML = isPaid
+            ? `<button class="partner-qr-btn" onclick='showPartnerQRByName("${partner.name.replace(/'/g, "\\'")}","${partner.emoji}")'>
+                   <span class="qr-btn-icon">📱</span>
+                   <span class="qr-btn-text">Показать QR</span>
+               </button>`
+            : `<button class="partner-qr-btn disabled" disabled title="Оплатите доступ для получения QR-кода">
+                   <span class="qr-btn-icon">🔒</span>
+                   <span class="qr-btn-text">Показать QR</span>
+               </button>`;
+
         card.innerHTML = `
             <div class="partner-image">${partner.emoji}</div>
             <div class="partner-info">
@@ -551,35 +570,23 @@ function loadPartners(partners) {
                 <div class="partner-rating">
                     <span>⭐</span>
                     <span>${partner.rating}</span>
-                    <span style="color: rgba(255,255,255,0.5);">(отзывы)</span>
                 </div>
-                <button class="partner-qr-btn">
-                    <span class="qr-btn-icon">📱</span>
-                    Получить QR
+                <button class="partner-route-btn" data-partner-index="${index}">
+                    <span class="route-icon">🗺️</span>
+                    <span class="route-text">Маршрут, отзывы, время работы</span>
                 </button>
+                ${qrButtonHTML}
             </div>
         `;
         card.style.opacity = '0';
         card.style.transform = 'translateY(30px)';
         partnersGrid.appendChild(card);
 
-        // Добавляем обработчик для кнопки QR
-        const qrButton = card.querySelector('.partner-qr-btn');
-        if (qrButton) {
-            qrButton.addEventListener('click', (e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                console.log('🔲 Клик по кнопке QR для:', partner.name);
-
-                // Используем полноценную систему QR от matryoshkaQR
-                if (window.matryoshkaQR) {
-                    window.matryoshkaQR.showQRCode(partner);
-                } else {
-                    // Fallback на простой QR
-                    showStaticQR(partner.name);
-                }
-            });
-        }
+        // Добавляем обработчик для кнопки маршрута
+        const routeBtn = card.querySelector('.partner-route-btn');
+        routeBtn.addEventListener('click', () => {
+            openPartnerRoute(partner);
+        });
 
         // Анимация появления
         setTimeout(() => {
@@ -588,6 +595,64 @@ function loadPartners(partners) {
             card.style.transform = 'translateY(0)';
         }, index * 100);
     });
+
+    // Добавляем кнопки оплаты внизу только если еще не оплачено
+    if (!isPaid) {
+        const buttonsContainer = document.createElement('div');
+        buttonsContainer.className = 'partners-buttons-container';
+        buttonsContainer.innerHTML = `
+            <button class="partners-pay-btn" onclick="showPaymentModal()">
+                <span class="pay-btn-icon">💳</span>
+                <span class="pay-btn-text">Оплатить пакет региона</span>
+                <span class="pay-btn-price">300 ₽</span>
+            </button>
+            <button class="partners-demo-btn" onclick="demoPurchase()">
+                <span class="demo-btn-icon">✨</span>
+                <span class="demo-btn-text">Демо-покупка</span>
+            </button>
+        `;
+        partnersGrid.appendChild(buttonsContainer);
+    }
+}
+
+// Функция показа QR для конкретного партнера по имени
+function showPartnerQRByName(partnerName, partnerEmoji) {
+    console.log('🔲 Показываем QR для партнера:', partnerName);
+
+    // Используем систему QR
+    if (typeof showQRModal === 'function') {
+        showQRModal(partnerName, partnerEmoji);
+    } else if (window.matryoshkaQR) {
+        // Fallback на полноценную систему QR
+        const partner = window.currentPartners?.find(p => p.name === partnerName);
+        if (partner) {
+            window.matryoshkaQR.showQRCode(partner);
+        }
+    } else {
+        // Последний fallback
+        showStaticQR(partnerName);
+    }
+}
+
+// Функция показа QR для всех партнеров (оставляем для совместимости)
+function showAllPartnersQR() {
+    const partners = window.currentPartners || [];
+
+    if (partners.length === 0) {
+        showToast('❌ Партнеры не найдены');
+        return;
+    }
+
+    console.log('🔲 Показываем общий QR-код для партнеров');
+
+    // Используем полноценную систему QR от matryoshkaQR
+    if (window.matryoshkaQR) {
+        // Можно показать QR для первого партнера или создать общий QR
+        window.matryoshkaQR.showQRCode(partners[0]);
+    } else {
+        // Fallback на простой QR
+        showStaticQR('Партнеры региона');
+    }
 }
 
 // Функция показа статического QR кода
@@ -723,18 +788,134 @@ function openRoute(attractionName) {
     // Ищем достопримечательность
     const attraction = regionData.attractions.find(a => a.name === attractionName);
 
-    if (attraction && attraction.gisLink) {
-        // Открываем ссылку на 2GIS
-        window.open(attraction.gisLink, '_blank');
-        console.log('🗺️ Открываем 2GIS для:', attractionName);
-    } else {
-        // Fallback - поиск по названию в 2GIS
-        const searchQuery = encodeURIComponent(attractionName);
-        const cityName = regionData.name || 'moscow';
-        const routeUrl = `https://2gis.ru/search/${searchQuery}`;
-        window.open(routeUrl, '_blank');
-        console.log('🗺️ Открываем поиск 2GIS для:', attractionName);
+    // Показываем модальное окно выбора навигации
+    showNavigationChoice({
+        name: attractionName,
+        coordinates: attraction?.coordinates,
+        type: 'attraction'
+    });
+}
+
+// Функция открытия маршрута для партнера
+function openPartnerRoute(partner) {
+    console.log('🗺️ Открываем маршрут для партнера:', partner.name);
+
+    // Показываем модальное окно выбора навигации
+    showNavigationChoice({
+        name: partner.name,
+        coordinates: partner.coordinates,
+        type: 'partner'
+    });
+}
+
+// Функция показа модального окна выбора навигации
+function showNavigationChoice(place) {
+    // Создаем модальное окно
+    const modal = document.createElement('div');
+    modal.id = 'navigationModal';
+    modal.className = 'navigation-modal';
+    modal.innerHTML = `
+        <div class="navigation-modal-overlay"></div>
+        <div class="navigation-modal-content">
+            <button class="navigation-modal-close">✕</button>
+
+            <div class="navigation-modal-header">
+                <h3 class="navigation-modal-title">🗺️ Выберите навигацию</h3>
+                <p class="navigation-modal-subtitle">${place.name}</p>
+            </div>
+
+            <div class="navigation-options">
+                <button class="navigation-option" data-nav="2gis">
+                    <div class="navigation-option-icon" style="background: linear-gradient(135deg, #00a650, #008f45);">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="white">
+                            <path d="M20 10C16.13 10 13 13.13 13 17c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                        </svg>
+                    </div>
+                    <div class="navigation-option-info">
+                        <div class="navigation-option-name">2GIS</div>
+                        <div class="navigation-option-desc">Карты и навигация</div>
+                    </div>
+                </button>
+
+                <button class="navigation-option" data-nav="yandex">
+                    <div class="navigation-option-icon" style="background: linear-gradient(135deg, #fc3f1d, #ff0000);">
+                        <svg width="40" height="40" viewBox="0 0 40 40" fill="white">
+                            <text x="50%" y="55%" text-anchor="middle" font-size="24" font-weight="bold" font-family="Arial">Я</text>
+                        </svg>
+                    </div>
+                    <div class="navigation-option-info">
+                        <div class="navigation-option-name">Яндекс.Карты</div>
+                        <div class="navigation-option-desc">Маршруты и навигация</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Добавляем обработчики событий
+    const overlay = modal.querySelector('.navigation-modal-overlay');
+    const closeBtn = modal.querySelector('.navigation-modal-close');
+    const btn2gis = modal.querySelector('[data-nav="2gis"]');
+    const btnYandex = modal.querySelector('[data-nav="yandex"]');
+
+    overlay.addEventListener('click', closeNavigationModal);
+    closeBtn.addEventListener('click', closeNavigationModal);
+
+    btn2gis.addEventListener('click', () => {
+        openIn2GIS(place.name, place.coordinates);
+    });
+
+    btnYandex.addEventListener('click', () => {
+        openInYandex(place.name, place.coordinates);
+    });
+
+    // Анимация появления
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+}
+
+// Функция закрытия модального окна навигации
+function closeNavigationModal() {
+    const modal = document.getElementById('navigationModal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
     }
+}
+
+// Функция открытия в 2GIS
+function openIn2GIS(placeName, coordinates) {
+    closeNavigationModal();
+
+    // Всегда используем поиск по названию + город (как у достопримечательностей)
+    const regionData = window.RUSSIA_REGIONS_DATA?.[getCurrentRegionId()];
+    const cityName = regionData?.name || '';
+    const searchQuery = encodeURIComponent(`${placeName} ${cityName}`);
+    const url = `https://2gis.ru/search/${searchQuery}`;
+
+    window.open(url, '_blank');
+    console.log('🗺️ Открываем 2GIS:', url);
+    showToast('🗺️ Открываем 2GIS');
+}
+
+// Функция открытия в Яндекс.Картах
+function openInYandex(placeName, coordinates) {
+    closeNavigationModal();
+
+    // Всегда используем поиск по названию + город (как у достопримечательностей)
+    const regionData = window.RUSSIA_REGIONS_DATA?.[getCurrentRegionId()];
+    const cityName = regionData?.name || '';
+    const searchQuery = encodeURIComponent(`${placeName} ${cityName}`);
+    const url = `https://yandex.ru/maps/?text=${searchQuery}`;
+
+    window.open(url, '_blank');
+    console.log('🗺️ Открываем Яндекс.Карты:', url);
+    showToast('🗺️ Открываем Яндекс.Карты');
 }
 
 // Функция получения текущего региона
@@ -746,8 +927,190 @@ function getCurrentRegionId() {
     return null;
 }
 
+// ========================================
+// СИСТЕМА ОПЛАТЫ РЕГИОНОВ
+// ========================================
+
+// Инициализация хранилища оплаченных регионов из sessionStorage
+function initPaidRegions() {
+    const saved = sessionStorage.getItem('paidRegions');
+    if (saved) {
+        try {
+            window.paidRegions = JSON.parse(saved);
+        } catch (e) {
+            window.paidRegions = [];
+        }
+    } else {
+        window.paidRegions = [];
+    }
+}
+
+// Инициализируем при загрузке
+initPaidRegions();
+
+// Проверка, оплачен ли регион
+function isRegionPaid(regionId) {
+    initPaidRegions(); // Всегда загружаем актуальные данные
+    return window.paidRegions.includes(regionId);
+}
+
+// Отметить регион как оплаченный
+function markRegionAsPaid(regionId) {
+    initPaidRegions(); // Загружаем актуальные данные
+    if (!window.paidRegions.includes(regionId)) {
+        window.paidRegions.push(regionId);
+        // Сохраняем в sessionStorage
+        sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+        console.log('✅ Регион оплачен и сохранен:', regionId, window.paidRegions);
+    }
+}
+
+// Показать модальное окно оплаты
+function showPaymentModal() {
+    const currentRegionId = getCurrentRegionId();
+    const regionData = window.RUSSIA_REGIONS_DATA?.[currentRegionId];
+    const regionName = regionData?.name || 'региона';
+
+    const modal = document.createElement('div');
+    modal.id = 'paymentModal';
+    modal.className = 'payment-modal';
+    modal.innerHTML = `
+        <div class="payment-modal-overlay"></div>
+        <div class="payment-modal-content">
+            <button class="payment-modal-close" onclick="closePaymentModal()">✕</button>
+
+            <div class="payment-modal-header">
+                <h3 class="payment-modal-title">💳 Оплата доступа</h3>
+                <p class="payment-modal-subtitle">Пакет партнеров: ${regionName}</p>
+                <div class="payment-modal-price">300 ₽</div>
+            </div>
+
+            <form class="payment-form" onsubmit="processPayment(event)">
+                <div class="payment-form-group">
+                    <label class="payment-label">Номер карты</label>
+                    <input
+                        type="text"
+                        class="payment-input"
+                        placeholder="0000 0000 0000 0000"
+                        maxlength="19"
+                        required
+                    >
+                </div>
+
+                <div class="payment-form-row">
+                    <div class="payment-form-group">
+                        <label class="payment-label">Срок действия</label>
+                        <input
+                            type="text"
+                            class="payment-input"
+                            placeholder="MM/YY"
+                            maxlength="5"
+                            required
+                        >
+                    </div>
+                    <div class="payment-form-group">
+                        <label class="payment-label">CVV</label>
+                        <input
+                            type="text"
+                            class="payment-input"
+                            placeholder="***"
+                            maxlength="3"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <button type="submit" class="payment-submit-btn">
+                    <span class="payment-submit-icon">💳</span>
+                    <span class="payment-submit-text">Оплатить 300 ₽</span>
+                </button>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    // Анимация появления
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+
+    // Закрытие по клику на overlay
+    const overlay = modal.querySelector('.payment-modal-overlay');
+    overlay.addEventListener('click', closePaymentModal);
+}
+
+// Закрыть модальное окно оплаты
+function closePaymentModal() {
+    const modal = document.getElementById('paymentModal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.remove();
+        }, 300);
+    }
+}
+
+// Обработка оплаты
+function processPayment(event) {
+    event.preventDefault();
+
+    const currentRegionId = getCurrentRegionId();
+    const regionData = window.RUSSIA_REGIONS_DATA?.[currentRegionId];
+
+    // Имитация обработки платежа
+    showLoader('Обработка платежа...');
+
+    setTimeout(() => {
+        // Отмечаем регион как оплаченный
+        markRegionAsPaid(currentRegionId);
+
+        hideLoader();
+        closePaymentModal();
+
+        // Показываем уведомление об успешной оплате
+        showToast('✅ Оплата прошла успешно!', 3000);
+
+        // Перезагружаем партнеров для обновления кнопок
+        if (regionData && regionData.partners) {
+            loadPartners(regionData.partners);
+        }
+
+        // Обновляем профиль если открыт
+        if (window.matryoshkaProfile && window.matryoshkaProfile.updateCoupons) {
+            window.matryoshkaProfile.updateCoupons();
+        }
+    }, 2000);
+}
+
+// Демо-покупка (мгновенная)
+function demoPurchase() {
+    const currentRegionId = getCurrentRegionId();
+    const regionData = window.RUSSIA_REGIONS_DATA?.[currentRegionId];
+
+    // Отмечаем регион как оплаченный
+    markRegionAsPaid(currentRegionId);
+
+    // Показываем уведомление
+    showToast('✅ Оплата прошла успешно! (Демо)', 3000);
+
+    // Перезагружаем партнеров для обновления кнопок
+    if (regionData && regionData.partners) {
+        loadPartners(regionData.partners);
+    }
+
+    // Обновляем профиль если открыт
+    if (window.matryoshkaProfile && window.matryoshkaProfile.updateCoupons) {
+        window.matryoshkaProfile.updateCoupons();
+    }
+}
+
 // Функция загрузки интерактивной карты 2GIS
 async function load2GISMap(regionData) {
+    console.log('🗺️ load2GISMap вызвана с данными:', regionData);
+    console.log('📋 Партнёры в regionData:', regionData?.partners);
+    console.log('📊 Количество партнёров:', regionData?.partners?.length);
+
     const mapContainer = document.getElementById('mapContainer');
     if (!mapContainer) {
         console.warn('⚠️ Контейнер карты не найден');
@@ -765,6 +1128,7 @@ async function load2GISMap(regionData) {
     try {
         // Создаем интерактивную карту через наш модуль
         if (window.matryoshka2GIS) {
+            console.log('✅ Модуль matryoshka2GIS найден, вызываем createMap...');
             await window.matryoshka2GIS.createMap(regionData, 'mapContainer');
         } else {
             throw new Error('Модуль карт не загружен');

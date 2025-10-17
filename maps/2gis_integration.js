@@ -5,7 +5,7 @@
 
 class TwoGISIntegration {
     constructor(apiKey) {
-        this.apiKey = apiKey || '8a7c9b28-b45f-4f45-9784-d34db72416db';
+        this.apiKey = apiKey || '20d959b9-d5ec-4578-abe3-1d414e8edfc3';
         this.map = null;
         this.markers = [];
         this.currentResults = [];

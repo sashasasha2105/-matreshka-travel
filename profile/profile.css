@@ -1098,3 +1098,504 @@
         font-size: 0.9rem;
     }
 }
+
+/* Секция купонов и скидок */
+.coupons-section {
+    margin: 40px -30px 30px -30px;
+    padding: 30px;
+    background: rgba(138, 43, 226, 0.05);
+    border-top: 2px solid rgba(138, 43, 226, 0.2);
+    border-bottom: 2px solid rgba(138, 43, 226, 0.2);
+    position: relative;
+    box-shadow: inset 0 1px 0 rgba(138, 43, 226, 0.1), inset 0 -1px 0 rgba(138, 43, 226, 0.1);
+}
+
+.coupons-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.4), transparent);
+}
+
+.coupons-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(138, 43, 226, 0.4), transparent);
+}
+
+.coupons-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.coupons-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #c77dff;
+    margin: 0 0 10px 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.coupons-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    margin: 0;
+    font-style: italic;
+}
+
+.coupons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.coupon-card {
+    background: linear-gradient(135deg, rgba(15, 5, 32, 0.8), rgba(30, 10, 50, 0.7));
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    border-radius: 18px;
+    padding: 20px;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.coupon-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(138, 43, 226, 0.3);
+    border-color: rgba(138, 43, 226, 0.5);
+}
+
+.coupon-emoji {
+    font-size: 3rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.coupon-info {
+    flex: 1;
+}
+
+.coupon-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.coupon-type {
+    font-size: 0.9rem;
+    color: #c77dff;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.coupon-region {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 10px;
+}
+
+.coupon-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1rem;
+    color: #ffcc00;
+    margin-bottom: 10px;
+}
+
+.coupon-offer {
+    background: rgba(255, 204, 0, 0.1);
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.4;
+    margin-top: 5px;
+}
+
+.coupon-qr-btn {
+    background: linear-gradient(135deg, #c77dff, #9d4edd);
+    border: none;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(138, 43, 226, 0.3);
+    margin-top: auto;
+}
+
+.coupon-qr-btn:hover {
+    background: linear-gradient(135deg, #d8a7ff, #b57edc);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+}
+
+.qr-icon {
+    font-size: 1.1rem;
+}
+
+.qr-text {
+    font-weight: 700;
+}
+
+/* Адаптивность купонов для мобильных */
+@media (max-width: 768px) {
+    .coupons-section {
+        margin: 30px -20px 20px -20px;
+        padding: 20px;
+    }
+
+    .coupons-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .coupons-title {
+        font-size: 1.4rem;
+    }
+
+    .coupon-card {
+        padding: 18px;
+    }
+
+    .coupon-emoji {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .coupons-header {
+        margin-bottom: 20px;
+    }
+
+    .coupons-title {
+        font-size: 1.2rem;
+        gap: 8px;
+    }
+
+    .coupons-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .coupon-card {
+        padding: 16px;
+    }
+
+    .coupon-name {
+        font-size: 1.1rem;
+    }
+
+    .coupon-qr-btn {
+        padding: 12px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* ========================================
+   НОВЫЙ ДИЗАЙН КАРТОЧЕК ПУТЕШЕСТВИЙ
+   ======================================== */
+
+/* Обновленная структура карточки */
+.travel-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,204,0,0.1);
+}
+
+.travel-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(255, 204, 0, 0.2);
+    border-color: rgba(255,204,0,0.3);
+}
+
+/* Кнопка удаления */
+.delete-travel-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
+    background: rgba(255, 0, 0, 0.8);
+    border: none;
+    color: white;
+    font-size: 1.2rem;
+    padding: 10px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.delete-travel-btn:hover {
+    background: rgba(255, 0, 0, 1);
+    transform: scale(1.1) rotate(10deg);
+}
+
+/* Контейнер изображений */
+.travel-card-images {
+    cursor: pointer;
+    position: relative;
+}
+
+/* Контент карточки */
+.travel-card-content {
+    padding: 20px;
+}
+
+.travel-card-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #ffcc00;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+}
+
+.travel-card-text {
+    font-size: 1rem;
+    color: #e5e5e5;
+    line-height: 1.65;
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* ========================================
+   АДАПТИВНЫЕ СЕТКИ ФОТОГРАФИЙ
+   ======================================== */
+
+/* Одна фотография */
+.single-image {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Две фотографии */
+.grid-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+}
+
+.grid-two .grid-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+/* Три фотографии */
+.grid-three {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 4px;
+    height: 300px;
+}
+
+.grid-three .grid-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.grid-three .grid-column {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 4px;
+}
+
+/* Четыре или более фотографий */
+.grid-many {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 4px;
+    height: 400px;
+}
+
+.grid-many .grid-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.grid-more {
+    position: relative;
+}
+
+.more-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    font-weight: 700;
+    backdrop-filter: blur(2px);
+}
+
+/* Заглушка для пустых изображений */
+.no-images {
+    height: 200px;
+    background: #2a2a2a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 1.1rem;
+}
+
+/* ========================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ
+   ======================================== */
+
+@media (max-width: 768px) {
+    .travel-gallery-section {
+        margin: 30px -20px 20px -20px;
+        padding: 20px;
+    }
+
+    .gallery-title {
+        font-size: 1.4rem;
+    }
+
+    .add-travel-btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+
+    .travel-card-title {
+        font-size: 1.15rem;
+    }
+
+    .travel-card-text {
+        font-size: 0.95rem;
+    }
+
+    .travel-card-content {
+        padding: 16px;
+    }
+
+    /* Адаптация сеток */
+    .single-image {
+        height: 280px;
+    }
+
+    .grid-two .grid-image {
+        height: 200px;
+    }
+
+    .grid-three {
+        height: 250px;
+    }
+
+    .grid-many {
+        height: 320px;
+    }
+
+    .delete-travel-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .travel-gallery-section {
+        margin: 20px -15px 15px -15px;
+        padding: 16px;
+    }
+
+    .gallery-title {
+        font-size: 1.2rem;
+        gap: 8px;
+    }
+
+    .add-travel-btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
+    }
+
+    .travel-card-title {
+        font-size: 1.05rem;
+        margin-bottom: 10px;
+    }
+
+    .travel-card-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .travel-card-content {
+        padding: 14px;
+    }
+
+    /* Более компактные сетки на маленьких экранах */
+    .single-image {
+        height: 240px;
+    }
+
+    .grid-two .grid-image {
+        height: 180px;
+    }
+
+    .grid-three {
+        height: 220px;
+    }
+
+    .grid-many {
+        height: 280px;
+    }
+
+    .more-overlay {
+        font-size: 1.6rem;
+    }
+
+    .delete-travel-btn {
+        top: 8px;
+        right: 8px;
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+}
+
+
+
+
+

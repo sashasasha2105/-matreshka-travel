@@ -111,7 +111,9 @@ class MatryoshkaProfile {
                 ${this.generateStatsHTML()}
             </div>
 
-            <div class="travel-gallery-section" data-animate="fadeInUp" data-delay="400">
+            ${this.generateCouponsSection()}
+
+            <div class="travel-gallery-section" data-animate="fadeInUp" data-delay="500">
                 <div class="travel-gallery-header">
                     <h3 class="gallery-title">
                         <span>📸</span> Мои путешествия
@@ -169,59 +171,130 @@ class MatryoshkaProfile {
         }
 
         return this.travelStories.map(travel => `
-            <div class="travel-card" data-travel-id="${travel.id}" style="
-                background: rgba(255,255,255,0.05);
-                border-radius: 20px;
-                margin-bottom: 30px;
-                overflow: hidden;
-                border: 1px solid rgba(255,204,0,0.1);
-            ">
+            <div class="travel-card" data-travel-id="${travel.id}">
                 <!-- Кнопка удаления -->
-                <div style="
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
-                    z-index: 2;
-                ">
-                    <button class="delete-travel-btn" data-action="delete-travel" data-id="${travel.id}" style="
-                        background: rgba(0,0,0,0.5);
-                        border: none;
-                        color: white;
-                        font-size: 14px;
-                        cursor: pointer;
-                        padding: 8px;
-                        border-radius: 50%;
-                        transition: all 0.3s;
-                        backdrop-filter: blur(10px);
-                    " onmouseover="this.style.backgroundColor='rgba(255,107,107,0.8)'" onmouseout="this.style.backgroundColor='rgba(0,0,0,0.5)'">🗑️</button>
-                </div>
+                <button class="delete-travel-btn" data-action="delete-travel" data-id="${travel.id}">
+                    🗑️
+                </button>
 
                 <!-- Фотографии -->
-                <div style="position: relative;" onclick="matryoshkaProfile.openPhotoGallery(${travel.id})">
+                <div class="travel-card-images" onclick="matryoshkaProfile.openPhotoGallery(${travel.id})">
                     ${this.generatePhotoGrid(travel.images)}
                 </div>
 
                 <!-- Текст поста -->
-                <div style="padding: 20px;">
-                    <h4 style="
-                        color: white;
-                        font-size: 16px;
-                        font-weight: 600;
-                        margin: 0 0 12px 0;
-                        line-height: 1.4;
-                    ">${travel.title}</h4>
-                    <div style="
-                        color: #ddd;
-                        font-size: 14px;
-                        line-height: 1.6;
-                        white-space: pre-wrap;
-                        word-wrap: break-word;
-                        margin-bottom: 15px;
-                    ">${travel.text}</div>
-
+                <div class="travel-card-content">
+                    <h4 class="travel-card-title">${travel.title}</h4>
+                    <p class="travel-card-text">${travel.text}</p>
                 </div>
             </div>
         `).join('');
+    }
+
+    /**
+     * Генерация секции купонов и скидок
+     */
+    generateCouponsSection() {
+        // Загружаем оплаченные регионы из sessionStorage
+        let paidRegions = [];
+        try {
+            const saved = sessionStorage.getItem('paidRegions');
+            if (saved) {
+                paidRegions = JSON.parse(saved);
+            }
+        } catch (e) {
+            console.error('Ошибка загрузки paidRegions:', e);
+        }
+
+        console.log('🎫 Загружены оплаченные регионы для купонов:', paidRegions);
+
+        if (paidRegions.length === 0) {
+            return ''; // Не показываем секцию, если ничего не куплено
+        }
+
+        // Собираем всех партнеров из оплаченных регионов
+        let allPartners = [];
+        paidRegions.forEach(regionId => {
+            const regionData = window.RUSSIA_REGIONS_DATA?.[regionId];
+            if (regionData && regionData.partners) {
+                regionData.partners.forEach(partner => {
+                    allPartners.push({
+                        ...partner,
+                        regionName: regionData.name,
+                        regionId: regionId
+                    });
+                });
+            }
+        });
+
+        if (allPartners.length === 0) {
+            return '';
+        }
+
+        // Генерируем HTML для секции купонов
+        return `
+            <div class="coupons-section" data-animate="fadeInUp" data-delay="400">
+                <div class="coupons-header">
+                    <h3 class="coupons-title">
+                        <span>🎫</span> Мои купоны и скидки
+                    </h3>
+                    <p class="coupons-subtitle">Партнеры из оплаченных регионов</p>
+                </div>
+                <div class="coupons-grid">
+                    ${allPartners.map((partner, index) => `
+                        <div class="coupon-card" data-partner-index="${index}">
+                            <div class="coupon-emoji">${partner.emoji}</div>
+                            <div class="coupon-info">
+                                <div class="coupon-name">${partner.name}</div>
+                                <div class="coupon-type">${partner.type}</div>
+                                <div class="coupon-region">📍 ${partner.regionName}</div>
+                                <div class="coupon-rating">
+                                    <span>⭐</span>
+                                    <span>${partner.rating}</span>
+                                </div>
+                                ${partner.specialOffer ? `<div class="coupon-offer">🎁 ${partner.specialOffer}</div>` : ''}
+                            </div>
+                            <button class="coupon-qr-btn" onclick="matryoshkaProfile.showPartnerQR('${partner.name.replace(/'/g, "\\'")}', '${partner.emoji}')">
+                                <span class="qr-icon">📱</span>
+                                <span class="qr-text">Показать QR</span>
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Показать QR-код для конкретного партнера
+     */
+    showPartnerQR(partnerName, partnerEmoji) {
+        console.log('🔲 Показываем QR для партнера из профиля:', partnerName);
+
+        // Используем глобальный экземпляр MatryoshkaQR
+        if (window.matryoshkaQR && typeof window.matryoshkaQR.showQRCode === 'function') {
+            // Создаем объект партнера для QR системы
+            const partnerData = {
+                name: partnerName,
+                emoji: partnerEmoji,
+                type: 'Партнер',
+                description: 'Покажите этот QR-код сотруднику для получения скидки',
+                rating: '4.5'
+            };
+
+            window.matryoshkaQR.showQRCode(partnerData);
+        } else {
+            console.error('❌ MatryoshkaQR не загружен');
+            this.showToast('❌ Ошибка отображения QR-кода');
+        }
+    }
+
+    /**
+     * Обновление секции купонов (вызывается после оплаты)
+     */
+    updateCoupons() {
+        // Перезагружаем весь профиль, чтобы обновить секцию купонов
+        this.loadProfileData();
     }
 
     /**
@@ -229,50 +302,42 @@ class MatryoshkaProfile {
      */
     generatePhotoGrid(images) {
         if (!images || images.length === 0) {
-            return '<div style="height: 200px; background: #333; display: flex; align-items: center; justify-content: center; color: #666;">Нет фотографий</div>';
+            return '<div class="no-images">Нет фотографий</div>';
         }
 
         if (images.length === 1) {
-            return `<img src="${images[0]}" style="width: 100%; height: 400px; object-fit: cover;" loading="lazy">`;
+            return `<img src="${images[0]}" class="single-image" loading="lazy">`;
         }
 
         if (images.length === 2) {
             return `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 3px;">
-                    ${images.map(img => `<img src="${img}" style="width: 100%; height: 250px; object-fit: cover;" loading="lazy">`).join('')}
+                <div class="grid-two">
+                    ${images.map(img => `<img src="${img}" class="grid-image" loading="lazy">`).join('')}
                 </div>
             `;
         }
 
         if (images.length === 3) {
             return `
-                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 3px; height: 300px;">
-                    <img src="${images[0]}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                    <div style="display: grid; grid-template-rows: 1fr 1fr; gap: 3px;">
-                        <img src="${images[1]}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                        <img src="${images[2]}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
+                <div class="grid-three">
+                    <img src="${images[0]}" class="grid-image main" loading="lazy">
+                    <div class="grid-column">
+                        <img src="${images[1]}" class="grid-image" loading="lazy">
+                        <img src="${images[2]}" class="grid-image" loading="lazy">
                     </div>
                 </div>
             `;
         }
 
-        if (images.length === 4) {
+        if (images.length >= 4) {
             return `
-                <div style="display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; height: 400px;">
-                    ${images.slice(0, 4).map(img => `<img src="${img}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">`).join('')}
-                </div>
-            `;
-        }
-
-        if (images.length >= 5) {
-            return `
-                <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; height: 350px;">
-                    <img src="${images[0]}" style="width: 100%; height: 100%; object-fit: cover; grid-row: 1 / 3;" loading="lazy">
-                    <img src="${images[1]}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                    <img src="${images[2]}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                    <img src="${images[3]}" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy">
-                    <div style="width: 100%; height: 100%; position: relative; background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${images[4]}'); background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: bold;">
-                        ${images.length > 5 ? `+${images.length - 4}` : ''}
+                <div class="grid-many">
+                    <img src="${images[0]}" class="grid-image" loading="lazy">
+                    <img src="${images[1]}" class="grid-image" loading="lazy">
+                    <img src="${images[2]}" class="grid-image" loading="lazy">
+                    <div class="grid-more">
+                        <img src="${images[3]}" class="grid-image" loading="lazy">
+                        ${images.length > 4 ? `<div class="more-overlay">+${images.length - 4}</div>` : ''}
                     </div>
                 </div>
             `;

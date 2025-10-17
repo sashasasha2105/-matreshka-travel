@@ -187,6 +187,14 @@ class MatryoshkaProfile {
                     <h4 class="travel-card-title">${travel.title}</h4>
                     <p class="travel-card-text">${travel.text}</p>
                 </div>
+
+                <!-- Футер с лайками -->
+                <div class="travel-card-footer">
+                    <button class="like-btn ${travel.liked ? 'liked' : ''}" data-action="toggle-like" data-travel-id="${travel.id}">
+                        <span class="like-icon">${travel.liked ? '❤️' : '🤍'}</span>
+                        <span class="like-count">${travel.likes || 0}</span>
+                    </button>
+                </div>
             </div>
         `).join('');
     }
@@ -525,6 +533,10 @@ class MatryoshkaProfile {
                 break;
             case 'edit-profile':
                 this.showEditProfileModal();
+                break;
+            case 'toggle-like':
+                const likedTravelId = parseInt(button.dataset.travelId);
+                this.toggleLike(likedTravelId, button);
                 break;
             default:
                 console.log(`Неизвестное действие: ${action}`);
@@ -1027,6 +1039,46 @@ class MatryoshkaProfile {
             this.saveToSession();
             this.showToast('🗑️ Путешествие удалено');
         }
+    }
+
+    /**
+     * Переключение лайка на путешествии
+     */
+    toggleLike(travelId, button) {
+        const travel = this.travelStories.find(t => t.id === travelId);
+        if (!travel) return;
+
+        // Инициализируем поля лайков если их еще нет
+        if (travel.likes === undefined) travel.likes = 0;
+        if (travel.liked === undefined) travel.liked = false;
+
+        // Переключаем состояние лайка
+        travel.liked = !travel.liked;
+
+        if (travel.liked) {
+            travel.likes += 1;
+            // Анимация лайка
+            button.classList.add('liked');
+            button.style.animation = 'likeAnimation 0.5s ease';
+        } else {
+            travel.likes = Math.max(0, travel.likes - 1);
+            button.classList.remove('liked');
+        }
+
+        // Обновляем UI кнопки
+        const likeIcon = button.querySelector('.like-icon');
+        const likeCount = button.querySelector('.like-count');
+
+        if (likeIcon) likeIcon.textContent = travel.liked ? '❤️' : '🤍';
+        if (likeCount) likeCount.textContent = travel.likes;
+
+        // Сохраняем изменения
+        this.saveToSession();
+
+        // Убираем анимацию после завершения
+        setTimeout(() => {
+            button.style.animation = '';
+        }, 500);
     }
 
     /**

@@ -101,6 +101,7 @@ class MatryoshkaProfile {
                     </div>
                     <div class="profile-info">
                         <div class="profile-name">${this.profileData.name || this.user.first_name || 'Путешественник'}</div>
+                        ${this.user.username ? `<div class="profile-username">@${this.user.username}</div>` : ''}
                         <div class="profile-id">ID: ${this.user.id || 'MATRYOSHKA-' + Math.floor(Math.random() * 100000)}</div>
                         <div class="profile-bio">${this.profileData.bio}</div>
                     </div>

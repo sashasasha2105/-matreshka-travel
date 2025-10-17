@@ -342,10 +342,8 @@ function generatePackagesHTML() {
             <div class="package-content">
                 <div class="package-header">
                     <div class="package-emoji">${pkg.emoji}</div>
-                    <div class="package-info">
-                        <div class="package-name">${pkg.name}</div>
-                        <div class="package-description">${pkg.description}</div>
-                    </div>
+                    <div class="package-name">${pkg.name}</div>
+                    <div class="package-description">${pkg.description}</div>
                 </div>
                 <div class="package-highlights">
                     ${pkg.highlights.map(highlight => `<span class="package-highlight">✨ ${highlight}</span>`).join('')}

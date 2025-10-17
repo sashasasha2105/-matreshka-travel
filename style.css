@@ -1166,7 +1166,8 @@ body {
 
 .package-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
     gap: 16px;
     margin-bottom: 20px;
 }
@@ -1188,13 +1189,16 @@ body {
     font-size: 1.6rem;
     font-weight: 700;
     color: white;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    flex: 1 1 calc(100% - 66px);
 }
 
 .package-description {
     font-size: 1.05rem;
     color: #e5e5e5;
-    line-height: 1.6;
+    line-height: 1.7;
+    flex: 1 1 100%;
+    margin-left: 66px;
 }
 
 .package-highlights {

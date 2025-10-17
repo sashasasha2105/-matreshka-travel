@@ -1,9 +1,53 @@
 // Инициализация Telegram Web App
 const tg = window.Telegram?.WebApp;
+let isTelegramWebApp = false;
+
 if (tg) {
+    isTelegramWebApp = true;
+
+    // Разворачиваем приложение на весь экран
     tg.expand();
+
+    // Отключаем подтверждение при закрытии
+    tg.enableClosingConfirmation();
+
+    // Устанавливаем цвета темы
+    if (tg.setHeaderColor) {
+        tg.setHeaderColor('secondary_bg_color');
+    }
+    if (tg.setBackgroundColor) {
+        tg.setBackgroundColor('#0f0520');
+    }
+
+    // Готовность приложения
     tg.ready();
-    console.log('Telegram Web App инициализирован');
+
+    console.log('✅ Telegram Web App инициализирован', {
+        version: tg.version,
+        platform: tg.platform,
+        colorScheme: tg.colorScheme,
+        viewportHeight: tg.viewportHeight,
+        isExpanded: tg.isExpanded
+    });
+
+    // Настраиваем BackButton для навигации
+    if (tg.BackButton) {
+        tg.BackButton.onClick(() => {
+            // Проверяем что сейчас показано
+            const regionDetails = document.getElementById('regionDetails');
+            const profileSection = document.getElementById('profileSection');
+
+            if (regionDetails && regionDetails.style.display !== 'none') {
+                goBack();
+                tg.BackButton.hide();
+            } else if (profileSection && profileSection.style.display !== 'none') {
+                hideProfile();
+                tg.BackButton.hide();
+            }
+        });
+    }
+} else {
+    console.log('ℹ️ Приложение запущено вне Telegram');
 }
 
 // Глобальная лента путешествий
@@ -469,9 +513,14 @@ function showRegionDetails(regionId) {
 
             hideLoader();
 
+            // Показываем BackButton в Telegram
+            if (tg && tg.BackButton) {
+                tg.BackButton.show();
+            }
+
             // Уведомление Telegram
-            if (tg && tg.showAlert) {
-                tg.showAlert(`Добро пожаловать в ${region.name}!`);
+            if (tg && tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('light');
             }
         } catch (error) {
             console.error('❌ Ошибка отображения региона:', error);
@@ -1196,6 +1245,11 @@ function goBack() {
 
     if (detailsSection) detailsSection.style.display = 'none';
     if (mainSection) mainSection.style.display = 'block';
+
+    // Скрываем BackButton в Telegram
+    if (tg && tg.BackButton) {
+        tg.BackButton.hide();
+    }
 }
 
 // Функция показа лоадера
@@ -1224,6 +1278,16 @@ function showProfile() {
     const profileSection = document.getElementById('profileSection');
     profileSection.style.display = 'block';
 
+    // Показываем BackButton в Telegram
+    if (tg && tg.BackButton) {
+        tg.BackButton.show();
+    }
+
+    // Тактильная обратная связь
+    if (tg && tg.HapticFeedback) {
+        tg.HapticFeedback.impactOccurred('light');
+    }
+
     // Инициализируем профиль Матрешка
     if (window.matryoshkaProfile) {
         window.matryoshkaProfile.loadProfileData();
@@ -1241,6 +1305,11 @@ function showProfile() {
 function hideProfile() {
     document.getElementById('profileSection').style.display = 'none';
     document.getElementById('mainSection').style.display = 'block';
+
+    // Скрываем BackButton в Telegram
+    if (tg && tg.BackButton) {
+        tg.BackButton.hide();
+    }
 }
 
 // Функция совместимости для старого кода (удалена встроенная версия)

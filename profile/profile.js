@@ -303,16 +303,31 @@ class MatryoshkaProfile {
             return ''; // Не показываем секцию, если ничего не куплено
         }
 
+        const now = new Date();
+
+        // Функция для вычисления оставшихся дней
+        const getDaysLeft = (expiresAt) => {
+            const expires = new Date(expiresAt);
+            const diffTime = expires - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        };
+
         // Собираем всех партнеров из оплаченных регионов
         let allPartners = [];
-        paidRegions.forEach(regionId => {
+        paidRegions.forEach(region => {
+            // Поддержка как старого формата (строка), так и нового (объект)
+            const regionId = typeof region === 'string' ? region : region.id;
+            const regionExpiry = typeof region === 'object' ? region.expiresAt : null;
+
             const regionData = window.RUSSIA_REGIONS_DATA?.[regionId];
             if (regionData && regionData.partners) {
                 regionData.partners.forEach(partner => {
                     allPartners.push({
                         ...partner,
                         regionName: regionData.name,
-                        regionId: regionId
+                        regionId: regionId,
+                        expiresAt: regionExpiry
                     });
                 });
             }
@@ -329,28 +344,40 @@ class MatryoshkaProfile {
                     <h3 class="coupons-title">
                         <span>🎫</span> Мои купоны и скидки
                     </h3>
-                    <p class="coupons-subtitle">Партнеры из оплаченных регионов</p>
+                    <p class="coupons-subtitle">${allPartners.length} доступных</p>
                 </div>
                 <div class="coupons-grid">
-                    ${allPartners.map((partner, index) => `
-                        <div class="coupon-card" data-partner-index="${index}">
-                            <div class="coupon-emoji">${partner.emoji}</div>
-                            <div class="coupon-info">
-                                <div class="coupon-name">${partner.name}</div>
-                                <div class="coupon-type">${partner.type}</div>
-                                <div class="coupon-region">📍 ${partner.regionName}</div>
-                                <div class="coupon-rating">
-                                    <span>⭐</span>
-                                    <span>${partner.rating}</span>
+                    ${allPartners.map((partner, index) => {
+                        const daysLeft = partner.expiresAt ? getDaysLeft(partner.expiresAt) : null;
+                        const expiresDate = partner.expiresAt ? new Date(partner.expiresAt).toLocaleDateString('ru-RU') : null;
+                        const isExpiringSoon = daysLeft && daysLeft <= 2;
+
+                        return `
+                            <div class="coupon-card ${isExpiringSoon ? 'expiring-soon' : ''}" data-partner-index="${index}">
+                                <div class="coupon-emoji">${partner.emoji}</div>
+                                <div class="coupon-info">
+                                    <div class="coupon-name">${partner.name}</div>
+                                    <div class="coupon-type">${partner.type}</div>
+                                    <div class="coupon-region">📍 ${partner.regionName}</div>
+                                    ${partner.expiresAt ? `
+                                        <div class="coupon-expiry ${isExpiringSoon ? 'expiring' : ''}">
+                                            <span class="expiry-icon">⏱️</span>
+                                            <span>До ${expiresDate} (${daysLeft} дн.)</span>
+                                        </div>
+                                    ` : ''}
+                                    <div class="coupon-rating">
+                                        <span>⭐</span>
+                                        <span>${partner.rating}</span>
+                                    </div>
+                                    ${partner.specialOffer ? `<div class="coupon-offer">🎁 ${partner.specialOffer}</div>` : ''}
                                 </div>
-                                ${partner.specialOffer ? `<div class="coupon-offer">🎁 ${partner.specialOffer}</div>` : ''}
+                                <button class="coupon-qr-btn" onclick="matryoshkaProfile.showPartnerQR('${partner.name.replace(/'/g, "\\'")}', '${partner.emoji}')">
+                                    <span class="qr-icon">📱</span>
+                                    <span class="qr-text">Показать QR</span>
+                                </button>
                             </div>
-                            <button class="coupon-qr-btn" onclick="matryoshkaProfile.showPartnerQR('${partner.name.replace(/'/g, "\\'")}', '${partner.emoji}')">
-                                <span class="qr-icon">📱</span>
-                                <span class="qr-text">Показать QR</span>
-                            </button>
-                        </div>
-                    `).join('')}
+                        `;
+                    }).join('')}
                 </div>
             </div>
         `;

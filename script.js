@@ -983,7 +983,29 @@ function initPaidRegions() {
     const saved = sessionStorage.getItem('paidRegions');
     if (saved) {
         try {
-            window.paidRegions = JSON.parse(saved);
+            const data = JSON.parse(saved);
+            // Поддержка старого формата (массив ID)
+            if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'string') {
+                // Конвертируем старый формат в новый
+                window.paidRegions = data.map(id => ({
+                    id,
+                    purchaseDate: new Date().toISOString(),
+                    expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+                }));
+                // Сохраняем в новом формате
+                sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+            } else {
+                window.paidRegions = data;
+            }
+
+            // Фильтруем истекшие
+            const now = new Date();
+            window.paidRegions = window.paidRegions.filter(region => {
+                return new Date(region.expiresAt) > now;
+            });
+
+            // Сохраняем отфильтрованный список
+            sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
         } catch (e) {
             window.paidRegions = [];
         }
@@ -997,19 +1019,38 @@ initPaidRegions();
 
 // Проверка, оплачен ли регион
 function isRegionPaid(regionId) {
-    initPaidRegions(); // Всегда загружаем актуальные данные
-    return window.paidRegions.includes(regionId);
+    initPaidRegions(); // Всегда загружаем актуальные данные и фильтруем истекшие
+    return window.paidRegions.some(region => region.id === regionId);
 }
 
 // Отметить регион как оплаченный
 function markRegionAsPaid(regionId) {
     initPaidRegions(); // Загружаем актуальные данные
-    if (!window.paidRegions.includes(regionId)) {
-        window.paidRegions.push(regionId);
-        // Сохраняем в sessionStorage
-        sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
-        console.log('✅ Регион оплачен и сохранен:', regionId, window.paidRegions);
+
+    // Проверяем, не оплачен ли уже этот регион
+    const existingRegion = window.paidRegions.find(r => r.id === regionId);
+    if (existingRegion) {
+        const expiresDate = new Date(existingRegion.expiresAt).toLocaleDateString('ru-RU');
+        showToast(`Регион уже оплачен до ${expiresDate}`, 3000);
+        return;
     }
+
+    // Добавляем новый регион со сроком действия 7 дней
+    const purchaseDate = new Date();
+    const expiresAt = new Date(purchaseDate);
+    expiresAt.setDate(expiresAt.getDate() + 7);
+
+    const paidRegion = {
+        id: regionId,
+        purchaseDate: purchaseDate.toISOString(),
+        expiresAt: expiresAt.toISOString()
+    };
+
+    window.paidRegions.push(paidRegion);
+
+    // Сохраняем в sessionStorage
+    sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+    console.log('✅ Регион оплачен и сохранен:', regionId, paidRegion);
 }
 
 // Показать модальное окно оплаты

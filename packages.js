@@ -51,10 +51,37 @@ function loadTravelPackages() {
     `).join('');
 }
 
+// Получить партнеров из городов пакета
+function getPartnersForPackage(pkg) {
+    const allPartners = [];
+
+    // Проходим по всем городам пакета
+    pkg.cities.forEach(cityName => {
+        // Ищем регион с таким городом
+        Object.values(RUSSIA_REGIONS_DATA).forEach(region => {
+            if (region.name === cityName || region.city === cityName) {
+                if (region.partners && region.partners.length > 0) {
+                    region.partners.forEach(partner => {
+                        allPartners.push({
+                            ...partner,
+                            city: cityName
+                        });
+                    });
+                }
+            }
+        });
+    });
+
+    return allPartners;
+}
+
 // Показ модального окна с деталями пакета
 function showPackageModal(packageId) {
     const pkg = TRAVEL_PACKAGES.find(p => p.id === packageId);
     if (!pkg) return;
+
+    // Получаем партнеров из городов пакета
+    const partners = getPartnersForPackage(pkg);
 
     const modal = document.createElement('div');
     modal.className = 'package-modal';
@@ -73,6 +100,10 @@ function showPackageModal(packageId) {
                         ${pkg.oldPrice ? `<span class="modal-old-price">${pkg.oldPrice.toLocaleString()} ₽</span>` : ''}
                         <span class="modal-current-price">${pkg.price.toLocaleString()} ₽</span>
                     </div>
+                    <div class="package-validity-info">
+                        <span class="validity-icon">⏱️</span>
+                        <span class="validity-text">Срок действия: 7 дней после покупки</span>
+                    </div>
                 </div>
             </div>
 
@@ -89,50 +120,38 @@ function showPackageModal(packageId) {
                     </div>
                 </div>
 
+                ${partners.length > 0 ? `
                 <div class="package-section">
-                    <h3 class="package-section-title">Выберите вариант путешествия</h3>
-                    <div class="package-routes">
-                        ${pkg.routes.map(route => `
-                            <div class="package-route-card" onclick="event.stopPropagation(); toggleRoute(${route.id}, '${pkg.id}')">
-                                <div class="package-route-header">
-                                    <h4 class="package-route-name">${route.name}</h4>
-                                    <span class="package-route-toggle">▼</span>
-                                </div>
-                                <div class="package-route-details" id="route-${pkg.id}-${route.id}" style="display: none;">
-                                    <div class="package-route-section">
-                                        <h5>Гостиницы</h5>
-                                        ${route.hotels.map(hotel => `
-                                            <div class="package-item">
-                                                <div class="package-item-name">${hotel.name} - ${hotel.city}</div>
-                                                <div class="package-item-links">
-                                                    <a href="${hotel.link}" target="_blank" class="package-link">Сайт</a>
-                                                    <a href="${hotel.mapLink}" target="_blank" class="package-link">На карте</a>
-                                                </div>
-                                            </div>
-                                        `).join('')}
+                    <h3 class="package-section-title">🍽️ Партнеры со скидками (${partners.length})</h3>
+                    <div class="package-partners-grid">
+                        ${partners.map(partner => `
+                            <div class="package-partner-card">
+                                <div class="package-partner-header">
+                                    <span class="package-partner-emoji">${partner.emoji || '🏪'}</span>
+                                    <div class="package-partner-info">
+                                        <div class="package-partner-name">${partner.name}</div>
+                                        <div class="package-partner-city">${partner.city}</div>
                                     </div>
-                                    <div class="package-route-section">
-                                        <h5>Программа</h5>
-                                        ${route.programs.map(program => `
-                                            <div class="package-item">
-                                                <div class="package-item-name">${program.name}</div>
-                                                <div class="package-item-desc">${program.description}</div>
-                                                <div class="package-item-duration">Продолжительность: ${program.duration}</div>
-                                                <div class="package-item-links">
-                                                    <a href="${program.link}" target="_blank" class="package-link">Подробнее</a>
-                                                    <a href="${program.mapLink}" target="_blank" class="package-link">На карте</a>
-                                                </div>
-                                            </div>
-                                        `).join('')}
-                                    </div>
+                                    ${partner.rating ? `<div class="package-partner-rating">⭐ ${partner.rating}</div>` : ''}
                                 </div>
+                                <div class="package-partner-type">${partner.type}</div>
+                                <div class="package-partner-description">${partner.description}</div>
+                                ${partner.specialOffer ? `
+                                    <div class="package-partner-offer">
+                                        <span class="offer-icon">🎁</span>
+                                        ${partner.specialOffer}
+                                    </div>
+                                ` : ''}
                             </div>
                         `).join('')}
                     </div>
                 </div>
+                ` : ''}
 
                 <div class="package-modal-footer">
-                    <button class="package-book-btn" onclick="bookPackage('${pkg.id}')">Забронировать путешествие</button>
+                    <button class="package-book-btn" onclick="bookPackage('${pkg.id}')">
+                        Купить пакет (действует 7 дней)
+                    </button>
                 </div>
             </div>
         </div>
@@ -177,9 +196,41 @@ function bookPackage(packageId) {
     const pkg = TRAVEL_PACKAGES.find(p => p.id === packageId);
     if (!pkg) return;
 
+    // Сохраняем купленный пакет в localStorage
+    const purchasedPackages = JSON.parse(localStorage.getItem('purchasedPackages') || '[]');
+
+    // Проверяем, не куплен ли уже этот пакет
+    const existingPackage = purchasedPackages.find(p => p.id === packageId);
+    if (existingPackage) {
+        showNotification(`Пакет "${pkg.name}" уже активен до ${new Date(existingPackage.expiresAt).toLocaleDateString('ru-RU')}`);
+        return;
+    }
+
+    // Добавляем новый пакет со сроком действия 7 дней
+    const purchaseDate = new Date();
+    const expiresAt = new Date(purchaseDate);
+    expiresAt.setDate(expiresAt.getDate() + 7);
+
+    const purchasedPackage = {
+        id: pkg.id,
+        name: pkg.name,
+        purchaseDate: purchaseDate.toISOString(),
+        expiresAt: expiresAt.toISOString(),
+        cities: pkg.cities,
+        price: pkg.price
+    };
+
+    purchasedPackages.push(purchasedPackage);
+    localStorage.setItem('purchasedPackages', JSON.stringify(purchasedPackages));
+
     // Показываем уведомление
-    showNotification(`Спасибо за интерес к "${pkg.name}"! Скоро с вами свяжется менеджер.`);
+    showNotification(`✅ Пакет "${pkg.name}" успешно куплен! Действителен до ${expiresAt.toLocaleDateString('ru-RU')}`);
     closePackageModal();
+
+    // Обновляем профиль если он открыт
+    if (window.matryoshkaProfile && document.getElementById('profileSection').style.display !== 'none') {
+        window.matryoshkaProfile.render();
+    }
 }
 
 // Показ уведомления

@@ -2765,3 +2765,268 @@ body {
         font-size: 1rem;
     }
 }
+
+/* ========================================
+   ПАРТНЕРЫ В ПАКЕТАХ
+   ======================================== */
+
+.package-partners-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.package-partner-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 204, 0, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.package-partner-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 204, 0, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.2);
+}
+
+.package-partner-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.package-partner-emoji {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.package-partner-info {
+    flex: 1;
+}
+
+.package-partner-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffcc00;
+    margin-bottom: 4px;
+}
+
+.package-partner-city {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.package-partner-rating {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+.package-partner-type {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 10px;
+}
+
+.package-partner-description {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.package-partner-offer {
+    background: rgba(255, 107, 107, 0.15);
+    border: 1px solid rgba(255, 107, 107, 0.3);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    color: #ff6b6b;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.offer-icon {
+    font-size: 1.1rem;
+}
+
+.package-validity-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 16px;
+    background: rgba(255, 204, 0, 0.1);
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    border-radius: 12px;
+}
+
+.validity-icon {
+    font-size: 1.2rem;
+}
+
+.validity-text {
+    font-size: 0.95rem;
+    color: rgba(255, 204, 0, 0.9);
+    font-weight: 600;
+}
+
+/* ========================================
+   АКТИВНЫЕ ПАКЕТЫ В ПРОФИЛЕ
+   ======================================== */
+
+.packages-section {
+    margin: 30px 0;
+}
+
+.packages-header {
+    margin-bottom: 20px;
+}
+
+.packages-title {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffcc00;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.packages-subtitle {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin-left: 42px;
+}
+
+.packages-grid-profile {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+.profile-package-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 204, 0, 0.25);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.profile-package-card:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 204, 0, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.2);
+}
+
+.profile-package-card.expiring-soon {
+    border-color: rgba(255, 107, 107, 0.5);
+    background: rgba(255, 107, 107, 0.05);
+}
+
+.profile-package-card.expiring-soon:hover {
+    border-color: rgba(255, 107, 107, 0.7);
+    box-shadow: 0 8px 24px rgba(255, 107, 107, 0.3);
+}
+
+.profile-package-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    gap: 12px;
+}
+
+.profile-package-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    flex: 1;
+}
+
+.profile-package-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.badge-active {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.4);
+}
+
+.badge-warning {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+    border: 1px solid rgba(255, 152, 0, 0.4);
+}
+
+.profile-package-cities {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 15px;
+    line-height: 1.6;
+}
+
+.profile-package-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profile-package-expiry {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.expiry-icon {
+    font-size: 1.1rem;
+}
+
+.profile-package-price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #ffcc00;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .package-partners-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .packages-grid-profile {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .profile-package-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .profile-package-badge {
+        align-self: flex-start;
+    }
+
+    .profile-package-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}

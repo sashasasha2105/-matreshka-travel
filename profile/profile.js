@@ -112,6 +112,8 @@ class MatryoshkaProfile {
                 ${this.generateStatsHTML()}
             </div>
 
+            ${this.generatePackagesSection()}
+
             ${this.generateCouponsSection()}
 
             <div class="travel-gallery-section" data-animate="fadeInUp" data-delay="500">
@@ -155,6 +157,86 @@ class MatryoshkaProfile {
                 </div>
             </div>
         `).join('');
+    }
+
+    /**
+     * Генерация секции активных пакетов
+     */
+    generatePackagesSection() {
+        // Загружаем купленные пакеты из localStorage
+        let purchasedPackages = [];
+        try {
+            const saved = localStorage.getItem('purchasedPackages');
+            if (saved) {
+                purchasedPackages = JSON.parse(saved);
+            }
+        } catch (e) {
+            console.error('Ошибка загрузки purchasedPackages:', e);
+        }
+
+        // Фильтруем только активные пакеты (не истекшие)
+        const now = new Date();
+        const activePackages = purchasedPackages.filter(pkg => {
+            const expiresAt = new Date(pkg.expiresAt);
+            return expiresAt > now;
+        });
+
+        // Удаляем истекшие пакеты из localStorage
+        if (activePackages.length !== purchasedPackages.length) {
+            localStorage.setItem('purchasedPackages', JSON.stringify(activePackages));
+        }
+
+        if (activePackages.length === 0) {
+            return ''; // Не показываем секцию, если нет активных пакетов
+        }
+
+        // Функция для вычисления оставшихся дней
+        const getDaysLeft = (expiresAt) => {
+            const expires = new Date(expiresAt);
+            const diffTime = expires - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays;
+        };
+
+        // Генерируем HTML для секции пакетов
+        return `
+            <div class="packages-section" data-animate="fadeInUp" data-delay="300">
+                <div class="packages-header">
+                    <h3 class="packages-title">
+                        <span>🎒</span> Мои активные пакеты
+                    </h3>
+                    <p class="packages-subtitle">${activePackages.length} активных</p>
+                </div>
+                <div class="packages-grid-profile">
+                    ${activePackages.map(pkg => {
+                        const daysLeft = getDaysLeft(pkg.expiresAt);
+                        const expiresDate = new Date(pkg.expiresAt).toLocaleDateString('ru-RU');
+                        const isExpiringSoon = daysLeft <= 2;
+
+                        return `
+                            <div class="profile-package-card ${isExpiringSoon ? 'expiring-soon' : ''}">
+                                <div class="profile-package-header">
+                                    <div class="profile-package-name">${pkg.name}</div>
+                                    <div class="profile-package-badge ${isExpiringSoon ? 'badge-warning' : 'badge-active'}">
+                                        ${isExpiringSoon ? '⚠️' : '✓'} ${daysLeft === 1 ? 'Истекает сегодня' : `${daysLeft} дн.`}
+                                    </div>
+                                </div>
+                                <div class="profile-package-cities">
+                                    📍 ${pkg.cities.join(', ')}
+                                </div>
+                                <div class="profile-package-footer">
+                                    <div class="profile-package-expiry">
+                                        <span class="expiry-icon">⏱️</span>
+                                        <span>До ${expiresDate}</span>
+                                    </div>
+                                    <div class="profile-package-price">${pkg.price.toLocaleString()} ₽</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
     }
 
     /**

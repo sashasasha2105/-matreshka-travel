@@ -112,11 +112,7 @@ class MatryoshkaProfile {
                 ${this.generateStatsHTML()}
             </div>
 
-            ${this.generatePackagesSection()}
-
-            ${this.generateCouponsSection()}
-
-            <div class="travel-gallery-section" data-animate="fadeInUp" data-delay="500">
+            <div class="travel-gallery-section" data-animate="fadeInUp" data-delay="300">
                 <div class="travel-gallery-header">
                     <h3 class="gallery-title">
                         <span>📸</span> Мои путешествия

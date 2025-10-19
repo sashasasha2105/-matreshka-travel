@@ -172,6 +172,17 @@
             </div>
         </div>
 
+        <!-- Корзина (Мои покупки) -->
+        <div id="cartSection" class="cart-section" style="display: none;">
+            <button id="cartBackBtn" class="back-btn">
+                ← Назад
+            </button>
+
+            <div class="cart-content">
+                <!-- Сюда загрузится корзина -->
+            </div>
+        </div>
+
         <!-- Лоадер -->
         <div id="loader" class="loader">
             <div class="loader-spinner"></div>
@@ -182,6 +193,19 @@
             © 2025 Матрешка — Путешествуй по России 🇷🇺
         </div>
     </div>
+
+    <!-- Нижняя навигация -->
+    <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item" onclick="showProfile()" data-page="profile">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Профиль</div>
+        </button>
+        <button class="nav-item" onclick="showCart()" data-page="cart">
+            <div class="nav-icon">🛒</div>
+            <div class="nav-label">Корзина</div>
+            <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+        </button>
+    </nav>
 
     <!-- Кнопка "Наверх" -->
     <button id="scrollToTop" class="scroll-to-top" aria-label="Прокрутить наверх" title="Наверх">
@@ -241,5 +265,6 @@
     <script src="packages.js"></script>
     <script src="profile/profile.js"></script>
     <script src="profile/avatar_fix.js"></script>
+    <script src="cart/cart.js"></script>
 </body>
 </html>

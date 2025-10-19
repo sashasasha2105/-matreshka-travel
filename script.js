@@ -1447,3 +1447,86 @@ function updateBreadcrumbs(regionName) {
 
     console.log('✅ Кнопка "Наверх" инициализирована');
 })();
+
+// ========================================
+// ФУНКЦИИ ДЛЯ КОРЗИНЫ И НИЖНЕЙ НАВИГАЦИИ
+// ========================================
+
+/**
+ * Показ корзины
+ */
+function showCart() {
+    console.log('🛒 Открываем корзину');
+
+    // Скрываем все секции
+    document.getElementById('mainSection').style.display = 'none';
+    document.getElementById('regionDetails').style.display = 'none';
+    document.getElementById('profileSection').style.display = 'none';
+
+    // Показываем корзину
+    const cartSection = document.getElementById('cartSection');
+    cartSection.style.display = 'block';
+
+    // Обновляем данные корзины
+    if (window.matryoshkaCart) {
+        window.matryoshkaCart.refresh();
+    }
+
+    // Обновляем активную кнопку в навигации
+    updateBottomNav('cart');
+
+    // Скроллим наверх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Скрыть корзину
+ */
+function hideCart() {
+    console.log('🛒 Закрываем корзину');
+
+    document.getElementById('cartSection').style.display = 'none';
+    document.getElementById('mainSection').style.display = 'block';
+
+    // Обновляем навигацию
+    updateBottomNav(null);
+
+    // Скроллим наверх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Обновление активной кнопки в нижней навигации
+ */
+function updateBottomNav(activePage) {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        if (item.dataset.page === activePage) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+}
+
+// Обновляем функцию hideProfile для синхронизации навигации
+const originalHideProfile = hideProfile;
+hideProfile = function() {
+    originalHideProfile();
+    updateBottomNav(null);
+};
+
+// Обновляем функцию showProfile для синхронизации навигации
+const originalShowProfile = showProfile;
+showProfile = function() {
+    originalShowProfile();
+    updateBottomNav('profile');
+};
+
+// Обработчик кнопки "Назад" в корзине
+document.addEventListener('DOMContentLoaded', function() {
+    const cartBackBtn = document.getElementById('cartBackBtn');
+    if (cartBackBtn) {
+        cartBackBtn.addEventListener('click', hideCart);
+    }
+});

@@ -227,14 +227,20 @@ function bookPackage(packageId) {
     purchasedPackages.push(purchasedPackage);
     localStorage.setItem('purchasedPackages', JSON.stringify(purchasedPackages));
 
+    console.log('💾 Пакет сохранен в localStorage:', purchasedPackage);
+    console.log('💾 Всего пакетов в localStorage:', purchasedPackages.length);
+
     // Показываем уведомление
     showNotification(`✅ Пакет "${pkg.name}" успешно куплен! Действителен до ${expiresAt.toLocaleDateString('ru-RU')}`);
     closePackageModal();
 
     // 🔥 ОБНОВЛЯЕМ КОРЗИНУ СРАЗУ ПОСЛЕ ПОКУПКИ
     if (window.matryoshkaCart) {
+        console.log('🔄 Обновляю корзину...');
         window.matryoshkaCart.refresh();
         console.log('✅ Корзина обновлена после покупки пакета');
+    } else {
+        console.error('❌ window.matryoshkaCart не найден!');
     }
 
     // Обновляем профиль если он открыт

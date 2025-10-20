@@ -65,20 +65,32 @@ class MatryoshkaCart {
     loadPurchasedPackages() {
         try {
             const saved = localStorage.getItem('purchasedPackages');
+            console.log('🔍 localStorage purchasedPackages:', saved);
+
             if (saved) {
                 this.purchasedPackages = JSON.parse(saved);
+                console.log('📦 Загружено пакетов из localStorage:', this.purchasedPackages.length);
+                console.log('📦 Пакеты:', this.purchasedPackages);
 
                 // Фильтруем истекшие
                 const now = new Date();
                 this.purchasedPackages = this.purchasedPackages.filter(pkg => {
-                    return new Date(pkg.expiresAt) > now;
+                    const isValid = new Date(pkg.expiresAt) > now;
+                    if (!isValid) {
+                        console.log(`⏰ Пакет "${pkg.name}" истек`);
+                    }
+                    return isValid;
                 });
+
+                console.log('✅ Активных пакетов после фильтрации:', this.purchasedPackages.length);
 
                 // Сохраняем обновленный список
                 localStorage.setItem('purchasedPackages', JSON.stringify(this.purchasedPackages));
+            } else {
+                console.log('📦 localStorage пуст, пакетов нет');
             }
         } catch (e) {
-            console.error('Ошибка загрузки пакетов:', e);
+            console.error('❌ Ошибка загрузки пакетов:', e);
             this.purchasedPackages = [];
         }
     }
@@ -113,7 +125,10 @@ class MatryoshkaCart {
      * Генерация секции пакетов с партнерами
      */
     generatePackagesSection() {
+        console.log('🎨 generatePackagesSection вызван, пакетов:', this.purchasedPackages.length);
+
         if (this.purchasedPackages.length === 0) {
+            console.log('⚠️ Секция пакетов не генерируется - список пуст');
             return '';
         }
 

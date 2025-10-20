@@ -1106,6 +1106,12 @@ function processPayment(event) {
             loadPartners(regionData.partners);
         }
 
+        // 🔥 ОБНОВЛЯЕМ КОРЗИНУ
+        if (window.matryoshkaCart) {
+            window.matryoshkaCart.refresh();
+            console.log('✅ Корзина обновлена после оплаты региона');
+        }
+
         // Обновляем профиль если открыт
         if (window.matryoshkaProfile && window.matryoshkaProfile.updateCoupons) {
             window.matryoshkaProfile.updateCoupons();
@@ -1127,6 +1133,12 @@ function demoPurchase() {
     // Перезагружаем партнеров для обновления кнопок
     if (regionData && regionData.partners) {
         loadPartners(regionData.partners);
+    }
+
+    // 🔥 ОБНОВЛЯЕМ КОРЗИНУ
+    if (window.matryoshkaCart) {
+        window.matryoshkaCart.refresh();
+        console.log('✅ Корзина обновлена после демо-покупки региона');
     }
 
     // Обновляем профиль если открыт

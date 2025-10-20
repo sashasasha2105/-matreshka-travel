@@ -6,8 +6,8 @@ const TRAVEL_PACKAGES = [
     {
         id: 'golden-ring-classic',
         name: 'Золотое кольцо России',
-        duration: '5 дней / 4 ночи',
-        price: 900,
+        duration: '5 дней',
+        price: 500,
         oldPrice: null,
         image: 'city_photos/GOLDRING.jpg',
         description: 'Путешествие по древним городам России с посещением главных достопримечательностей',
@@ -62,8 +62,8 @@ const TRAVEL_PACKAGES = [
     {
         id: 'caucasus-mountains',
         name: 'Кавказ - горы и традиции',
-        duration: '6 дней / 5 ночей',
-        price: 900,
+        duration: '6 дней',
+        price: 500,
         oldPrice: null,
         image: 'city_photos/kazan.jpg',
         description: 'Путешествие по самым красивым местам Северного Кавказа с посещением горных курортов',
@@ -126,8 +126,8 @@ const TRAVEL_PACKAGES = [
     {
         id: 'ural-mountains',
         name: 'Урал - сердце России',
-        duration: '5 дней / 4 ночи',
-        price: 900,
+        duration: '5 дней',
+        price: 500,
         oldPrice: null,
         image: 'city_photos/Снимок экрана 2025-10-07 в 13.34.49.png',
         description: 'Путешествие по живописным местам Урала с посещением природных парков и исторических городов',

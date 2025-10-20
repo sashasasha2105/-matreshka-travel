@@ -126,28 +126,44 @@ class MatryoshkaCart {
             return diffDays;
         };
 
-        // Собираем всех партнеров из городов пакетов
+        // Собираем всех партнеров из купленных пакетов
         let allPackagePartners = [];
         this.purchasedPackages.forEach(pkg => {
-            if (pkg.cities && Array.isArray(pkg.cities)) {
-                pkg.cities.forEach(cityName => {
-                    // Ищем регион с таким городом
-                    Object.values(window.RUSSIA_REGIONS_DATA || {}).forEach(region => {
-                        if (region.name === cityName || region.city === cityName) {
-                            if (region.partners && region.partners.length > 0) {
-                                region.partners.forEach(partner => {
-                                    allPackagePartners.push({
-                                        ...partner,
-                                        cityName: cityName,
-                                        packageName: pkg.name,
-                                        packageId: pkg.id,
-                                        expiresAt: pkg.expiresAt
-                                    });
-                                });
-                            }
-                        }
+            // 🔥 СНАЧАЛА ПРОВЕРЯЕМ, СОХРАНЕНЫ ЛИ ПАРТНЕРЫ С ПАКЕТОМ
+            if (pkg.partners && Array.isArray(pkg.partners) && pkg.partners.length > 0) {
+                // Используем сохраненных партнеров
+                pkg.partners.forEach(partner => {
+                    allPackagePartners.push({
+                        ...partner,
+                        packageName: pkg.name,
+                        packageId: pkg.id,
+                        expiresAt: pkg.expiresAt
                     });
                 });
+                console.log(`✅ Загружены партнеры из пакета "${pkg.name}": ${pkg.partners.length} шт.`);
+            } else {
+                // Fallback: ищем партнеров по городам (для старых данных)
+                console.warn(`⚠️ Пакет "${pkg.name}" не содержит партнеров, ищем по городам...`);
+                if (pkg.cities && Array.isArray(pkg.cities)) {
+                    pkg.cities.forEach(cityName => {
+                        // Ищем регион с таким городом
+                        Object.values(window.RUSSIA_REGIONS_DATA || {}).forEach(region => {
+                            if (region.name === cityName || region.city === cityName) {
+                                if (region.partners && region.partners.length > 0) {
+                                    region.partners.forEach(partner => {
+                                        allPackagePartners.push({
+                                            ...partner,
+                                            cityName: partner.city || cityName,
+                                            packageName: pkg.name,
+                                            packageId: pkg.id,
+                                            expiresAt: pkg.expiresAt
+                                        });
+                                    });
+                                }
+                            }
+                        });
+                    });
+                }
             }
         });
 

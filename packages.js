@@ -211,13 +211,17 @@ function bookPackage(packageId) {
     const expiresAt = new Date(purchaseDate);
     expiresAt.setDate(expiresAt.getDate() + 7);
 
+    // Получаем всех партнеров из городов пакета
+    const partners = getPartnersForPackage(pkg);
+
     const purchasedPackage = {
         id: pkg.id,
         name: pkg.name,
         purchaseDate: purchaseDate.toISOString(),
         expiresAt: expiresAt.toISOString(),
         cities: pkg.cities,
-        price: pkg.price
+        price: pkg.price,
+        partners: partners  // 🔥 СОХРАНЯЕМ ПАРТНЕРОВ ВМЕСТЕ С ПАКЕТОМ!
     };
 
     purchasedPackages.push(purchasedPackage);
@@ -227,9 +231,15 @@ function bookPackage(packageId) {
     showNotification(`✅ Пакет "${pkg.name}" успешно куплен! Действителен до ${expiresAt.toLocaleDateString('ru-RU')}`);
     closePackageModal();
 
+    // 🔥 ОБНОВЛЯЕМ КОРЗИНУ СРАЗУ ПОСЛЕ ПОКУПКИ
+    if (window.matryoshkaCart) {
+        window.matryoshkaCart.refresh();
+        console.log('✅ Корзина обновлена после покупки пакета');
+    }
+
     // Обновляем профиль если он открыт
     if (window.matryoshkaProfile && document.getElementById('profileSection').style.display !== 'none') {
-        window.matryoshkaProfile.render();
+        window.matryoshkaProfile.loadProfileData();
     }
 }
 

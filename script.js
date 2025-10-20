@@ -348,66 +348,8 @@ function loadTravelFeed() {
     });
 }
 
-// Функция загрузки пакетов путешествий
-function loadTravelPackages() {
-    const packagesContainer = document.createElement('div');
-    packagesContainer.className = 'packages-section';
-    packagesContainer.innerHTML = `
-        <div class="packages-header">
-            <h2 class="packages-title">
-                <span class="packages-icon">🎒</span>
-                Готовые пакеты путешествий
-                <span class="packages-subtitle">Лучшие маршруты по России</span>
-            </h2>
-        </div>
-        <div class="packages-grid" id="packagesGrid">
-            ${generatePackagesHTML()}
-        </div>
-    `;
-
-    // Вставляем после регионов но перед лентой путешествий
-    const travelFeedSection = document.querySelector('.travel-feed-section');
-    if (travelFeedSection) {
-        travelFeedSection.parentNode.insertBefore(packagesContainer, travelFeedSection);
-    }
-}
-
-// Генерация HTML для пакетов
-function generatePackagesHTML() {
-    return travelPackages.map((pkg, index) => `
-        <div class="package-card" onclick="showPackageDetails('${pkg.id}')" style="animation: fadeInUp 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${index * 200}ms forwards; opacity: 0;">
-            <div class="package-image-container">
-                <img src="${pkg.image}" alt="${pkg.name}" class="package-image" loading="lazy">
-                <div class="package-overlay">
-                    <div class="package-price">${pkg.price}</div>
-                    <div class="package-duration">⏱️ ${pkg.duration}</div>
-                </div>
-            </div>
-            <div class="package-content">
-                <div class="package-header">
-                    <div class="package-emoji">${pkg.emoji}</div>
-                    <div class="package-name">${pkg.name}</div>
-                    <div class="package-description">${pkg.description}</div>
-                </div>
-                <div class="package-highlights">
-                    ${pkg.highlights.map(highlight => `<span class="package-highlight">✨ ${highlight}</span>`).join('')}
-                </div>
-                <div class="package-regions">
-                    <strong>Города:</strong> ${pkg.regions.join(' • ')}
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Показать детали пакета (заглушка)
-function showPackageDetails(packageId) {
-    const pkg = travelPackages.find(p => p.id === packageId);
-    if (!pkg) return;
-
-    // Показываем уведомление о том, что функция в разработке
-    showToast(`🎒 Пакет "${pkg.name}" скоро будет доступен для бронирования!`);
-}
+// Функция загрузки пакетов путешествий перенесена в packages.js
+// Используем функции из packages.js: loadTravelPackages(), showPackageModal()
 
 // Функция показа уведомлений
 function showToast(message, duration = 3000) {

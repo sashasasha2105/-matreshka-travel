@@ -80,6 +80,9 @@ class MatryoshkaCart {
                 console.log('📦 УСПЕШНО загружено пакетов:', this.purchasedPackages.length);
                 console.log('📦 Пакеты полностью:', this.purchasedPackages);
 
+                // ВИЗУАЛЬНОЕ уведомление
+                alert(`КОРЗИНА ЗАГРУЖЕНА:\n📦 Найдено пакетов в localStorage: ${this.purchasedPackages.length}\n💾 Длина данных: ${saved.length} символов`);
+
                 // Фильтруем истекшие
                 const now = new Date();
                 this.purchasedPackages = this.purchasedPackages.filter(pkg => {
@@ -96,6 +99,8 @@ class MatryoshkaCart {
                 localStorage.setItem('purchasedPackages', JSON.stringify(this.purchasedPackages));
             } else {
                 console.log('📦 localStorage пуст, пакетов нет');
+                // ВИЗУАЛЬНОЕ уведомление о пустой корзине
+                alert(`⚠️ КОРЗИНА ПУСТА!\n❌ localStorage НЕ содержит purchasedPackages\n🔍 Значение: ${saved}`);
             }
         } catch (e) {
             console.error('❌ Ошибка загрузки пакетов:', e);

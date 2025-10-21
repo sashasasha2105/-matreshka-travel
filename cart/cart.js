@@ -444,18 +444,22 @@ class MatryoshkaCart {
     }
 }
 
-// Глобальная инициализация
-let matryoshkaCart = null;
+// 🔥 ГЛОБАЛЬНАЯ инициализация - доступна как window.matryoshkaCart
+window.matryoshkaCart = null;
 
 function initCart() {
-    matryoshkaCart = new MatryoshkaCart();
-    matryoshkaCart.initCart();
+    console.log('🔧 initCart() вызвана');
+    window.matryoshkaCart = new MatryoshkaCart();
+    window.matryoshkaCart.initCart();
+    console.log('✅ window.matryoshkaCart инициализирована:', !!window.matryoshkaCart);
 }
 
 // Автоинициализация при загрузке DOM
 if (document.readyState === 'loading') {
+    console.log('⏳ DOM еще загружается, ждем DOMContentLoaded...');
     document.addEventListener('DOMContentLoaded', initCart);
 } else {
+    console.log('✅ DOM уже загружен, инициализируем сразу');
     initCart();
 }
 

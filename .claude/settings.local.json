@@ -47,7 +47,8 @@
       "Bash(git branch -M main)",
       "Bash(git push:*)",
       "Bash(git remote set-url:*)",
-      "Bash(open:*)"
+      "Bash(open:*)",
+      "Bash(git remote:*)"
     ],
     "deny": [],
     "ask": []

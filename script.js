@@ -1,8 +1,13 @@
-// 🔥 АВТОМАТИЧЕСКАЯ ОЧИСТКА ДАННЫХ ПРИ ЗАПУСКЕ
-console.log('🗑️ Очистка старых данных...');
-localStorage.removeItem('purchasedPackages');
-sessionStorage.removeItem('paidRegions');
-console.log('✅ Все старые данные удалены');
+// 🔥 АВТОМАТИЧЕСКАЯ ОЧИСТКА ДАННЫХ ПРИ ПЕРВОМ ЗАПУСКЕ СЕССИИ
+if (!sessionStorage.getItem('appInitialized')) {
+    console.log('🗑️ Первый запуск сессии - очистка старых данных...');
+    localStorage.removeItem('purchasedPackages');
+    sessionStorage.removeItem('paidRegions');
+    sessionStorage.setItem('appInitialized', 'true');
+    console.log('✅ Все старые данные удалены');
+} else {
+    console.log('♻️ Сессия уже инициализирована, данные сохранены');
+}
 
 // Инициализация Telegram Web App
 const tg = window.Telegram?.WebApp;

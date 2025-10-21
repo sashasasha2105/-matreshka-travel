@@ -3,27 +3,8 @@
    Современные эффекты и микро-взаимодействия
    ======================================== */
 
-/* Анимированный фон с частицами */
-.hero-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image:
-        radial-gradient(circle at 20% 50%, rgba(255, 204, 0, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 107, 107, 0.03) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(142, 85, 255, 0.03) 0%, transparent 50%);
-    animation: float 20s ease-in-out infinite;
-    z-index: 0;
-}
-
-@keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(30px, -30px) scale(1.05); }
-    66% { transform: translate(-20px, 20px) scale(0.95); }
-}
+/* ОТКЛЮЧЕНО: Анимированный фон для производительности */
+/* .hero-section::before - убрано */
 
 /* 3D модель с улучшенным оверлеем */
 .hero-model-container {
@@ -45,11 +26,11 @@
     filter: saturate(1.2);
 }
 
-/* Улучшенная карточка региона */
+/* УПРОЩЕНО: Карточка региона - статичный border */
 .region-card {
     position: relative;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 .region-card::before {
@@ -59,34 +40,26 @@
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(135deg, #ffcc00, #ff8e53, #ff6b6b, #8e55ff);
-    background-size: 400% 400%;
+    background: linear-gradient(135deg, #ffcc00, #ff8e53);
     border-radius: 22px;
     opacity: 0;
-    transition: opacity 0.4s ease;
-    animation: gradientRotate 8s ease infinite;
+    transition: opacity 0.3s ease;
     z-index: -1;
 }
 
-@keyframes gradientRotate {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-}
+/* Убрали анимацию градиента для производительности */
 
 .region-card:hover::before {
-    opacity: 0.6;
+    opacity: 0.5;
 }
 
 .region-card:hover {
-    transform: translateY(-12px) scale(1.02);
-    box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.3),
-        0 0 40px rgba(255, 204, 0, 0.2),
-        inset 0 0 30px rgba(255, 204, 0, 0.05);
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
 
 .region-card:active {
-    transform: translateY(-8px) scale(1.01);
+    transform: translateY(-4px);
 }
 
 /* Стеклянный эффект (glassmorphism) */
@@ -99,41 +72,22 @@
         inset 0 0 20px rgba(255, 255, 255, 0.05);
 }
 
-/* Улучшенные карточки пакетов */
+/* УПРОЩЕНО: Карточки пакетов без shine */
 .package-card {
     position: relative;
     background: linear-gradient(135deg,
         rgba(15, 5, 32, 0.95),
         rgba(26, 10, 62, 0.9)
     );
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
     overflow: hidden;
 }
 
-.package-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg,
-        transparent,
-        rgba(255, 204, 0, 0.1),
-        transparent
-    );
-    transition: left 0.6s ease;
-}
-
-.package-card:hover::after {
-    left: 100%;
-}
+/* Убрали shine эффект для производительности */
 
 .package-card:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.4),
-        0 0 60px rgba(255, 204, 0, 0.15);
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
 }
 
 /* Пульсирующие акценты */
@@ -177,16 +131,16 @@
     height: 300px;
 }
 
-/* Hover эффект для изображений */
+/* УПРОЩЕНО: Hover для изображений */
 .region-image,
 .package-image {
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s ease;
 }
 
 .region-card:hover .region-image,
 .package-card:hover .package-image {
-    transform: scale(1.1) rotate(1deg);
-    filter: brightness(1.1) saturate(1.2);
+    transform: scale(1.05);
+    filter: brightness(1.05);
 }
 
 /* Плавное появление элементов */
@@ -282,26 +236,14 @@
     filter: drop-shadow(0 0 8px rgba(255, 204, 0, 0.6));
 }
 
-/* Улучшенные бейджи */
+/* УПРОЩЕНО: Бейджи без пульсации */
 .cart-badge,
 .quests-badge {
     background: linear-gradient(135deg, #ff6b6b, #ff8e53);
-    box-shadow:
-        0 2px 8px rgba(255, 107, 107, 0.4),
-        inset 0 1px 2px rgba(255, 255, 255, 0.3);
-    animation: badgePulse 2s ease-in-out infinite;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
 }
 
-@keyframes badgePulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
-    }
-    50% {
-        transform: scale(1.1);
-        box-shadow: 0 4px 16px rgba(255, 107, 107, 0.6);
-    }
-}
+/* Убрали пульсацию для производительности */
 
 /* Скелетон загрузки */
 .skeleton {

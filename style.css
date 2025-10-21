@@ -180,44 +180,26 @@ body {
 .hero-title {
     font-size: clamp(2.5rem, 6vw, 5rem);
     font-weight: 900;
+    /* УПРОЩЕНО: Статичный градиент вместо анимации */
     background: linear-gradient(
         135deg,
         #ffffff 0%,
-        #ffcc00 30%,
-        #ff8e53 60%,
-        #ff6b6b 100%
+        #ffcc00 40%,
+        #ff8e53 100%
     );
-    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     margin-bottom: 28px;
-    animation: fadeInUp 1s ease 0.2s both, shimmer 8s ease-in-out infinite;
-    text-shadow: none;
+    animation: fadeInUp 1s ease 0.2s both;
+    text-shadow: 0 2px 20px rgba(255, 204, 0, 0.3);
     max-width: 95%;
     word-wrap: break-word;
     letter-spacing: -0.03em;
     line-height: 1.15;
-    position: relative;
 }
 
-.hero-title::before {
-    content: attr(data-text);
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: -1;
-    background: linear-gradient(135deg, #ffcc00, #ff6b6b);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: blur(20px);
-    opacity: 0.5;
-}
-
-@keyframes shimmer {
-    0%, 100% { background-position: 0% center; }
-    50% { background-position: 200% center; }
-}
+/* Убрали shimmer анимацию для производительности */
 
 .hero-subtitle {
     font-size: 1.3rem;

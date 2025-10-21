@@ -409,24 +409,20 @@
         }
 
         function initAll() {
-            initParallax();
+            // ОПТИМИЗАЦИЯ: Отключены тяжелые эффекты
+            // initParallax(); // Тяжелый для слабых устройств
+            // initCursorParticles(); // Тяжелый эффект
+            // initSmartHeader(); // Не нравится автоскрытие
+
+            // Легкие эффекты - оставляем
             initRippleEffect();
             initScrollAnimations();
             initSmoothScroll();
-            initSmartHeader();
-            initCursorParticles();
             initHapticFeedback();
             initLazyLoading();
             initScrollProgress();
 
-            console.log('✅ Все улучшения активированы!');
-
-            // Показываем уведомление
-            setTimeout(() => {
-                if (window.showToastEnhanced) {
-                    showToastEnhanced('🎨 Нереальный дизайн загружен!', 2000, 'info');
-                }
-            }, 1000);
+            console.log('✅ Оптимизированные улучшения активированы!');
         }
     }
 

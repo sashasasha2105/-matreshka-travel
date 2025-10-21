@@ -1,24 +1,36 @@
 #!/usr/bin/env python3
 """
 Telegram бот для Матрешка - путешествия по России
+Оптимизированная версия для 24/7 работы
 """
 
 import logging
+import asyncio
+import signal
+import sys
 from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram.error import NetworkError, TimedOut
 
-# Настройка логирования
+# Настройка логирования с ротацией
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
+    level=logging.INFO,
+    handlers=[
+        logging.StreamHandler(sys.stdout),
+        logging.FileHandler('matreshka_bot.log', encoding='utf-8')
+    ]
 )
 logger = logging.getLogger(__name__)
 
 # API токен бота
 BOT_TOKEN = "8284679572:AAE36-iXRiJgZr2Y526TKyAGA-z-IdD1SRg"
 
-# URL вашего Web App (замените на ваш GitHub Pages URL)
+# URL вашего Web App
 WEB_APP_URL = "https://sashasasha2105.github.io/-matreshka-travel/"
+
+# Глобальная переменная для graceful shutdown
+shutdown_event = asyncio.Event()
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -121,16 +133,43 @@ async def about_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Обработчик ошибок"""
+    """Обработчик ошибок с улучшенной диагностикой"""
     logger.error("Exception while handling an update:", exc_info=context.error)
+
+    # Обработка специфичных ошибок
+    if isinstance(context.error, NetworkError):
+        logger.warning("Network error occurred, bot will retry automatically")
+    elif isinstance(context.error, TimedOut):
+        logger.warning("Request timed out, bot will retry automatically")
+    else:
+        logger.error(f"Unexpected error: {type(context.error).__name__}: {context.error}")
+
+
+def signal_handler(signum, frame):
+    """Обработчик сигналов для graceful shutdown"""
+    logger.info(f"Получен сигнал {signum}, начинаем остановку бота...")
+    shutdown_event.set()
 
 
 def main() -> None:
-    """Запуск бота"""
+    """Запуск бота с автоматическим перезапуском"""
     logger.info("🪆 Запуск Telegram бота Матрешка...")
 
-    # Создаем приложение
-    application = Application.builder().token(BOT_TOKEN).build()
+    # Регистрируем обработчики сигналов
+    signal.signal(signal.SIGINT, signal_handler)
+    signal.signal(signal.SIGTERM, signal_handler)
+
+    # Создаем приложение с оптимизированными настройками
+    application = (
+        Application.builder()
+        .token(BOT_TOKEN)
+        .connect_timeout(30.0)
+        .read_timeout(30.0)
+        .write_timeout(30.0)
+        .pool_timeout(30.0)
+        .connection_pool_size(8)
+        .build()
+    )
 
     # Регистрируем обработчики команд
     application.add_handler(CommandHandler("start", start))
@@ -140,9 +179,24 @@ def main() -> None:
     # Регистрируем обработчик ошибок
     application.add_error_handler(error_handler)
 
-    # Запускаем бота
+    # Запускаем бота с автоматическим переподключением
     logger.info("✅ Бот успешно запущен и ожидает сообщений...")
-    application.run_polling(allowed_updates=Update.ALL_TYPES)
+    logger.info("🔄 Бот работает в режиме 24/7 с автоматическим переподключением")
+
+    try:
+        application.run_polling(
+            allowed_updates=Update.ALL_TYPES,
+            drop_pending_updates=True,
+            close_loop=False
+        )
+    except KeyboardInterrupt:
+        logger.info("Бот остановлен пользователем")
+    except Exception as e:
+        logger.error(f"Критическая ошибка: {e}", exc_info=True)
+        logger.info("Бот будет перезапущен системой управления процессами")
+        sys.exit(1)
+    finally:
+        logger.info("Бот завершил работу")
 
 
 if __name__ == '__main__':

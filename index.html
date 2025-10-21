@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="qr/qr.css">
     <link rel="stylesheet" href="maps/maps2gis_new.css">
     <link rel="stylesheet" href="maps/organization_card.css">
+    <link rel="stylesheet" href="quests/quests.css">
 
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -191,6 +192,17 @@
             </div>
         </div>
 
+        <!-- Задания -->
+        <div id="questsSection" class="quests-section" style="display: none;">
+            <button id="questsBackBtn" class="back-btn">
+                ← Назад
+            </button>
+
+            <div class="quests-content">
+                <!-- Сюда загрузятся задания -->
+            </div>
+        </div>
+
         <!-- Лоадер -->
         <div id="loader" class="loader">
             <div class="loader-spinner"></div>
@@ -207,6 +219,11 @@
         <button class="nav-item" onclick="showProfile()" data-page="profile">
             <div class="nav-icon">👤</div>
             <div class="nav-label">Профиль</div>
+        </button>
+        <button class="nav-item" onclick="showQuests()" data-page="quests">
+            <div class="nav-icon">🎯</div>
+            <div class="nav-label">Задания</div>
+            <span class="quests-badge" id="questsBadge" style="display: none;">0</span>
         </button>
         <button class="nav-item" onclick="showCart()" data-page="cart">
             <div class="nav-icon">🛒</div>
@@ -320,5 +337,8 @@
     <script src="packages.js"></script>
     <script src="profile/profile.js"></script>
     <script src="profile/avatar_fix.js"></script>
+
+    <!-- Система заданий -->
+    <script src="quests/quests.js"></script>
 </body>
 </html>

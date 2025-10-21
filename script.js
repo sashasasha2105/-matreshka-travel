@@ -1,15 +1,15 @@
+// 🔥🔥🔥 ПОЛНАЯ ОЧИСТКА ВСЕХ ДАННЫХ ПРИ КАЖДОЙ ЗАГРУЗКЕ СТРАНИЦЫ 🔥🔥🔥
+console.log('🗑️🗑️🗑️ ОЧИСТКА ВСЕХ ДАННЫХ ПРИ ЗАГРУЗКЕ...');
+localStorage.clear();
+sessionStorage.clear();
+console.log('✅ ВСЕ ДАННЫЕ ОЧИЩЕНЫ (localStorage + sessionStorage)');
+
 // Инициализация Telegram Web App
 const tg = window.Telegram?.WebApp;
 let isTelegramWebApp = false;
 
 if (tg) {
     isTelegramWebApp = true;
-
-    // 🔥 ПОЛНАЯ ОЧИСТКА ДАННЫХ ПРИ КАЖДОМ ЗАПУСКЕ ИЗ TELEGRAM
-    console.log('🗑️ Запуск из Telegram - ПОЛНАЯ очистка всех данных...');
-    localStorage.clear(); // Полностью очищаем localStorage
-    sessionStorage.clear(); // Полностью очищаем sessionStorage
-    console.log('✅ Все данные ПОЛНОСТЬЮ очищены');
 
     // Разворачиваем приложение на весь экран
     tg.expand();

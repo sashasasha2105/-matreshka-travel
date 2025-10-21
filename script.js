@@ -1,20 +1,19 @@
-// 🔥 АВТОМАТИЧЕСКАЯ ОЧИСТКА ДАННЫХ ПРИ ПЕРВОМ ЗАПУСКЕ СЕССИИ
-if (!sessionStorage.getItem('appInitialized')) {
-    console.log('🗑️ Первый запуск сессии - очистка старых данных...');
-    localStorage.removeItem('purchasedPackages');
-    sessionStorage.removeItem('paidRegions');
-    sessionStorage.setItem('appInitialized', 'true');
-    console.log('✅ Все старые данные удалены');
-} else {
-    console.log('♻️ Сессия уже инициализирована, данные сохранены');
-}
-
 // Инициализация Telegram Web App
 const tg = window.Telegram?.WebApp;
 let isTelegramWebApp = false;
 
 if (tg) {
     isTelegramWebApp = true;
+
+    // 🔥 ОЧИСТКА ДАННЫХ ПРИ КОМАНДЕ /start
+    // Проверяем start_param из Telegram
+    const startParam = tg.initDataUnsafe?.start_param;
+    if (startParam === 'start' || tg.initDataUnsafe?.query_id) {
+        console.log('🗑️ Telegram /start - очистка всех данных...');
+        localStorage.removeItem('purchasedPackages');
+        sessionStorage.removeItem('paidRegions');
+        console.log('✅ Все данные очищены при запуске бота');
+    }
 
     // Разворачиваем приложение на весь экран
     tg.expand();

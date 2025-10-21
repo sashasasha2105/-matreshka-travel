@@ -46,7 +46,8 @@
       "Bash(git remote add origin https://github.com/sashasasha2105/-matreshka-travel.git)",
       "Bash(git branch -M main)",
       "Bash(git push:*)",
-      "Bash(git remote set-url:*)"
+      "Bash(git remote set-url:*)",
+      "Bash(open:*)"
     ],
     "deny": [],
     "ask": []

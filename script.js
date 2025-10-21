@@ -2,20 +2,8 @@
 const tg = window.Telegram?.WebApp;
 let isTelegramWebApp = false;
 
-// 🔥 ОЧИСТКА ТОЛЬКО ПРИ НОВОЙ СЕССИИ (закрытие/открытие бота)
-const sessionId = Date.now().toString();
-const lastSessionId = sessionStorage.getItem('sessionId');
-
-if (!lastSessionId) {
-    // Новая сессия - очищаем все данные
-    console.log('🗑️ НОВАЯ СЕССИЯ - очистка всех данных...');
-    localStorage.clear();
-    sessionStorage.clear();
-    sessionStorage.setItem('sessionId', sessionId);
-    console.log('✅ Данные очищены, создана новая сессия:', sessionId);
-} else {
-    console.log('♻️ Продолжение сессии:', lastSessionId);
-}
+// 🔥 АВТООЧИСТКА ОТКЛЮЧЕНА - пользователь может очистить вручную через кнопку в корзине
+console.log('💾 Автоочистка localStorage отключена - данные сохраняются между сессиями');
 
 if (tg) {
     isTelegramWebApp = true;

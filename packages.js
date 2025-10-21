@@ -225,30 +225,10 @@ function bookPackage(packageId) {
     };
 
     purchasedPackages.push(purchasedPackage);
-
-    console.log('💾 ПЕРЕД СОХРАНЕНИЕМ - purchasedPackages:', purchasedPackages);
-    console.log('💾 ПЕРЕД СОХРАНЕНИЕМ - длина массива:', purchasedPackages.length);
-
     localStorage.setItem('purchasedPackages', JSON.stringify(purchasedPackages));
 
     console.log('💾 Пакет сохранен в localStorage:', purchasedPackage);
     console.log('💾 Всего пакетов в localStorage:', purchasedPackages.length);
-
-    // Проверяем что действительно сохранилось
-    const checkSaved = localStorage.getItem('purchasedPackages');
-    console.log('🔍 ПРОВЕРКА localStorage СРАЗУ после сохранения:', checkSaved);
-    console.log('🔍 Длина сохраненной строки:', checkSaved?.length);
-
-    // Попробуем распарсить обратно
-    try {
-        const parsed = JSON.parse(checkSaved);
-        console.log('✅ Распарсили обратно, длина массива:', parsed.length);
-        // ВИЗУАЛЬНОЕ уведомление с диагностикой
-        alert(`ДИАГНОСТИКА ПОКУПКИ:\n✅ Сохранено в localStorage: ${parsed.length} пакет(ов)\n📦 ID пакета: ${pkg.id}\n💾 Проверка: ${checkSaved ? 'ДАННЫЕ ЕСТЬ' : 'ПУСТО'}`);
-    } catch(e) {
-        console.error('❌ ОШИБКА парсинга:', e);
-        alert(`❌ ОШИБКА при сохранении пакета!\n${e.message}`);
-    }
 
     // Показываем уведомление
     showNotification(`✅ Пакет "${pkg.name}" успешно куплен! Действителен до ${expiresAt.toLocaleDateString('ru-RU')}`);

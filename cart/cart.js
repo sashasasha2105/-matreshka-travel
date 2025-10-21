@@ -22,18 +22,14 @@ class MatryoshkaCart {
      * Загрузка данных корзины
      */
     loadCartData() {
-        alert(`📋 loadCartData() ВЫЗВАН!`);
         console.log('📋 loadCartData() вызван');
 
         const cartContent = document.querySelector('.cart-content');
 
         if (!cartContent) {
             console.warn('Контейнер корзины не найден');
-            alert(`❌ ОШИБКА: Контейнер .cart-content не найден!`);
             return;
         }
-
-        alert(`✅ Контейнер корзины найден, загружаем пакеты...`);
 
         // Загружаем купленные пакеты
         this.loadPurchasedPackages();
@@ -77,17 +73,10 @@ class MatryoshkaCart {
         console.log('🔄 loadPurchasedPackages() ВЫЗВАНА');
         try {
             const saved = localStorage.getItem('purchasedPackages');
-            console.log('🔍 localStorage.getItem результат:', saved);
-            console.log('🔍 Тип данных:', typeof saved);
-            console.log('🔍 Длина строки:', saved?.length);
 
             if (saved) {
                 this.purchasedPackages = JSON.parse(saved);
-                console.log('📦 УСПЕШНО загружено пакетов:', this.purchasedPackages.length);
-                console.log('📦 Пакеты полностью:', this.purchasedPackages);
-
-                // ВИЗУАЛЬНОЕ уведомление
-                alert(`КОРЗИНА ЗАГРУЖЕНА:\n📦 Найдено пакетов в localStorage: ${this.purchasedPackages.length}\n💾 Длина данных: ${saved.length} символов`);
+                console.log('📦 Загружено пакетов:', this.purchasedPackages.length);
 
                 // Фильтруем истекшие
                 const now = new Date();
@@ -105,8 +94,6 @@ class MatryoshkaCart {
                 localStorage.setItem('purchasedPackages', JSON.stringify(this.purchasedPackages));
             } else {
                 console.log('📦 localStorage пуст, пакетов нет');
-                // ВИЗУАЛЬНОЕ уведомление о пустой корзине
-                alert(`⚠️ КОРЗИНА ПУСТА!\n❌ localStorage НЕ содержит purchasedPackages\n🔍 Значение: ${saved}`);
             }
         } catch (e) {
             console.error('❌ Ошибка загрузки пакетов:', e);
@@ -423,7 +410,6 @@ class MatryoshkaCart {
      * Обновление корзины
      */
     refresh() {
-        alert(`🔄 MatryoshkaCart.refresh() ВЫЗВАН!`);
         console.log('🔄 refresh() вызван');
         this.loadCartData();
         this.updateCartBadge();

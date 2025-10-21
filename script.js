@@ -1415,10 +1415,6 @@ function updateBreadcrumbs(regionName) {
 function showCart() {
     console.log('🛒 Открываем корзину');
 
-    // 🔍 ДИАГНОСТИКА: Проверяем localStorage ПЕРЕД открытием корзины
-    const lsCheck = localStorage.getItem('purchasedPackages');
-    alert(`🔍 showCart() ВЫЗВАНА!\n📦 localStorage.getItem('purchasedPackages'):\n${lsCheck ? lsCheck.substring(0, 200) + '...' : '❌ ПУСТО'}\n\n💾 Длина: ${lsCheck?.length || 0} символов`);
-
     // Скрываем все секции
     document.getElementById('mainSection').style.display = 'none';
     document.getElementById('regionDetails').style.display = 'none';
@@ -1428,26 +1424,18 @@ function showCart() {
     const cartSection = document.getElementById('cartSection');
     cartSection.style.display = 'block';
 
-    // 🔥 БЕЗОПАСНАЯ ИНИЦИАЛИЗАЦИЯ: Ждем загрузки корзины если нужно
+    // Обновляем данные корзины
     if (window.matryoshkaCart) {
-        alert(`🔄 Вызываем matryoshkaCart.refresh()...`);
         window.matryoshkaCart.refresh();
     } else {
-        alert(`⏳ matryoshkaCart еще не загружен, ждем...`);
         // Пробуем инициализировать корзину принудительно
         if (typeof initCart === 'function') {
             initCart();
-            // Даем время на инициализацию
             setTimeout(() => {
                 if (window.matryoshkaCart) {
                     window.matryoshkaCart.refresh();
-                    alert(`✅ Корзина инициализирована с задержкой!`);
-                } else {
-                    alert(`❌ КРИТИЧЕСКАЯ ОШИБКА: Не удалось загрузить корзину!`);
                 }
             }, 100);
-        } else {
-            alert(`❌ ОШИБКА: initCart не найдена! Проверьте загрузку cart.js`);
         }
     }
 

@@ -1,3 +1,9 @@
+// 🔥 АВТОМАТИЧЕСКАЯ ОЧИСТКА ДАННЫХ ПРИ ЗАПУСКЕ
+console.log('🗑️ Очистка старых данных...');
+localStorage.removeItem('purchasedPackages');
+sessionStorage.removeItem('paidRegions');
+console.log('✅ Все старые данные удалены');
+
 // Инициализация Telegram Web App
 const tg = window.Telegram?.WebApp;
 let isTelegramWebApp = false;

@@ -41,6 +41,11 @@ class MatryoshkaCart {
                     <span>🛒</span> Мои покупки
                 </h2>
                 <p class="cart-subtitle">Активные пакеты и купоны</p>
+                ${this.purchasedPackages.length > 0 || this.paidRegions.length > 0 ? `
+                    <button class="cart-clear-btn" onclick="matryoshkaCart.clearAll()" style="margin-top: 10px; padding: 8px 16px; background: #ff4444; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                        🗑️ Очистить корзину
+                    </button>
+                ` : ''}
             </div>
 
             ${this.generatePackagesSection()}
@@ -406,6 +411,20 @@ class MatryoshkaCart {
     refresh() {
         this.loadCartData();
         this.updateCartBadge();
+    }
+
+    /**
+     * Очистка всей корзины
+     */
+    clearAll() {
+        if (confirm('Вы уверены, что хотите очистить всю корзину? Это удалит все купленные пакеты и регионы.')) {
+            localStorage.removeItem('purchasedPackages');
+            sessionStorage.removeItem('paidRegions');
+            this.purchasedPackages = [];
+            this.paidRegions = [];
+            this.refresh();
+            console.log('🗑️ Корзина очищена');
+        }
     }
 }
 

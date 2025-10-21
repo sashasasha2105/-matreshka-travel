@@ -1427,6 +1427,10 @@ function updateBreadcrumbs(regionName) {
 function showCart() {
     console.log('🛒 Открываем корзину');
 
+    // 🔍 ДИАГНОСТИКА: Проверяем localStorage ПЕРЕД открытием корзины
+    const lsCheck = localStorage.getItem('purchasedPackages');
+    alert(`🔍 showCart() ВЫЗВАНА!\n📦 localStorage.getItem('purchasedPackages'):\n${lsCheck ? lsCheck.substring(0, 200) + '...' : '❌ ПУСТО'}\n\n💾 Длина: ${lsCheck?.length || 0} символов`);
+
     // Скрываем все секции
     document.getElementById('mainSection').style.display = 'none';
     document.getElementById('regionDetails').style.display = 'none';
@@ -1438,7 +1442,10 @@ function showCart() {
 
     // Обновляем данные корзины
     if (window.matryoshkaCart) {
+        alert(`🔄 Вызываем matryoshkaCart.refresh()...`);
         window.matryoshkaCart.refresh();
+    } else {
+        alert(`❌ window.matryoshkaCart НЕ НАЙДЕН!`);
     }
 
     // Обновляем активную кнопку в навигации

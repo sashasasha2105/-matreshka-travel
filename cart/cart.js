@@ -22,12 +22,18 @@ class MatryoshkaCart {
      * Загрузка данных корзины
      */
     loadCartData() {
+        alert(`📋 loadCartData() ВЫЗВАН!`);
+        console.log('📋 loadCartData() вызван');
+
         const cartContent = document.querySelector('.cart-content');
 
         if (!cartContent) {
             console.warn('Контейнер корзины не найден');
+            alert(`❌ ОШИБКА: Контейнер .cart-content не найден!`);
             return;
         }
+
+        alert(`✅ Контейнер корзины найден, загружаем пакеты...`);
 
         // Загружаем купленные пакеты
         this.loadPurchasedPackages();
@@ -417,6 +423,8 @@ class MatryoshkaCart {
      * Обновление корзины
      */
     refresh() {
+        alert(`🔄 MatryoshkaCart.refresh() ВЫЗВАН!`);
+        console.log('🔄 refresh() вызван');
         this.loadCartData();
         this.updateCartBadge();
     }

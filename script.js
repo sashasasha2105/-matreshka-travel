@@ -5,12 +5,11 @@ let isTelegramWebApp = false;
 if (tg) {
     isTelegramWebApp = true;
 
-    // 🔥 ОЧИСТКА ДАННЫХ ПРИ КАЖДОМ ЗАПУСКЕ ИЗ TELEGRAM
-    console.log('🗑️ Запуск из Telegram - очистка всех данных...');
-    localStorage.removeItem('purchasedPackages');
-    sessionStorage.removeItem('paidRegions');
-    sessionStorage.clear(); // Очищаем весь sessionStorage
-    console.log('✅ Все данные очищены');
+    // 🔥 ПОЛНАЯ ОЧИСТКА ДАННЫХ ПРИ КАЖДОМ ЗАПУСКЕ ИЗ TELEGRAM
+    console.log('🗑️ Запуск из Telegram - ПОЛНАЯ очистка всех данных...');
+    localStorage.clear(); // Полностью очищаем localStorage
+    sessionStorage.clear(); // Полностью очищаем sessionStorage
+    console.log('✅ Все данные ПОЛНОСТЬЮ очищены');
 
     // Разворачиваем приложение на весь экран
     tg.expand();

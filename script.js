@@ -5,15 +5,12 @@ let isTelegramWebApp = false;
 if (tg) {
     isTelegramWebApp = true;
 
-    // 🔥 ОЧИСТКА ДАННЫХ ПРИ КОМАНДЕ /start
-    // Проверяем start_param из Telegram
-    const startParam = tg.initDataUnsafe?.start_param;
-    if (startParam === 'start' || tg.initDataUnsafe?.query_id) {
-        console.log('🗑️ Telegram /start - очистка всех данных...');
-        localStorage.removeItem('purchasedPackages');
-        sessionStorage.removeItem('paidRegions');
-        console.log('✅ Все данные очищены при запуске бота');
-    }
+    // 🔥 ОЧИСТКА ДАННЫХ ПРИ КАЖДОМ ЗАПУСКЕ ИЗ TELEGRAM
+    console.log('🗑️ Запуск из Telegram - очистка всех данных...');
+    localStorage.removeItem('purchasedPackages');
+    sessionStorage.removeItem('paidRegions');
+    sessionStorage.clear(); // Очищаем весь sessionStorage
+    console.log('✅ Все данные очищены');
 
     // Разворачиваем приложение на весь экран
     tg.expand();

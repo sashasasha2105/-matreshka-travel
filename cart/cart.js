@@ -68,14 +68,17 @@ class MatryoshkaCart {
      * Загрузка купленных пакетов
      */
     loadPurchasedPackages() {
+        console.log('🔄 loadPurchasedPackages() ВЫЗВАНА');
         try {
             const saved = localStorage.getItem('purchasedPackages');
-            console.log('🔍 localStorage purchasedPackages:', saved);
+            console.log('🔍 localStorage.getItem результат:', saved);
+            console.log('🔍 Тип данных:', typeof saved);
+            console.log('🔍 Длина строки:', saved?.length);
 
             if (saved) {
                 this.purchasedPackages = JSON.parse(saved);
-                console.log('📦 Загружено пакетов из localStorage:', this.purchasedPackages.length);
-                console.log('📦 Пакеты:', this.purchasedPackages);
+                console.log('📦 УСПЕШНО загружено пакетов:', this.purchasedPackages.length);
+                console.log('📦 Пакеты полностью:', this.purchasedPackages);
 
                 // Фильтруем истекшие
                 const now = new Date();

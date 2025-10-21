@@ -1,12 +1,21 @@
-// 🔥🔥🔥 ПОЛНАЯ ОЧИСТКА ВСЕХ ДАННЫХ ПРИ КАЖДОЙ ЗАГРУЗКЕ СТРАНИЦЫ 🔥🔥🔥
-console.log('🗑️🗑️🗑️ ОЧИСТКА ВСЕХ ДАННЫХ ПРИ ЗАГРУЗКЕ...');
-localStorage.clear();
-sessionStorage.clear();
-console.log('✅ ВСЕ ДАННЫЕ ОЧИЩЕНЫ (localStorage + sessionStorage)');
-
 // Инициализация Telegram Web App
 const tg = window.Telegram?.WebApp;
 let isTelegramWebApp = false;
+
+// 🔥 ОЧИСТКА ТОЛЬКО ПРИ НОВОЙ СЕССИИ (закрытие/открытие бота)
+const sessionId = Date.now().toString();
+const lastSessionId = sessionStorage.getItem('sessionId');
+
+if (!lastSessionId) {
+    // Новая сессия - очищаем все данные
+    console.log('🗑️ НОВАЯ СЕССИЯ - очистка всех данных...');
+    localStorage.clear();
+    sessionStorage.clear();
+    sessionStorage.setItem('sessionId', sessionId);
+    console.log('✅ Данные очищены, создана новая сессия:', sessionId);
+} else {
+    console.log('♻️ Продолжение сессии:', lastSessionId);
+}
 
 if (tg) {
     isTelegramWebApp = true;

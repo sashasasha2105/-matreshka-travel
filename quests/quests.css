@@ -418,6 +418,165 @@
     font-size: 0.9rem;
 }
 
+/* QR-код в карточке задания */
+.quest-qr-container {
+    margin-top: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(255, 204, 0, 0.05), rgba(255, 142, 83, 0.05));
+    border: 2px solid rgba(255, 204, 0, 0.3);
+    border-radius: 16px;
+    text-align: center;
+}
+
+.quest-qr-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffcc00;
+    margin-bottom: 15px;
+}
+
+.quest-qr-code {
+    width: 200px;
+    height: 200px;
+    margin: 15px auto;
+    display: block;
+    background: white;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.quest-qr-info {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    margin: 15px 0;
+    line-height: 1.6;
+}
+
+/* Полноэкранный QR-код */
+.qr-fullscreen-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.qr-fullscreen-modal.active {
+    opacity: 1;
+}
+
+.qr-fullscreen-content {
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    background: linear-gradient(135deg, #1a0a3e, #0f0520);
+    border: 2px solid rgba(255, 204, 0, 0.5);
+    border-radius: 24px;
+    padding: 30px;
+    text-align: center;
+    animation: modalSlideUp 0.4s ease-out;
+}
+
+.qr-close-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.qr-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.qr-fullscreen-header {
+    margin-bottom: 30px;
+}
+
+.qr-fullscreen-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ffcc00, #ff8e53);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.qr-fullscreen-subtitle {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+}
+
+.qr-fullscreen-code {
+    margin: 30px 0;
+}
+
+.qr-fullscreen-code img {
+    width: 300px;
+    height: 300px;
+    max-width: 80vw;
+    max-height: 80vw;
+    background: white;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(255, 204, 0, 0.3);
+}
+
+.qr-fullscreen-info {
+    margin-top: 30px;
+}
+
+.qr-partner-info {
+    background: rgba(255, 204, 0, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.qr-partner-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffcc00;
+    margin-bottom: 5px;
+}
+
+.qr-partner-type {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.qr-partner-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+}
+
+.qr-instructions {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
 /* Адаптивность */
 @media (max-width: 768px) {
     .quests-title {
@@ -434,5 +593,14 @@
 
     .quest-btn {
         width: 100%;
+    }
+
+    .qr-fullscreen-code img {
+        width: 250px;
+        height: 250px;
+    }
+
+    .qr-fullscreen-title {
+        font-size: 1.5rem;
     }
 }

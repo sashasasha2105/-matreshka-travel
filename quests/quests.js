@@ -52,6 +52,11 @@
                     // Проверяем, не выполнено ли уже задание
                     const isCompleted = this.completedQuests.includes(questId);
 
+                    // Выбираем случайного партнера для награды
+                    const partner = regionData.partners && regionData.partners.length > 0
+                        ? regionData.partners[Math.floor(Math.random() * regionData.partners.length)]
+                        : null;
+
                     this.quests.push({
                         id: questId,
                         regionId: paidRegion.id,
@@ -59,10 +64,12 @@
                         title: `Сфотографируй ${attraction.name}`,
                         description: `Найди и сфотографируй достопримечательность "${attraction.name}" в городе ${regionData.name}`,
                         attraction: attraction.name,
-                        reward: 50 + (index * 10), // Награда увеличивается
+                        partner: partner,
+                        rewardText: partner ? `QR-код на бонус в "${partner.name}"` : 'QR-код на бонус',
                         status: isCompleted ? 'completed' : 'available',
                         photo: isCompleted ? this.getQuestPhoto(questId) : null,
-                        completedDate: isCompleted ? this.getCompletionDate(questId) : null
+                        completedDate: isCompleted ? this.getCompletionDate(questId) : null,
+                        qrCode: isCompleted ? this.getQuestQR(questId) : null
                     });
                 });
             });
@@ -104,6 +111,34 @@
             return date ? new Date(date) : null;
         }
 
+        // Получение QR-кода задания
+        getQuestQR(questId) {
+            return localStorage.getItem(`quest_qr_${questId}`);
+        }
+
+        // Генерация QR-кода
+        generateQRCode(quest) {
+            // Простой QR-код с данными о бонусе
+            const qrData = {
+                questId: quest.id,
+                region: quest.regionName,
+                partner: quest.partner ? quest.partner.name : 'Партнер',
+                bonus: quest.partner ? quest.partner.description : 'Специальный бонус',
+                date: new Date().toISOString()
+            };
+
+            // Используем QRCode.js библиотеку для генерации
+            const canvas = document.createElement('canvas');
+            const qr = new QRious({
+                element: canvas,
+                value: JSON.stringify(qrData),
+                size: 300,
+                level: 'H'
+            });
+
+            return canvas.toDataURL();
+        }
+
         // Обновление бейджа с количеством доступных заданий
         updateQuestsBadge() {
             const badge = document.getElementById('questsBadge');
@@ -130,7 +165,7 @@
             container.innerHTML = `
                 <div class="quests-header">
                     <div class="quests-title">🎯 Игровые задания</div>
-                    <div class="quests-subtitle">Фотографируй достопримечательности и получай купоны</div>
+                    <div class="quests-subtitle">Фотографируй достопримечательности и получай QR-коды на бонусы</div>
                 </div>
 
                 <div class="quests-info">
@@ -138,11 +173,11 @@
                     <div class="quests-info-text">
                         После покупки пакета региона вам становятся доступны задания -
                         сфотографируйте указанные достопримечательности и получите
-                        дополнительные купоны для скидок у партнеров!
+                        QR-код на бонус в заведении партнеров!
                     </div>
                     <div class="quests-reward">
                         <span class="reward-icon">🎁</span>
-                        <span class="reward-text">За каждое задание: +50-70 купонов</span>
+                        <span class="reward-text">За каждое задание: QR-код на бонус</span>
                     </div>
                 </div>
 
@@ -219,10 +254,22 @@
                     <div class="quest-description">${quest.description}</div>
                     <div class="quest-reward-badge">
                         <span class="reward-icon">🎁</span>
-                        <span class="reward-text">+${quest.reward} купонов</span>
+                        <span class="reward-text">${quest.rewardText}</span>
                     </div>
                     ${completedInfo}
                     ${photoPreview}
+                    ${quest.qrCode ? `
+                        <div class="quest-qr-container">
+                            <div class="quest-qr-title">✅ Ваш QR-код на бонус:</div>
+                            <img src="${quest.qrCode}" class="quest-qr-code" alt="QR код">
+                            <div class="quest-qr-info">
+                                ${quest.partner ? `📍 ${quest.partner.name}<br>${quest.partner.emoji} ${quest.partner.type}` : ''}
+                            </div>
+                            <button class="quest-btn quest-btn-primary" onclick="window.matryoshkaQuests.showQRFullscreen('${quest.id}')">
+                                🔍 Показать QR-код
+                            </button>
+                        </div>
+                    ` : ''}
                     ${actions}
                 </div>
             `;
@@ -344,39 +391,27 @@
             showLoader('Обработка фото...');
 
             setTimeout(() => {
+                // Генерируем QR-код для награды
+                const qrCode = this.generateQRCode(this.currentQuest);
+
                 // Сохраняем выполненное задание
                 this.saveCompletedQuest(this.currentQuest.id, this.currentPhotoData);
 
-                // Начисляем купоны
-                this.awardCoupons(this.currentQuest.reward);
+                // Сохраняем QR-код
+                localStorage.setItem(`quest_qr_${this.currentQuest.id}`, qrCode);
 
                 // Закрываем модалку
                 this.closePhotoUpload();
 
                 hideLoader();
 
-                // Показываем успех
-                showToast(`✅ Задание выполнено! +${this.currentQuest.reward} купонов`, 4000);
-
-                // Обновляем профиль если открыт
-                if (window.matryoshkaProfile) {
-                    window.matryoshkaProfile.updateCoupons();
-                }
+                // Показываем успех с информацией о QR-коде
+                const partnerName = this.currentQuest.partner ? this.currentQuest.partner.name : 'партнеров';
+                showToast(`✅ Задание выполнено! Получен QR-код на бонус в "${partnerName}"`, 4000);
 
                 // Перерисовываем список заданий
                 this.render();
             }, 1500);
-        }
-
-        // Начисление купонов
-        awardCoupons(amount) {
-            // Получаем текущие купоны из профиля
-            const currentCoupons = parseInt(localStorage.getItem('userCoupons') || '0');
-            const newTotal = currentCoupons + amount;
-
-            localStorage.setItem('userCoupons', newTotal.toString());
-
-            console.log(`💰 Начислено купонов: ${amount}. Новый баланс: ${newTotal}`);
         }
 
         // Закрытие модального окна
@@ -387,6 +422,46 @@
                 setTimeout(() => modal.remove(), 300);
             }
             this.currentPhotoData = null;
+        }
+
+        // Показать QR-код в полноэкранном режиме
+        showQRFullscreen(questId) {
+            const quest = this.quests.find(q => q.id === questId);
+            if (!quest || !quest.qrCode) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'qr-fullscreen-modal active';
+            modal.innerHTML = `
+                <div class="qr-fullscreen-content">
+                    <button class="qr-close-btn" onclick="this.closest('.qr-fullscreen-modal').remove()">✕</button>
+                    <div class="qr-fullscreen-header">
+                        <div class="qr-fullscreen-title">🎁 QR-код на бонус</div>
+                        <div class="qr-fullscreen-subtitle">${quest.partner ? quest.partner.name : ''}</div>
+                    </div>
+                    <div class="qr-fullscreen-code">
+                        <img src="${quest.qrCode}" alt="QR код">
+                    </div>
+                    <div class="qr-fullscreen-info">
+                        ${quest.partner ? `
+                            <div class="qr-partner-info">
+                                <div class="qr-partner-name">${quest.partner.emoji} ${quest.partner.name}</div>
+                                <div class="qr-partner-type">${quest.partner.type}</div>
+                                <div class="qr-partner-desc">${quest.partner.description}</div>
+                            </div>
+                        ` : ''}
+                        <div class="qr-instructions">
+                            📱 Покажите этот QR-код сотруднику заведения для получения бонуса
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Вибрация Telegram
+            if (window.Telegram?.WebApp?.HapticFeedback) {
+                window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
+            }
         }
     }
 

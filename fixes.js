@@ -22,36 +22,7 @@ function showMainSection() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// ========================================
-// УЛУЧШЕННАЯ ЛЕНТА ПУТЕШЕСТВИЙ В СТИЛЕ VK
-// ========================================
-(function improveTravelFeed() {
-    // Ждем загрузки DOM
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
-
-    function init() {
-        const feedSection = document.querySelector('.travel-feed-section');
-        if (!feedSection) return;
-
-        // Уменьшаем hero секцию чтобы было больше места для ленты
-        const heroSection = document.querySelector('.hero-section');
-        if (heroSection) {
-            heroSection.style.minHeight = '400px'; // Было больше
-        }
-
-        // Улучшаем стили ленты
-        const feed = document.querySelector('.travel-feed');
-        if (feed) {
-            feed.style.maxWidth = '680px';
-            feed.style.margin = '0 auto';
-            feed.style.padding = '0';
-        }
-    }
-})();
+// Hero секцию НЕ трогаем - оставляем как было!
 
 // ========================================
 // ИСПРАВЛЕНИЕ МОДАЛКИ ДОБАВЛЕНИЯ ФОТО

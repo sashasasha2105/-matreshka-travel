@@ -330,10 +330,6 @@ function loadTravelFeed() {
                     <span>❤️</span>
                     <span class="like-count">${post.likes || 0}</span>
                 </button>
-                <button class="feed-action-btn">
-                    <span>👁️</span>
-                    <span>${post.views || 0}</span>
-                </button>
             </div>
         `;
 
@@ -1421,27 +1417,32 @@ function updateBreadcrumbs(regionName) {
 
 (function initScrollToTop() {
     const scrollToTopBtn = document.getElementById('scrollToTop');
-    
+
     if (!scrollToTopBtn) return;
 
-    // Показываем/скрываем кнопку при скролле
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-        clearTimeout(scrollTimeout);
-        
-        const scrolled = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrolled > 400) {
+    // Функция проверки скролла для всех страниц
+    function checkScroll() {
+        const scrolled = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+
+        if (scrolled > 300) {
             scrollToTopBtn.classList.add('visible');
         } else {
             scrollToTopBtn.classList.remove('visible');
         }
-        
-        // Добавляем небольшую задержку для плавности
-        scrollTimeout = setTimeout(() => {
-            // Дополнительная логика если нужна
-        }, 100);
+    }
+
+    // Показываем/скрываем кнопку при скролле window
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(checkScroll, 50);
     }, { passive: true });
+
+    // Проверяем сразу при загрузке
+    checkScroll();
+
+    // Проверяем каждые 500мс на случай если страница изменилась
+    setInterval(checkScroll, 500);
 
     // Плавная прокрутка наверх при клике
     scrollToTopBtn.addEventListener('click', () => {
@@ -1449,9 +1450,13 @@ function updateBreadcrumbs(regionName) {
             top: 0,
             behavior: 'smooth'
         });
+
+        // Прокручиваем body на всякий случай
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
     });
 
-    console.log('✅ Кнопка "Наверх" инициализирована');
+    console.log('✅ Кнопка "Наверх" инициализирована для всех страниц');
 })();
 
 // ========================================

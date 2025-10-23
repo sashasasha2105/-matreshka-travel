@@ -1,0 +1,77 @@
+/* ================================================
+   ИСПРАВЛЕНИЯ CSS ДЛЯ ПРОФИЛЯ
+   ================================================ */
+
+/* Исправляем переполнение в профиле */
+.profile-section {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    height: 100vh;
+    -webkit-overflow-scrolling: touch;
+}
+
+.profile-content {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Исправляем карточки путешествий */
+.travel-card {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.travel-card-images {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Исправляем grid фотографий */
+.grid-two,
+.grid-three,
+.grid-many {
+    width: 100%;
+    max-width: 100%;
+}
+
+.grid-two .grid-image,
+.grid-three .grid-image,
+.grid-many .grid-image {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+}
+
+/* Исправляем модалку */
+.travel-modal {
+    z-index: 10000 !important;
+}
+
+.modal-content {
+    max-width: 90vw;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* Убираем переполнение из статистики */
+.profile-stats {
+    overflow: visible !important;
+}
+
+.profile-stat {
+    overflow: visible !important;
+}
+
+/* Исправляем галерею */
+.travel-gallery-section {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.travel-cards {
+    width: 100%;
+    max-width: 100%;
+}

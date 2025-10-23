@@ -2,15 +2,7 @@
    ЛЕНТА ПУТЕШЕСТВИЙ В СТИЛЕ СОЦСЕТИ (VK-STYLE)
    ================================================ */
 
-/* Hero секция - уменьшаем для больше места ленте */
-.hero-section {
-    min-height: 400px !important;
-    max-height: 450px;
-}
-
-.hero-model-container {
-    max-height: 450px;
-}
+/* Hero секция - оставляем как было (НЕ ТРОГАЕМ!) */
 
 /* Лента путешествий - стиль VK */
 .travel-feed-section {

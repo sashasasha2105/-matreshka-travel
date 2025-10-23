@@ -1,0 +1,305 @@
+/* ================================================
+   ЛЕНТА ПУТЕШЕСТВИЙ В СТИЛЕ СОЦСЕТИ (VK-STYLE)
+   ================================================ */
+
+/* Hero секция - уменьшаем для больше места ленте */
+.hero-section {
+    min-height: 400px !important;
+    max-height: 450px;
+}
+
+.hero-model-container {
+    max-height: 450px;
+}
+
+/* Лента путешествий - стиль VK */
+.travel-feed-section {
+    padding: 20px 0 80px;
+    background: transparent;
+}
+
+.feed-title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    padding: 0 16px;
+}
+
+.travel-feed {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Карточка поста в стиле VK */
+.travel-feed-card {
+    background: var(--card-bg, rgba(255, 255, 255, 0.05));
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+}
+
+/* Хедер поста */
+.feed-card-header {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.05));
+}
+
+.feed-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.feed-user-info {
+    flex: 1;
+}
+
+.feed-username {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    margin-bottom: 2px;
+}
+
+.feed-timestamp {
+    font-size: 12px;
+    opacity: 0.6;
+    line-height: 16px;
+}
+
+/* Текст поста */
+.feed-card-content {
+    padding: 12px 16px;
+}
+
+.feed-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 20px;
+}
+
+.feed-card-text {
+    font-size: 14px;
+    line-height: 20px;
+    opacity: 0.85;
+}
+
+/* Фотографии - улучшенный grid без фиксированных высот */
+.feed-card-images {
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Одна фотография */
+.feed-card-images .single-image {
+    width: 100%;
+    max-height: 500px;
+    height: auto;
+    object-fit: contain;
+    background: #000;
+    display: block;
+}
+
+/* Две фотографии */
+.feed-card-images .grid-two {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: #000;
+}
+
+.feed-card-images .grid-two .grid-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+/* Три фотографии */
+.feed-card-images .grid-three {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2px;
+    background: #000;
+}
+
+.feed-card-images .grid-three .grid-image {
+    width: 100%;
+    object-fit: cover;
+}
+
+.feed-card-images .grid-three .grid-image:first-child {
+    aspect-ratio: 3/4;
+}
+
+.feed-card-images .grid-three .grid-column {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    gap: 2px;
+}
+
+.feed-card-images .grid-three .grid-column .grid-image {
+    aspect-ratio: 1;
+}
+
+/* Четыре или более фотографий */
+.feed-card-images .grid-many {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2px;
+    background: #000;
+}
+
+.feed-card-images .grid-many .grid-image {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+}
+
+.feed-card-images .grid-more {
+    position: relative;
+}
+
+.feed-card-images .more-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: 700;
+    color: white;
+}
+
+/* Футер поста - действия */
+.feed-card-footer {
+    padding: 8px 16px 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.feed-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    color: inherit;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+    border-radius: 6px;
+}
+
+.feed-action-btn:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.feed-action-btn.liked {
+    opacity: 1;
+    color: #ff6b6b;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 300px !important;
+        max-height: 350px;
+    }
+
+    .travel-feed {
+        padding: 0 4px;
+        gap: 8px;
+    }
+
+    .travel-feed-card {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .feed-card-images .single-image {
+        max-height: 400px;
+    }
+}
+
+/* Исправление для модалки добавления фото */
+.modal {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+.modal-content {
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: var(--bg-secondary, #1a1a1a);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+/* Исправление photo preview в модалке */
+.photo-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.preview-image-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.preview-image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-remove-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}

@@ -53,27 +53,8 @@ if (tg) {
     console.log('ℹ️ Приложение запущено вне Telegram');
 }
 
-// Глобальная лента путешествий
-let globalTravelFeed = [
-    {
-        id: 1,
-        author: 'Путешественник',
-        avatar: '👤',
-        time: '2 часа назад',
-        title: 'Красоты Санкт-Петербурга',
-        image: './assets/travel1.jpg',
-        text: 'Удивительное путешествие по культурной столице России. Эрмитаж поразил своими коллекциями!'
-    },
-    {
-        id: 2,
-        author: 'Путешественник',
-        avatar: '👤',
-        time: '5 часов назад',
-        title: 'Золотое кольцо России',
-        image: './assets/travel2.jpg',
-        text: 'Проехал все города Золотого кольца. Особенно впечатлил Суздаль с его древними храмами.'
-    }
-];
+// Глобальная лента путешествий (пустая по умолчанию)
+let globalTravelFeed = [];
 
 // Глобальные переменные
 
@@ -304,7 +285,7 @@ function loadMoreRegions() {
     }, 800);
 }
 
-// Функция загрузки ленты путешествий
+// Функция загрузки ленты путешествий в стиле VK
 function loadTravelFeed() {
     const travelFeed = document.getElementById('travelFeed');
     if (!travelFeed) return;
@@ -324,22 +305,35 @@ function loadTravelFeed() {
 
     globalTravelFeed.forEach((post, index) => {
         const postElement = document.createElement('div');
-        postElement.className = 'feed-post';
+        postElement.className = 'travel-feed-card';
+
+        // Генерируем grid для фотографий
+        const imagesHTML = generatePhotoGridForFeed(post.images || [post.image]);
 
         postElement.innerHTML = `
-            <div class="post-header">
-                <div class="post-avatar">${post.avatar}</div>
-                <div class="post-author">
-                    <div class="post-name">${post.author}</div>
-                    <div class="post-time">${post.time}</div>
+            <div class="feed-card-header">
+                <div class="feed-avatar">${post.avatar || '👤'}</div>
+                <div class="feed-user-info">
+                    <div class="feed-username">${post.author || 'Путешественник'}</div>
+                    <div class="feed-timestamp">${post.time || 'только что'}</div>
                 </div>
             </div>
-            <div class="post-image">
-                <img src="${post.image}" alt="${post.title}" loading="lazy">
+            <div class="feed-card-content">
+                <div class="feed-card-title">${post.title}</div>
+                <div class="feed-card-text">${post.text}</div>
             </div>
-            <div class="post-content">
-                <div class="post-title">${post.title}</div>
-                <div class="post-text">${post.text}</div>
+            <div class="feed-card-images">
+                ${imagesHTML}
+            </div>
+            <div class="feed-card-footer">
+                <button class="feed-action-btn" onclick="toggleFeedLike(${post.id}, this)">
+                    <span>❤️</span>
+                    <span class="like-count">${post.likes || 0}</span>
+                </button>
+                <button class="feed-action-btn">
+                    <span>👁️</span>
+                    <span>${post.views || 0}</span>
+                </button>
             </div>
         `;
 
@@ -349,6 +343,61 @@ function loadTravelFeed() {
 
         travelFeed.appendChild(postElement);
     });
+}
+
+// Генерация photo grid для ленты
+function generatePhotoGridForFeed(images) {
+    if (!images || images.length === 0) {
+        return '';
+    }
+
+    if (images.length === 1) {
+        return `<img src="${images[0]}" class="single-image" loading="lazy">`;
+    }
+
+    if (images.length === 2) {
+        return `
+            <div class="grid-two">
+                ${images.map(img => `<img src="${img}" class="grid-image" loading="lazy">`).join('')}
+            </div>
+        `;
+    }
+
+    if (images.length === 3) {
+        return `
+            <div class="grid-three">
+                <img src="${images[0]}" class="grid-image" loading="lazy">
+                <div class="grid-column">
+                    <img src="${images[1]}" class="grid-image" loading="lazy">
+                    <img src="${images[2]}" class="grid-image" loading="lazy">
+                </div>
+            </div>
+        `;
+    }
+
+    if (images.length >= 4) {
+        return `
+            <div class="grid-many">
+                <img src="${images[0]}" class="grid-image" loading="lazy">
+                <img src="${images[1]}" class="grid-image" loading="lazy">
+                <img src="${images[2]}" class="grid-image" loading="lazy">
+                <div class="grid-more">
+                    <img src="${images[3]}" class="grid-image" loading="lazy">
+                    ${images.length > 4 ? `<div class="more-overlay">+${images.length - 4}</div>` : ''}
+                </div>
+            </div>
+        `;
+    }
+}
+
+// Переключение лайка в ленте
+function toggleFeedLike(postId, button) {
+    const post = globalTravelFeed.find(p => p.id === postId);
+    if (!post) return;
+
+    post.likes = (post.likes || 0) + (button.classList.contains('liked') ? -1 : 1);
+    button.classList.toggle('liked');
+    button.querySelector('.like-count').textContent = post.likes;
 }
 
 // Функция загрузки пакетов путешествий перенесена в packages.js

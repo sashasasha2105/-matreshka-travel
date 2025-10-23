@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="quests/quests.css">
     <link rel="stylesheet" href="enhancements.css">
 
+    <!-- Идеально ровные кнопки и иконки -->
+    <link rel="stylesheet" href="button-redesign.css">
+
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
@@ -219,6 +222,10 @@
 
     <!-- Нижняя навигация -->
     <nav class="bottom-nav" id="bottomNav">
+        <button class="nav-item" onclick="showMainSection()" data-page="main">
+            <div class="nav-icon">🏠</div>
+            <div class="nav-label">Главная</div>
+        </button>
         <button class="nav-item" onclick="showProfile()" data-page="profile">
             <div class="nav-icon">👤</div>
             <div class="nav-label">Профиль</div>

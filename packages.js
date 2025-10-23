@@ -227,6 +227,16 @@ function bookPackage(packageId) {
     purchasedPackages.push(purchasedPackage);
     localStorage.setItem('purchasedPackages', JSON.stringify(purchasedPackages));
 
+    // 🌍 Автоматически увеличиваем счетчик путешествий в профиле
+    try {
+        const profileData = JSON.parse(sessionStorage.getItem('matryoshka_profile') || '{}');
+        profileData.travels = (profileData.travels || 0) + 1;
+        sessionStorage.setItem('matryoshka_profile', JSON.stringify(profileData));
+        console.log('🌍 Счетчик путешествий увеличен:', profileData.travels);
+    } catch (e) {
+        console.error('Ошибка обновления счетчика путешествий:', e);
+    }
+
     console.log('💾 Пакет сохранен в localStorage:', purchasedPackage);
     console.log('💾 Всего пакетов в localStorage:', purchasedPackages.length);
 

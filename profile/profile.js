@@ -136,13 +136,11 @@ class MatryoshkaProfile {
     }
 
     /**
-     * Генерация HTML для статистики
+     * Генерация HTML для статистики (только счетчик путешествий)
      */
     generateStatsHTML() {
         const stats = [
-            { key: 'travels', value: this.profileData.travels, label: 'Путешествий', icon: '🌍' },
-            { key: 'cities', value: this.profileData.cities, label: 'Городов', icon: '🏛️' },
-            { key: 'reviews', value: this.profileData.reviews, label: 'Отзывов', icon: '⭐' }
+            { key: 'travels', value: this.profileData.travels, label: 'Путешествий', icon: '🌍' }
         ];
 
         return stats.map(stat => `

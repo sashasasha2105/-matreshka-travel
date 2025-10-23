@@ -65,7 +65,7 @@ const TRAVEL_PACKAGES = [
         duration: '6 дней',
         price: 500,
         oldPrice: null,
-        image: 'city_photos/kazan.jpg',
+        image: 'city_photos/кавказ.jpg',
         description: 'Путешествие по самым красивым местам Северного Кавказа с посещением горных курортов',
         cities: ['Пятигорск', 'Кисловодск', 'Минеральные Воды', 'Домбай'],
         routes: [

@@ -1,0 +1,92 @@
+/* ================================================
+   МИНИМАЛЬНЫЙ ПРОСТОЙ ФИКС ДЛЯ МОБИЛЬНЫХ
+   Только z-index и размеры, НЕ ТРОГАЕМ структуру
+   ================================================ */
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+    /* Hero секция */
+    .hero-section {
+        min-height: 550px;
+    }
+
+    /* Модель - меньше высота */
+    .hero-model-container {
+        height: 400px;
+        max-height: 400px;
+    }
+
+    .hero-model-container iframe {
+        height: 500px;
+    }
+
+    /* Overlay - правильный z-index */
+    .hero-overlay {
+        padding: 30px 16px;
+        z-index: 10;
+    }
+
+    /* Заголовки */
+    .hero-title {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
+
+    /* Date picker - компактнее */
+    .travel-date-picker {
+        padding: 16px;
+        max-width: 100%;
+    }
+
+    .date-picker-header {
+        margin-bottom: 12px;
+    }
+
+    .date-inputs-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .date-separator {
+        display: none;
+    }
+
+    .date-input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .date-save-btn {
+        padding: 12px;
+        font-size: 0.95rem;
+    }
+}
+
+/* Очень маленькие телефоны */
+@media (max-width: 480px) {
+    .hero-section {
+        min-height: 500px;
+    }
+
+    .hero-model-container {
+        height: 320px;
+        max-height: 320px;
+    }
+
+    .hero-model-container iframe {
+        height: 420px;
+    }
+
+    .hero-title {
+        font-size: 1.3rem;
+    }
+
+    .travel-date-picker {
+        padding: 12px;
+    }
+}

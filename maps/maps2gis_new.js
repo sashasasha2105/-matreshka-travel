@@ -639,98 +639,112 @@ class Matryoshka2GISMaps {
     }
 
     /**
-     * Загрузка партнеров региона
+     * Загрузка партнеров региона - ОТМЕЧАЕМ ВСЕХ!
      */
     async loadRegionPartners(regionData) {
-        console.log('🤝 Загружаем партнеров для:', regionData.name);
+        console.log('🤝 Загружаем партнеров для региона:', regionData.name);
         console.log('📦 Данные региона:', regionData);
 
         if (!regionData.partners || regionData.partners.length === 0) {
-            console.log('⚠️ Нет партнеров для региона!');
+            console.warn('⚠️ Нет партнеров для региона!');
             console.log('regionData.partners:', regionData.partners);
             return;
         }
 
-        console.log(`✅ Найдено ${regionData.partners.length} партнёров`);
-        console.log('Список партнёров:', regionData.partners);
+        console.log(`✅ Найдено ${regionData.partners.length} партнёров для региона ${regionData.name}`);
+        console.log('📋 Список партнёров:', regionData.partners.map(p => p.name).join(', '));
 
-        // Добавляем маркеры партнеров
+        let successCount = 0;
+        let failCount = 0;
+
+        // Добавляем маркеры ВСЕХ партнеров
         for (let i = 0; i < regionData.partners.length; i++) {
             const partner = regionData.partners[i];
-            console.log(`➡️ Обрабатываем партнёра ${i + 1}/${regionData.partners.length}:`, partner.name);
-            await this.addPartnerMarker(partner);
+            console.log(`➡️ [${i + 1}/${regionData.partners.length}] Обрабатываем партнёра: ${partner.name}`);
+
+            const success = await this.addPartnerMarker(partner);
+            if (success) {
+                successCount++;
+            } else {
+                failCount++;
+            }
         }
 
-        console.log(`✅ Все ${regionData.partners.length} партнёров обработаны`);
+        console.log(`✅ ИТОГО: Добавлено ${successCount} маркеров партнеров из ${regionData.partners.length}`);
+        if (failCount > 0) {
+            console.warn(`⚠️ Не удалось добавить: ${failCount} партнеров (нет координат)`);
+        }
     }
 
     /**
-     * Добавление маркера партнера
+     * Добавление маркера партнера - УЛУЧШЕННАЯ ВЕРСИЯ
      */
     async addPartnerMarker(partner) {
         try {
-            // ТОЛЬКО используем координаты из данных - НЕ ищем через API!
+            // Проверяем наличие координат
             if (!partner.coordinates || !partner.coordinates.lon || !partner.coordinates.lat) {
-                console.warn(`⚠️ У партнёра "${partner.name}" нет координат!`);
-                return;
+                console.warn(`⚠️ У партнёра "${partner.name}" нет координат! Пропускаем...`);
+                return false;
             }
 
             const coordinates = [partner.coordinates.lon, partner.coordinates.lat];
-            console.log(`✅ Создаём маркер для партнёра: ${partner.name} на координатах:`, coordinates);
+            console.log(`📍 Создаём маркер для партнёра: "${partner.name}" на координатах [${coordinates[0]}, ${coordinates[1]}]`);
 
-            if (coordinates) {
-                const markerElement = document.createElement('div');
-                markerElement.className = 'partner-marker';
-                markerElement.innerHTML = `
-                    <div class="partner-marker-icon">
-                        <span class="partner-emoji">${partner.emoji || '🤝'}</span>
-                    </div>
-                    <div class="partner-tooltip">
-                        <strong>${partner.name}</strong>
-                        ${partner.type ? `<br><small>${partner.type}</small>` : ''}
-                    </div>
-                `;
+            // Создаем яркий заметный маркер
+            const markerElement = document.createElement('div');
+            markerElement.className = 'partner-marker';
+            markerElement.innerHTML = `
+                <div class="partner-marker-icon">
+                    <span class="partner-emoji">${partner.emoji || '🤝'}</span>
+                </div>
+                <div class="partner-tooltip">
+                    <strong>${partner.name}</strong>
+                    ${partner.type ? `<br><small>${partner.type}</small>` : ''}
+                </div>
+            `;
 
-                // Делаем маркер интерактивным
-                markerElement.style.pointerEvents = 'auto';
-                markerElement.style.cursor = 'pointer';
-                markerElement.style.position = 'absolute';
+            // Стили для маркера
+            markerElement.style.pointerEvents = 'auto';
+            markerElement.style.cursor = 'pointer';
+            markerElement.style.position = 'absolute';
+            markerElement.style.zIndex = '1002';
+
+            // Создаем маркер на карте
+            const marker = new mapgl.Marker(this.mapInstance, {
+                coordinates: coordinates,
+                element: markerElement,
+            });
+
+            // Обработчик клика
+            const clickHandler = (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                console.log('🤝 Клик по партнеру:', partner.name);
+                this.showPartnerInfo(partner, coordinates);
+            };
+
+            markerElement.addEventListener('click', clickHandler, true);
+            markerElement.addEventListener('touchend', clickHandler, true);
+
+            // Hover эффекты
+            markerElement.addEventListener('mouseenter', () => {
+                markerElement.style.transform = 'scale(1.3)';
+                markerElement.style.zIndex = '10002';
+            });
+
+            markerElement.addEventListener('mouseleave', () => {
+                markerElement.style.transform = 'scale(1)';
                 markerElement.style.zIndex = '1002';
+            });
 
-                const marker = new mapgl.Marker(this.mapInstance, {
-                    coordinates: coordinates,
-                    element: markerElement,
-                });
+            // Сохраняем маркер
+            this.markers.push(marker);
+            console.log(`✅ Маркер партнера успешно добавлен: "${partner.name}"`);
 
-                // Обработчик клика
-                const clickHandler = (e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    console.log('🤝 Клик по партнеру:', partner.name);
-                    this.showPartnerInfo(partner, coordinates);
-                };
-
-                markerElement.addEventListener('click', clickHandler, true);
-                markerElement.addEventListener('touchend', clickHandler, true);
-
-                // Hover эффект
-                markerElement.addEventListener('mouseenter', () => {
-                    markerElement.style.transform = 'scale(1.2)';
-                    markerElement.style.zIndex = '10002';
-                });
-
-                markerElement.addEventListener('mouseleave', () => {
-                    markerElement.style.transform = 'scale(1)';
-                    markerElement.style.zIndex = '1002';
-                });
-
-                this.markers.push(marker);
-                console.log('✅ Маркер партнера добавлен на карту:', partner.name);
-            } else {
-                console.warn('⚠️ Нет координат для партнера:', partner.name);
-            }
+            return true;
         } catch (error) {
-            console.warn('⚠️ Ошибка добавления маркера партнера:', partner.name, error);
+            console.error(`❌ Ошибка добавления маркера партнера "${partner.name}":`, error);
+            return false;
         }
     }
 

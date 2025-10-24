@@ -1459,97 +1459,68 @@ function updateBreadcrumbs(regionName) {
 }
 
 // ========================================
-// КНОПКА "НАВЕРХ" - УМНАЯ ЛОГИКА
+// КНОПКА "НАВЕРХ" - НОВАЯ ЛОГИКА С НУЛЯ
 // ========================================
 
-(function initScrollToTop() {
-    const scrollToTopBtn = document.getElementById('scrollToTop');
-
-    if (!scrollToTopBtn) return;
-
-    /**
-     * Определяет активную секцию
-     */
-    function getActiveSection() {
-        const sections = [
-            { el: document.getElementById('mainSection'), name: 'main' },
-            { el: document.getElementById('regionDetails'), name: 'region' },
-            { el: document.getElementById('profileSection'), name: 'profile' },
-            { el: document.getElementById('cartSection'), name: 'cart' },
-            { el: document.getElementById('questsSection'), name: 'quests' }
-        ];
-
-        for (const section of sections) {
-            if (section.el && section.el.style.display !== 'none') {
-                return section;
-            }
-        }
-
-        return sections[0]; // По умолчанию главная
+/**
+ * Инициализация кнопки "Наверх"
+ * Полностью новая реализация с простой и понятной логикой
+ */
+function initScrollToTopButton() {
+    const btn = document.getElementById('scrollToTop');
+    if (!btn) {
+        console.warn('⚠️ Кнопка scrollToTop не найдена');
+        return;
     }
 
-    /**
-     * Проверяет скролл и показывает/скрывает кнопку
-     */
-    function checkScroll() {
-        const scrolled = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+    console.log('🔝 Инициализация кнопки "Наверх"...');
 
-        // Показываем кнопку если прокрутили больше 300px
-        if (scrolled > 300) {
-            scrollToTopBtn.classList.add('visible');
+    // Функция проверки скролла
+    function updateButtonVisibility() {
+        const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+        if (scrollPosition > 300) {
+            btn.classList.add('visible');
         } else {
-            scrollToTopBtn.classList.remove('visible');
+            btn.classList.remove('visible');
         }
     }
 
-    /**
-     * Прокручивает активную секцию наверх
-     */
+    // Функция прокрутки наверх
     function scrollToTop() {
-        const activeSection = getActiveSection();
+        console.log('🔝 Прокрутка наверх!');
 
-        console.log('🔝 Прокрутка наверх активной секции:', activeSection.name);
-
-        // Прокручиваем window наверх
+        // Прокручиваем window
         window.scrollTo({
             top: 0,
             behavior: 'smooth'
         });
 
-        // Дополнительно прокручиваем body и html на всякий случай
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-
-        // Если это секция с внутренним скроллом, прокручиваем и её
-        if (activeSection.el) {
-            activeSection.el.scrollTop = 0;
-        }
-
-        // Анимация нажатия кнопки
-        scrollToTopBtn.style.transform = 'scale(0.9) translateY(-2px)';
+        // Принудительная прокрутка для совместимости
         setTimeout(() => {
-            scrollToTopBtn.style.transform = '';
-        }, 150);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        }, 100);
     }
 
-    // Слушаем скролл window
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(checkScroll, 50);
-    }, { passive: true });
+    // Слушаем скролл
+    window.addEventListener('scroll', updateButtonVisibility, { passive: true });
 
-    // Проверяем сразу при загрузке
-    checkScroll();
+    // Клик по кнопке
+    btn.addEventListener('click', scrollToTop);
 
-    // Периодически проверяем (на случай динамических изменений)
-    setInterval(checkScroll, 500);
+    // Проверяем сразу
+    updateButtonVisibility();
 
-    // Обработчик клика по кнопке
-    scrollToTopBtn.addEventListener('click', scrollToTop);
+    console.log('✅ Кнопка "Наверх" успешно инициализирована');
+}
 
-    console.log('✅ Кнопка "Наверх" инициализирована с умной логикой');
-})();
+// Запускаем инициализацию при загрузке
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initScrollToTopButton);
+} else {
+    initScrollToTopButton();
+}
 
 // ========================================
 // ФУНКЦИИ ДЛЯ КОРЗИНЫ И НИЖНЕЙ НАВИГАЦИИ

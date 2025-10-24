@@ -407,11 +407,9 @@ html {
     }
 }
 
-/* Темная тема улучшения */
-@media (prefers-color-scheme: dark) {
-    .glass-effect {
-        background: rgba(15, 5, 32, 0.6);
-    }
+/* Черная тема зафиксирована по умолчанию */
+.glass-effect {
+    background: rgba(15, 5, 32, 0.6) !important;
 }
 
 /* Reduced motion для доступности */

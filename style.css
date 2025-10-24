@@ -3,6 +3,9 @@
    ======================================== */
 
 :root {
+    /* Фиксируем черную тему */
+    color-scheme: dark !important;
+
     /* Spacing (8px базовая единица) */
     --space-xs: 8px;
     --space-sm: 16px;
@@ -60,11 +63,16 @@ html, body {
     -webkit-tap-highlight-color: transparent;
     user-select: none;
     overscroll-behavior: none;
+    color-scheme: dark !important;
+}
+
+html {
+    background: #0f0520 !important;
 }
 
 body {
-    background: var(--tg-theme-bg-color, radial-gradient(ellipse at top left, #0f0520, #0f0f0f 50%, #1a0e2e));
-    color: var(--tg-theme-text-color, #f0f0f0);
+    background: radial-gradient(ellipse at top left, #0f0520, #0f0f0f 50%, #1a0e2e) !important;
+    color: #f0f0f0 !important;
     min-height: 100vh;
     padding: 0;
     overflow-x: hidden;

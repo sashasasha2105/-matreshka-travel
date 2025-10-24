@@ -3,16 +3,25 @@
    Простая рабочая версия без багов
    ================================================ */
 
-/* Hero Section - фиксированная высота */
+/* Hero Section - автоматическая высота для мобильных */
 .hero-section {
     position: relative;
     width: 100%;
     height: 600px;
+    min-height: 600px;
     margin-bottom: 40px;
     border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     border: 1px solid rgba(255,255,255,0.08);
+}
+
+/* Мобильные устройства - увеличиваем высоту */
+@media (max-width: 768px) {
+    .hero-section {
+        height: auto;
+        min-height: 750px;
+    }
 }
 
 /* Hero Overlay - градиент поверх модели */
@@ -45,6 +54,14 @@
     letter-spacing: -0.02em;
 }
 
+/* Мобильные - уменьшаем размер заголовка */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+        margin-bottom: 16px;
+    }
+}
+
 /* Hero Subtitle */
 .hero-subtitle {
     font-size: 1.3rem;
@@ -54,6 +71,14 @@
     opacity: 0.9;
     max-width: 80%;
     word-wrap: break-word;
+}
+
+/* Мобильные - уменьшаем subtitle */
+@media (max-width: 768px) {
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 24px;
+    }
 }
 
 /* Hero Model Container */
@@ -97,6 +122,15 @@
     animation: fadeInUp 1.2s ease 0.9s both;
     backdrop-filter: blur(10px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Мобильные - компактный date picker */
+@media (max-width: 768px) {
+    .travel-date-picker {
+        padding: 20px 16px;
+        border-radius: 16px;
+        max-width: 90%;
+    }
 }
 
 .date-picker-header {
@@ -221,4 +255,47 @@
 @keyframes pulse {
     0%, 100% { text-shadow: 0 0 20px rgba(255,204,0,0.4); }
     50% { text-shadow: 0 0 30px rgba(255,204,0,0.6); }
+}
+
+/* Мобильные - компактные элементы date picker */
+@media (max-width: 768px) {
+    .date-picker-header {
+        margin-bottom: 16px;
+    }
+
+    .date-icon {
+        font-size: 1.4rem;
+    }
+
+    .date-label {
+        font-size: 0.95rem;
+    }
+
+    .date-inputs-row {
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .date-separator {
+        display: none;
+    }
+
+    .date-input-label {
+        font-size: 0.75rem;
+    }
+
+    .date-input {
+        font-size: 0.9rem;
+        padding: 12px;
+    }
+
+    .date-save-btn {
+        padding: 14px 20px;
+        font-size: 0.95rem;
+    }
+
+    .date-save-btn .btn-icon {
+        font-size: 1rem;
+    }
 }

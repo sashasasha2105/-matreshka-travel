@@ -495,13 +495,6 @@ function showQuests() {
 
     // Скроллим наверх
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // Обновляем видимость кнопки "Наверх"
-    setTimeout(() => {
-        if (window.updateScrollToTopVisibility) {
-            window.updateScrollToTopVisibility();
-        }
-    }, 200);
 }
 
 // Функция скрытия заданий

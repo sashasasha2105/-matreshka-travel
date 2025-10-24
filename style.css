@@ -2314,96 +2314,53 @@ body {
 }
 
 /* ========================================
-   КНОПКА "НАВЕРХ"
+   КНОПКА НАВЕРХ (простая реализация)
    ======================================== */
 
-.scroll-to-top {
+.back-to-top {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 56px;
-    height: 56px;
+    bottom: 90px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
     background: linear-gradient(135deg, #ffcc00, #ff8e53);
-    border: 3px solid rgba(255, 204, 0, 0.6);
+    border: 2px solid rgba(255, 204, 0, 0.5);
     border-radius: 50%;
     color: #0f0520;
+    font-size: 28px;
+    font-weight: bold;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow:
-        0 8px 32px rgba(255, 204, 0, 0.6),
-        0 0 30px rgba(255, 204, 0, 0.4);
-    backdrop-filter: blur(10px);
-    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 4px 16px rgba(255, 204, 0, 0.4);
+    z-index: 9999;
     opacity: 0;
     visibility: hidden;
-    transform: translateY(20px) scale(0.8);
-    z-index: 99999;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
 }
 
-.scroll-to-top.visible {
+.back-to-top.show {
     opacity: 1;
     visibility: visible;
-    transform: translateY(0) scale(1);
+    transform: scale(1);
 }
 
-.scroll-to-top:hover {
+.back-to-top:hover {
     background: linear-gradient(135deg, #ffd633, #ff9e6b);
-    border-color: rgba(255, 204, 0, 0.8);
-    box-shadow:
-        0 12px 40px rgba(255, 204, 0, 0.8),
-        0 0 50px rgba(255, 204, 0, 0.6);
-    transform: translateY(-4px) scale(1.1);
+    box-shadow: 0 6px 20px rgba(255, 204, 0, 0.6);
+    transform: scale(1.1);
 }
 
-.scroll-to-top:active {
-    transform: translateY(-2px) scale(0.98);
+.back-to-top:active {
+    transform: scale(0.95);
 }
 
-.scroll-to-top svg {
-    width: 24px;
-    height: 24px;
-    transition: transform 0.3s ease;
-}
-
-.scroll-to-top:hover svg {
-    transform: translateY(-3px);
-    animation: bounce 0.6s ease infinite;
-}
-
-@keyframes bounce {
-    0%, 100% {
-        transform: translateY(-3px);
-    }
-    50% {
-        transform: translateY(-6px);
-    }
-}
-
-/* Мобильная адаптация */
 @media (max-width: 768px) {
-    .scroll-to-top {
-        bottom: 90px;
-        right: 16px;
-        width: 48px;
-        height: 48px;
-        z-index: 9999;
-    }
-
-    .scroll-to-top svg {
-        width: 22px;
-        height: 22px;
-    }
-
-    .breadcrumbs {
-        font-size: 0.85rem;
-        padding: 10px 0;
-        margin-bottom: 15px;
-    }
-
-    .breadcrumb-item {
-        padding: 3px 6px;
+    .back-to-top {
+        width: 45px;
+        height: 45px;
+        font-size: 24px;
+        bottom: 85px;
+        right: 15px;
     }
 }
 

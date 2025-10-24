@@ -265,24 +265,6 @@
     transition: all 0.2s ease;
 }
 
-/* Кнопка прокрутки наверх */
-.scroll-to-top {
-    width: 48px;
-    height: 48px;
-    border-radius: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: none;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    transition: all 0.3s ease;
-}
-
-.scroll-to-top svg {
-    width: 24px;
-    height: 24px;
-}
-
 /* Инпуты дат - идеально ровные */
 .date-input {
     display: flex;

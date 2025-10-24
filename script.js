@@ -1459,7 +1459,7 @@ function updateBreadcrumbs(regionName) {
 }
 
 // ========================================
-// КНОПКА "НАВЕРХ"
+// КНОПКА "НАВЕРХ" - УМНАЯ ЛОГИКА
 // ========================================
 
 (function initScrollToTop() {
@@ -1467,10 +1467,34 @@ function updateBreadcrumbs(regionName) {
 
     if (!scrollToTopBtn) return;
 
-    // Функция проверки скролла для всех страниц
+    /**
+     * Определяет активную секцию
+     */
+    function getActiveSection() {
+        const sections = [
+            { el: document.getElementById('mainSection'), name: 'main' },
+            { el: document.getElementById('regionDetails'), name: 'region' },
+            { el: document.getElementById('profileSection'), name: 'profile' },
+            { el: document.getElementById('cartSection'), name: 'cart' },
+            { el: document.getElementById('questsSection'), name: 'quests' }
+        ];
+
+        for (const section of sections) {
+            if (section.el && section.el.style.display !== 'none') {
+                return section;
+            }
+        }
+
+        return sections[0]; // По умолчанию главная
+    }
+
+    /**
+     * Проверяет скролл и показывает/скрывает кнопку
+     */
     function checkScroll() {
         const scrolled = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
 
+        // Показываем кнопку если прокрутили больше 300px
         if (scrolled > 300) {
             scrollToTopBtn.classList.add('visible');
         } else {
@@ -1478,7 +1502,37 @@ function updateBreadcrumbs(regionName) {
         }
     }
 
-    // Показываем/скрываем кнопку при скролле window
+    /**
+     * Прокручивает активную секцию наверх
+     */
+    function scrollToTop() {
+        const activeSection = getActiveSection();
+
+        console.log('🔝 Прокрутка наверх активной секции:', activeSection.name);
+
+        // Прокручиваем window наверх
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+
+        // Дополнительно прокручиваем body и html на всякий случай
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+
+        // Если это секция с внутренним скроллом, прокручиваем и её
+        if (activeSection.el) {
+            activeSection.el.scrollTop = 0;
+        }
+
+        // Анимация нажатия кнопки
+        scrollToTopBtn.style.transform = 'scale(0.9) translateY(-2px)';
+        setTimeout(() => {
+            scrollToTopBtn.style.transform = '';
+        }, 150);
+    }
+
+    // Слушаем скролл window
     let scrollTimeout;
     window.addEventListener('scroll', () => {
         clearTimeout(scrollTimeout);
@@ -1488,22 +1542,13 @@ function updateBreadcrumbs(regionName) {
     // Проверяем сразу при загрузке
     checkScroll();
 
-    // Проверяем каждые 500мс на случай если страница изменилась
+    // Периодически проверяем (на случай динамических изменений)
     setInterval(checkScroll, 500);
 
-    // Плавная прокрутка наверх при клике
-    scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+    // Обработчик клика по кнопке
+    scrollToTopBtn.addEventListener('click', scrollToTop);
 
-        // Прокручиваем body на всякий случай
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-    });
-
-    console.log('✅ Кнопка "Наверх" инициализирована для всех страниц');
+    console.log('✅ Кнопка "Наверх" инициализирована с умной логикой');
 })();
 
 // ========================================
@@ -1604,14 +1649,3 @@ document.addEventListener('DOMContentLoaded', function() {
         cartBackBtn.addEventListener('click', hideCart);
     }
 });
-
-// Глобальная функция для открытия поддержки из навигации
-function showSupport() {
-    if (window.matryoshkaProfile) {
-        window.matryoshkaProfile.showSupportModal();
-    } else {
-        // Если профиль еще не инициализирован, инициализируем и показываем
-        window.matryoshkaProfile = new MatryoshkaProfile();
-        window.matryoshkaProfile.showSupportModal();
-    }
-}

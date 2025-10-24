@@ -124,6 +124,11 @@ class MatryoshkaProfile {
                 </div>
             </div>
 
+            <div class="profile-actions" data-animate="fadeInUp" data-delay="400">
+                <button class="action-btn" data-action="support">
+                    <span>💬</span> Поддержка
+                </button>
+            </div>
         `;
 
         // Запускаем анимации появления

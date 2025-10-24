@@ -537,6 +537,16 @@ function showRegionDetails(regionId) {
             if (tg && tg.HapticFeedback) {
                 tg.HapticFeedback.impactOccurred('light');
             }
+
+            // Скроллим наверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Обновляем видимость кнопки "Наверх"
+            setTimeout(() => {
+                if (window.updateScrollToTopVisibility) {
+                    window.updateScrollToTopVisibility();
+                }
+            }, 200);
         } catch (error) {
             console.error('❌ Ошибка отображения региона:', error);
             hideLoader();
@@ -1329,6 +1339,13 @@ function showMainSection() {
 
     // Скроллим наверх
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Обновляем видимость кнопки "Наверх"
+    setTimeout(() => {
+        if (window.updateScrollToTopVisibility) {
+            window.updateScrollToTopVisibility();
+        }
+    }, 200);
 }
 
 // Функция возврата на главную (для совместимости)
@@ -1386,6 +1403,16 @@ function showProfile() {
             }
         }, 100);
     }
+
+    // Скроллим наверх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Обновляем видимость кнопки "Наверх"
+    setTimeout(() => {
+        if (window.updateScrollToTopVisibility) {
+            window.updateScrollToTopVisibility();
+        }
+    }, 200);
 }
 
 // Скрыть профиль
@@ -1459,12 +1486,29 @@ function updateBreadcrumbs(regionName) {
 }
 
 // ========================================
-// КНОПКА "НАВЕРХ" - НОВАЯ ЛОГИКА С НУЛЯ
+// КНОПКА "НАВЕРХ" - УЛУЧШЕННАЯ ЛОГИКА
 // ========================================
 
 /**
+ * Глобальная функция обновления видимости кнопки "Наверх"
+ * Доступна для вызова из любой части приложения
+ */
+window.updateScrollToTopVisibility = function() {
+    const btn = document.getElementById('scrollToTop');
+    if (!btn) return;
+
+    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (scrollPosition > 300) {
+        btn.classList.add('visible');
+    } else {
+        btn.classList.remove('visible');
+    }
+};
+
+/**
  * Инициализация кнопки "Наверх"
- * Полностью новая реализация с простой и понятной логикой
+ * Работает на всех секциях приложения (главная, профиль, корзина, задания, детали региона)
  */
 function initScrollToTopButton() {
     const btn = document.getElementById('scrollToTop');
@@ -1475,19 +1519,9 @@ function initScrollToTopButton() {
 
     console.log('🔝 Инициализация кнопки "Наверх"...');
 
-    // Функция проверки скролла
-    function updateButtonVisibility() {
-        const scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-
-        if (scrollPosition > 300) {
-            btn.classList.add('visible');
-        } else {
-            btn.classList.remove('visible');
-        }
-    }
-
     // Функция прокрутки наверх
-    function scrollToTop() {
+    function scrollToTop(e) {
+        e.preventDefault();
         console.log('🔝 Прокрутка наверх!');
 
         // Прокручиваем window
@@ -1500,19 +1534,26 @@ function initScrollToTopButton() {
         setTimeout(() => {
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
+            // Обновляем видимость кнопки после прокрутки
+            window.updateScrollToTopVisibility();
         }, 100);
+
+        // Тактильная обратная связь для Telegram
+        if (window.Telegram?.WebApp?.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred('light');
+        }
     }
 
     // Слушаем скролл
-    window.addEventListener('scroll', updateButtonVisibility, { passive: true });
+    window.addEventListener('scroll', window.updateScrollToTopVisibility, { passive: true });
 
     // Клик по кнопке
     btn.addEventListener('click', scrollToTop);
 
     // Проверяем сразу
-    updateButtonVisibility();
+    window.updateScrollToTopVisibility();
 
-    console.log('✅ Кнопка "Наверх" успешно инициализирована');
+    console.log('✅ Кнопка "Наверх" успешно инициализирована и работает на всех секциях');
 }
 
 // Запускаем инициализацию при загрузке
@@ -1564,6 +1605,13 @@ function showCart() {
 
     // Скроллим наверх
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Обновляем видимость кнопки "Наверх"
+    setTimeout(() => {
+        if (window.updateScrollToTopVisibility) {
+            window.updateScrollToTopVisibility();
+        }
+    }, 200);
 }
 
 /**

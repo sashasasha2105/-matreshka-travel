@@ -975,13 +975,14 @@ body {
 .footer {
     text-align: center;
     margin-top: 80px;
-    padding: 40px;
-    font-size: 0.95rem;
-    color: rgba(255, 204, 0, 0.8);
-    border-top: 1px solid rgba(255, 204, 0, 0.1);
+    padding: 40px 20px 120px;
+    font-size: 1.1rem;
+    color: rgba(255, 204, 0, 0.9);
+    border-top: 2px solid rgba(255, 204, 0, 0.2);
     position: relative;
-    background: rgba(15, 5, 32, 0.3);
-    font-weight: 500;
+    background: linear-gradient(135deg, rgba(15, 5, 32, 0.5), rgba(26, 10, 62, 0.4));
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 /* Travel Feed */
@@ -2303,24 +2304,26 @@ body {
 .scroll-to-top {
     position: fixed;
     bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, rgba(255, 204, 0, 0.9), rgba(255, 107, 107, 0.8));
-    border: 2px solid rgba(255, 204, 0, 0.3);
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #ffcc00, #ff8e53);
+    border: 3px solid rgba(255, 204, 0, 0.6);
     border-radius: 50%;
-    color: white;
+    color: #0f0520;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.3);
+    box-shadow:
+        0 8px 32px rgba(255, 204, 0, 0.6),
+        0 0 30px rgba(255, 204, 0, 0.4);
     backdrop-filter: blur(10px);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px) scale(0.8);
-    z-index: 9999;
+    z-index: 99999;
 }
 
 .scroll-to-top.visible {
@@ -2330,10 +2333,12 @@ body {
 }
 
 .scroll-to-top:hover {
-    background: linear-gradient(135deg, rgba(255, 204, 0, 1), rgba(255, 107, 107, 0.9));
-    border-color: rgba(255, 204, 0, 0.6);
-    box-shadow: 0 12px 32px rgba(255, 204, 0, 0.5);
-    transform: translateY(-4px) scale(1.05);
+    background: linear-gradient(135deg, #ffd633, #ff9e6b);
+    border-color: rgba(255, 204, 0, 0.8);
+    box-shadow:
+        0 12px 40px rgba(255, 204, 0, 0.8),
+        0 0 50px rgba(255, 204, 0, 0.6);
+    transform: translateY(-4px) scale(1.1);
 }
 
 .scroll-to-top:active {

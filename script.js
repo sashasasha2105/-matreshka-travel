@@ -453,6 +453,28 @@ function addToGlobalFeed(travel) {
     console.log('🌟 Путешествие добавлено в ленту:', newPost);
 }
 
+// ========================================
+// УПРАВЛЕНИЕ ВИДИМОСТЬЮ СЕКЦИИ КОМАНДЫ
+// ========================================
+
+/**
+ * Обновляет видимость секции команды
+ * Команда видна только на главной странице
+ */
+function updateTeamVisibility() {
+    const teamSection = document.querySelector('.team-section');
+    const mainSection = document.getElementById('mainSection');
+
+    if (!teamSection) return;
+
+    // Показываем команду только если главная страница видна
+    if (mainSection && mainSection.style.display !== 'none') {
+        teamSection.style.display = 'block';
+    } else {
+        teamSection.style.display = 'none';
+    }
+}
+
 // Функция показа деталей региона
 function showRegionDetails(regionId) {
     const region = russiaRegions.find(r => r.id === regionId);
@@ -473,6 +495,9 @@ function showRegionDetails(regionId) {
             // Показываем детали региона
             const detailsSection = document.getElementById('regionDetails');
             if (detailsSection) detailsSection.style.display = 'block';
+
+            // Скрываем команду
+            updateTeamVisibility();
 
             // Заполняем данные
             const regionTitle = document.getElementById('regionTitle');
@@ -1273,10 +1298,18 @@ function getRegionCenterCoords(regionId) {
     return centers[regionId] || { lat: 55.7558, lon: 37.6176, zoom: 10 };
 }
 
-// Функция возврата на главную
-function goBack() {
-    const detailsSection = document.getElementById('regionDetails');
-    const mainSection = document.getElementById('mainSection');
+// Функция показа главной страницы (универсальная)
+function showMainSection() {
+    // Скрываем все остальные секции
+    document.getElementById('regionDetails').style.display = 'none';
+    document.getElementById('profileSection').style.display = 'none';
+    document.getElementById('cartSection').style.display = 'none';
+
+    // Показываем главную
+    document.getElementById('mainSection').style.display = 'block';
+
+    // Показываем команду
+    updateTeamVisibility();
 
     // Закрываем QR код если открыт
     closeStaticQR();
@@ -1286,13 +1319,21 @@ function goBack() {
         window.matryoshka2GIS.destroy();
     }
 
-    if (detailsSection) detailsSection.style.display = 'none';
-    if (mainSection) mainSection.style.display = 'block';
+    // Обновляем навигацию
+    updateBottomNav(null);
 
     // Скрываем BackButton в Telegram
     if (tg && tg.BackButton) {
         tg.BackButton.hide();
     }
+
+    // Скроллим наверх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Функция возврата на главную (для совместимости)
+function goBack() {
+    showMainSection();
 }
 
 // Функция показа лоадера
@@ -1321,6 +1362,9 @@ function showProfile() {
     const profileSection = document.getElementById('profileSection');
     profileSection.style.display = 'block';
 
+    // Скрываем команду
+    updateTeamVisibility();
+
     // Показываем BackButton в Telegram
     if (tg && tg.BackButton) {
         tg.BackButton.show();
@@ -1348,6 +1392,9 @@ function showProfile() {
 function hideProfile() {
     document.getElementById('profileSection').style.display = 'none';
     document.getElementById('mainSection').style.display = 'block';
+
+    // Показываем команду
+    updateTeamVisibility();
 
     // Скрываем BackButton в Telegram
     if (tg && tg.BackButton) {
@@ -1478,6 +1525,9 @@ function showCart() {
     const cartSection = document.getElementById('cartSection');
     cartSection.style.display = 'block';
 
+    // Скрываем команду
+    updateTeamVisibility();
+
     // Обновляем данные корзины
     if (window.matryoshkaCart) {
         window.matryoshkaCart.refresh();
@@ -1508,6 +1558,9 @@ function hideCart() {
 
     document.getElementById('cartSection').style.display = 'none';
     document.getElementById('mainSection').style.display = 'block';
+
+    // Показываем команду
+    updateTeamVisibility();
 
     // Обновляем навигацию
     updateBottomNav(null);
@@ -1551,3 +1604,14 @@ document.addEventListener('DOMContentLoaded', function() {
         cartBackBtn.addEventListener('click', hideCart);
     }
 });
+
+// Глобальная функция для открытия поддержки из навигации
+function showSupport() {
+    if (window.matryoshkaProfile) {
+        window.matryoshkaProfile.showSupportModal();
+    } else {
+        // Если профиль еще не инициализирован, инициализируем и показываем
+        window.matryoshkaProfile = new MatryoshkaProfile();
+        window.matryoshkaProfile.showSupportModal();
+    }
+}

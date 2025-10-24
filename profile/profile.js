@@ -124,11 +124,6 @@ class MatryoshkaProfile {
                 </div>
             </div>
 
-            <div class="profile-actions" data-animate="fadeInUp" data-delay="600">
-                <button class="action-btn" data-action="support">
-                    <span>💬</span> Поддержка
-                </button>
-            </div>
         `;
 
         // Запускаем анимации появления
@@ -652,39 +647,43 @@ class MatryoshkaProfile {
      */
     showSupportModal() {
         const modal = document.createElement('div');
-        modal.className = 'travel-modal';
+        modal.className = 'travel-modal modern-modal';
         modal.innerHTML = `
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3>💬 Поддержка</h3>
-                    <button class="modal-close">✕</button>
+            <div class="modal-content support-modal-content">
+                <div class="modal-header modern-modal-header">
+                    <h3 class="modal-title">💬 Поддержка</h3>
+                    <button class="modal-close modern-close">✕</button>
                 </div>
-                <div class="modal-body">
-                    <div style="padding: 20px; text-align: center;">
-                        <div style="margin-bottom: 25px;">
-                            <div style="font-size: 48px; margin-bottom: 15px;">📞</div>
-                            <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 20px;">
-                                Свяжитесь с нами любым удобным способом
-                            </p>
+                <div class="modal-body modern-modal-body">
+                    <div class="support-intro">
+                        <div class="support-icon">📞</div>
+                        <p class="support-subtitle">Свяжитесь с нами любым удобным способом</p>
+                    </div>
+
+                    <div class="support-contacts">
+                        <div class="support-contact-card telegram-card">
+                            <div class="contact-icon">💬</div>
+                            <div class="contact-info">
+                                <div class="contact-label">Telegram</div>
+                                <a href="https://t.me/Alexandr_TSYP" target="_blank" class="contact-link">
+                                    @Alexandr_TSYP
+                                </a>
+                            </div>
                         </div>
 
-                        <div style="background: rgba(255,204,0,0.05); border: 1px solid rgba(255,204,0,0.2); border-radius: 12px; padding: 20px; margin-bottom: 15px;">
-                            <div style="color: #ffcc00; font-weight: 600; margin-bottom: 8px; font-size: 16px;">Telegram</div>
-                            <a href="https://t.me/Alexandr_TSYP" target="_blank" style="color: #6fb6ff; text-decoration: none; font-size: 15px; display: inline-block; padding: 8px 16px; background: rgba(111,182,255,0.1); border-radius: 8px; transition: all 0.3s;">
-                                @Alexandr_TSYP
-                            </a>
-                        </div>
-
-                        <div style="background: rgba(255,204,0,0.05); border: 1px solid rgba(255,204,0,0.2); border-radius: 12px; padding: 20px;">
-                            <div style="color: #ffcc00; font-weight: 600; margin-bottom: 8px; font-size: 16px;">Email</div>
-                            <a href="mailto:cypkajkinsasa@gmail.com" style="color: #6fb6ff; text-decoration: none; font-size: 15px; display: inline-block; padding: 8px 16px; background: rgba(111,182,255,0.1); border-radius: 8px; transition: all 0.3s;">
-                                cypkajkinsasa@gmail.com
-                            </a>
+                        <div class="support-contact-card email-card">
+                            <div class="contact-icon">📧</div>
+                            <div class="contact-info">
+                                <div class="contact-label">Email</div>
+                                <a href="mailto:cypkajkinsasa@gmail.com" class="contact-link">
+                                    cypkajkinsasa@gmail.com
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="modal-btn cancel">Закрыть</button>
+                <div class="modal-footer modern-modal-footer">
+                    <button class="modal-btn modern-btn cancel">Закрыть</button>
                 </div>
             </div>
         `;

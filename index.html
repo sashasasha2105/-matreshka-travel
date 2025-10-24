@@ -7,6 +7,7 @@
     <title>Матрешка - Путешествуй по России</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="profile/profile.css">
+    <link rel="stylesheet" href="profile/modern-modal.css">
     <link rel="stylesheet" href="qr/qr.css">
     <link rel="stylesheet" href="maps/maps2gis_new.css">
     <link rel="stylesheet" href="maps/organization_card.css">
@@ -289,15 +290,14 @@
             <div class="nav-icon">👤</div>
             <div class="nav-label">Профиль</div>
         </button>
-        <button class="nav-item" onclick="showQuests()" data-page="quests">
-            <div class="nav-icon">🎯</div>
-            <div class="nav-label">Задания</div>
-            <span class="quests-badge" id="questsBadge" style="display: none;">0</span>
-        </button>
         <button class="nav-item" onclick="showCart()" data-page="cart">
             <div class="nav-icon">🛒</div>
             <div class="nav-label">Корзина</div>
             <span class="cart-badge" id="cartBadge" style="display: none;">0</span>
+        </button>
+        <button class="nav-item" onclick="showSupport()" data-page="support">
+            <div class="nav-icon">💬</div>
+            <div class="nav-label">Поддержка</div>
         </button>
     </nav>
 

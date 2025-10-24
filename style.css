@@ -2355,15 +2355,16 @@ body {
 /* Мобильная адаптация */
 @media (max-width: 768px) {
     .scroll-to-top {
-        bottom: 20px;
-        right: 20px;
-        width: 45px;
-        height: 45px;
+        bottom: 90px;
+        right: 16px;
+        width: 48px;
+        height: 48px;
+        z-index: 9999;
     }
 
     .scroll-to-top svg {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
     }
 
     .breadcrumbs {

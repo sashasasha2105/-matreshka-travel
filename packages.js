@@ -148,10 +148,63 @@ function showPackageModal(packageId) {
                 </div>
                 ` : ''}
 
+                <div class="package-section package-quests-section">
+                    <h3 class="package-section-title">🎯 Выполните задания и получите скидку!</h3>
+                    <div class="package-quests-grid">
+                        <div class="package-quest-card" data-quest="favorites">
+                            <div class="quest-icon">❤️</div>
+                            <div class="quest-info">
+                                <div class="quest-title">Добавьте 3 города в избранное</div>
+                                <div class="quest-reward">Скидка 5%</div>
+                            </div>
+                            <div class="quest-status" id="quest-favorites-${pkg.id}">
+                                <span class="quest-progress">0/3</span>
+                            </div>
+                        </div>
+
+                        <div class="package-quest-card" data-quest="views">
+                            <div class="quest-icon">👀</div>
+                            <div class="quest-info">
+                                <div class="quest-title">Посмотрите 5 достопримечательностей</div>
+                                <div class="quest-reward">Скидка 3%</div>
+                            </div>
+                            <div class="quest-status" id="quest-views-${pkg.id}">
+                                <span class="quest-progress">0/5</span>
+                            </div>
+                        </div>
+
+                        <div class="package-quest-card" data-quest="share">
+                            <div class="quest-icon">📤</div>
+                            <div class="quest-info">
+                                <div class="quest-title">Поделитесь пакетом с друзьями</div>
+                                <div class="quest-reward">Скидка 2%</div>
+                            </div>
+                            <button class="quest-action-btn" onclick="sharePackage('${pkg.id}')">
+                                Поделиться
+                            </button>
+                        </div>
+
+                        <div class="package-quest-card" data-quest="review">
+                            <div class="quest-icon">⭐</div>
+                            <div class="quest-info">
+                                <div class="quest-title">Оставьте отзыв о сервисе</div>
+                                <div class="quest-reward">Бонус 500 ₽</div>
+                            </div>
+                            <button class="quest-action-btn" onclick="leaveReview('${pkg.id}')">
+                                Написать отзыв
+                            </button>
+                        </div>
+                    </div>
+                    <div class="total-discount">
+                        💰 Ваша итоговая скидка: <span id="total-discount-${pkg.id}">0%</span>
+                    </div>
+                </div>
+
                 <div class="package-modal-footer">
                     <button class="package-book-btn" onclick="bookPackage('${pkg.id}')">
-                        Купить пакет (действует 7 дней)
+                        <span id="book-btn-text-${pkg.id}">Купить пакет за ${pkg.price.toLocaleString()} ₽</span>
                     </button>
+                    <div class="package-footer-note">Действует 7 дней после покупки</div>
                 </div>
             </div>
         </div>
@@ -281,6 +334,89 @@ function showNotification(message) {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
     }, 4000);
+}
+
+// Функции для работы с заданиями пакетов
+function sharePackage(packageId) {
+    const pkg = TRAVEL_PACKAGES.find(p => p.id === packageId);
+    if (!pkg) return;
+
+    // Создаем текст для шэринга
+    const shareText = `Посмотрите этот замечательный тур: ${pkg.name}! ${pkg.description}`;
+    const shareUrl = window.location.href;
+
+    // Если доступен Web Share API
+    if (navigator.share) {
+        navigator.share({
+            title: pkg.name,
+            text: shareText,
+            url: shareUrl
+        }).then(() => {
+            markQuestComplete('share', packageId);
+            showToast('✅ Спасибо за то, что поделились!', 3000);
+        }).catch(err => console.log('Ошибка шэринга:', err));
+    } else {
+        // Fallback: копируем ссылку в буфер обмена
+        navigator.clipboard.writeText(shareUrl).then(() => {
+            markQuestComplete('share', packageId);
+            showToast('📋 Ссылка скопирована в буфер обмена!', 3000);
+        });
+    }
+}
+
+function leaveReview(packageId) {
+    const review = prompt('Расскажите, что вам нравится в нашем сервисе:');
+    if (review && review.trim().length > 10) {
+        markQuestComplete('review', packageId);
+        showToast('⭐ Спасибо за отзыв! Вы получили бонус 500 ₽', 4000);
+    } else if (review !== null) {
+        showToast('❌ Отзыв слишком короткий (минимум 10 символов)', 3000);
+    }
+}
+
+function markQuestComplete(questType, packageId) {
+    const questData = JSON.parse(localStorage.getItem('packageQuests') || '{}');
+    if (!questData[packageId]) {
+        questData[packageId] = {};
+    }
+    questData[packageId][questType] = true;
+    localStorage.setItem('packageQuests', JSON.stringify(questData));
+
+    updateQuestDiscounts(packageId);
+}
+
+function updateQuestDiscounts(packageId) {
+    const pkg = TRAVEL_PACKAGES.find(p => p.id === packageId);
+    if (!pkg) return;
+
+    const questData = JSON.parse(localStorage.getItem('packageQuests') || '{}');
+    const packageQuests = questData[packageId] || {};
+
+    let totalDiscount = 0;
+    let bonusAmount = 0;
+
+    // Проверяем выполненные задания
+    if (packageQuests.favorites) totalDiscount += 5;
+    if (packageQuests.views) totalDiscount += 3;
+    if (packageQuests.share) totalDiscount += 2;
+    if (packageQuests.review) bonusAmount += 500;
+
+    // Обновляем отображение скидки
+    const totalDiscountEl = document.getElementById(`total-discount-${packageId}`);
+    if (totalDiscountEl) {
+        totalDiscountEl.textContent = `${totalDiscount}%` + (bonusAmount > 0 ? ` + ${bonusAmount} ₽` : '');
+    }
+
+    // Пересчитываем цену
+    const finalPrice = Math.round(pkg.price * (1 - totalDiscount / 100) - bonusAmount);
+    const bookBtnText = document.getElementById(`book-btn-text-${packageId}`);
+    if (bookBtnText) {
+        if (totalDiscount > 0 || bonusAmount > 0) {
+            bookBtnText.innerHTML = `Купить пакет за ${finalPrice.toLocaleString()} ₽ <small style="text-decoration: line-through; opacity: 0.7;">${pkg.price.toLocaleString()} ₽</small>`;
+        } else {
+            bookBtnText.textContent = `Купить пакет за ${pkg.price.toLocaleString()} ₽`;
+        }
+    }
 }
 
 // Инициализация при загрузке страницы

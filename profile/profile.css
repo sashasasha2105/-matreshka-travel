@@ -14,9 +14,10 @@
         0 8px 32px rgba(255, 204, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.05);
     position: relative;
-    overflow: visible; /* Убираем overflow - все в одном скролле */
-    min-height: auto;
-    height: auto;
+    overflow: visible !important; /* Убираем overflow - все в одном скролле */
+    min-height: auto !important;
+    height: auto !important;
+    max-height: none !important; /* Убираем любые ограничения по высоте */
 }
 
 .profile-section::before {
@@ -36,9 +37,24 @@
 
 .profile-content {
     text-align: center;
-    overflow: visible; /* Убираем overflow */
-    height: auto; /* Автоматическая высота */
-    max-height: none; /* Убираем ограничение по высоте */
+    overflow: visible !important; /* Убираем overflow */
+    height: auto !important; /* Автоматическая высота */
+    max-height: none !important; /* Убираем ограничение по высоте */
+    display: block !important;
+}
+
+/* Убираем overflow со всех внутренних элементов профиля */
+.profile-section * {
+    overflow-y: visible !important;
+    max-height: none !important;
+}
+
+/* Кроме модалок - для них оставляем свой скролл */
+.modal-overlay,
+.modal-content,
+.modal-body {
+    overflow-y: auto !important;
+    max-height: initial !important;
 }
 
 .profile-header {
@@ -720,7 +736,7 @@
 
 .modal-body {
     padding: 20px;
-    overflow-y: auto;
+    overflow-y: auto; /* Это для модалок - оставляем, т.к. они отдельные */
     flex: 1;
     max-height: calc(85vh - 180px);
 }

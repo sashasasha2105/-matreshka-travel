@@ -436,6 +436,8 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 30px;
+    gap: 16px; /* Отступ между заголовком и кнопкой */
+    flex-wrap: wrap; /* Перенос на новую строку на маленьких экранах */
 }
 
 .gallery-title {
@@ -450,6 +452,8 @@
     background-clip: text;
     margin: 0;
     filter: drop-shadow(0 2px 8px rgba(255, 204, 0, 0.4));
+    flex: 1 1 auto; /* Растягивается, но может уменьшаться */
+    min-width: 0; /* Позволяет сжиматься */
 }
 
 .gallery-title span {
@@ -461,9 +465,9 @@
     background: linear-gradient(135deg, rgba(255, 204, 0, 0.15), rgba(255, 107, 107, 0.12));
     border: 2px solid rgba(255, 204, 0, 0.35);
     color: white;
-    padding: 14px 24px;
+    padding: 12px 20px;
     border-radius: 16px;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -473,6 +477,8 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.15);
     position: relative;
     overflow: hidden;
+    flex-shrink: 0; /* Кнопка не сжимается */
+    white-space: nowrap; /* Текст не переносится */
 }
 
 .add-travel-btn::before {

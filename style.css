@@ -376,9 +376,10 @@ body {
 /* Regions Grid */
 .regions-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
     margin-top: 40px;
+    align-items: stretch; /* Все карточки одинаковой высоты */
 }
 
 .region-card {
@@ -394,6 +395,9 @@ body {
         0 4px 16px rgba(255,204,0,0.15);
     position: relative;
     backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Заполняем всю высоту grid cell */
 }
 
 .region-card::before {
@@ -474,6 +478,9 @@ body {
 
 .region-content {
     padding: 25px;
+    flex: 1; /* Занимает оставшееся пространство */
+    display: flex;
+    flex-direction: column;
 }
 
 .region-name {
@@ -1365,8 +1372,9 @@ body {
 
 .packages-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 32px;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 28px;
+    align-items: stretch; /* Все карточки одинаковой высоты */
 }
 
 .package-card {
@@ -1384,6 +1392,9 @@ body {
         0 0 0 1px rgba(255, 107, 107, 0.1) inset,
         0 4px 20px rgba(255, 107, 107, 0.15);
     backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Заполняем всю высоту grid cell */
 }
 
 .package-card::before {
@@ -1505,6 +1516,9 @@ body {
 
 .package-content {
     padding: 24px;
+    flex: 1; /* Занимает оставшееся пространство */
+    display: flex;
+    flex-direction: column;
 }
 
 .package-header {

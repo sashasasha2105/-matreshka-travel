@@ -463,6 +463,21 @@
                 window.Telegram.WebApp.HapticFeedback.impactOccurred('medium');
             }
         }
+
+        // Обновить задания (вызывается при покупке нового пакета)
+        refresh() {
+            console.log('🔄 Обновляем задания...');
+            this.generateQuests();
+            this.updateQuestsBadge();
+
+            // Если секция заданий открыта, обновляем её отображение
+            const questsSection = document.getElementById('questsSection');
+            if (questsSection && questsSection.style.display !== 'none') {
+                this.render();
+            }
+
+            console.log('✅ Задания обновлены, всего заданий:', this.quests.length);
+        }
     }
 
     // Глобальная инициализация

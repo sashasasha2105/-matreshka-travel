@@ -319,6 +319,71 @@ function bookPackage(packageId) {
     if (window.matryoshkaProfile && document.getElementById('profileSection').style.display !== 'none') {
         window.matryoshkaProfile.loadProfileData();
     }
+
+    // 🎯 ДОБАВЛЯЕМ РЕГИОНЫ ИЗ ПАКЕТА В ОПЛАЧЕННЫЕ И ГЕНЕРИРУЕМ ЗАДАНИЯ
+    console.log('🎯 Добавляем регионы из пакета в оплаченные...');
+
+    // Инициализируем paidRegions если нужно
+    if (typeof window.paidRegions === 'undefined') {
+        window.paidRegions = [];
+        const saved = sessionStorage.getItem('paidRegions');
+        if (saved) {
+            try {
+                window.paidRegions = JSON.parse(saved);
+            } catch (e) {
+                window.paidRegions = [];
+            }
+        }
+    }
+
+    // Для каждого города в пакете находим соответствующий регион
+    let addedRegions = 0;
+    pkg.cities.forEach(cityName => {
+        // Ищем регион с таким названием
+        const regionEntry = Object.entries(window.RUSSIA_REGIONS_DATA || {}).find(([key, region]) => {
+            return region.name === cityName || region.city === cityName;
+        });
+
+        if (regionEntry) {
+            const [regionId, regionData] = regionEntry;
+
+            // Проверяем, не добавлен ли уже этот регион
+            const existingRegion = window.paidRegions.find(r => r.id === regionId);
+            if (!existingRegion) {
+                // Добавляем регион в оплаченные со сроком действия 7 дней
+                const purchaseDate = new Date();
+                const expiresAt = new Date(purchaseDate);
+                expiresAt.setDate(expiresAt.getDate() + 7);
+
+                const paidRegion = {
+                    id: regionId,
+                    purchaseDate: purchaseDate.toISOString(),
+                    expiresAt: expiresAt.toISOString()
+                };
+
+                window.paidRegions.push(paidRegion);
+                addedRegions++;
+                console.log(`✅ Регион ${regionData.name} (${regionId}) добавлен в оплаченные`);
+            } else {
+                console.log(`ℹ️ Регион ${regionData.name} (${regionId}) уже оплачен`);
+            }
+        } else {
+            console.warn(`⚠️ Не найден регион для города: ${cityName}`);
+        }
+    });
+
+    // Сохраняем обновленный список в sessionStorage
+    sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+    console.log(`💾 Добавлено новых регионов: ${addedRegions}, всего оплаченных: ${window.paidRegions.length}`);
+
+    // 🎯 ОБНОВЛЯЕМ ЗАДАНИЯ
+    if (window.matryoshkaQuests && typeof window.matryoshkaQuests.refresh === 'function') {
+        console.log('🔄 Обновляем задания...');
+        window.matryoshkaQuests.refresh();
+        console.log('✅ Задания обновлены после покупки пакета');
+    } else {
+        console.warn('⚠️ Система заданий не найдена или метод refresh отсутствует');
+    }
 }
 
 // Показ уведомления

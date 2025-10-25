@@ -88,10 +88,8 @@ class MatryoshkaProfile {
         }
 
         profileContent.innerHTML = `
+            <!-- Аватар и имя (НЕ ТРОГАЕМ) -->
             <div class="profile-header" data-animate="fadeInUp">
-                <div class="profile-header-top">
-                    <button class="profile-edit-btn" data-action="edit-profile" title="Редактировать профиль">✏️</button>
-                </div>
                 <div class="profile-main-info">
                     <div class="profile-avatar-wrapper">
                         <img src="${this.user.photo_url || 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent('<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg"><circle cx="60" cy="60" r="60" fill="#FFCC00"/><text x="50%" y="50%" fill="white" text-anchor="middle" dy=".3em" font-family="Arial" font-size="40">👤</text></svg>')}"
@@ -102,31 +100,37 @@ class MatryoshkaProfile {
                     <div class="profile-info">
                         <div class="profile-name">${this.profileData.name || this.user.first_name || 'Путешественник'}</div>
                         ${this.user.username ? `<div class="profile-username">@${this.user.username}</div>` : ''}
-                        <div class="profile-id">ID: ${this.user.id || 'MATRYOSHKA-' + Math.floor(Math.random() * 100000)}</div>
-                        <div class="profile-bio">${this.profileData.bio}</div>
                     </div>
                 </div>
             </div>
 
-            <div class="profile-stats" data-animate="fadeInUp" data-delay="200">
+            <!-- Статистика - НОВЫЙ ДИЗАЙН -->
+            <div class="profile-stats-modern" data-animate="fadeInUp" data-delay="200">
                 ${this.generateStatsHTML()}
             </div>
 
+            <!-- Мои путешествия - ОБНОВЛЕННЫЙ СТИЛЬ -->
             <div class="travel-gallery-section" data-animate="fadeInUp" data-delay="300">
                 <div class="travel-gallery-header">
                     <h3 class="gallery-title">
                         <span>📸</span> Мои путешествия
                     </h3>
-                    <button class="add-travel-btn" data-action="add-travel">+ Добавить</button>
+                    <button class="add-travel-btn" data-action="add-travel">
+                        <span class="btn-icon">➕</span>
+                        <span class="btn-text">Добавить</span>
+                    </button>
                 </div>
                 <div class="travel-cards" id="travelCards">
                     ${this.generateTravelCardsHTML()}
                 </div>
             </div>
 
-            <div class="profile-actions" data-animate="fadeInUp" data-delay="400">
-                <button class="action-btn" data-action="support">
-                    <span>💬</span> Поддержка
+            <!-- Кнопка поддержки - СОВРЕМЕННЫЙ СТИЛЬ -->
+            <div class="profile-actions-modern" data-animate="fadeInUp" data-delay="400">
+                <button class="support-btn-modern" data-action="support">
+                    <span class="support-icon">💬</span>
+                    <span class="support-text">Связаться с поддержкой</span>
+                    <span class="support-arrow">→</span>
                 </button>
             </div>
         `;
@@ -136,18 +140,20 @@ class MatryoshkaProfile {
     }
 
     /**
-     * Генерация HTML для статистики (только счетчик путешествий)
+     * Генерация HTML для статистики - НОВЫЙ СОВРЕМЕННЫЙ СТИЛЬ
      */
     generateStatsHTML() {
         const stats = [
-            { key: 'travels', value: this.profileData.travels, label: 'Путешествий', icon: '🌍' }
+            { key: 'travels', value: this.profileData.travels, label: 'Путешествий', icon: '🌍', description: 'Количество ваших путешествий' }
         ];
 
         return stats.map(stat => `
-            <div class="profile-stat" data-value="${stat.value}" data-key="${stat.key}">
-                <div class="profile-stat-value">0</div>
-                <div class="profile-stat-label">
-                    <span>${stat.icon}</span> ${stat.label}
+            <div class="stat-card-modern" data-value="${stat.value}" data-key="${stat.key}">
+                <div class="stat-icon-modern">${stat.icon}</div>
+                <div class="stat-info-modern">
+                    <div class="stat-value-modern">0</div>
+                    <div class="stat-label-modern">${stat.label}</div>
+                    <div class="stat-description-modern">${stat.description}</div>
                 </div>
             </div>
         `).join('');

@@ -2312,58 +2312,6 @@ body {
     font-size: 1.2rem;
     user-select: none;
 }
-
-/* ========================================
-   КНОПКА НАВЕРХ (простая реализация)
-   ======================================== */
-
-.back-to-top {
-    position: fixed;
-    bottom: 90px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, #ffcc00, #ff8e53);
-    border: 2px solid rgba(255, 204, 0, 0.5);
-    border-radius: 50%;
-    color: #0f0520;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 16px rgba(255, 204, 0, 0.4);
-    z-index: 9999;
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(0.8);
-    transition: all 0.3s ease;
-}
-
-.back-to-top.show {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(1);
-}
-
-.back-to-top:hover {
-    background: linear-gradient(135deg, #ffd633, #ff9e6b);
-    box-shadow: 0 6px 20px rgba(255, 204, 0, 0.6);
-    transform: scale(1.1);
-}
-
-.back-to-top:active {
-    transform: scale(0.95);
-}
-
-@media (max-width: 768px) {
-    .back-to-top {
-        width: 45px;
-        height: 45px;
-        font-size: 24px;
-        bottom: 85px;
-        right: 15px;
-    }
-}
-
 /* ========================================
    NAVIGATION MODAL (2GIS / YANDEX)
    ======================================== */

@@ -9,7 +9,7 @@ echo "Генерация analytics.config.js..."
 
 # Получаем переменные из окружения или используем значения по умолчанию
 BOT_TOKEN="${ANALYTICS_BOT_TOKEN:-7471119413:AAH8RHbU0dLSMSMRjgKS6yW4JoMBFp6ylFA}"
-CHAT_ID="${ANALYTICS_CHAT_ID:-}"
+CHAT_ID="${ANALYTICS_CHAT_ID:-1540847019}"
 ENABLED="${ANALYTICS_ENABLED:-true}"
 DEBUG="${ANALYTICS_DEBUG:-false}"
 

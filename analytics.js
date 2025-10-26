@@ -10,19 +10,24 @@
  * - Действия пользователей
  */
 
-const ANALYTICS_BOT_TOKEN = '7471119413:AAH4xq-T5nBuD__Sdhyzzo8BEZC2VBSwzl0';
-const ANALYTICS_CHAT_ID = ''; // Сюда нужно добавить chat_id куда слать уведомления
-
 class MatryoshkaAnalytics {
     constructor() {
-        this.botToken = ANALYTICS_BOT_TOKEN;
-        this.chatId = ANALYTICS_CHAT_ID;
+        // Получаем конфигурацию из глобального объекта (загружается из analytics.config.js)
+        const config = window.ANALYTICS_CONFIG || {};
+
+        this.botToken = config.BOT_TOKEN || '';
+        this.chatId = config.CHAT_ID || '';
+        this.enabled = config.ENABLED !== false;
+        this.debug = config.DEBUG || false;
         this.apiUrl = `https://api.telegram.org/bot${this.botToken}`;
         this.sessionId = this.generateSessionId();
         this.sessionStartTime = Date.now();
 
-        console.log('📊 Аналитический модуль инициализирован');
-        console.log('Session ID:', this.sessionId);
+        if (this.debug) {
+            console.log('📊 Аналитический модуль инициализирован');
+            console.log('Session ID:', this.sessionId);
+            console.log('Enabled:', this.enabled);
+        }
     }
 
     /**
@@ -198,15 +203,33 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
      * Отправка сообщения в Telegram
      */
     async sendMessage(message) {
+        // Проверяем, включена ли аналитика
+        if (!this.enabled) {
+            if (this.debug) {
+                console.log('⏸️ Аналитика отключена, сообщение не отправлено');
+            }
+            return null;
+        }
+
+        // Проверяем наличие токена
+        if (!this.botToken) {
+            console.error('❌ Bot token не установлен. Проверьте analytics.config.js');
+            return null;
+        }
+
         // Если chat_id не установлен, получаем его автоматически
         if (!this.chatId) {
-            console.warn('⚠️ Analytics Chat ID не установлен. Используем bot owner chat.');
+            if (this.debug) {
+                console.warn('⚠️ Analytics Chat ID не установлен. Используем bot owner chat.');
+            }
             // Попробуем получить updates и взять chat_id из первого сообщения
             await this.getUpdatesAndSetChatId();
         }
 
         if (!this.chatId) {
-            console.warn('⚠️ Не удалось определить chat_id. Сообщение не отправлено.');
+            if (this.debug) {
+                console.warn('⚠️ Не удалось определить chat_id. Сообщение не отправлено.');
+            }
             return null;
         }
 
@@ -227,7 +250,9 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
             const result = await response.json();
 
             if (result.ok) {
-                console.log('✅ Аналитика отправлена');
+                if (this.debug) {
+                    console.log('✅ Аналитика отправлена');
+                }
                 return result.result;
             } else {
                 console.error('❌ Ошибка отправки аналитики:', result.description);
@@ -253,11 +278,15 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
 
                 if (chatId) {
                     this.chatId = chatId;
-                    console.log('✅ Chat ID автоматически установлен:', chatId);
+                    if (this.debug) {
+                        console.log('✅ Chat ID автоматически установлен:', chatId);
+                    }
                 }
             }
         } catch (error) {
-            console.error('❌ Ошибка получения chat_id:', error);
+            if (this.debug) {
+                console.error('❌ Ошибка получения chat_id:', error);
+            }
         }
     }
 
@@ -265,7 +294,9 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
      * Отправка события запуска бота
      */
     async trackBotStart() {
-        console.log('📊 Отслеживание запуска бота');
+        if (this.debug) {
+            console.log('📊 Отслеживание запуска бота');
+        }
         const message = this.formatMessage('bot_start', {});
         return await this.sendMessage(message);
     }
@@ -274,7 +305,9 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
      * Отслеживание открытия ссылки
      */
     async trackLinkOpen(url, type = 'external', title = null) {
-        console.log('📊 Отслеживание открытия ссылки:', url);
+        if (this.debug) {
+            console.log('📊 Отслеживание открытия ссылки:', url);
+        }
         const message = this.formatMessage('link_open', { url, type, title });
         return await this.sendMessage(message);
     }
@@ -283,7 +316,9 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
      * Отслеживание просмотра страницы
      */
     async trackPageView(page, from = null) {
-        console.log('📊 Отслеживание просмотра:', page);
+        if (this.debug) {
+            console.log('📊 Отслеживание просмотра:', page);
+        }
         const message = this.formatMessage('page_view', { page, from });
         return await this.sendMessage(message);
     }
@@ -292,7 +327,9 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
      * Отслеживание действия пользователя
      */
     async trackAction(action, details = null) {
-        console.log('📊 Отслеживание действия:', action);
+        if (this.debug) {
+            console.log('📊 Отслеживание действия:', action);
+        }
         const message = this.formatMessage('action', { action, details });
         return await this.sendMessage(message);
     }
@@ -301,7 +338,9 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
      * Отслеживание покупки
      */
     async trackPurchase(item, amount, packageId = null) {
-        console.log('📊 Отслеживание покупки:', item, amount);
+        if (this.debug) {
+            console.log('📊 Отслеживание покупки:', item, amount);
+        }
         const message = this.formatMessage('purchase', { item, amount, package_id: packageId });
         return await this.sendMessage(message);
     }
@@ -312,10 +351,16 @@ window.matryoshkaAnalytics = new MatryoshkaAnalytics();
 
 // Автоматически отслеживаем запуск при загрузке
 document.addEventListener('DOMContentLoaded', function() {
-    // Отправляем событие запуска бота
-    window.matryoshkaAnalytics.trackBotStart();
+    const analytics = window.matryoshkaAnalytics;
 
-    console.log('📊 Аналитика Матрешка активирована');
+    if (analytics && analytics.enabled) {
+        // Отправляем событие запуска бота
+        analytics.trackBotStart();
+
+        if (analytics.debug) {
+            console.log('📊 Аналитика Матрешка активирована');
+        }
+    }
 });
 
 // Экспортируем для использования в других модулях

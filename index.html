@@ -385,7 +385,18 @@
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 
     <!-- 📊 АНАЛИТИКА - загружается первой -->
-    <script src="analytics.config.js"></script>
+    <script>
+        // Fallback конфигурация, если analytics.config.js не загрузится
+        if (!window.ANALYTICS_CONFIG) {
+            window.ANALYTICS_CONFIG = {
+                BOT_TOKEN: '7471119413:AAH8RHbU0dLSMSMRjgKS6yW4JoMBFp6ylFA',
+                CHAT_ID: '1540847019',
+                ENABLED: true,
+                DEBUG: false
+            };
+        }
+    </script>
+    <script src="analytics.config.js" onerror="console.log('⚠️ analytics.config.js не загружен, используется fallback')"></script>
     <script src="analytics.js"></script>
     <script src="analytics-integration.js"></script>
 

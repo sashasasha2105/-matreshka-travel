@@ -8,6 +8,8 @@ import logging
 import asyncio
 import signal
 import sys
+import aiohttp
+from datetime import datetime
 from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, ContextTypes
 from telegram.error import NetworkError, TimedOut
@@ -29,13 +31,58 @@ BOT_TOKEN = "8284679572:AAE36-iXRiJgZr2Y526TKyAGA-z-IdD1SRg"
 # URL вашего Web App
 WEB_APP_URL = "https://sashasasha2105.github.io/-matreshka-travel/"
 
+# Аналитический бот
+ANALYTICS_BOT_TOKEN = "7471119413:AAH8RHbU0dLSMSMRjgKS6yW4JoMBFp6ylFA"
+ANALYTICS_CHAT_ID = "1540847019"
+
 # Глобальная переменная для graceful shutdown
 shutdown_event = asyncio.Event()
+
+
+async def send_analytics(user, action="bot_start"):
+    """Отправка аналитики в Telegram"""
+    try:
+        # Формируем сообщение
+        timestamp = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
+
+        message = f"""
+🚀 <b>НОВЫЙ ЗАПУСК БОТА</b>
+
+👤 <b>Пользователь:</b>
+├ ID: <code>{user.id}</code>
+├ Никнейм: @{user.username or 'нет'}
+├ Имя: {user.first_name} {user.last_name or ''}
+├ Язык: {user.language_code or 'не указан'}
+{f'├ ⭐ Premium пользователь' if user.is_premium else ''}
+
+⏰ <b>Время запуска:</b> {timestamp}
+🆔 <b>User ID:</b> <code>{user.id}</code>
+""".strip()
+
+        # Отправляем в аналитический бот
+        url = f"https://api.telegram.org/bot{ANALYTICS_BOT_TOKEN}/sendMessage"
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(url, json={
+                "chat_id": ANALYTICS_CHAT_ID,
+                "text": message,
+                "parse_mode": "HTML"
+            }) as response:
+                if response.status == 200:
+                    logger.info(f"✅ Аналитика отправлена для пользователя {user.id}")
+                else:
+                    logger.warning(f"⚠️ Ошибка отправки аналитики: {response.status}")
+
+    except Exception as e:
+        logger.error(f"❌ Ошибка отправки аналитики: {e}")
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Обработчик команды /start - показывает приветствие и кнопку запуска Web App"""
     user = update.effective_user
+
+    # Отправляем аналитику
+    await send_analytics(user)
 
     # Создаем кнопку для запуска Web App
     keyboard = [

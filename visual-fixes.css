@@ -1,0 +1,491 @@
+/**
+ * ВИЗУАЛЬНЫЕ ИСПРАВЛЕНИЯ v5.0
+ * Исправляет все найденные баги и косяки
+ * Загружается ПОСЛЕДНИМ для переопределения всех стилей
+ */
+
+/* ========================================
+   1. ЦЕНТРИРОВАНИЕ ЗАГОЛОВКОВ СЕКЦИЙ
+   ======================================== */
+
+/* Готовые пакеты путешествий */
+.packages-section {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.packages-title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    text-align: center !important;
+    margin: 0 auto 40px !important;
+}
+
+.packages-icon {
+    font-size: 2.5rem !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* Лента путешествий */
+.travel-feed-section {
+    text-align: center;
+}
+
+.feed-title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    text-align: center !important;
+    margin: 0 auto 40px !important;
+}
+
+.feed-icon {
+    font-size: 2.2rem !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+/* ========================================
+   2. ИСПРАВЛЕНИЕ КОМАНДЫ
+   ======================================== */
+
+.team-section {
+    text-align: center;
+}
+
+.team-header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.team-title {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 15px !important;
+    text-align: center !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+    margin: 0 0 16px 0 !important;
+}
+
+.team-icon {
+    font-size: 3rem !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+}
+
+.team-subtitle {
+    display: block !important;
+    font-size: 1.1rem !important;
+    font-weight: 400 !important;
+    opacity: 0.8 !important;
+    margin: 0 !important;
+    color: rgba(255, 204, 0, 0.9) !important;
+}
+
+/* ========================================
+   3. DATE SEPARATOR НА MOBILE
+   ======================================== */
+
+/* Mobile - скрываем стрелку */
+@media (max-width: 640px) {
+    .date-separator {
+        display: none !important;
+    }
+
+    .date-inputs-row {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+}
+
+/* Tablet и Desktop - показываем стрелку */
+@media (min-width: 641px) {
+    .date-separator {
+        display: block !important;
+        font-size: 1.5rem !important;
+        color: rgba(255, 204, 0, 0.6) !important;
+        margin-bottom: 14px !important;
+    }
+
+    .date-inputs-row {
+        flex-direction: row !important;
+        gap: 16px !important;
+    }
+}
+
+/* ========================================
+   4. BADGES ВИДИМОСТЬ И ПОЗИЦИОНИРОВАНИЕ
+   ======================================== */
+
+.quests-badge,
+.cart-badge {
+    /* Всегда показываем если есть число > 0 */
+    display: flex !important;
+    position: absolute !important;
+    top: 8px !important;
+    right: calc(50% - 20px) !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    padding: 0 5px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 9px !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+    background: linear-gradient(135deg, #ff6b6b, #ff4757) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4) !important;
+}
+
+/* Скрываем если 0 - через JS */
+.quests-badge[data-count="0"],
+.cart-badge[data-count="0"] {
+    display: none !important;
+}
+
+/* ========================================
+   5. КОНСИСТЕНТНЫЕ РАЗМЕРЫ ИКОНОК
+   ======================================== */
+
+/* Все иконки в заголовках одного размера */
+.section-title span,
+.packages-icon,
+.feed-icon,
+.team-icon {
+    font-size: 2.5rem !important;
+    line-height: 1 !important;
+}
+
+/* На mobile чуть меньше */
+@media (max-width: 640px) {
+    .section-title span,
+    .packages-icon,
+    .feed-icon,
+    .team-icon {
+        font-size: 2rem !important;
+    }
+}
+
+/* ========================================
+   6. FOOTER АДАПТИВНОСТЬ
+   ======================================== */
+
+.footer {
+    text-align: center;
+    padding: 24px 16px;
+    margin-top: 60px;
+    padding-bottom: calc(var(--bottom-nav-height, 70px) + 20px);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(255, 204, 0, 0.1);
+}
+
+@media (max-width: 640px) {
+    .footer {
+        font-size: 0.8rem;
+        padding: 16px 12px;
+    }
+}
+
+/* ========================================
+   7. CONTAINER PADDING УНИФИКАЦИЯ
+   ======================================== */
+
+.container {
+    padding: 20px !important;
+    padding-bottom: calc(var(--bottom-nav-height, 70px) + 24px) !important;
+}
+
+@media (min-width: 641px) {
+    .container {
+        padding: 24px !important;
+        padding-bottom: calc(var(--bottom-nav-height, 75px) + 24px) !important;
+    }
+}
+
+@media (min-width: 1025px) {
+    .container {
+        max-width: 1400px !important;
+        margin: 0 auto !important;
+        padding: 40px !important;
+        padding-bottom: calc(var(--bottom-nav-height, 80px) + 24px) !important;
+    }
+}
+
+/* ========================================
+   8. PROFILE STATS НА MOBILE
+   ======================================== */
+
+@media (max-width: 480px) {
+    .profile-stats {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+@media (min-width: 481px) and (max-width: 640px) {
+    .profile-stats {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .profile-stats {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (min-width: 1025px) {
+    .profile-stats {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
+}
+
+/* ========================================
+   9. REGIONS GRID ОПТИМИЗАЦИЯ
+   ======================================== */
+
+/* На маленьких экранах 1 колонка */
+@media (max-width: 480px) {
+    .regions-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* На средних 2 колонки */
+@media (min-width: 481px) and (max-width: 640px) {
+    .regions-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+}
+
+/* ========================================
+   10. FOCUS STATES ДЛЯ ACCESSIBILITY
+   ======================================== */
+
+button:focus,
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid rgba(255, 204, 0, 0.6) !important;
+    outline-offset: 2px !important;
+}
+
+.nav-item:focus {
+    outline: 2px solid rgba(255, 204, 0, 0.8) !important;
+    outline-offset: -2px !important;
+    background: rgba(255, 204, 0, 0.1) !important;
+}
+
+/* ========================================
+   11. SECTION TITLE БЕЗ ::BEFORE БАР
+   ======================================== */
+
+.section-title {
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+}
+
+.section-title::before {
+    display: none !important;
+}
+
+/* ========================================
+   12. GRADIENT TEXT FALLBACK ДЛЯ FIREFOX
+   ======================================== */
+
+@-moz-document url-prefix() {
+    .hero-title,
+    .matryoshka-name,
+    .profile-name {
+        background: none !important;
+        -webkit-background-clip: unset !important;
+        -webkit-text-fill-color: unset !important;
+        color: #ffcc00 !important;
+    }
+}
+
+/* ========================================
+   13. DATE PICKER АДАПТИВНОСТЬ
+   ======================================== */
+
+.travel-date-picker {
+    max-width: 100% !important;
+    padding: 20px 16px !important;
+}
+
+@media (min-width: 641px) {
+    .travel-date-picker {
+        max-width: 600px !important;
+        padding: 28px 32px !important;
+    }
+}
+
+.date-picker-header {
+    flex-wrap: wrap !important;
+}
+
+.date-label {
+    word-break: break-word !important;
+    text-align: center !important;
+}
+
+@media (max-width: 400px) {
+    .date-label {
+        font-size: 0.95rem !important;
+    }
+
+    .date-icon {
+        font-size: 1.5rem !important;
+    }
+}
+
+/* ========================================
+   14. УМЕНЬШЕНИЕ PULSE АНИМАЦИИ
+   ======================================== */
+
+/* Уменьшаем агрессивность pulse */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+}
+
+/* На mobile вообще убираем pulse */
+@media (max-width: 640px) {
+    .team-icon,
+    .feed-icon,
+    .packages-icon,
+    .date-icon {
+        animation: none !important;
+    }
+}
+
+/* ========================================
+   15. BOTTOM NAV ВЫСОТА УНИФИКАЦИЯ
+   ======================================== */
+
+.bottom-nav {
+    height: 70px !important;
+}
+
+@media (min-width: 641px) {
+    .bottom-nav {
+        height: 75px !important;
+    }
+}
+
+@media (min-width: 1025px) {
+    .bottom-nav {
+        height: 80px !important;
+    }
+}
+
+/* ========================================
+   16. УБИРАЕМ ЛИШНИЕ !IMPORTANT ИЗ ДРУГИХ ФАЙЛОВ
+   ======================================== */
+
+/* Переопределяем конфликтующие стили */
+.packages-section,
+.travel-feed-section,
+.team-section {
+    overflow: visible !important;
+}
+
+/* ========================================
+   17. TEAM GRID АДАПТИВНОСТЬ
+   ======================================== */
+
+@media (max-width: 640px) {
+    .team-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 24px !important;
+    }
+
+    .team-member {
+        padding: 20px 16px !important;
+    }
+
+    .member-photo-wrapper {
+        width: 120px !important;
+        height: 120px !important;
+    }
+
+    .member-name {
+        font-size: 0.95rem !important;
+    }
+
+    .member-role {
+        font-size: 0.8rem !important;
+    }
+}
+
+/* ========================================
+   18. ИСПРАВЛЕНИЕ Z-INDEX КОНФЛИКТОВ
+   ======================================== */
+
+.bottom-nav {
+    z-index: 1000 !important;
+}
+
+.loader {
+    z-index: 9999 !important;
+}
+
+.modal-overlay {
+    z-index: 2000 !important;
+}
+
+/* ========================================
+   19. PACKAGES GRID ЦЕНТРИРОВАНИЕ
+   ======================================== */
+
+.packages-grid {
+    margin: 0 auto !important;
+}
+
+/* ========================================
+   20. УЛУЧШЕНИЕ КНОПОК
+   ======================================== */
+
+.date-save-btn,
+.cta-button,
+.btn-primary {
+    min-height: 44px !important;
+    cursor: pointer !important;
+}
+
+.date-save-btn:disabled,
+.cta-button:disabled,
+.btn-primary:disabled {
+    opacity: 0.5 !important;
+    cursor: not-allowed !important;
+}
+
+/* ========================================
+   RESPONSIVE BREAKPOINTS SUMMARY
+   ======================================== */
+
+/*
+   Mobile: 0-480px    - 1 колонка, компактно
+   Mobile+: 481-640px - 2 колонки где возможно
+   Tablet: 641-1024px - 2 колонки
+   Desktop: 1025px+   - 3-4 колонки
+*/

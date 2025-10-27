@@ -1,0 +1,446 @@
+/**
+ * Специальные улучшения для мобильных устройств
+ * Дополнительные оптимизации для small mobile (< 480px)
+ */
+
+/* ========================================
+   ОПТИМИЗАЦИЯ ДЛЯ ОЧЕНЬ МАЛЕНЬКИХ ЭКРАНОВ
+   ======================================== */
+
+@media (max-width: 480px) {
+    /* Уменьшаем отступы для экономии места */
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    /* Hero секция компактнее */
+    .hero-section {
+        min-height: 350px;
+        margin-bottom: 16px;
+    }
+
+    .hero-title {
+        font-size: 1.25rem;
+        margin-bottom: 8px;
+    }
+
+    .hero-subtitle {
+        font-size: 0.8rem;
+        margin-bottom: 16px;
+    }
+
+    /* Date picker более компактный */
+    .travel-date-picker {
+        padding: 12px;
+    }
+
+    .date-picker-header {
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+    }
+
+    .date-input-label {
+        font-size: 0.75rem;
+    }
+
+    .date-save-btn {
+        padding: 10px 16px;
+        font-size: 0.85rem;
+    }
+
+    /* Карточки регионов компактнее */
+    .region-card {
+        margin-bottom: 12px;
+    }
+
+    .region-image {
+        height: 160px;
+    }
+
+    .region-content {
+        padding: 12px;
+    }
+
+    .region-name {
+        font-size: 1rem;
+    }
+
+    .region-description {
+        font-size: 0.8rem;
+    }
+
+    .region-stats {
+        font-size: 0.7rem;
+    }
+
+    /* Нижняя навигация компактнее */
+    .bottom-nav {
+        height: 65px;
+        padding: 4px 0;
+    }
+
+    .nav-icon {
+        font-size: 1.1rem;
+    }
+
+    .nav-label {
+        font-size: 0.6rem;
+    }
+
+    /* Профиль компактнее */
+    .profile-section {
+        padding: 16px;
+        margin: 12px 0;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+
+    .profile-name {
+        font-size: 1.25rem;
+    }
+
+    .profile-stats {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    /* Кнопки меньше */
+    .back-btn {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+
+    /* Модальные окна на весь экран */
+    .modal-content {
+        width: 100%;
+        max-width: 100vw;
+        max-height: 100vh;
+        border-radius: 0;
+        padding: 16px;
+    }
+}
+
+/* ========================================
+   ОПТИМИЗАЦИЯ ПРОКРУТКИ ДЛЯ iOS
+   ======================================== */
+
+/* Smooth scrolling для iOS */
+html {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Убираем bounce эффект на границах страницы */
+body {
+    overscroll-behavior-y: none;
+}
+
+/* Секции с правильным скроллингом */
+#mainSection,
+#regionDetails,
+#profileSection,
+#cartSection,
+#questsSection {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+
+/* ========================================
+   УЛУЧШЕНИЯ ДЛЯ TOUCH ВЗАИМОДЕЙСТВИЯ
+   ======================================== */
+
+/* Убираем задержку клика на iOS */
+a, button, .nav-item, .region-card {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Активное состояние для touch */
+.region-card:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+.nav-item:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+button:active {
+    transform: scale(0.97);
+    transition: transform 0.1s ease;
+}
+
+/* Увеличиваем область касания для маленьких кнопок */
+@media (hover: none) and (pointer: coarse) {
+    .nav-item,
+    .back-btn,
+    .search-clear,
+    button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+
+    /* Увеличиваем отступы в кликабельных элементах */
+    .partner-route-btn,
+    .partner-qr-btn,
+    .action-btn {
+        padding: 12px 16px;
+    }
+}
+
+/* ========================================
+   ОПТИМИЗАЦИЯ ТЕКСТА НА МОБИЛЬНЫХ
+   ======================================== */
+
+/* Запрет переноса для важных элементов */
+.nav-label {
+    white-space: nowrap;
+}
+
+/* Правильный перенос для длинных слов */
+.region-description,
+.profile-bio,
+.partner-description {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Читаемость текста на мобильных */
+@media (max-width: 640px) {
+    body {
+        font-size: 16px; /* Базовый размер для мобильных */
+        line-height: 1.5;
+    }
+
+    p {
+        line-height: 1.6;
+    }
+}
+
+/* ========================================
+   ОПТИМИЗАЦИЯ ИЗОБРАЖЕНИЙ
+   ======================================== */
+
+/* Все изображения должны быть адаптивными */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Предотвращаем белый фон под изображениями во время загрузки */
+.region-image,
+.partner-image,
+.team-member img {
+    background-color: rgba(15, 5, 32, 0.5);
+}
+
+/* ========================================
+   ИСПРАВЛЕНИЕ ГОРИЗОНТАЛЬНОЙ ПРОКРУТКИ
+   ======================================== */
+
+/* Предотвращаем горизонтальную прокрутку */
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
+.container {
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+/* Все секции в пределах viewport */
+#mainSection,
+#regionDetails,
+#profileSection,
+#cartSection,
+#questsSection {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+/* ========================================
+   ОПТИМИЗАЦИЯ ФОРМ НА МОБИЛЬНЫХ
+   ======================================== */
+
+/* Правильные input на iOS */
+input, textarea, select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 12px;
+    font-size: 16px; /* Предотвращает zoom на iOS */
+}
+
+/* Date inputs */
+input[type="date"] {
+    min-height: 44px; /* Для touch устройств */
+}
+
+/* Search input */
+.search-input {
+    font-size: 16px; /* Предотвращает zoom на iOS */
+}
+
+/* ========================================
+   SAFE AREA ДЛЯ iPhone X+
+   ======================================== */
+
+/* Учитываем notch и home indicator */
+@supports (padding-top: env(safe-area-inset-top)) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+
+    .bottom-nav {
+        padding-bottom: calc(8px + env(safe-area-inset-bottom));
+        height: calc(70px + env(safe-area-inset-bottom));
+    }
+
+    /* Отступ снизу с учетом safe area */
+    .container {
+        padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-lg) + env(safe-area-inset-bottom));
+    }
+}
+
+/* ========================================
+   ПРОИЗВОДИТЕЛЬНОСТЬ
+   ======================================== */
+
+/* GPU ускорение для анимаций */
+.region-card,
+.nav-item,
+.modal-content,
+.hero-section {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Отключаем will-change после завершения анимации */
+.region-card:not(:hover),
+.nav-item:not(.active) {
+    will-change: auto;
+}
+
+/* ========================================
+   LANDSCAPE ORIENTATION
+   ======================================== */
+
+/* Оптимизация для горизонтальной ориентации на телефонах */
+@media (max-width: 900px) and (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+        height: 90vh;
+        min-height: unset;
+    }
+
+    .bottom-nav {
+        height: 60px;
+    }
+
+    .nav-icon {
+        font-size: 1rem;
+    }
+
+    .nav-label {
+        display: none; /* Скрываем текст в landscape */
+    }
+
+    .profile-main-info {
+        flex-direction: row;
+    }
+
+    .profile-avatar {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* ========================================
+   DARK MODE ОПТИМИЗАЦИЯ
+   ======================================== */
+
+/* Для устройств с темной темой */
+@media (prefers-color-scheme: dark) {
+    /* Уменьшаем яркость для экономии батареи на OLED */
+    img {
+        opacity: 0.95;
+    }
+
+    .region-card,
+    .partner-card,
+    .profile-section {
+        background: rgba(10, 3, 20, 0.9);
+    }
+}
+
+/* ========================================
+   УМЕНЬШЕНИЕ АНИМАЦИЙ ДЛЯ A11Y
+   ======================================== */
+
+/* Для пользователей с prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .region-card:hover,
+    .nav-item:active {
+        transform: none !important;
+    }
+}
+
+/* ========================================
+   ИСПРАВЛЕНИЕ СПЕЦИФИЧНЫХ БАГОВ iOS
+   ======================================== */
+
+/* Исправляем баг с 100vh на iOS Safari */
+@supports (-webkit-touch-callout: none) {
+    .hero-section {
+        height: -webkit-fill-available;
+    }
+}
+
+/* Убираем синее выделение при долгом нажатии на iOS */
+* {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* Но разрешаем выделение текста */
+p, span, a, li, input, textarea {
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+/* ========================================
+   УЛУЧШЕНИЕ ЧИТАЕМОСТИ НА СОЛНЦЕ
+   ======================================== */
+
+/* Увеличиваем контраст для outdoor использования */
+@media (prefers-contrast: high) {
+    .hero-title,
+    .region-name,
+    .profile-name {
+        text-shadow:
+            0 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .region-card,
+    .partner-card {
+        border: 2px solid rgba(255, 204, 0, 0.3);
+    }
+}

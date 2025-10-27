@@ -1,0 +1,768 @@
+/**
+ * Единая система адаптивного дизайна для Матрешка
+ * Mobile-First подход с консистентными breakpoints
+ */
+
+/* ========================================
+   CSS ПЕРЕМЕННЫЕ ДЛЯ АДАПТИВНОСТИ
+   ======================================== */
+:root {
+    /* Breakpoints */
+    --mobile-max: 640px;
+    --tablet-min: 641px;
+    --tablet-max: 1024px;
+    --desktop-min: 1025px;
+
+    /* Отступы (Mobile First) */
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 40px;
+
+    /* Размеры шрифтов (Mobile First) */
+    --font-xs: 0.75rem;    /* 12px */
+    --font-sm: 0.875rem;   /* 14px */
+    --font-base: 1rem;     /* 16px */
+    --font-lg: 1.125rem;   /* 18px */
+    --font-xl: 1.25rem;    /* 20px */
+    --font-2xl: 1.5rem;    /* 24px */
+    --font-3xl: 1.875rem;  /* 30px */
+    --font-4xl: 2.25rem;   /* 36px */
+
+    /* Высота нижней навигации */
+    --bottom-nav-height: 70px;
+
+    /* Радиусы */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+}
+
+/* Tablet */
+@media (min-width: 641px) {
+    :root {
+        --spacing-lg: 32px;
+        --spacing-xl: 40px;
+        --spacing-2xl: 48px;
+        --bottom-nav-height: 75px;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+    :root {
+        --spacing-lg: 40px;
+        --spacing-xl: 48px;
+        --spacing-2xl: 56px;
+        --bottom-nav-height: 80px;
+    }
+}
+
+/* ========================================
+   БАЗОВЫЕ АДАПТИВНЫЕ СТИЛИ
+   ======================================== */
+
+/* Контейнер с правильными отступами */
+.container {
+    width: 100%;
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+    padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-lg));
+}
+
+@media (min-width: 641px) {
+    .container {
+        padding-left: var(--spacing-lg);
+        padding-right: var(--spacing-lg);
+    }
+}
+
+@media (min-width: 1025px) {
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding-left: var(--spacing-2xl);
+        padding-right: var(--spacing-2xl);
+    }
+}
+
+/* ========================================
+   HERO СЕКЦИЯ - АДАПТИВНОСТЬ
+   ======================================== */
+
+.hero-section {
+    position: relative;
+    height: 60vh;
+    min-height: 400px;
+    max-height: 600px;
+    border-radius: var(--radius-lg);
+    margin-bottom: var(--spacing-lg);
+    overflow: hidden;
+}
+
+@media (min-width: 641px) {
+    .hero-section {
+        height: 65vh;
+        min-height: 500px;
+        max-height: 700px;
+        border-radius: var(--radius-xl);
+    }
+}
+
+@media (min-width: 1025px) {
+    .hero-section {
+        height: 70vh;
+        min-height: 600px;
+        max-height: 800px;
+        border-radius: var(--radius-2xl);
+    }
+}
+
+/* Hero title - адаптивный размер */
+.hero-title {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+    line-height: 1.2;
+    margin-bottom: var(--spacing-sm);
+    text-align: center;
+}
+
+@media (min-width: 641px) {
+    .hero-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+    }
+}
+
+.hero-subtitle {
+    font-size: clamp(0.875rem, 2vw, 1.125rem);
+    opacity: 0.9;
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+/* Travel date picker - адаптивность */
+.travel-date-picker {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+    max-width: 100%;
+}
+
+@media (min-width: 641px) {
+    .travel-date-picker {
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+.date-inputs-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+}
+
+@media (min-width: 641px) {
+    .date-inputs-row {
+        flex-direction: row;
+        gap: var(--spacing-md);
+    }
+}
+
+.date-input {
+    padding: var(--spacing-sm);
+    font-size: var(--font-sm);
+    width: 100%;
+}
+
+@media (min-width: 641px) {
+    .date-input {
+        padding: var(--spacing-md);
+        font-size: var(--font-base);
+    }
+}
+
+/* ========================================
+   ПОИСК - АДАПТИВНОСТЬ
+   ======================================== */
+
+.search-section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.search-container {
+    max-width: 100%;
+    padding: var(--spacing-xs);
+}
+
+@media (min-width: 641px) {
+    .search-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: var(--spacing-sm);
+    }
+}
+
+.search-input {
+    padding: var(--spacing-sm) var(--spacing-2xl);
+    font-size: var(--font-sm);
+}
+
+@media (min-width: 641px) {
+    .search-input {
+        padding: var(--spacing-md) var(--spacing-2xl);
+        font-size: var(--font-base);
+    }
+}
+
+/* ========================================
+   РЕГИОНЫ - АДАПТИВНАЯ СЕТКА
+   ======================================== */
+
+.regions-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Tablet - 2 колонки */
+@media (min-width: 641px) {
+    .regions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+}
+
+/* Desktop - 3 колонки */
+@media (min-width: 1025px) {
+    .regions-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-xl);
+    }
+}
+
+/* Карточки регионов */
+.region-card {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+@media (min-width: 641px) {
+    .region-card {
+        border-radius: var(--radius-lg);
+    }
+}
+
+.region-card:hover {
+    transform: translateY(-4px);
+}
+
+@media (min-width: 1025px) {
+    .region-card:hover {
+        transform: translateY(-8px);
+    }
+}
+
+.region-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+@media (min-width: 641px) {
+    .region-image {
+        height: 200px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .region-image {
+        height: 220px;
+    }
+}
+
+.region-content {
+    padding: var(--spacing-md);
+}
+
+@media (min-width: 641px) {
+    .region-content {
+        padding: var(--spacing-lg);
+    }
+}
+
+.region-name {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    margin-bottom: var(--spacing-xs);
+}
+
+@media (min-width: 641px) {
+    .region-name {
+        font-size: var(--font-xl);
+    }
+}
+
+.region-description {
+    font-size: var(--font-sm);
+    opacity: 0.8;
+    margin-bottom: var(--spacing-sm);
+}
+
+@media (min-width: 641px) {
+    .region-description {
+        font-size: var(--font-base);
+    }
+}
+
+.region-stats {
+    display: flex;
+    gap: var(--spacing-sm);
+    font-size: var(--font-xs);
+}
+
+@media (min-width: 641px) {
+    .region-stats {
+        font-size: var(--font-sm);
+    }
+}
+
+/* ========================================
+   НИЖНЯЯ НАВИГАЦИЯ - ФИКСИРОВАННАЯ ВЫСОТА
+   ======================================== */
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: var(--bottom-nav-height);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: rgba(15, 5, 32, 0.95);
+    backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 204, 0, 0.2);
+    z-index: 1000;
+    padding: var(--spacing-xs) 0;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    position: relative;
+    min-width: 60px;
+}
+
+@media (min-width: 641px) {
+    .nav-item {
+        min-width: 70px;
+        gap: 6px;
+    }
+}
+
+.nav-icon {
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
+}
+
+@media (min-width: 641px) {
+    .nav-icon {
+        font-size: 1.5rem;
+    }
+}
+
+.nav-label {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (min-width: 641px) {
+    .nav-label {
+        font-size: 0.75rem;
+    }
+}
+
+.nav-item.active {
+    color: #ffcc00;
+}
+
+.nav-item.active .nav-icon {
+    transform: scale(1.15);
+}
+
+/* Badges */
+.quests-badge,
+.cart-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
+    color: white;
+    font-size: 0.625rem;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 10px;
+    min-width: 16px;
+    text-align: center;
+}
+
+@media (min-width: 641px) {
+    .quests-badge,
+    .cart-badge {
+        font-size: 0.7rem;
+        padding: 3px 6px;
+        min-width: 18px;
+    }
+}
+
+/* ========================================
+   ПРОФИЛЬ - АДАПТИВНОСТЬ
+   ======================================== */
+
+.profile-section {
+    padding: var(--spacing-md);
+    padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-lg));
+    margin: var(--spacing-md) 0;
+}
+
+@media (min-width: 641px) {
+    .profile-section {
+        padding: var(--spacing-lg);
+        padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-xl));
+        margin: var(--spacing-lg) 0;
+    }
+}
+
+@media (min-width: 1025px) {
+    .profile-section {
+        padding: var(--spacing-2xl);
+        padding-bottom: calc(var(--bottom-nav-height) + var(--spacing-2xl));
+    }
+}
+
+.profile-main-info {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-md);
+}
+
+@media (min-width: 641px) {
+    .profile-main-info {
+        flex-direction: row;
+        text-align: left;
+        gap: var(--spacing-lg);
+    }
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+}
+
+@media (min-width: 641px) {
+    .profile-avatar {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (min-width: 1025px) {
+    .profile-avatar {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+.profile-name {
+    font-size: var(--font-xl);
+}
+
+@media (min-width: 641px) {
+    .profile-name {
+        font-size: var(--font-2xl);
+    }
+}
+
+@media (min-width: 1025px) {
+    .profile-name {
+        font-size: var(--font-3xl);
+    }
+}
+
+.profile-stats {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+}
+
+@media (min-width: 480px) {
+    .profile-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+}
+
+@media (min-width: 1025px) {
+    .profile-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-lg);
+    }
+}
+
+/* ========================================
+   КНОПКИ - АДАПТИВНОСТЬ
+   ======================================== */
+
+.back-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-sm);
+    border-radius: var(--radius-md);
+}
+
+@media (min-width: 641px) {
+    .back-btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: var(--font-base);
+        border-radius: var(--radius-lg);
+    }
+}
+
+/* ========================================
+   МОДАЛЬНЫЕ ОКНА - АДАПТИВНОСТЬ
+   ======================================== */
+
+.modal-content {
+    width: 95%;
+    max-width: 95vw;
+    max-height: 90vh;
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+}
+
+@media (min-width: 641px) {
+    .modal-content {
+        width: 85%;
+        max-width: 600px;
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-xl);
+    }
+}
+
+@media (min-width: 1025px) {
+    .modal-content {
+        width: 70%;
+        max-width: 700px;
+        padding: var(--spacing-xl);
+    }
+}
+
+/* ========================================
+   ПАРТНЕРЫ - АДАПТИВНОСТЬ
+   ======================================== */
+
+.partners-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+@media (min-width: 641px) {
+    .partners-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+}
+
+@media (min-width: 1025px) {
+    .partners-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.partner-card {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-md);
+}
+
+@media (min-width: 641px) {
+    .partner-card {
+        padding: var(--spacing-lg);
+        border-radius: var(--radius-lg);
+    }
+}
+
+/* ========================================
+   ПАКЕТЫ - АДАПТИВНОСТЬ
+   ======================================== */
+
+.packages-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+@media (min-width: 641px) {
+    .packages-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-lg);
+    }
+}
+
+@media (min-width: 1025px) {
+    .packages-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ========================================
+   КОМАНДА - АДАПТИВНОСТЬ
+   ======================================== */
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+}
+
+@media (min-width: 641px) {
+    .team-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-lg);
+    }
+}
+
+@media (min-width: 1025px) {
+    .team-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-xl);
+    }
+}
+
+.team-member {
+    padding: var(--spacing-md);
+}
+
+@media (min-width: 641px) {
+    .team-member {
+        padding: var(--spacing-lg);
+    }
+}
+
+/* ========================================
+   ЛЕНТА - АДАПТИВНОСТЬ
+   ======================================== */
+
+.travel-feed {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+}
+
+@media (min-width: 641px) {
+    .travel-feed {
+        gap: var(--spacing-lg);
+    }
+}
+
+/* ========================================
+   УТИЛИТЫ ДЛЯ СКРЫТИЯ/ПОКАЗА
+   ======================================== */
+
+.mobile-only {
+    display: block;
+}
+
+.tablet-up {
+    display: none;
+}
+
+.desktop-only {
+    display: none;
+}
+
+@media (min-width: 641px) {
+    .mobile-only {
+        display: none;
+    }
+    .tablet-up {
+        display: block;
+    }
+}
+
+@media (min-width: 1025px) {
+    .desktop-only {
+        display: block;
+    }
+}
+
+/* ========================================
+   ИСПРАВЛЕНИЕ OVERFLOW ПРОБЛЕМ
+   ======================================== */
+
+/* Убираем принудительное overflow: visible */
+.profile-section,
+.profile-content {
+    overflow: visible;
+    max-height: none;
+    height: auto;
+}
+
+/* Секции должны естественно скроллиться */
+#mainSection,
+#regionDetails,
+#profileSection,
+#cartSection,
+#questsSection {
+    min-height: calc(100vh - var(--bottom-nav-height));
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* ========================================
+   УЛУЧШЕНИЯ ДЛЯ TOUCH УСТРОЙСТВ
+   ======================================== */
+
+/* Увеличиваем область касания для кнопок */
+@media (hover: none) and (pointer: coarse) {
+    .nav-item,
+    .back-btn,
+    button {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Убираем hover эффекты на touch устройствах */
+@media (hover: none) {
+    .region-card:hover,
+    .nav-item:hover,
+    .profile-avatar:hover {
+        transform: none;
+    }
+}
+
+/* Активное состояние для touch */
+.region-card:active,
+.nav-item:active {
+    transform: scale(0.98);
+    opacity: 0.9;
+}

@@ -368,6 +368,12 @@ textarea:focus {
     }
 }
 
+/* Фиксируем team-icon - убираем анимацию */
+.team-icon {
+    animation: none !important;
+    transform: none !important;
+}
+
 /* На mobile вообще убираем pulse */
 @media (max-width: 640px) {
     .team-icon,

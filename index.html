@@ -2,9 +2,23 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="color-scheme" content="dark">
+    <meta name="theme-color" content="#0f0520">
+    <meta name="description" content="Матрешка - откройте для себя красоту и разнообразие России. Путешествуйте по регионам, выполняйте задания, получайте награды.">
     <title>Матрешка - Путешествуй по России</title>
+
+    <!-- DNS Prefetch для внешних ресурсов -->
+    <link rel="dns-prefetch" href="//telegram.org">
+    <link rel="dns-prefetch" href="//sketchfab.com">
+    <link rel="dns-prefetch" href="//mapgl.2gis.com">
+    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+
+    <!-- Preload критических ресурсов -->
+    <link rel="preload" href="style.css?v=3.0" as="style">
+    <link rel="preload" href="script.js" as="script">
+
+    <!-- Основные стили -->
     <link rel="stylesheet" href="style.css?v=3.0">
     <link rel="stylesheet" href="profile/profile.css?v=3.0">
     <link rel="stylesheet" href="profile/modern-modal.css?v=3.0">
@@ -40,6 +54,9 @@
 
     <!-- 🔧 ВИЗУАЛЬНЫЕ ИСПРАВЛЕНИЯ - загружается ПОСЛЕДНИМ -->
     <link rel="stylesheet" href="visual-fixes.css?v=5.0">
+
+    <!-- ✨ СОВРЕМЕННЫЕ ЭФФЕКТЫ - профессиональные улучшения -->
+    <link rel="stylesheet" href="modern-effects.css?v=1.0">
 
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -94,7 +111,7 @@
             </div>
 
             <!-- Поиск регионов -->
-            <div class="search-section">
+            <div class="search-section" data-animate>
                 <div class="search-container">
                     <div class="search-icon">🔍</div>
                     <input
@@ -103,6 +120,7 @@
                         class="search-input"
                         placeholder="Найти регион или город..."
                         oninput="searchRegions(this.value)"
+                        autocomplete="off"
                     >
                     <button class="search-clear" onclick="clearSearch()" style="display: none;">✕</button>
                 </div>
@@ -113,7 +131,7 @@
             </div>
 
             <!-- Готовые пакеты путешествий -->
-            <div class="packages-section">
+            <div class="packages-section" data-animate>
                 <h2 class="packages-title">
                     <span class="packages-icon">🎁</span>
                     Готовые пакеты путешествий
@@ -124,7 +142,7 @@
             </div>
 
             <!-- Лента путешествий -->
-            <div class="travel-feed-section">
+            <div class="travel-feed-section" data-animate>
                 <h2 class="feed-title">
                     <span class="feed-icon">🌟</span>
                     Лента путешествий
@@ -160,7 +178,7 @@
             </div>
 
             <div class="region-image-container">
-                <img id="regionImage" src="" alt="Фото региона" class="region-image">
+                <img id="regionImage" src="" alt="Фото региона" class="region-image" loading="lazy">
             </div>
 
             <div class="section">
@@ -240,43 +258,42 @@
         </div>
 
         <!-- Секция Команда -->
-        <div class="team-section">
+        <div class="team-section" data-animate>
             <div class="team-header">
                 <h2 class="team-title">
                     <span class="team-icon">👥</span>
                     Наша команда
                 </h2>
-                <p class="team-subtitle">Профессионалы своего дела</p>
             </div>
             <div class="team-grid">
-                <div class="team-member">
+                <div class="team-member" data-animate>
                     <div class="member-photo-wrapper">
-                        <img src="TeamPhotos/Говоруха Егор.png" alt="Говоруха Егор" class="member-photo">
+                        <img src="TeamPhotos/Говоруха Егор.png" alt="Говоруха Егор" class="member-photo" loading="lazy">
                         <div class="member-badge captain">Капитан</div>
                     </div>
                     <h3 class="member-name">Егор Говоруха</h3>
                     <p class="member-role">Капитан команды</p>
                 </div>
 
-                <div class="team-member">
+                <div class="team-member" data-animate>
                     <div class="member-photo-wrapper">
-                        <img src="TeamPhotos/Антонова Юлия.png" alt="Антонова Юлия" class="member-photo">
+                        <img src="TeamPhotos/Антонова Юлия.png" alt="Антонова Юлия" class="member-photo" loading="lazy">
                     </div>
                     <h3 class="member-name">Юлия Антонова</h3>
                     <p class="member-role">Дизайнер • Аналитик</p>
                 </div>
 
-                <div class="team-member">
+                <div class="team-member" data-animate>
                     <div class="member-photo-wrapper">
-                        <img src="TeamPhotos/Флёр Михаил.png" alt="Флёр Михаил" class="member-photo">
+                        <img src="TeamPhotos/Флёр Михаил.png" alt="Флёр Михаил" class="member-photo" loading="lazy">
                     </div>
                     <h3 class="member-name">Михаил Флёр</h3>
                     <p class="member-role">Аналитик</p>
                 </div>
 
-                <div class="team-member">
+                <div class="team-member" data-animate>
                     <div class="member-photo-wrapper">
-                        <img src="TeamPhotos/Цыпкайкин Александр.png" alt="Цыпкайкин Александр" class="member-photo">
+                        <img src="TeamPhotos/Цыпкайкин Александр.png" alt="Цыпкайкин Александр" class="member-photo" loading="lazy">
                     </div>
                     <h3 class="member-name">Александр Цыпкайкин</h3>
                     <p class="member-role">Программист-разработчик</p>
@@ -440,5 +457,8 @@
 
     <!-- 🔔 ОБНОВЛЕНИЕ BADGES - загружается последним -->
     <script src="badges-update.js"></script>
+
+    <!-- ✨ СОВРЕМЕННЫЕ ВЗАИМОДЕЙСТВИЯ - профессиональные улучшения UX -->
+    <script src="modern-interactions.js" defer></script>
 </body>
 </html>

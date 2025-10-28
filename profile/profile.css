@@ -383,7 +383,7 @@
         0 0 80px rgba(255, 204, 0, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(20px);
-    overflow: hidden;
+    overflow: visible; /* ✅ ИСПРАВЛЕНО: Было hidden */
 }
 
 .travel-gallery-section::before {
@@ -662,6 +662,37 @@
     .more-overlay {
         font-size: 1.8rem;
     }
+
+    /* Travel card content на планшетах */
+    .travel-card-content {
+        padding: 20px;
+    }
+
+    .travel-card-title {
+        font-size: 1.25rem;
+    }
+
+    .travel-card-text {
+        font-size: 0.95rem;
+    }
+
+    .travel-card-footer {
+        padding: 14px 20px;
+    }
+
+    .travel-gallery-section {
+        padding: 28px;
+        margin: 30px 0 25px 0;
+    }
+
+    .gallery-title {
+        font-size: 1.6rem;
+    }
+
+    .add-travel-btn {
+        padding: 10px 18px;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 480px) {
@@ -676,6 +707,44 @@
     .no-images {
         height: 180px;
         font-size: 1rem;
+    }
+
+    /* Travel card content на мобильных */
+    .travel-card-content {
+        padding: 16px;
+    }
+
+    .travel-card-title {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .travel-card-text {
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .travel-card-footer {
+        padding: 12px 16px;
+    }
+
+    .like-btn {
+        padding: 6px 14px;
+        font-size: 0.9rem;
+    }
+
+    .travel-gallery-section {
+        padding: 20px;
+        margin: 25px 0 20px 0;
+    }
+
+    .gallery-title {
+        font-size: 1.4rem;
+    }
+
+    .add-travel-btn {
+        padding: 8px 14px;
+        font-size: 0.85rem;
     }
 }
 
@@ -737,6 +806,85 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   НОВЫЕ СТИЛИ ДЛЯ .travel-card-content
+   (profile.js использует эти классы)
+   ======================================== */
+
+.travel-card-content {
+    padding: 24px;
+    position: relative;
+    background: transparent;
+}
+
+.travel-card-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffcc00, #ff8e53);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 14px 0;
+    filter: drop-shadow(0 2px 6px rgba(255, 204, 0, 0.3));
+    line-height: 1.4;
+}
+
+.travel-card-text {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.7;
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.travel-card-footer {
+    padding: 16px 24px;
+    border-top: 1px solid rgba(255, 204, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.like-btn {
+    background: transparent;
+    border: 2px solid rgba(255, 204, 0, 0.2);
+    border-radius: 24px;
+    padding: 8px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.like-btn:hover {
+    background: rgba(255, 204, 0, 0.1);
+    border-color: rgba(255, 204, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.like-btn.liked {
+    background: rgba(255, 107, 107, 0.15);
+    border-color: rgba(255, 107, 107, 0.4);
+}
+
+.like-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.like-count {
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .delete-travel-btn {

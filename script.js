@@ -952,6 +952,9 @@ function openPartnerRoute(partner) {
 
 // Функция показа модального окна выбора навигации
 function showNavigationChoice(place) {
+    console.log('🗺️ showNavigationChoice вызвана для:', place);
+    console.log('📍 Координаты:', place.coordinates);
+
     // Создаем модальное окно
     const modal = document.createElement('div');
     modal.id = 'navigationModal';
@@ -996,6 +999,7 @@ function showNavigationChoice(place) {
     `;
 
     document.body.appendChild(modal);
+    console.log('✅ Модальное окно добавлено в DOM');
 
     // Добавляем обработчики событий
     const overlay = modal.querySelector('.navigation-modal-overlay');
@@ -1007,16 +1011,19 @@ function showNavigationChoice(place) {
     closeBtn.addEventListener('click', closeNavigationModal);
 
     btn2gis.addEventListener('click', () => {
+        console.log('🗺️ Клик по 2GIS');
         openIn2GIS(place.name, place.coordinates);
     });
 
     btnYandex.addEventListener('click', () => {
+        console.log('🗺️ Клик по Yandex');
         openInYandex(place.name, place.coordinates);
     });
 
     // Анимация появления
     setTimeout(() => {
         modal.classList.add('active');
+        console.log('✅ Класс "active" добавлен, модальное окно должно быть видимым');
     }, 10);
 }
 

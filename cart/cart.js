@@ -148,18 +148,37 @@ class MatryoshkaCart {
         };
 
         // Собираем всех партнеров из купленных пакетов
-        let allPackagePartners = [];
+        // Используем Map для удаления дубликатов по имени партнера
+        const partnersMap = new Map();
+
         this.purchasedPackages.forEach(pkg => {
             // 🔥 СНАЧАЛА ПРОВЕРЯЕМ, СОХРАНЕНЫ ЛИ ПАРТНЕРЫ С ПАКЕТОМ
             if (pkg.partners && Array.isArray(pkg.partners) && pkg.partners.length > 0) {
                 // Используем сохраненных партнеров
                 pkg.partners.forEach(partner => {
-                    allPackagePartners.push({
-                        ...partner,
-                        packageName: pkg.name,
-                        packageId: pkg.id,
-                        expiresAt: pkg.expiresAt
-                    });
+                    const partnerKey = partner.name; // Уникальный ключ - имя партнера
+
+                    // Добавляем только если партнера еще нет в Map
+                    if (!partnersMap.has(partnerKey)) {
+                        partnersMap.set(partnerKey, {
+                            ...partner,
+                            packageName: pkg.name,
+                            packageId: pkg.id,
+                            expiresAt: pkg.expiresAt
+                        });
+                    } else {
+                        // Если партнер уже есть, можем обновить пакет если нужно
+                        const existing = partnersMap.get(partnerKey);
+                        // Сохраняем тот пакет, который истекает позже
+                        if (new Date(pkg.expiresAt) > new Date(existing.expiresAt)) {
+                            partnersMap.set(partnerKey, {
+                                ...partner,
+                                packageName: pkg.name,
+                                packageId: pkg.id,
+                                expiresAt: pkg.expiresAt
+                            });
+                        }
+                    }
                 });
                 console.log(`✅ Загружены партнеры из пакета "${pkg.name}": ${pkg.partners.length} шт.`);
             } else {
@@ -172,13 +191,17 @@ class MatryoshkaCart {
                             if (region.name === cityName || region.city === cityName) {
                                 if (region.partners && region.partners.length > 0) {
                                     region.partners.forEach(partner => {
-                                        allPackagePartners.push({
-                                            ...partner,
-                                            cityName: partner.city || cityName,
-                                            packageName: pkg.name,
-                                            packageId: pkg.id,
-                                            expiresAt: pkg.expiresAt
-                                        });
+                                        const partnerKey = partner.name;
+
+                                        if (!partnersMap.has(partnerKey)) {
+                                            partnersMap.set(partnerKey, {
+                                                ...partner,
+                                                cityName: partner.city || cityName,
+                                                packageName: pkg.name,
+                                                packageId: pkg.id,
+                                                expiresAt: pkg.expiresAt
+                                            });
+                                        }
                                     });
                                 }
                             }
@@ -187,6 +210,33 @@ class MatryoshkaCart {
                 }
             }
         });
+
+        // Конвертируем Map обратно в массив
+        const allPackagePartners = Array.from(partnersMap.values());
+
+        // 🎯 СОБИРАЕМ ЗАДАНИЯ ИЗ КУПЛЕННЫХ ПАКЕТОВ
+        let allPackageQuests = [];
+        if (window.matryoshkaQuests && window.matryoshkaQuests.quests) {
+            this.purchasedPackages.forEach(pkg => {
+                // Фильтруем задания, которые относятся к регионам из этого пакета
+                pkg.cities.forEach(cityName => {
+                    // Находим задания для этого города
+                    const cityQuests = window.matryoshkaQuests.quests.filter(quest => {
+                        return quest.regionName === cityName;
+                    });
+
+                    cityQuests.forEach(quest => {
+                        allPackageQuests.push({
+                            ...quest,
+                            packageName: pkg.name,
+                            packageId: pkg.id,
+                            packageExpiresAt: pkg.expiresAt
+                        });
+                    });
+                });
+            });
+            console.log(`✅ Загружено заданий для пакетов: ${allPackageQuests.length} шт.`);
+        }
 
         return `
             <div class="packages-section" data-animate="fadeInUp" data-delay="200">
@@ -264,6 +314,55 @@ class MatryoshkaCart {
                         </div>
                     </div>
                 ` : ''}
+
+                ${allPackageQuests.length > 0 ? `
+                    <div class="package-quests-section">
+                        <h3 class="partners-section-title">
+                            <span>🎯</span> Задания из пакетов (${allPackageQuests.length})
+                        </h3>
+                        <div class="coupons-grid">
+                            ${allPackageQuests.map((quest, index) => {
+                                const daysLeft = getDaysLeft(quest.packageExpiresAt);
+                                const expiresDate = new Date(quest.packageExpiresAt).toLocaleDateString('ru-RU');
+                                const isExpiringSoon = daysLeft <= 2;
+                                const isCompleted = quest.status === 'completed';
+
+                                return `
+                                    <div class="coupon-card quest-card-cart ${isExpiringSoon ? 'expiring-soon' : ''} ${isCompleted ? 'completed' : ''}" data-quest-index="${index}">
+                                        <div class="coupon-emoji">${isCompleted ? '✅' : '🎯'}</div>
+                                        <div class="coupon-info">
+                                            <div class="coupon-name">${quest.title}</div>
+                                            <div class="coupon-type">${quest.description}</div>
+                                            <div class="coupon-region">📍 ${quest.regionName}</div>
+                                            <div class="coupon-package">🎒 ${quest.packageName}</div>
+                                            <div class="coupon-expiry ${isExpiringSoon ? 'expiring' : ''}">
+                                                <span class="expiry-icon">⏱️</span>
+                                                <span>До ${expiresDate} (${daysLeft} дн.)</span>
+                                            </div>
+                                            ${quest.rewardText ? `<div class="coupon-offer">🎁 ${quest.rewardText}</div>` : ''}
+                                            ${isCompleted && quest.completedDate ? `
+                                                <div class="quest-completed-date" style="margin-top: 8px; font-size: 12px; color: #10b981;">
+                                                    ✅ Выполнено: ${new Date(quest.completedDate).toLocaleDateString('ru-RU')}
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                        ${isCompleted && quest.qrCode ? `
+                                            <button class="coupon-qr-btn" onclick="matryoshkaCart.showQuestQR('${quest.id}')">
+                                                <span class="qr-icon">📱</span>
+                                                <span class="qr-text">Показать QR</span>
+                                            </button>
+                                        ` : !isCompleted ? `
+                                            <button class="coupon-qr-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showQuests()">
+                                                <span class="qr-icon">🎯</span>
+                                                <span class="qr-text">Выполнить</span>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                ` : ''}
             </div>
         `;
     }
@@ -304,51 +403,129 @@ class MatryoshkaCart {
             }
         });
 
-        if (allRegionPartners.length === 0) {
+        // 🎯 СОБИРАЕМ ЗАДАНИЯ ИЗ КУПЛЕННЫХ РЕГИОНОВ
+        let allRegionQuests = [];
+        if (window.matryoshkaQuests && window.matryoshkaQuests.quests) {
+            this.paidRegions.forEach(region => {
+                const regionId = typeof region === 'string' ? region : region.id;
+                const regionExpiry = typeof region === 'object' ? region.expiresAt : null;
+
+                const regionData = window.RUSSIA_REGIONS_DATA?.[regionId];
+                if (regionData) {
+                    // Находим задания для этого региона
+                    const regionQuests = window.matryoshkaQuests.quests.filter(quest => {
+                        return quest.regionName === regionData.name;
+                    });
+
+                    regionQuests.forEach(quest => {
+                        allRegionQuests.push({
+                            ...quest,
+                            regionExpiresAt: regionExpiry
+                        });
+                    });
+                }
+            });
+            console.log(`✅ Загружено заданий для регионов: ${allRegionQuests.length} шт.`);
+        }
+
+        if (allRegionPartners.length === 0 && allRegionQuests.length === 0) {
             return '';
         }
 
         return `
             <div class="coupons-section" data-animate="fadeInUp" data-delay="400">
-                <div class="coupons-header">
-                    <h3 class="coupons-title">
-                        <span>🎫</span> Купоны из регионов
-                    </h3>
-                    <p class="coupons-subtitle">${allRegionPartners.length} доступных</p>
-                </div>
-                <div class="coupons-grid">
-                    ${allRegionPartners.map((partner, index) => {
-                        const daysLeft = partner.expiresAt ? getDaysLeft(partner.expiresAt) : null;
-                        const expiresDate = partner.expiresAt ? new Date(partner.expiresAt).toLocaleDateString('ru-RU') : null;
-                        const isExpiringSoon = daysLeft && daysLeft <= 2;
+                ${allRegionPartners.length > 0 ? `
+                    <div class="coupons-header">
+                        <h3 class="coupons-title">
+                            <span>🎫</span> Купоны из регионов
+                        </h3>
+                        <p class="coupons-subtitle">${allRegionPartners.length} доступных</p>
+                    </div>
+                    <div class="coupons-grid">
+                        ${allRegionPartners.map((partner, index) => {
+                            const daysLeft = partner.expiresAt ? getDaysLeft(partner.expiresAt) : null;
+                            const expiresDate = partner.expiresAt ? new Date(partner.expiresAt).toLocaleDateString('ru-RU') : null;
+                            const isExpiringSoon = daysLeft && daysLeft <= 2;
 
-                        return `
-                            <div class="coupon-card ${isExpiringSoon ? 'expiring-soon' : ''}" data-partner-index="${index}">
-                                <div class="coupon-emoji">${partner.emoji}</div>
-                                <div class="coupon-info">
-                                    <div class="coupon-name">${partner.name}</div>
-                                    <div class="coupon-type">${partner.type}</div>
-                                    <div class="coupon-region">📍 ${partner.regionName}</div>
-                                    ${partner.expiresAt ? `
-                                        <div class="coupon-expiry ${isExpiringSoon ? 'expiring' : ''}">
-                                            <span class="expiry-icon">⏱️</span>
-                                            <span>До ${expiresDate} (${daysLeft} дн.)</span>
+                            return `
+                                <div class="coupon-card ${isExpiringSoon ? 'expiring-soon' : ''}" data-partner-index="${index}">
+                                    <div class="coupon-emoji">${partner.emoji}</div>
+                                    <div class="coupon-info">
+                                        <div class="coupon-name">${partner.name}</div>
+                                        <div class="coupon-type">${partner.type}</div>
+                                        <div class="coupon-region">📍 ${partner.regionName}</div>
+                                        ${partner.expiresAt ? `
+                                            <div class="coupon-expiry ${isExpiringSoon ? 'expiring' : ''}">
+                                                <span class="expiry-icon">⏱️</span>
+                                                <span>До ${expiresDate} (${daysLeft} дн.)</span>
+                                            </div>
+                                        ` : ''}
+                                        <div class="coupon-rating">
+                                            <span>⭐</span>
+                                            <span>${partner.rating}</span>
                                         </div>
-                                    ` : ''}
-                                    <div class="coupon-rating">
-                                        <span>⭐</span>
-                                        <span>${partner.rating}</span>
+                                        ${partner.specialOffer ? `<div class="coupon-offer">🎁 ${partner.specialOffer}</div>` : ''}
                                     </div>
-                                    ${partner.specialOffer ? `<div class="coupon-offer">🎁 ${partner.specialOffer}</div>` : ''}
+                                    <button class="coupon-qr-btn" onclick="matryoshkaCart.showPartnerQR('${partner.name.replace(/'/g, "\\'")}', '${partner.emoji}')">
+                                        <span class="qr-icon">📱</span>
+                                        <span class="qr-text">Показать QR</span>
+                                    </button>
                                 </div>
-                                <button class="coupon-qr-btn" onclick="matryoshkaCart.showPartnerQR('${partner.name.replace(/'/g, "\\'")}', '${partner.emoji}')">
-                                    <span class="qr-icon">📱</span>
-                                    <span class="qr-text">Показать QR</span>
-                                </button>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                ` : ''}
+
+                ${allRegionQuests.length > 0 ? `
+                    <div class="region-quests-section" style="margin-top: ${allRegionPartners.length > 0 ? '30px' : '0'};">
+                        <h3 class="coupons-title">
+                            <span>🎯</span> Задания из регионов
+                        </h3>
+                        <p class="coupons-subtitle">${allRegionQuests.length} доступных</p>
+                        <div class="coupons-grid">
+                            ${allRegionQuests.map((quest, index) => {
+                                const daysLeft = quest.regionExpiresAt ? getDaysLeft(quest.regionExpiresAt) : null;
+                                const expiresDate = quest.regionExpiresAt ? new Date(quest.regionExpiresAt).toLocaleDateString('ru-RU') : null;
+                                const isExpiringSoon = daysLeft && daysLeft <= 2;
+                                const isCompleted = quest.status === 'completed';
+
+                                return `
+                                    <div class="coupon-card quest-card-cart ${isExpiringSoon ? 'expiring-soon' : ''} ${isCompleted ? 'completed' : ''}" data-quest-index="${index}">
+                                        <div class="coupon-emoji">${isCompleted ? '✅' : '🎯'}</div>
+                                        <div class="coupon-info">
+                                            <div class="coupon-name">${quest.title}</div>
+                                            <div class="coupon-type">${quest.description}</div>
+                                            <div class="coupon-region">📍 ${quest.regionName}</div>
+                                            ${quest.regionExpiresAt ? `
+                                                <div class="coupon-expiry ${isExpiringSoon ? 'expiring' : ''}">
+                                                    <span class="expiry-icon">⏱️</span>
+                                                    <span>До ${expiresDate} (${daysLeft} дн.)</span>
+                                                </div>
+                                            ` : ''}
+                                            ${quest.rewardText ? `<div class="coupon-offer">🎁 ${quest.rewardText}</div>` : ''}
+                                            ${isCompleted && quest.completedDate ? `
+                                                <div class="quest-completed-date" style="margin-top: 8px; font-size: 12px; color: #10b981;">
+                                                    ✅ Выполнено: ${new Date(quest.completedDate).toLocaleDateString('ru-RU')}
+                                                </div>
+                                            ` : ''}
+                                        </div>
+                                        ${isCompleted && quest.qrCode ? `
+                                            <button class="coupon-qr-btn" onclick="matryoshkaCart.showQuestQR('${quest.id}')">
+                                                <span class="qr-icon">📱</span>
+                                                <span class="qr-text">Показать QR</span>
+                                            </button>
+                                        ` : !isCompleted ? `
+                                            <button class="coupon-qr-btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" onclick="showQuests()">
+                                                <span class="qr-icon">🎯</span>
+                                                <span class="qr-text">Выполнить</span>
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                ` : ''}
             </div>
         `;
     }
@@ -371,6 +548,19 @@ class MatryoshkaCart {
             window.matryoshkaQR.showQRCode(partnerData);
         } else {
             console.error('❌ MatryoshkaQR не загружен');
+        }
+    }
+
+    /**
+     * Показать QR-код из задания
+     */
+    showQuestQR(questId) {
+        console.log('🔲 Показываем QR для задания из корзины:', questId);
+
+        if (window.matryoshkaQuests && typeof window.matryoshkaQuests.showQRFullscreen === 'function') {
+            window.matryoshkaQuests.showQRFullscreen(questId);
+        } else {
+            console.error('❌ MatryoshkaQuests не загружен');
         }
     }
 

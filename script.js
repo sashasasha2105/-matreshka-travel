@@ -58,6 +58,19 @@ let globalTravelFeed = [];
 
 // Глобальные переменные
 
+// Утилита debounce для оптимизации производительности
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+
 // Получаем данные регионов из внешнего файла
 let russiaRegions = [];
 
@@ -129,8 +142,8 @@ function displayUserInfo() {
     }
 }
 
-// Функция поиска регионов
-function searchRegions(query) {
+// Функция поиска регионов (внутренняя, без debounce)
+function searchRegionsInternal(query) {
     searchQuery = query.toLowerCase().trim();
     currentPage = 0; // Сбрасываем на первую страницу
     loadRegions();
@@ -142,6 +155,9 @@ function searchRegions(query) {
         console.log(`🔍 Поиск: "${query}" - найдено ${totalRegions} регионов`);
     }
 }
+
+// Функция поиска регионов с debounce (публичная)
+const searchRegions = debounce(searchRegionsInternal, 300);
 
 // Функция фильтрации регионов
 function getFilteredRegions() {
@@ -178,6 +194,24 @@ function loadRegions() {
     if (currentPage === 0) {
         // Первая загрузка - очищаем все и показываем первые 6
         regionsGrid.innerHTML = '';
+
+        // Проверяем есть ли результаты поиска
+        if (filteredRegions.length === 0 && searchQuery) {
+            // Показываем сообщение о пустом результате поиска
+            regionsGrid.innerHTML = `
+                <div class="search-empty">
+                    <div class="search-empty-icon">🔍</div>
+                    <div class="search-empty-title">Ничего не найдено</div>
+                    <div class="search-empty-text">По запросу "${searchQuery}" регионы не найдены</div>
+                    <button class="search-clear-btn" onclick="clearSearchAndReload()">
+                        <span>✕</span>
+                        <span>Очистить поиск</span>
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
         const regionsToShow = filteredRegions.slice(0, REGIONS_PER_PAGE);
 
         regionsToShow.forEach((region, index) => {
@@ -202,6 +236,23 @@ function loadRegions() {
     // Загружаем ленту путешествий после первой загрузки
     if (currentPage === 0) {
         loadTravelFeed();
+    }
+}
+
+// Функция очистки поиска и перезагрузки
+function clearSearchAndReload() {
+    const searchInput = document.getElementById('regionSearch');
+    if (searchInput) {
+        searchInput.value = '';
+    }
+    searchQuery = '';
+    currentPage = 0;
+    loadRegions();
+
+    // Скрываем кнопку очистки
+    const clearBtn = document.querySelector('.search-clear');
+    if (clearBtn) {
+        clearBtn.style.display = 'none';
     }
 }
 
@@ -399,11 +450,16 @@ function toggleFeedLike(postId, button) {
 // Функция загрузки пакетов путешествий перенесена в packages.js
 // Используем функции из packages.js: loadTravelPackages(), showPackageModal()
 
-// Функция показа уведомлений
+// Функция показа уведомлений с поддержкой accessibility
 function showToast(message, duration = 3000) {
     const toast = document.createElement('div');
     toast.className = 'matryoshka-toast';
     toast.textContent = message;
+
+    // Добавляем ARIA атрибуты для accessibility
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'polite');
+    toast.setAttribute('aria-atomic', 'true');
 
     Object.assign(toast.style, {
         position: 'fixed',
@@ -418,15 +474,36 @@ function showToast(message, duration = 3000) {
         fontSize: '14px',
         zIndex: '10000',
         boxShadow: '0 8px 32px rgba(255, 204, 0, 0.3)',
-        animation: 'fadeInUp 0.3s ease-out'
+        animation: 'fadeInUp 0.3s ease-out',
+        maxWidth: '90%',
+        textAlign: 'center'
     });
 
     document.body.appendChild(toast);
 
-    setTimeout(() => {
+    // Автоматически удаляем после duration
+    const timeoutId = setTimeout(() => {
         toast.style.animation = 'fadeOut 0.3s ease-out forwards';
-        setTimeout(() => toast.remove(), 300);
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 300);
     }, duration);
+
+    // Добавляем возможность закрыть по клику
+    toast.addEventListener('click', () => {
+        clearTimeout(timeoutId);
+        toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 300);
+    });
+
+    // Добавляем курсор pointer для подсказки что можно кликнуть
+    toast.style.cursor = 'pointer';
 }
 
 // Функция добавления поста в ленту
@@ -879,6 +956,7 @@ function showNavigationChoice(place) {
     const modal = document.createElement('div');
     modal.id = 'navigationModal';
     modal.className = 'navigation-modal';
+    modal.setAttribute('data-auto-modal', ''); // Авто-инициализация ModalManager
     modal.innerHTML = `
         <div class="navigation-modal-overlay"></div>
         <div class="navigation-modal-content">
@@ -1080,6 +1158,7 @@ function showPaymentModal() {
     const modal = document.createElement('div');
     modal.id = 'paymentModal';
     modal.className = 'payment-modal';
+    modal.setAttribute('data-auto-modal', ''); // Авто-инициализация ModalManager
     modal.innerHTML = `
         <div class="payment-modal-overlay"></div>
         <div class="payment-modal-content">
@@ -1368,6 +1447,9 @@ function showProfile() {
     // Скрываем команду
     updateTeamVisibility();
 
+    // Обновляем навигацию
+    updateBottomNav('profile');
+
     // Показываем BackButton в Telegram
     if (tg && tg.BackButton) {
         tg.BackButton.show();
@@ -1401,6 +1483,9 @@ function hideProfile() {
 
     // Показываем команду
     updateTeamVisibility();
+
+    // Обновляем навигацию
+    updateBottomNav(null);
 
     // Скрываем BackButton в Telegram
     if (tg && tg.BackButton) {
@@ -1540,20 +1625,6 @@ function updateBottomNav(activePage) {
         }
     });
 }
-
-// Обновляем функцию hideProfile для синхронизации навигации
-const originalHideProfile = hideProfile;
-hideProfile = function() {
-    originalHideProfile();
-    updateBottomNav(null);
-};
-
-// Обновляем функцию showProfile для синхронизации навигации
-const originalShowProfile = showProfile;
-showProfile = function() {
-    originalShowProfile();
-    updateBottomNav('profile');
-};
 
 // Обработчик кнопки "Назад" в корзине
 document.addEventListener('DOMContentLoaded', function() {

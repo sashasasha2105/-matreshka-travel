@@ -118,25 +118,39 @@
 
         // Генерация QR-кода
         generateQRCode(quest) {
-            // Простой QR-код с данными о бонусе
-            const qrData = {
-                questId: quest.id,
-                region: quest.regionName,
-                partner: quest.partner ? quest.partner.name : 'Партнер',
-                bonus: quest.partner ? quest.partner.description : 'Специальный бонус',
-                date: new Date().toISOString()
-            };
+            // Проверяем доступность библиотеки QRious
+            if (typeof QRious === 'undefined') {
+                console.error('❌ QRious библиотека не загружена');
+                console.warn('QR-код не может быть сгенерирован. Проверьте подключение библиотеки.');
 
-            // Используем QRCode.js библиотеку для генерации
-            const canvas = document.createElement('canvas');
-            const qr = new QRious({
-                element: canvas,
-                value: JSON.stringify(qrData),
-                size: 300,
-                level: 'H'
-            });
+                // Возвращаем заглушку или null
+                return null;
+            }
 
-            return canvas.toDataURL();
+            try {
+                // Простой QR-код с данными о бонусе
+                const qrData = {
+                    questId: quest.id,
+                    region: quest.regionName,
+                    partner: quest.partner ? quest.partner.name : 'Партнер',
+                    bonus: quest.partner ? quest.partner.description : 'Специальный бонус',
+                    date: new Date().toISOString()
+                };
+
+                // Используем QRCode.js библиотеку для генерации
+                const canvas = document.createElement('canvas');
+                const qr = new QRious({
+                    element: canvas,
+                    value: JSON.stringify(qrData),
+                    size: 300,
+                    level: 'H'
+                });
+
+                return canvas.toDataURL();
+            } catch (error) {
+                console.error('❌ Ошибка генерации QR-кода:', error);
+                return null;
+            }
         }
 
         // Обновление бейджа с количеством доступных заданий

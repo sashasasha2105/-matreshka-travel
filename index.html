@@ -8,7 +8,13 @@
     <meta name="description" content="Матрешка - откройте для себя красоту и разнообразие России. Путешествуйте по регионам, выполняйте задания, получайте награды.">
     <title>Матрешка - Путешествуй по России</title>
 
-    <!-- DNS Prefetch для внешних ресурсов -->
+    <!-- Preconnect для внешних ресурсов (быстрее чем dns-prefetch) -->
+    <link rel="preconnect" href="https://telegram.org" crossorigin>
+    <link rel="preconnect" href="https://sketchfab.com" crossorigin>
+    <link rel="preconnect" href="https://mapgl.2gis.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+
+    <!-- DNS Prefetch как fallback -->
     <link rel="dns-prefetch" href="//telegram.org">
     <link rel="dns-prefetch" href="//sketchfab.com">
     <link rel="dns-prefetch" href="//mapgl.2gis.com">
@@ -58,8 +64,26 @@
     <!-- ✨ СОВРЕМЕННЫЕ ЭФФЕКТЫ - профессиональные улучшения -->
     <link rel="stylesheet" href="modern-effects.css?v=1.0">
 
+    <!-- 🎯 ЕДИНАЯ Z-INDEX СИСТЕМА -->
+    <link rel="stylesheet" href="z-index-system.css?v=1.0">
+
+    <!-- 📱 КРИТИЧЕСКИЕ МОБИЛЬНЫЕ ИСПРАВЛЕНИЯ - загружается последним для override -->
+    <link rel="stylesheet" href="mobile-fixes.css?v=1.0">
+
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Глобальный обработчик ошибок - загружается первым -->
+    <script src="error-handler.js"></script>
+
+    <!-- Modal Manager с focus trap и keyboard navigation -->
+    <script src="modal-manager.js"></script>
+
+    <!-- Viewport height fix для iOS Safari -->
+    <script src="viewport-height-fix.js"></script>
+
+    <!-- Lazy loading для изображений -->
+    <script src="lazy-loading.js" defer></script>
 </head>
 <body>
     <div class="container">

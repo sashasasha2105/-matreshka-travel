@@ -48,7 +48,13 @@
       "Bash(git push:*)",
       "Bash(git remote set-url:*)",
       "Bash(open:*)",
-      "Bash(git remote:*)"
+      "Bash(git remote:*)",
+      "Bash(find:*)",
+      "Bash(/tmp/wait_for_telegram.sh)",
+      "Bash(railway:*)",
+      "Bash(du -sh:*)",
+      "Bash(ls:*)",
+      "Bash(git log:*)"
     ],
     "deny": [],
     "ask": []

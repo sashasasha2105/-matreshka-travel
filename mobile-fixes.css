@@ -1,0 +1,392 @@
+/**
+ * КРИТИЧЕСКИЕ МОБИЛЬНЫЕ ИСПРАВЛЕНИЯ
+ * Решает все найденные мобильные баги
+ */
+
+/* ================================================
+   БАГ #2: ИСПРАВЛЕНИЕ 100vh ДЛЯ iOS Safari
+   ================================================ */
+
+/* Правильная высота viewport для iOS */
+:root {
+    --vh: 1vh;
+}
+
+/* Используем CSS переменные вместо 100vh */
+.hero-section {
+    min-height: 100vh;
+    min-height: calc(var(--vh, 1vh) * 100);
+    min-height: 100dvh; /* Dynamic viewport height для новых браузеров */
+}
+
+@supports (-webkit-touch-callout: none) {
+    /* iOS Safari specific */
+    .hero-section {
+        min-height: -webkit-fill-available;
+    }
+}
+
+/* Исправляем все места где используется 100vh */
+.profile-section,
+#mainSection,
+#regionDetails,
+#profileSection,
+#cartSection,
+#questsSection {
+    min-height: calc(var(--vh, 1vh) * 100);
+}
+
+@media (max-width: 640px) {
+    .hero-section {
+        height: auto;
+        min-height: calc(var(--vh, 1vh) * 60);
+        max-height: none;
+    }
+}
+
+/* ================================================
+   БАГ #3: УБИРАЕМ HORIZONTAL SCROLL
+   ================================================ */
+
+/* Глобальное предотвращение horizontal scroll */
+html {
+    overflow-x: clip !important;
+    max-width: 100%;
+}
+
+body {
+    overflow-x: clip !important;
+    max-width: 100%;
+    position: relative;
+}
+
+/* Все контейнеры в пределах viewport */
+* {
+    max-width: 100%;
+}
+
+.container,
+#mainSection,
+#regionDetails,
+#profileSection,
+#cartSection,
+#questsSection {
+    overflow-x: clip !important;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Предотвращаем вылезание элементов */
+.hero-section,
+.regions-grid,
+.packages-grid,
+.partners-grid {
+    max-width: 100%;
+    overflow-x: clip;
+    box-sizing: border-box;
+}
+
+/* Images и media */
+img, video, iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Убираем проблемные 100vw */
+.modal-content {
+    max-width: calc(100vw - 32px) !important;
+}
+
+/* ================================================
+   БАГ #4: SAFE AREA ДЛЯ iPhone X+
+   ================================================ */
+
+/* Safe area для всех fixed элементов */
+.bottom-nav {
+    padding-bottom: max(8px, env(safe-area-inset-bottom)) !important;
+    height: calc(70px + env(safe-area-inset-bottom)) !important;
+    bottom: 0 !important;
+}
+
+/* Контент с отступом от bottom-nav с учетом safe area */
+.container {
+    padding-bottom: calc(var(--bottom-nav-height, 70px) + 24px + env(safe-area-inset-bottom)) !important;
+}
+
+/* Modals с учетом safe area */
+.modal-content,
+.payment-modal-content,
+.package-modal-content {
+    max-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 40px) !important;
+    margin-top: env(safe-area-inset-top);
+    margin-bottom: env(safe-area-inset-bottom);
+}
+
+/* ================================================
+   БАГ #5: УВЕЛИЧЕНИЕ TOUCH TARGETS ДО 44px
+   ================================================ */
+
+/* Apple/Google требования: минимум 44x44px */
+@media (hover: none) and (pointer: coarse) {
+    .nav-item,
+    button,
+    .back-btn,
+    .search-clear,
+    .partner-route-btn,
+    .partner-qr-btn,
+    .action-btn,
+    .close-btn,
+    .modal-close,
+    a.button {
+        min-height: 44px !important;
+        min-width: 44px !important;
+        padding: 12px 16px !important;
+    }
+
+    /* Увеличиваем иконки */
+    .nav-icon {
+        font-size: 1.5rem !important;
+    }
+
+    /* Badges должны быть видимыми */
+    .quests-badge,
+    .cart-badge {
+        min-width: 20px !important;
+        min-height: 20px !important;
+        padding: 4px 6px !important;
+        font-size: 0.75rem !important;
+    }
+}
+
+/* ================================================
+   БАГ #12: FONT SIZES В INPUTS >= 16px
+   ================================================ */
+
+/* Предотвращаем zoom на iOS при focus */
+input,
+textarea,
+select,
+.search-input,
+.date-input {
+    font-size: 16px !important;
+}
+
+@media (min-width: 641px) {
+    input,
+    textarea,
+    select {
+        font-size: 1rem; /* Можно меньше на больших экранах */
+    }
+}
+
+/* ================================================
+   БАГ #13: РАЗРЕШАЕМ ВЫДЕЛЕНИЕ ТЕКСТА
+   ================================================ */
+
+/* Убираем глобальный user-select: none */
+p, span, a, li, h1, h2, h3, h4, h5, h6,
+.region-description,
+.profile-bio,
+.partner-description,
+.region-name,
+.hero-title {
+    -webkit-user-select: text !important;
+    user-select: text !important;
+}
+
+/* Запрещаем только для интерактивных элементов */
+button, .nav-item, img {
+    -webkit-user-select: none !important;
+    user-select: none !important;
+}
+
+/* ================================================
+   БАГ #14: ОПТИМИЗАЦИЯ will-change
+   ================================================ */
+
+/* По умолчанию will-change: auto */
+* {
+    will-change: auto !important;
+}
+
+/* Добавляем will-change только во время hover/active */
+@media (hover: hover) {
+    .region-card:hover,
+    .nav-item:hover,
+    button:hover {
+        will-change: transform;
+    }
+}
+
+/* На touch устройствах will-change только при :active */
+@media (hover: none) {
+    .region-card:active,
+    .nav-item:active,
+    button:active {
+        will-change: transform;
+    }
+}
+
+/* ================================================
+   БАГ #15: TAP HIGHLIGHT FEEDBACK
+   ================================================ */
+
+/* Легкая подсветка при tap */
+a, button, .nav-item, .region-card {
+    -webkit-tap-highlight-color: rgba(255, 204, 0, 0.15) !important;
+}
+
+/* Визуальная обратная связь при :active */
+button:active,
+.nav-item:active,
+.region-card:active {
+    background: rgba(255, 204, 0, 0.1) !important;
+    transform: scale(0.98) !important;
+    transition: transform 0.1s ease, background 0.1s ease !important;
+}
+
+/* ================================================
+   БАГ #16: LANDSCAPE OPTIMIZATION
+   ================================================ */
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+        height: 80vh !important;
+        min-height: 400px !important;
+    }
+
+    .bottom-nav {
+        height: calc(55px + env(safe-area-inset-bottom)) !important;
+        padding: 4px 0 !important;
+    }
+
+    .nav-label {
+        display: none !important;
+    }
+
+    .nav-item {
+        min-width: 50px !important;
+    }
+
+    .profile-avatar {
+        width: 70px !important;
+        height: 70px !important;
+    }
+}
+
+/* ================================================
+   БАГ #18: BACKDROP-FILTER FALLBACK
+   ================================================ */
+
+.bottom-nav,
+.modal-overlay,
+.hero-overlay {
+    background: rgba(15, 5, 32, 0.95) !important;
+}
+
+@supports (backdrop-filter: blur(20px)) {
+    .bottom-nav {
+        background: rgba(15, 5, 32, 0.85) !important;
+        backdrop-filter: blur(20px) !important;
+        -webkit-backdrop-filter: blur(20px) !important;
+    }
+
+    .modal-overlay {
+        background: rgba(0, 0, 0, 0.7) !important;
+        backdrop-filter: blur(10px) !important;
+        -webkit-backdrop-filter: blur(10px) !important;
+    }
+}
+
+/* ================================================
+   БАГ #10: ОТКЛЮЧЕНИЕ ТЯЖЕЛЫХ ANIMATIONS
+   ================================================ */
+
+/* Отключаем тяжелые анимации на слабых устройствах */
+@media (max-width: 768px) and (hover: none) {
+    .hero-title,
+    .matryoshka-name {
+        animation: none !important;
+        background: linear-gradient(135deg, #ffffff, #ffcc00, #ff8e53) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+
+    .hero-section::before,
+    .hero-section::after {
+        animation: none !important;
+    }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ================================================
+   БАГ #7: OVERFLOW CONFLICTS
+   ================================================ */
+
+/* Единая стратегия overflow */
+.profile-section,
+.profile-content {
+    overflow: visible !important;
+}
+
+#mainSection,
+#regionDetails,
+#profileSection,
+#cartSection,
+#questsSection {
+    overflow-y: auto !important;
+    overflow-x: clip !important;
+}
+
+.modal-content {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+}
+
+/* ================================================
+   ДОПОЛНИТЕЛЬНЫЕ ОПТИМИЗАЦИИ
+   ================================================ */
+
+/* Smooth scrolling для iOS */
+html {
+    -webkit-overflow-scrolling: touch !important;
+}
+
+/* Убираем bounce на границах */
+body {
+    overscroll-behavior-y: none !important;
+}
+
+/* Оптимизация производительности */
+.region-card,
+.partner-card,
+.package-card {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 400px;
+}
+
+/* Убираем задержку клика на iOS */
+a, button, input, textarea {
+    touch-action: manipulation !important;
+}
+
+/* Предотвращаем zoom на double-tap */
+* {
+    touch-action: pan-x pan-y !important;
+}
+
+button, a, .nav-item {
+    touch-action: manipulation !important;
+}

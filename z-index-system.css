@@ -1,0 +1,87 @@
+/**
+ * ЕДИНАЯ Z-INDEX СИСТЕМА
+ * Решает проблему хаотичных z-index значений по всему проекту
+ */
+
+:root {
+    /* Z-index шкала - от меньшего к большему */
+    --z-base: 1;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-header: 300;
+    --z-fixed-nav: 1000;
+    --z-overlay: 2000;
+    --z-modal: 3000;
+    --z-toast: 4000;
+    --z-tooltip: 5000;
+}
+
+/* Применяем единую систему */
+
+/* Базовый слой */
+.hero-overlay,
+.hero-model-container::after {
+    z-index: var(--z-base) !important;
+}
+
+/* Header */
+.header-row {
+    z-index: var(--z-header) !important;
+}
+
+/* Dropdown и popover */
+.search-results,
+.dropdown-menu {
+    z-index: var(--z-dropdown) !important;
+}
+
+/* Fixed navigation */
+.bottom-nav {
+    z-index: var(--z-fixed-nav) !important;
+}
+
+/* Overlays */
+.modal-overlay,
+.payment-modal-overlay,
+.navigation-modal-overlay {
+    z-index: var(--z-overlay) !important;
+}
+
+/* Modals */
+.modal-content,
+.payment-modal,
+.navigation-modal,
+.package-modal,
+.profile-modal,
+.quest-modal {
+    z-index: var(--z-modal) !important;
+}
+
+/* QR коды - должны быть поверх модалок */
+.qr-modal {
+    z-index: calc(var(--z-modal) + 100) !important;
+}
+
+/* Toast уведомления */
+.matryoshka-toast,
+.toast-notification {
+    z-index: var(--z-toast) !important;
+}
+
+/* Tooltips - самые верхние */
+.tooltip {
+    z-index: var(--z-tooltip) !important;
+}
+
+/* Карты 2GIS */
+.map-container {
+    z-index: var(--z-base) !important;
+}
+
+.map-controls {
+    z-index: var(--z-dropdown) !important;
+}
+
+.organization-card-modal {
+    z-index: var(--z-modal) !important;
+}

@@ -3,6 +3,9 @@
  */
 
 // Загрузка и отображение пакетов
+let loadPackagesAttempts = 0;
+const MAX_LOAD_ATTEMPTS = 10;
+
 function loadTravelPackages() {
     console.log('📦 Загрузка пакетов путешествий...');
     console.log('🔍 window.TRAVEL_PACKAGES:', window.TRAVEL_PACKAGES);
@@ -15,18 +18,40 @@ function loadTravelPackages() {
     }
 
     if (typeof TRAVEL_PACKAGES === 'undefined') {
-        console.error('❌ TRAVEL_PACKAGES не загружены');
-        console.error('Попробуем загрузить через 100ms...');
+        loadPackagesAttempts++;
+
+        if (loadPackagesAttempts >= MAX_LOAD_ATTEMPTS) {
+            console.error('❌ TRAVEL_PACKAGES не загружены после', MAX_LOAD_ATTEMPTS, 'попыток');
+            packagesGrid.innerHTML = `
+                <div class="packages-error">
+                    <div class="error-icon">⚠️</div>
+                    <div class="error-text">Не удалось загрузить пакеты путешествий</div>
+                    <button class="retry-btn" onclick="loadPackagesAttempts = 0; loadTravelPackages()">
+                        Попробовать снова
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        console.warn(`⏳ TRAVEL_PACKAGES не загружены, попытка ${loadPackagesAttempts}/${MAX_LOAD_ATTEMPTS}...`);
         setTimeout(loadTravelPackages, 100);
         return;
     }
 
     if (!TRAVEL_PACKAGES || !Array.isArray(TRAVEL_PACKAGES)) {
         console.error('❌ TRAVEL_PACKAGES не является массивом:', TRAVEL_PACKAGES);
+        packagesGrid.innerHTML = `
+            <div class="packages-error">
+                <div class="error-icon">❌</div>
+                <div class="error-text">Ошибка формата данных пакетов</div>
+            </div>
+        `;
         return;
     }
 
     console.log(`✅ Найдено ${TRAVEL_PACKAGES.length} пакетов`);
+    loadPackagesAttempts = 0; // Сбрасываем счетчик после успешной загрузки
 
     packagesGrid.innerHTML = TRAVEL_PACKAGES.map(pkg => `
         <div class="package-card" onclick="showPackageModal('${pkg.id}')">

@@ -117,7 +117,6 @@ class MatryoshkaProfile {
                     </h3>
                     <button class="add-travel-btn" data-action="add-travel">
                         <span class="btn-icon">➕</span>
-                        <span class="btn-text">Добавить</span>
                     </button>
                 </div>
                 <div class="travel-cards" id="travelCards">
@@ -248,7 +247,7 @@ class MatryoshkaProfile {
                 <div class="no-travels">
                     <span>🗺️</span>
                     <p>Пока нет добавленных путешествий</p>
-                    <small>Нажмите "Добавить" чтобы поделиться своим опытом</small>
+                    <small>Нажмите ➕ чтобы поделиться своим опытом</small>
                 </div>
             `;
         }

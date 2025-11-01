@@ -14,159 +14,85 @@ class MatryoshkaProfile {
             name: 'Путешественник'
         };
         this.travelStories = [];
-
-        // Загружаем данные из localStorage
-        this.loadFromLocalStorage();
+        this.isInitialized = false;
     }
 
     /**
-     * Загрузка данных профиля из localStorage
+     * Загрузка данных профиля из IndexedDB
      */
-    loadFromLocalStorage() {
-        console.log('📖 Загружаем данные профиля из localStorage...');
+    async loadFromStorage() {
+        console.log('📖 Загружаем данные профиля из IndexedDB...');
         try {
-            const savedProfile = localStorage.getItem('matryoshka_profile');
-            const savedStories = localStorage.getItem('matryoshka_stories');
-            const savedAvatar = localStorage.getItem('matryoshka_avatar');
+            // Инициализируем базу данных если еще не инициализирована
+            if (!window.matryoshkaStorage.db) {
+                await window.matryoshkaStorage.init();
+            }
 
-            console.log('📦 Загружено из localStorage:', {
-                profile: savedProfile ? 'есть' : 'нет',
-                stories: savedStories ? 'есть' : 'нет',
-                avatar: savedAvatar ? 'есть' : 'нет'
-            });
-
+            // Загружаем профиль
+            const savedProfile = await window.matryoshkaStorage.getProfile();
             if (savedProfile) {
-                const parsed = JSON.parse(savedProfile);
-                this.profileData = { ...this.profileData, ...parsed };
+                this.profileData = { ...this.profileData, ...savedProfile };
+                console.log('✅ Профиль загружен');
             }
 
-            if (savedStories) {
-                const parsed = JSON.parse(savedStories);
-                this.travelStories = parsed;
-                console.log('✅ Загружено путешествий:', this.travelStories.length);
-                if (this.travelStories.length > 0) {
-                    console.log('🖼️ Первое путешествие:', this.travelStories[0].title);
-                    console.log('🖼️ Изображения в первом путешествии:', this.travelStories[0].images?.length);
-                    if (this.travelStories[0].images && this.travelStories[0].images.length > 0) {
-                        console.log('🖼️ Первое изображение (первые 100 символов):', this.travelStories[0].images[0].substring(0, 100));
-                    }
-                }
-            }
+            // Загружаем путешествия
+            this.travelStories = await window.matryoshkaStorage.getAllTravels();
+            console.log('✅ Загружено путешествий:', this.travelStories.length);
 
-            if (savedAvatar) {
-                this.user.photo_url = savedAvatar;
+            if (this.travelStories.length > 0) {
+                console.log('🖼️ Первое путешествие:', this.travelStories[0].title);
+                console.log('🖼️ Изображений:', this.travelStories[0].images?.length);
             }
         } catch (error) {
-            console.error('❌ Ошибка загрузки данных из localStorage:', error);
+            console.error('❌ Ошибка загрузки данных:', error);
         }
     }
 
     /**
-     * Сохранение данных профиля в localStorage
+     * Сохранение данных профиля в IndexedDB
      */
-    saveToLocalStorage() {
-        console.log('💾💾💾 СОХРАНЯЕМ ДАННЫЕ ПРОФИЛЯ В localStorage 💾💾💾');
+    async saveToStorage() {
+        console.log('💾 Сохраняем данные профиля в IndexedDB...');
         try {
-            // Проверяем данные ПЕРЕД сохранением
-            console.log('📊 Путешествий для сохранения:', this.travelStories.length);
+            // Сохраняем профиль
+            await window.matryoshkaStorage.saveProfile(this.profileData);
 
-            if (this.travelStories.length > 0) {
-                console.log('🔍 Проверка первого путешествия:');
-                const first = this.travelStories[0];
-                console.log('  - ID:', first.id);
-                console.log('  - Название:', first.title);
-                console.log('  - Описание:', first.text?.substring(0, 50));
-                console.log('  - Изображения:', first.images);
-                console.log('  - Количество изображений:', first.images?.length);
-
-                if (first.images && first.images.length > 0) {
-                    console.log('  - Первое изображение существует:', first.images[0] ? 'ДА' : 'НЕТ');
-                    console.log('  - Тип первого изображения:', typeof first.images[0]);
-                    console.log('  - Длина первого изображения:', (first.images[0]?.length / 1024).toFixed(2), 'KB');
-                    console.log('  - Начало первого изображения:', first.images[0]?.substring(0, 100));
-                }
+            // Сохраняем каждое путешествие
+            for (let travel of this.travelStories) {
+                await window.matryoshkaStorage.saveTravel(travel);
             }
 
-            // Проверяем размер ПЕРЕД сохранением
-            const storiesJson = JSON.stringify(this.travelStories);
-            const storiesSize = storiesJson.length;
-            console.log('📦 Размер JSON для сохранения:', (storiesSize / 1024).toFixed(2), 'KB');
+            console.log('✅ Все данные сохранены в IndexedDB');
 
-            // Проверяем общий размер localStorage
-            let currentSize = 0;
-            for (let key in localStorage) {
-                if (localStorage.hasOwnProperty(key) && key !== 'matryoshka_stories') {
-                    currentSize += localStorage[key].length + key.length;
-                }
-            }
-            const totalSize = currentSize + storiesSize;
-            console.log('📦 Текущий размер localStorage:', (currentSize / 1024).toFixed(2), 'KB');
-            console.log('📦 Размер после сохранения:', (totalSize / 1024).toFixed(2), 'KB');
-            console.log('📦 Лимит обычно: 5000-10000 KB');
-
-            // ПРЕДУПРЕЖДЕНИЕ если близко к лимиту
-            if (totalSize > 4000 * 1024) {
-                console.warn('⚠️⚠️⚠️ ВНИМАНИЕ: Размер данных близок к лимиту localStorage!');
-                console.warn('Рекомендуется удалить старые путешествия или загружать меньше фото');
-                this.showToast('⚠️ Хранилище почти заполнено! Удалите старые путешествия');
-            }
-
-            // Сохраняем
-            localStorage.setItem('matryoshka_profile', JSON.stringify(this.profileData));
-            localStorage.setItem('matryoshka_stories', storiesJson);
-            if (this.user.photo_url) {
-                localStorage.setItem('matryoshka_avatar', this.user.photo_url);
-            }
-
-            // Проверяем что сохранилось
-            const saved = localStorage.getItem('matryoshka_stories');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                console.log('✅ Проверка: сохранено путешествий в localStorage:', parsed.length);
-                if (parsed.length > 0 && parsed[0].images) {
-                    console.log('✅ Проверка: изображения в первом путешествии:', parsed[0].images.length);
-                    console.log('✅ Проверка: первое изображение (размер):', (parsed[0].images[0]?.length / 1024).toFixed(2), 'KB');
-                }
-            } else {
-                console.error('❌ КРИТИЧЕСКАЯ ОШИБКА: данные НЕ сохранились в localStorage!');
-            }
-
+            // Показываем статистику
+            const stats = await window.matryoshkaStorage.getStorageSize();
+            console.log('📊 Статистика хранилища:');
+            console.log('  - Путешествий:', stats.travels);
+            console.log('  - Фотографий:', stats.photos);
+            console.log('  - Размер:', stats.sizeMB.toFixed(2), 'MB');
         } catch (error) {
-            console.error('❌❌❌ ОШИБКА СОХРАНЕНИЯ:', error);
-            console.error('Детали ошибки:', error.message);
-
-            // Проверяем превышен ли лимит
-            if (error.name === 'QuotaExceededError' || error.code === 22) {
-                console.error('💥 ПРЕВЫШЕН ЛИМИТ localStorage!');
-                this.showToast('❌ Ошибка: превышен лимит хранилища! Удалите старые путешествия');
-
-                // Пытаемся посчитать размер
-                try {
-                    let total = 0;
-                    for (let key in localStorage) {
-                        if (localStorage.hasOwnProperty(key)) {
-                            total += localStorage[key].length + key.length;
-                        }
-                    }
-                    console.error('Текущий размер localStorage:', (total / 1024).toFixed(2), 'KB');
-                    console.error('РЕШЕНИЕ: Удалите старые путешествия или загружайте меньше фото');
-                } catch (e) {
-                    console.error('Не удалось посчитать размер localStorage');
-                }
-            } else {
-                this.showToast('❌ Ошибка сохранения данных');
-            }
+            console.error('❌ Ошибка сохранения:', error);
+            this.showToast('❌ Ошибка сохранения данных');
         }
     }
 
     /**
      * Инициализация профиля с анимациями
      */
-    initProfile() {
-        console.log('🪆 Профиль Матрешка инициализирован');
+    async initProfile() {
+        console.log('🪆 Инициализация профиля Матрешка...');
+
+        // Загружаем данные из IndexedDB
+        if (!this.isInitialized) {
+            await this.loadFromStorage();
+            this.isInitialized = true;
+        }
+
         this.loadProfileData();
         this.initAnimations();
         this.initInteractions();
+
+        console.log('✅ Профиль Матрешка инициализирован');
     }
 
     /**
@@ -690,7 +616,7 @@ class MatryoshkaProfile {
                 valueElement.textContent = newValue;
                 valueElement.style.display = '';
                 input.remove();
-                this.saveToLocalStorage();
+                this.saveToStorage();
                 this.showToast(`✅ ${key === 'cities' ? 'Города' : 'Статистика'} обновлена`);
             };
 
@@ -919,21 +845,8 @@ class MatryoshkaProfile {
                 console.log(`Файл ${index + 1} загружен`);
 
                 try {
-                    // СЖИМАЕМ изображение перед добавлением в превью
-                    let imageData = e.target.result;
-
-                    if (window.imageCompression) {
-                        console.log(`🗜️ Сжимаем фото ${index + 1}...`);
-                        imageData = await window.imageCompression.compressImage(
-                            imageData,
-                            800,   // maxWidth - агрессивное сжатие
-                            600,   // maxHeight - агрессивное сжатие
-                            0.6    // quality - меньше качество для экономии места
-                        );
-                        console.log(`✅ Фото ${index + 1} сжато до ${(imageData.length / 1024).toFixed(2)} KB`);
-                    } else {
-                        console.warn('⚠️ imageCompression не доступен, используем оригинал');
-                    }
+                    // Просто используем изображение как есть - IndexedDB может хранить гигабайты
+                    const imageData = e.target.result;
 
                     const imageContainer = document.createElement('div');
                     imageContainer.className = 'preview-image-item';
@@ -1115,7 +1028,7 @@ class MatryoshkaProfile {
     /**
      * Сохранение фото и создание поста
      */
-    savePhotosAndSubmit(modal) {
+    async savePhotosAndSubmit(modal) {
         console.log('🚀 ЗАПУСК savePhotosAndSubmit');
 
         const titleElement = modal.querySelector('#travelTitle');
@@ -1180,7 +1093,7 @@ class MatryoshkaProfile {
         this.updateTravelCounters();
 
         this.updateTravelCards();
-        this.saveToLocalStorage();
+        await this.saveToStorage();
 
         // Добавляем в глобальную базу данных
         if (window.travelDatabase) {
@@ -1248,7 +1161,7 @@ class MatryoshkaProfile {
     /**
      * Удаление истории путешествия
      */
-    deleteTravelStory(travelId) {
+    async deleteTravelStory(travelId) {
         if (confirm('Удалить это путешествие?')) {
             this.travelStories = this.travelStories.filter(t => t.id !== travelId);
 
@@ -1280,7 +1193,7 @@ class MatryoshkaProfile {
     /**
      * Переключение лайка на путешествии
      */
-    toggleLike(travelId, button) {
+    async toggleLike(travelId, button) {
         const travel = this.travelStories.find(t => t.id === travelId);
         if (!travel) return;
 
@@ -1396,7 +1309,7 @@ class MatryoshkaProfile {
     /**
      * Сохранение изменений профиля
      */
-    saveProfileChanges(modal) {
+    async saveProfileChanges(modal) {
         console.log('💾 Сохраняем изменения профиля');
 
         const name = modal.querySelector('#nameText').value.trim();
@@ -1419,8 +1332,8 @@ class MatryoshkaProfile {
             console.log('✅ Аватар сохранен из selectedAvatarData');
         }
 
-        // Сохраняем в sessionStorage
-        this.saveToLocalStorage();
+        // Сохраняем в IndexedDB
+        await this.saveToStorage();
 
         // Обновляем интерфейс
         this.loadProfileData();

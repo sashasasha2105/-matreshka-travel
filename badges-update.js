@@ -73,7 +73,7 @@
             }
 
             // Регионы из sessionStorage
-            const savedRegions = sessionStorage.getItem('paidRegions');
+            const savedRegions = localStorage.getItem('paidRegions');
             if (savedRegions) {
                 const regions = JSON.parse(savedRegions);
                 total += regions.length;

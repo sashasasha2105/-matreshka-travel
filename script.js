@@ -1083,7 +1083,7 @@ function getCurrentRegionId() {
 
 // Инициализация хранилища оплаченных регионов из sessionStorage
 function initPaidRegions() {
-    const saved = sessionStorage.getItem('paidRegions');
+    const saved = localStorage.getItem('paidRegions');
     if (saved) {
         try {
             const data = JSON.parse(saved);
@@ -1096,7 +1096,7 @@ function initPaidRegions() {
                     expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
                 }));
                 // Сохраняем в новом формате
-                sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+                localStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
             } else {
                 window.paidRegions = data;
             }
@@ -1108,7 +1108,7 @@ function initPaidRegions() {
             });
 
             // Сохраняем отфильтрованный список
-            sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+            localStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
         } catch (e) {
             window.paidRegions = [];
         }
@@ -1152,7 +1152,7 @@ function markRegionAsPaid(regionId) {
     window.paidRegions.push(paidRegion);
 
     // Сохраняем в sessionStorage
-    sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+    localStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
     console.log('✅ Регион оплачен и сохранен:', regionId, paidRegion);
 }
 

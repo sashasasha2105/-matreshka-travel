@@ -15,18 +15,25 @@ class MatryoshkaProfile {
         };
         this.travelStories = [];
 
-        // Загружаем данные из sessionStorage
-        this.loadFromSession();
+        // Загружаем данные из localStorage
+        this.loadFromLocalStorage();
     }
 
     /**
-     * Загрузка данных профиля из sessionStorage
+     * Загрузка данных профиля из localStorage
      */
-    loadFromSession() {
+    loadFromLocalStorage() {
+        console.log('📖 Загружаем данные профиля из localStorage...');
         try {
-            const savedProfile = sessionStorage.getItem('matryoshka_profile');
-            const savedStories = sessionStorage.getItem('matryoshka_stories');
-            const savedAvatar = sessionStorage.getItem('matryoshka_avatar');
+            const savedProfile = localStorage.getItem('matryoshka_profile');
+            const savedStories = localStorage.getItem('matryoshka_stories');
+            const savedAvatar = localStorage.getItem('matryoshka_avatar');
+
+            console.log('📦 Загружено из localStorage:', {
+                profile: savedProfile ? 'есть' : 'нет',
+                stories: savedStories ? 'есть' : 'нет',
+                avatar: savedAvatar ? 'есть' : 'нет'
+            });
 
             if (savedProfile) {
                 const parsed = JSON.parse(savedProfile);
@@ -36,28 +43,42 @@ class MatryoshkaProfile {
             if (savedStories) {
                 const parsed = JSON.parse(savedStories);
                 this.travelStories = parsed;
+                console.log('✅ Загружено путешествий:', this.travelStories.length);
+                if (this.travelStories.length > 0) {
+                    console.log('🖼️ Первое путешествие:', this.travelStories[0].title);
+                    console.log('🖼️ Изображения в первом путешествии:', this.travelStories[0].images?.length);
+                    if (this.travelStories[0].images && this.travelStories[0].images.length > 0) {
+                        console.log('🖼️ Первое изображение (первые 100 символов):', this.travelStories[0].images[0].substring(0, 100));
+                    }
+                }
             }
 
             if (savedAvatar) {
                 this.user.photo_url = savedAvatar;
             }
         } catch (error) {
-            console.error('Ошибка загрузки данных из sessionStorage:', error);
+            console.error('❌ Ошибка загрузки данных из localStorage:', error);
         }
     }
 
     /**
-     * Сохранение данных профиля в sessionStorage
+     * Сохранение данных профиля в localStorage
      */
-    saveToSession() {
+    saveToLocalStorage() {
+        console.log('💾 Сохраняем данные профиля в localStorage...');
         try {
-            sessionStorage.setItem('matryoshka_profile', JSON.stringify(this.profileData));
-            sessionStorage.setItem('matryoshka_stories', JSON.stringify(this.travelStories));
+            localStorage.setItem('matryoshka_profile', JSON.stringify(this.profileData));
+            localStorage.setItem('matryoshka_stories', JSON.stringify(this.travelStories));
             if (this.user.photo_url) {
-                sessionStorage.setItem('matryoshka_avatar', this.user.photo_url);
+                localStorage.setItem('matryoshka_avatar', this.user.photo_url);
+            }
+            console.log('✅ Сохранено путешествий:', this.travelStories.length);
+            if (this.travelStories.length > 0) {
+                console.log('🖼️ Изображения в первом путешествии:', this.travelStories[0].images?.length);
             }
         } catch (error) {
-            console.error('Ошибка сохранения данных в sessionStorage:', error);
+            console.error('❌ Ошибка сохранения данных в localStorage:', error);
+            console.error('Возможно превышен лимит localStorage');
         }
     }
 
@@ -285,10 +306,10 @@ class MatryoshkaProfile {
      * Генерация секции купонов и скидок
      */
     generateCouponsSection() {
-        // Загружаем оплаченные регионы из sessionStorage
+        // Загружаем оплаченные регионы из localStorage
         let paidRegions = [];
         try {
-            const saved = sessionStorage.getItem('paidRegions');
+            const saved = localStorage.getItem('paidRegions');
             if (saved) {
                 paidRegions = JSON.parse(saved);
             }
@@ -592,7 +613,7 @@ class MatryoshkaProfile {
                 valueElement.textContent = newValue;
                 valueElement.style.display = '';
                 input.remove();
-                this.saveToSession();
+                this.saveToLocalStorage();
                 this.showToast(`✅ ${key === 'cities' ? 'Города' : 'Статистика'} обновлена`);
             };
 
@@ -1048,7 +1069,7 @@ class MatryoshkaProfile {
         this.updateTravelCounters();
 
         this.updateTravelCards();
-        this.saveToSession();
+        this.saveToLocalStorage();
 
         // Добавляем в глобальную базу данных
         if (window.travelDatabase) {
@@ -1140,7 +1161,7 @@ class MatryoshkaProfile {
             this.updateTravelCounters();
 
             this.updateTravelCards();
-            this.saveToSession();
+            this.saveToLocalStorage();
             this.showToast('🗑️ Путешествие удалено');
         }
     }
@@ -1177,7 +1198,7 @@ class MatryoshkaProfile {
         if (likeCount) likeCount.textContent = travel.likes;
 
         // Сохраняем изменения
-        this.saveToSession();
+        this.saveToLocalStorage();
 
         // Убираем анимацию после завершения
         setTimeout(() => {
@@ -1288,7 +1309,7 @@ class MatryoshkaProfile {
         }
 
         // Сохраняем в sessionStorage
-        this.saveToSession();
+        this.saveToLocalStorage();
 
         // Обновляем интерфейс
         this.loadProfileData();

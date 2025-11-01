@@ -351,7 +351,7 @@ function bookPackage(packageId) {
     // Инициализируем paidRegions если нужно
     if (typeof window.paidRegions === 'undefined') {
         window.paidRegions = [];
-        const saved = sessionStorage.getItem('paidRegions');
+        const saved = localStorage.getItem('paidRegions');
         if (saved) {
             try {
                 window.paidRegions = JSON.parse(saved);
@@ -398,7 +398,7 @@ function bookPackage(packageId) {
     });
 
     // Сохраняем обновленный список в sessionStorage
-    sessionStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+    localStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
     console.log(`💾 Добавлено новых регионов: ${addedRegions}, всего оплаченных: ${window.paidRegions.length}`);
 
     // 🎯 ОБНОВЛЯЕМ ЗАДАНИЯ

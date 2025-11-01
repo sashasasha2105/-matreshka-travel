@@ -106,7 +106,7 @@ class MatryoshkaCart {
      */
     loadPaidRegions() {
         try {
-            const saved = sessionStorage.getItem('paidRegions');
+            const saved = localStorage.getItem('paidRegions');
             if (saved) {
                 this.paidRegions = JSON.parse(saved);
 
@@ -119,7 +119,7 @@ class MatryoshkaCart {
                     return true; // Старый формат без даты
                 });
 
-                sessionStorage.setItem('paidRegions', JSON.stringify(this.paidRegions));
+                localStorage.setItem('paidRegions', JSON.stringify(this.paidRegions));
             }
         } catch (e) {
             console.error('Ошибка загрузки регионов:', e);
@@ -611,7 +611,7 @@ class MatryoshkaCart {
     clearAll() {
         if (confirm('Вы уверены, что хотите очистить всю корзину? Это удалит все купленные пакеты и регионы.')) {
             localStorage.removeItem('purchasedPackages');
-            sessionStorage.removeItem('paidRegions');
+            localStorage.removeItem('paidRegions');
             this.purchasedPackages = [];
             this.paidRegions = [];
             this.refresh();

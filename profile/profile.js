@@ -1036,9 +1036,11 @@ class MatryoshkaProfile {
         this.updateTravelCards();
         this.saveToSession();
 
-        // Добавляем в глобальную ленту (если есть)
-        if (typeof addToGlobalFeed === 'function') {
-            addToGlobalFeed(newTravel);
+        // Добавляем в глобальную базу данных
+        if (window.travelDatabase) {
+            const userInfo = this.user || {};
+            window.travelDatabase.add(newTravel, userInfo);
+            console.log('✅ Путешествие добавлено в глобальную ленту');
         }
 
         // Показываем уведомление
@@ -1092,6 +1094,12 @@ class MatryoshkaProfile {
     deleteTravelStory(travelId) {
         if (confirm('Удалить это путешествие?')) {
             this.travelStories = this.travelStories.filter(t => t.id !== travelId);
+
+            // Удаляем из глобальной базы данных
+            if (window.travelDatabase) {
+                window.travelDatabase.removeByLocalId(travelId);
+                console.log('🗑️ Путешествие удалено из глобальной ленты');
+            }
 
             // Автоматически обновляем счетчики
             this.updateTravelCounters();

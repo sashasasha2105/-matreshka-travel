@@ -67,6 +67,9 @@
     <!-- 🎯 ЕДИНАЯ Z-INDEX СИСТЕМА -->
     <link rel="stylesheet" href="z-index-system.css?v=1.0">
 
+    <!-- 🌍 ЛЕНТА ПУТЕШЕСТВИЙ -->
+    <link rel="stylesheet" href="feed/feed.css?v=1.0">
+
     <!-- 📱 КРИТИЧЕСКИЕ МОБИЛЬНЫЕ ИСПРАВЛЕНИЯ - загружается последним для override -->
     <link rel="stylesheet" href="mobile-fixes.css?v=1.0">
 
@@ -274,6 +277,17 @@
             </div>
         </div>
 
+        <!-- Лента путешествий -->
+        <div id="feedSection" class="feed-section" style="display: none;">
+            <button id="feedBackBtn" class="back-btn">
+                ← Назад
+            </button>
+
+            <div id="feedContent" class="feed-content">
+                <!-- Сюда загрузится лента -->
+            </div>
+        </div>
+
         <!-- Лоадер -->
         <div id="loader" class="loader">
             <div class="loader-spinner"></div>
@@ -334,6 +348,10 @@
         <button class="nav-item" onclick="showMainSection()" data-page="main">
             <div class="nav-icon">🏠</div>
             <div class="nav-label">Главная</div>
+        </button>
+        <button class="nav-item" onclick="showFeed()" data-page="feed">
+            <div class="nav-icon">🌍</div>
+            <div class="nav-label">Лента</div>
         </button>
         <button class="nav-item" onclick="showProfile()" data-page="profile">
             <div class="nav-icon">👤</div>
@@ -466,8 +484,15 @@
     <!-- Основная логика -->
     <script src="script.js"></script>
     <script src="packages.js"></script>
+
+    <!-- 🌍 ГЛОБАЛЬНАЯ БАЗА ДАННЫХ ПУТЕШЕСТВИЙ -->
+    <script src="travel-database.js"></script>
+
     <script src="profile/profile.js"></script>
     <script src="profile/avatar_fix.js"></script>
+
+    <!-- 🌍 ЛЕНТА ПУТЕШЕСТВИЙ -->
+    <script src="feed/feed.js"></script>
 
     <!-- Система заданий -->
     <script src="quests/quests.js"></script>

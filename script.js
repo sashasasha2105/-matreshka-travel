@@ -1620,6 +1620,68 @@ function hideCart() {
 }
 
 /**
+ * Показать ленту путешествий
+ */
+function showFeed() {
+    console.log('🌍 Открываем ленту путешествий');
+
+    // Скрываем все секции
+    document.getElementById('mainSection').style.display = 'none';
+    document.getElementById('regionDetails').style.display = 'none';
+    document.getElementById('profileSection').style.display = 'none';
+    document.getElementById('cartSection').style.display = 'none';
+
+    const questsSection = document.getElementById('questsSection');
+    if (questsSection) questsSection.style.display = 'none';
+
+    // Показываем ленту
+    const feedSection = document.getElementById('feedSection');
+    feedSection.style.display = 'block';
+
+    // Скрываем команду
+    updateTeamVisibility();
+
+    // Рендерим ленту путешествий
+    if (window.matryoshkaFeed) {
+        // Используем feedContent как контейнер
+        const feedContent = document.getElementById('feedContent');
+        if (feedContent) {
+            feedContent.innerHTML = '';
+            // Создаем временный контейнер для рендера
+            const tempDiv = document.createElement('div');
+            tempDiv.id = 'mainSection';
+            feedContent.appendChild(tempDiv);
+            window.matryoshkaFeed.render();
+        }
+    }
+
+    // Обновляем активную кнопку в навигации
+    updateBottomNav('feed');
+
+    // Скроллим наверх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
+ * Скрыть ленту путешествий
+ */
+function hideFeed() {
+    console.log('🌍 Закрываем ленту путешествий');
+
+    document.getElementById('feedSection').style.display = 'none';
+    document.getElementById('mainSection').style.display = 'block';
+
+    // Показываем команду
+    updateTeamVisibility();
+
+    // Обновляем навигацию
+    updateBottomNav(null);
+
+    // Скроллим наверх
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/**
  * Обновление активной кнопки в нижней навигации
  */
 function updateBottomNav(activePage) {
@@ -1638,5 +1700,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const cartBackBtn = document.getElementById('cartBackBtn');
     if (cartBackBtn) {
         cartBackBtn.addEventListener('click', hideCart);
+    }
+});
+
+// Обработчик кнопки "Назад" в ленте
+document.addEventListener('DOMContentLoaded', function() {
+    const feedBackBtn = document.getElementById('feedBackBtn');
+    if (feedBackBtn) {
+        feedBackBtn.addEventListener('click', hideFeed);
     }
 });

@@ -1,0 +1,336 @@
+/**
+ * Стили для ленты путешествий
+ */
+
+.feed-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 24px 16px 100px;
+}
+
+/* Шапка ленты */
+.feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid rgba(255, 204, 0, 0.2);
+}
+
+.feed-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffcc00;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.feed-icon {
+    font-size: 2rem;
+}
+
+.feed-stats {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+}
+
+/* Пустое состояние */
+.feed-empty {
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.feed-empty-icon {
+    font-size: 5rem;
+    margin-bottom: 24px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.feed-empty-title {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 12px;
+}
+
+.feed-empty-text {
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 24px;
+}
+
+.feed-empty-btn {
+    background: linear-gradient(135deg, #ffcc00, #ff8e53);
+    border: none;
+    color: #0f0520;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.feed-empty-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4);
+}
+
+/* Сетка карточек */
+.feed-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Карточка путешествия */
+.feed-card {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95), rgba(15, 5, 32, 0.95));
+    border: 2px solid rgba(255, 204, 0, 0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.feed-card:hover {
+    border-color: rgba(255, 204, 0, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(255, 204, 0, 0.2);
+}
+
+/* Шапка карточки с автором */
+.feed-card-header {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.feed-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.feed-author-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ffcc00, #ff8e53);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #0f0520;
+    font-size: 1rem;
+    overflow: hidden;
+}
+
+.feed-author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feed-author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.feed-author-name {
+    font-weight: 600;
+    color: white;
+    font-size: 1rem;
+}
+
+.feed-author-time {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Изображения в карточке */
+.feed-card-images {
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.feed-card-images img {
+    width: 100%;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.feed-card-images:hover img {
+    transform: scale(1.05);
+}
+
+/* Сетки фотографий (используем те же стили что в профиле) */
+.single-image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.grid-two,
+.grid-three,
+.grid-many {
+    display: grid;
+    gap: 2px;
+}
+
+.grid-two {
+    grid-template-columns: 1fr 1fr;
+    aspect-ratio: 2/1;
+}
+
+.grid-three {
+    grid-template-columns: 1fr 1fr;
+    aspect-ratio: 3/2;
+}
+
+.grid-three .grid-image.main {
+    grid-row: span 2;
+}
+
+.grid-column {
+    display: grid;
+    gap: 2px;
+}
+
+.grid-many {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.grid-more {
+    position: relative;
+}
+
+.more-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+.grid-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Контент карточки */
+.feed-card-content {
+    padding: 16px 20px;
+}
+
+.feed-card-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: white;
+    margin: 0 0 8px 0;
+}
+
+.feed-card-text {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Футер карточки */
+.feed-card-footer {
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feed-like-btn {
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.feed-like-btn:hover {
+    border-color: rgba(255, 107, 107, 0.6);
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.feed-like-btn.liked {
+    border-color: rgba(255, 107, 107, 0.8);
+    background: rgba(255, 107, 107, 0.2);
+}
+
+.feed-like-icon {
+    font-size: 1.2rem;
+    transition: transform 0.2s ease;
+}
+
+.feed-like-count {
+    font-weight: 600;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.feed-card-location {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 768px) {
+    .feed-container {
+        padding: 16px 12px 100px;
+    }
+
+    .feed-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .feed-title {
+        font-size: 1.5rem;
+    }
+
+    .feed-card-header {
+        padding: 12px 16px;
+    }
+
+    .feed-card-content {
+        padding: 12px 16px;
+    }
+
+    .feed-card-footer {
+        padding: 10px 16px;
+    }
+
+    .feed-author-avatar {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+    }
+}

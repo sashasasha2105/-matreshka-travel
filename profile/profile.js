@@ -65,20 +65,69 @@ class MatryoshkaProfile {
      * Сохранение данных профиля в localStorage
      */
     saveToLocalStorage() {
-        console.log('💾 Сохраняем данные профиля в localStorage...');
+        console.log('💾💾💾 СОХРАНЯЕМ ДАННЫЕ ПРОФИЛЯ В localStorage 💾💾💾');
         try {
+            // Проверяем данные ПЕРЕД сохранением
+            console.log('📊 Путешествий для сохранения:', this.travelStories.length);
+
+            if (this.travelStories.length > 0) {
+                console.log('🔍 Проверка первого путешествия:');
+                const first = this.travelStories[0];
+                console.log('  - ID:', first.id);
+                console.log('  - Название:', first.title);
+                console.log('  - Описание:', first.text?.substring(0, 50));
+                console.log('  - Изображения:', first.images);
+                console.log('  - Количество изображений:', first.images?.length);
+
+                if (first.images && first.images.length > 0) {
+                    console.log('  - Первое изображение существует:', first.images[0] ? 'ДА' : 'НЕТ');
+                    console.log('  - Тип первого изображения:', typeof first.images[0]);
+                    console.log('  - Длина первого изображения:', first.images[0]?.length);
+                    console.log('  - Начало первого изображения:', first.images[0]?.substring(0, 100));
+                }
+            }
+
+            // Сохраняем
+            const storiesJson = JSON.stringify(this.travelStories);
+            console.log('📦 Размер JSON для сохранения:', storiesJson.length, 'символов');
+            console.log('📦 Размер в KB:', (storiesJson.length / 1024).toFixed(2), 'KB');
+
             localStorage.setItem('matryoshka_profile', JSON.stringify(this.profileData));
-            localStorage.setItem('matryoshka_stories', JSON.stringify(this.travelStories));
+            localStorage.setItem('matryoshka_stories', storiesJson);
             if (this.user.photo_url) {
                 localStorage.setItem('matryoshka_avatar', this.user.photo_url);
             }
-            console.log('✅ Сохранено путешествий:', this.travelStories.length);
-            if (this.travelStories.length > 0) {
-                console.log('🖼️ Изображения в первом путешествии:', this.travelStories[0].images?.length);
+
+            // Проверяем что сохранилось
+            const saved = localStorage.getItem('matryoshka_stories');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                console.log('✅ Проверка: сохранено путешествий в localStorage:', parsed.length);
+                if (parsed.length > 0 && parsed[0].images) {
+                    console.log('✅ Проверка: изображения в первом путешествии:', parsed[0].images.length);
+                    console.log('✅ Проверка: первое изображение начинается с:', parsed[0].images[0]?.substring(0, 50));
+                }
+            } else {
+                console.error('❌ КРИТИЧЕСКАЯ ОШИБКА: данные НЕ сохранились в localStorage!');
             }
+
         } catch (error) {
-            console.error('❌ Ошибка сохранения данных в localStorage:', error);
-            console.error('Возможно превышен лимит localStorage');
+            console.error('❌❌❌ ОШИБКА СОХРАНЕНИЯ:', error);
+            console.error('Детали ошибки:', error.message);
+            console.error('Возможно превышен лимит localStorage (обычно 5-10MB)');
+
+            // Пытаемся посчитать размер
+            try {
+                let total = 0;
+                for (let key in localStorage) {
+                    if (localStorage.hasOwnProperty(key)) {
+                        total += localStorage[key].length + key.length;
+                    }
+                }
+                console.error('Текущий размер localStorage:', (total / 1024).toFixed(2), 'KB');
+            } catch (e) {
+                console.error('Не удалось посчитать размер localStorage');
+            }
         }
     }
 
@@ -838,40 +887,74 @@ class MatryoshkaProfile {
             console.log(`Обрабатываем файл ${index + 1}: ${file.name}`);
 
             const reader = new FileReader();
-            reader.onload = (e) => {
+            reader.onload = async (e) => {
                 console.log(`Файл ${index + 1} загружен`);
 
-                const imageContainer = document.createElement('div');
-                imageContainer.className = 'preview-image-item';
-                imageContainer.dataset.fileIndex = index;
+                try {
+                    // СЖИМАЕМ изображение перед добавлением в превью
+                    let imageData = e.target.result;
 
-                imageContainer.innerHTML = `
-                    <img src="${e.target.result}" alt="Фото ${index + 1}">
-                    <div class="preview-number">${index + 1}</div>
-                    <button class="remove-image-btn" data-file-index="${index}" title="Удалить">
-                        <span>×</span>
-                    </button>
-                `;
-
-                // Добавляем обработчик удаления
-                const removeBtn = imageContainer.querySelector('.remove-image-btn');
-                removeBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    console.log(`Удаляем фото ${index + 1}`);
-                    imageContainer.remove();
-
-                    // Проверяем, остались ли еще фото
-                    const remainingPhotos = preview.querySelectorAll('.preview-image-item');
-                    if (remainingPhotos.length === 0) {
-                        actions.style.display = 'none';
-                        publishBtn.style.display = 'none';
+                    if (window.imageCompression) {
+                        console.log(`🗜️ Сжимаем фото ${index + 1}...`);
+                        imageData = await window.imageCompression.compressImage(
+                            imageData,
+                            1920,  // maxWidth
+                            1080,  // maxHeight
+                            0.85   // quality (чуть выше для лучшего качества)
+                        );
+                        console.log(`✅ Фото ${index + 1} сжато`);
                     } else {
-                        photoCount.textContent = `${remainingPhotos.length} фото`;
+                        console.warn('⚠️ imageCompression не доступен, используем оригинал');
                     }
-                });
 
-                preview.appendChild(imageContainer);
-                console.log(`Фото ${index + 1} добавлено в превью`);
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'preview-image-item';
+                    imageContainer.dataset.fileIndex = index;
+
+                    imageContainer.innerHTML = `
+                        <img src="${imageData}" alt="Фото ${index + 1}">
+                        <div class="preview-number">${index + 1}</div>
+                        <button class="remove-image-btn" data-file-index="${index}" title="Удалить">
+                            <span>×</span>
+                        </button>
+                    `;
+
+                    // Добавляем обработчик удаления
+                    const removeBtn = imageContainer.querySelector('.remove-image-btn');
+                    removeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        console.log(`Удаляем фото ${index + 1}`);
+                        imageContainer.remove();
+
+                        // Проверяем, остались ли еще фото
+                        const remainingPhotos = preview.querySelectorAll('.preview-image-item');
+                        if (remainingPhotos.length === 0) {
+                            actions.style.display = 'none';
+                            publishBtn.style.display = 'none';
+                        } else {
+                            photoCount.textContent = `${remainingPhotos.length} фото`;
+                        }
+                    });
+
+                    preview.appendChild(imageContainer);
+                    console.log(`Фото ${index + 1} добавлено в превью`);
+                } catch (error) {
+                    console.error(`❌ Ошибка обработки фото ${index + 1}:`, error);
+                    // В случае ошибки используем оригинал
+                    const imageContainer = document.createElement('div');
+                    imageContainer.className = 'preview-image-item';
+                    imageContainer.dataset.fileIndex = index;
+
+                    imageContainer.innerHTML = `
+                        <img src="${e.target.result}" alt="Фото ${index + 1}">
+                        <div class="preview-number">${index + 1}</div>
+                        <button class="remove-image-btn" data-file-index="${index}" title="Удалить">
+                            <span>×</span>
+                        </button>
+                    `;
+
+                    preview.appendChild(imageContainer);
+                }
             };
 
             reader.onerror = () => {

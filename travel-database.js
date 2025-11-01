@@ -15,10 +15,41 @@ class TravelDatabase {
      */
     loadAll() {
         try {
-            console.log('📖 Загрузка из localStorage, ключ:', this.storageKey);
+            console.log('📖📖📖 ЗАГРУЗКА ИЗ localStorage 📖📖📖');
+            console.log('🔑 Ключ:', this.storageKey);
+
             const data = localStorage.getItem(this.storageKey);
-            const parsed = data ? JSON.parse(data) : [];
-            console.log('📊 Загружено путешествий:', parsed.length);
+
+            if (!data) {
+                console.log('⚠️ Данные не найдены в localStorage');
+                return [];
+            }
+
+            console.log('📦 Размер данных в localStorage:', data.length, 'символов');
+            console.log('📦 Размер в KB:', (data.length / 1024).toFixed(2), 'KB');
+
+            const parsed = JSON.parse(data);
+            console.log('✅ Распарсено путешествий:', parsed.length);
+
+            if (parsed.length > 0) {
+                const first = parsed[0];
+                console.log('🔍 Проверка первого путешествия:');
+                console.log('  - Название:', first.title);
+                console.log('  - ID:', first.id);
+                console.log('  - GlobalID:', first.globalId);
+                console.log('  - Изображения:', first.images);
+                console.log('  - Количество изображений:', first.images?.length);
+
+                if (first.images && first.images.length > 0) {
+                    console.log('  - Первое изображение существует:', first.images[0] ? 'ДА' : 'НЕТ');
+                    console.log('  - Тип первого изображения:', typeof first.images[0]);
+                    console.log('  - Длина первого изображения:', first.images[0]?.length);
+                    console.log('  - Начинается с:', first.images[0]?.substring(0, 100));
+                } else {
+                    console.error('❌ ПРОБЛЕМА: В первом путешествии НЕТ изображений!');
+                }
+            }
+
             return parsed;
         } catch (error) {
             console.error('❌ Ошибка загрузки путешествий:', error);
@@ -31,21 +62,63 @@ class TravelDatabase {
      */
     saveAll() {
         try {
+            console.log('💾💾💾 СОХРАНЕНИЕ В localStorage 💾💾💾');
+            console.log('🔑 Ключ:', this.storageKey);
+            console.log('📊 Путешествий в памяти для сохранения:', this.travels.length);
+
+            // Проверяем первое путешествие перед сохранением
+            if (this.travels.length > 0) {
+                const first = this.travels[0];
+                console.log('🔍 Проверка первого путешествия ПЕРЕД сохранением:');
+                console.log('  - Название:', first.title);
+                console.log('  - Изображения:', first.images);
+                console.log('  - Количество изображений:', first.images?.length);
+                if (first.images && first.images.length > 0) {
+                    console.log('  - Первое изображение (первые 50 символов):', first.images[0]?.substring(0, 50));
+                }
+            }
+
             const dataToSave = JSON.stringify(this.travels);
-            console.log('💾 Сохранение в localStorage, ключ:', this.storageKey);
-            console.log('💾 Данные для сохранения (размер):', dataToSave.length, 'символов');
+            console.log('📦 Размер JSON для сохранения:', dataToSave.length, 'символов');
+            console.log('📦 Размер в KB:', (dataToSave.length / 1024).toFixed(2), 'KB');
+
             localStorage.setItem(this.storageKey, dataToSave);
-            console.log('✅ Сохранено путешествий:', this.travels.length);
+            console.log('✅ Данные записаны в localStorage');
 
             // Проверяем, что данные действительно сохранились
             const verification = localStorage.getItem(this.storageKey);
             if (verification) {
-                console.log('✅ Проверка: данные в localStorage присутствуют');
+                const verParsed = JSON.parse(verification);
+                console.log('✅ Проверка: в localStorage сохранено путешествий:', verParsed.length);
+
+                if (verParsed.length > 0) {
+                    const verFirst = verParsed[0];
+                    console.log('✅ Проверка: изображения в первом путешествии:', verFirst.images?.length);
+                    if (verFirst.images && verFirst.images.length > 0) {
+                        console.log('✅ Проверка: первое изображение присутствует, длина:', verFirst.images[0]?.length);
+                    } else {
+                        console.error('❌ КРИТИЧЕСКАЯ ПРОБЛЕМА: После сохранения в первом путешествии НЕТ изображений!');
+                    }
+                }
             } else {
                 console.error('❌ Проверка: данные НЕ сохранились в localStorage!');
             }
         } catch (error) {
-            console.error('❌ Ошибка сохранения путешествий:', error);
+            console.error('❌❌❌ ОШИБКА СОХРАНЕНИЯ:', error);
+            console.error('Детали:', error.message);
+
+            // Проверяем размер localStorage
+            try {
+                let total = 0;
+                for (let key in localStorage) {
+                    if (localStorage.hasOwnProperty(key)) {
+                        total += localStorage[key].length + key.length;
+                    }
+                }
+                console.error('Текущий размер localStorage:', (total / 1024).toFixed(2), 'KB');
+            } catch (e) {
+                console.error('Не удалось посчитать размер localStorage');
+            }
         }
     }
 

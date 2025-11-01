@@ -13,14 +13,17 @@ class TravelFeed {
      * Отобразить ленту путешествий
      */
     render() {
-        const container = document.querySelector('#mainSection');
+        const container = document.querySelector('#feedContent');
         if (!container) {
-            console.error('❌ #mainSection не найден');
+            console.error('❌ #feedContent не найден');
             return;
         }
 
         this.container = container;
         const travels = this.database.getAll();
+
+        console.log('📊 Загружено путешествий из базы:', travels.length);
+        console.log('🗄️ Данные путешествий:', travels);
 
         const html = `
             <div class="feed-container">
@@ -51,7 +54,7 @@ class TravelFeed {
                 <div class="feed-empty-icon">🗺️</div>
                 <h3 class="feed-empty-title">Пока нет путешествий</h3>
                 <p class="feed-empty-text">Станьте первым, кто поделится своим путешествием!</p>
-                <button class="feed-empty-btn" onclick="showSection('profileSection')">
+                <button class="feed-empty-btn" onclick="showProfile()">
                     📸 Добавить путешествие
                 </button>
             </div>

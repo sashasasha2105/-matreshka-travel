@@ -1039,8 +1039,13 @@ class MatryoshkaProfile {
         // Добавляем в глобальную базу данных
         if (window.travelDatabase) {
             const userInfo = this.user || {};
-            window.travelDatabase.add(newTravel, userInfo);
-            console.log('✅ Путешествие добавлено в глобальную ленту');
+            console.log('📤 Добавляем в глобальную базу:', newTravel);
+            console.log('👤 Информация о пользователе:', userInfo);
+            const addedTravel = window.travelDatabase.add(newTravel, userInfo);
+            console.log('✅ Путешествие добавлено в глобальную ленту:', addedTravel);
+            console.log('📊 Всего в базе:', window.travelDatabase.travels.length);
+        } else {
+            console.error('❌ window.travelDatabase не найден!');
         }
 
         // Показываем уведомление
@@ -1097,8 +1102,12 @@ class MatryoshkaProfile {
 
             // Удаляем из глобальной базы данных
             if (window.travelDatabase) {
+                console.log('🗑️ Удаляем из глобальной базы, ID:', travelId);
                 window.travelDatabase.removeByLocalId(travelId);
-                console.log('🗑️ Путешествие удалено из глобальной ленты');
+                console.log('✅ Путешествие удалено из глобальной ленты');
+                console.log('📊 Осталось в базе:', window.travelDatabase.travels.length);
+            } else {
+                console.error('❌ window.travelDatabase не найден при удалении!');
             }
 
             // Автоматически обновляем счетчики

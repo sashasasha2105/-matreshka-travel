@@ -1643,16 +1643,10 @@ function showFeed() {
 
     // Рендерим ленту путешествий
     if (window.matryoshkaFeed) {
-        // Используем feedContent как контейнер
-        const feedContent = document.getElementById('feedContent');
-        if (feedContent) {
-            feedContent.innerHTML = '';
-            // Создаем временный контейнер для рендера
-            const tempDiv = document.createElement('div');
-            tempDiv.id = 'mainSection';
-            feedContent.appendChild(tempDiv);
-            window.matryoshkaFeed.render();
-        }
+        console.log('✅ matryoshkaFeed найден, вызываем render()');
+        window.matryoshkaFeed.render();
+    } else {
+        console.error('❌ window.matryoshkaFeed не найден!');
     }
 
     // Обновляем активную кнопку в навигации

@@ -15,8 +15,11 @@ class TravelDatabase {
      */
     loadAll() {
         try {
+            console.log('📖 Загрузка из localStorage, ключ:', this.storageKey);
             const data = localStorage.getItem(this.storageKey);
-            return data ? JSON.parse(data) : [];
+            const parsed = data ? JSON.parse(data) : [];
+            console.log('📊 Загружено путешествий:', parsed.length);
+            return parsed;
         } catch (error) {
             console.error('❌ Ошибка загрузки путешествий:', error);
             return [];
@@ -28,8 +31,19 @@ class TravelDatabase {
      */
     saveAll() {
         try {
-            localStorage.setItem(this.storageKey, JSON.stringify(this.travels));
-            console.log('💾 Сохранено путешествий:', this.travels.length);
+            const dataToSave = JSON.stringify(this.travels);
+            console.log('💾 Сохранение в localStorage, ключ:', this.storageKey);
+            console.log('💾 Данные для сохранения (размер):', dataToSave.length, 'символов');
+            localStorage.setItem(this.storageKey, dataToSave);
+            console.log('✅ Сохранено путешествий:', this.travels.length);
+
+            // Проверяем, что данные действительно сохранились
+            const verification = localStorage.getItem(this.storageKey);
+            if (verification) {
+                console.log('✅ Проверка: данные в localStorage присутствуют');
+            } else {
+                console.error('❌ Проверка: данные НЕ сохранились в localStorage!');
+            }
         } catch (error) {
             console.error('❌ Ошибка сохранения путешествий:', error);
         }
@@ -41,6 +55,10 @@ class TravelDatabase {
      * @param {Object} userInfo - Информация о пользователе (опционально)
      */
     add(travel, userInfo = null) {
+        console.log('➕ TravelDatabase.add() вызвана');
+        console.log('📥 Входящее путешествие:', travel);
+        console.log('👤 Входящий userInfo:', userInfo);
+
         // Добавляем информацию о пользователе если есть
         const enrichedTravel = {
             ...travel,
@@ -51,10 +69,14 @@ class TravelDatabase {
             liked: false  // Для текущего пользователя
         };
 
+        console.log('📦 Обогащенное путешествие:', enrichedTravel);
+
         this.travels.unshift(enrichedTravel); // Добавляем в начало (свежие сверху)
+        console.log('💾 Сохраняем в localStorage...');
         this.saveAll();
 
         console.log('✅ Путешествие добавлено в глобальную ленту:', enrichedTravel.title);
+        console.log('📊 Всего путешествий в памяти:', this.travels.length);
         return enrichedTravel;
     }
 

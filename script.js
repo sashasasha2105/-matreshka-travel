@@ -1389,22 +1389,44 @@ function getRegionCenterCoords(regionId) {
 
 // Функция показа главной страницы (универсальная)
 function showMainSection() {
-    console.log('🏠 Показываем главную страницу');
+    console.log('🏠🏠🏠 ВЫЗВАНА showMainSection() 🏠🏠🏠');
 
     // Скрываем все остальные секции
-    document.getElementById('regionDetails').style.display = 'none';
-    document.getElementById('profileSection').style.display = 'none';
-    document.getElementById('cartSection').style.display = 'none';
-
+    const regionDetails = document.getElementById('regionDetails');
+    const profileSection = document.getElementById('profileSection');
+    const cartSection = document.getElementById('cartSection');
     const questsSection = document.getElementById('questsSection');
+    const fullFeedContainer = document.getElementById('fullFeedContainer');
+    const mainSection = document.getElementById('mainSection');
+
+    console.log('📋 Состояние ДО изменений:');
+    console.log('  mainSection.display:', mainSection?.style.display);
+    console.log('  fullFeedContainer.display:', fullFeedContainer?.style.display);
+
+    regionDetails.style.display = 'none';
+    profileSection.style.display = 'none';
+    cartSection.style.display = 'none';
     if (questsSection) questsSection.style.display = 'none';
 
     // Скрываем полную ленту
-    const fullFeedContainer = document.getElementById('fullFeedContainer');
-    if (fullFeedContainer) fullFeedContainer.style.display = 'none';
+    if (fullFeedContainer) {
+        console.log('❌ Скрываем fullFeedContainer');
+        fullFeedContainer.style.display = 'none';
+    } else {
+        console.error('❌ fullFeedContainer не найден!');
+    }
 
     // Показываем главную
-    document.getElementById('mainSection').style.display = 'block';
+    if (mainSection) {
+        console.log('✅ Показываем mainSection');
+        mainSection.style.display = 'block';
+    } else {
+        console.error('❌ mainSection не найден!');
+    }
+
+    console.log('📋 Состояние ПОСЛЕ изменений:');
+    console.log('  mainSection.display:', mainSection?.style.display);
+    console.log('  fullFeedContainer.display:', fullFeedContainer?.style.display);
 
     // Показываем команду
     updateTeamVisibility();
@@ -1434,6 +1456,8 @@ function showMainSection() {
 
     // Скроллим наверх
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    console.log('✅✅✅ showMainSection() ЗАВЕРШЕНА ✅✅✅');
 }
 
 // Функция возврата на главную (для совместимости)
@@ -1683,25 +1707,38 @@ function hideCart() {
  * Показать полную ленту путешествий
  */
 function showFeed() {
-    console.log('🌍 Показываем полную ленту путешествий');
+    console.log('🌍🌍🌍 ВЫЗВАНА showFeed() 🌍🌍🌍');
 
     // Скрываем все секции
-    document.getElementById('mainSection').style.display = 'none';
-    document.getElementById('regionDetails').style.display = 'none';
-    document.getElementById('profileSection').style.display = 'none';
-    document.getElementById('cartSection').style.display = 'none';
-
+    const mainSection = document.getElementById('mainSection');
+    const regionDetails = document.getElementById('regionDetails');
+    const profileSection = document.getElementById('profileSection');
+    const cartSection = document.getElementById('cartSection');
     const questsSection = document.getElementById('questsSection');
+    const fullFeedContainer = document.getElementById('fullFeedContainer');
+
+    console.log('📋 Состояние ДО изменений:');
+    console.log('  mainSection.display:', mainSection?.style.display);
+    console.log('  fullFeedContainer.display:', fullFeedContainer?.style.display);
+
+    mainSection.style.display = 'none';
+    regionDetails.style.display = 'none';
+    profileSection.style.display = 'none';
+    cartSection.style.display = 'none';
     if (questsSection) questsSection.style.display = 'none';
 
     // Показываем контейнер полной ленты
-    const fullFeedContainer = document.getElementById('fullFeedContainer');
     if (!fullFeedContainer) {
         console.error('❌ fullFeedContainer не найден!');
         return;
     }
 
+    console.log('✅ Показываем fullFeedContainer');
     fullFeedContainer.style.display = 'block';
+
+    console.log('📋 Состояние ПОСЛЕ изменений:');
+    console.log('  mainSection.display:', mainSection?.style.display);
+    console.log('  fullFeedContainer.display:', fullFeedContainer?.style.display);
 
     // Скрываем команду
     updateTeamVisibility();
@@ -1738,6 +1775,8 @@ function showFeed() {
 
     // Скроллим наверх
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    console.log('✅✅✅ showFeed() ЗАВЕРШЕНА ✅✅✅');
 }
 
 /**

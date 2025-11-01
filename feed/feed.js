@@ -76,12 +76,19 @@ class TravelFeed {
      * Отрисовка карточки путешествия
      */
     renderTravelCard(travel) {
+        console.log('🎨 Рендерим карточку путешествия:', travel.title);
+        console.log('📷 Изображения в путешествии:', travel.images);
+
         const author = travel.author || {};
         const authorName = author.firstName ? `${author.firstName} ${author.lastName || ''}` : author.username || 'Аноним';
-        const timeAgo = this.getTimeAgo(travel.createdAt);
+        const timeAgo = this.getTimeAgo(travel.createdAt || Date.now());
+
+        // Проверяем наличие изображений
+        const hasImages = travel.images && Array.isArray(travel.images) && travel.images.length > 0;
+        console.log('✅ Есть изображения:', hasImages, 'Количество:', travel.images?.length);
 
         return `
-            <div class="feed-card" data-global-id="${travel.globalId}">
+            <div class="feed-card" data-global-id="${travel.globalId || travel.id}">
                 <!-- Шапка с автором -->
                 <div class="feed-card-header">
                     <div class="feed-author">
@@ -96,25 +103,27 @@ class TravelFeed {
                 </div>
 
                 <!-- Фотографии -->
-                <div class="feed-card-images" onclick="matryoshkaFeed.openGallery('${travel.globalId}')">
+                ${hasImages ? `
+                <div class="feed-card-images" onclick="matryoshkaFeed.openGallery('${travel.globalId || travel.id}')">
                     ${this.generatePhotoGrid(travel.images)}
                 </div>
+                ` : ''}
 
                 <!-- Контент -->
                 <div class="feed-card-content">
-                    <h4 class="feed-card-title">${travel.title}</h4>
-                    <p class="feed-card-text">${travel.text}</p>
+                    <h4 class="feed-card-title">${travel.title || 'Без названия'}</h4>
+                    <p class="feed-card-text">${travel.text || 'Нет описания'}</p>
                 </div>
 
                 <!-- Футер с лайками -->
                 <div class="feed-card-footer">
                     <button class="feed-like-btn ${travel.liked ? 'liked' : ''}"
-                            onclick="matryoshkaFeed.toggleLike('${travel.globalId}')">
+                            onclick="matryoshkaFeed.toggleLike('${travel.globalId || travel.id}')">
                         <span class="feed-like-icon">${travel.liked ? '❤️' : '🤍'}</span>
                         <span class="feed-like-count">${travel.likes || 0}</span>
                     </button>
                     <div class="feed-card-location">
-                        📍 ${travel.title.split(',')[0]}
+                        📍 ${(travel.title || 'Неизвестно').split(',')[0]}
                     </div>
                 </div>
             </div>
@@ -125,42 +134,51 @@ class TravelFeed {
      * Генерация адаптивной сетки фотографий (как в профиле)
      */
     generatePhotoGrid(images) {
+        console.log('🖼️ generatePhotoGrid вызвана с images:', images);
+
         if (!images || images.length === 0) {
-            return '<div class="no-images">Нет фотографий</div>';
+            console.log('⚠️ Нет изображений для отображения');
+            return '<div class="no-images" style="padding: 20px; text-align: center; color: rgba(255,255,255,0.5);">Нет фотографий</div>';
         }
 
+        console.log('✅ Генерируем сетку для', images.length, 'изображений');
+
         if (images.length === 1) {
-            return `<img src="${images[0]}" class="single-image" loading="lazy">`;
+            console.log('📐 Одно изображение');
+            return `<img src="${images[0]}" class="single-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">`;
         }
 
         if (images.length === 2) {
+            console.log('📐 Два изображения');
             return `
                 <div class="grid-two">
-                    ${images.map(img => `<img src="${img}" class="grid-image" loading="lazy">`).join('')}
+                    ${images.map(img => `<img src="${img}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">`).join('')}
                 </div>
             `;
         }
 
         if (images.length === 3) {
+            console.log('📐 Три изображения');
             return `
                 <div class="grid-three">
-                    <img src="${images[0]}" class="grid-image main" loading="lazy">
+                    <img src="${images[0]}" class="grid-image main" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
                     <div class="grid-column">
-                        <img src="${images[1]}" class="grid-image" loading="lazy">
-                        <img src="${images[2]}" class="grid-image" loading="lazy">
+                        <img src="${images[1]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
+                        <img src="${images[2]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
                     </div>
                 </div>
             `;
         }
 
         if (images.length >= 4) {
+            console.log('📐 Четыре или более изображений');
             return `
                 <div class="grid-many">
-                    <img src="${images[0]}" class="grid-image" loading="lazy">
-                    <img src="${images[1]}" class="grid-image" loading="lazy">
-                    <img src="${images[2]}" class="grid-image" loading="lazy">
+                    <img src="${images[0]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
+                    <img src="${images[1]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
+                    <img src="${images[2]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
                     <div class="grid-more">
-                        <img src="${images[3]}" class="grid-image" loading="lazy">
+                        <img src="${images[3]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
                         ${images.length > 4 ? `<div class="more-overlay">+${images.length - 4}</div>` : ''}
                     </div>
                 </div>

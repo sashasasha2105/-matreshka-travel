@@ -1,0 +1,375 @@
+/**
+ * Liquid Glass Navigation
+ * Навигация в стиле iPhone с liquid glass эффектом
+ */
+
+/* ========== LIQUID TOGGLE BASE ========== */
+.liquid-nav-item {
+  --unchecked: hsl(218, 8%, 81%);
+  --checked: hsl(
+    var(--hue, 144),
+    calc((8 + (var(--complete) / 100 * (92))) * 1%),
+    calc((81 - (var(--complete) / 100 * (81 - 43))) * 1%)
+  );
+  --control: hsl(300, 100%, 100%);
+  --border: 3px;
+  --width: 70;
+  --height: 50;
+
+  height: calc(var(--height) * 1px);
+  width: calc(var(--width) * 1px);
+  border-radius: 100px;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  position: relative;
+  overflow: visible;
+  container-type: inline-size;
+  background: transparent;
+  transition: outline 0.2s ease-out;
+  outline-offset: 2px;
+}
+
+.liquid-nav-item:focus-visible {
+  outline: 3px solid color-mix(in oklch, var(--checked), transparent 50%);
+}
+
+.liquid-nav-item:active {
+  outline: none;
+}
+
+.liquid-nav-item[data-active='true']:focus-visible {
+  outline: 3px solid transparent;
+}
+
+/* ========== INDICATOR ========== */
+.liquid-indicator {
+  border-radius: 100px;
+  pointer-events: none;
+  height: 100%;
+  width: 100%;
+  background: var(--checked);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+/* ========== KNOCKOUT ========== */
+.liquid-knockout {
+  height: calc(var(--height) * 1px);
+  width: calc(var(--width) * 1px);
+  border-radius: 100px;
+  filter: url(#remove-black);
+  position: absolute;
+  inset: 0;
+  will-change: filter, scale;
+  transform: translate3d(0, 0, 0);
+}
+
+.liquid-indicator--masked {
+  background: var(--checked);
+  z-index: 12;
+  height: 100%;
+  width: 100%;
+  translate: -50% -50%;
+  container-type: inline-size;
+}
+
+.liquid-mask {
+  position: absolute;
+  height: calc(100% - (2 * var(--border)));
+  width: calc(60% - (2 * var(--border)));
+  top: 50%;
+  background: #000;
+  left: var(--border);
+  border-radius: 100px;
+  translate: calc((var(--complete) / 100) * (100cqi - 60cqi - (0 * var(--border)))) -50%;
+  transition-property: height, width, margin, scale;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+  will-change: height, width, margin;
+}
+
+/* ========== WRAPPER ========== */
+.liquid-wrapper {
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  clip-path: inset(0 0 0 0 round 100px);
+  filter: blur(4px);
+  transition: filter 0.2s ease-out;
+}
+
+/* ========== LIQUIDS ========== */
+.liquid-container {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(0, 0, 0);
+  border-radius: 100px;
+  overflow: hidden;
+  filter: url(#goo);
+}
+
+.liquid-shadow {
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset 0px 0px 2px 3px var(--checked),
+    inset calc(((var(--complete) / 100) * 6px) + -3px) 0px 2px 3px var(--checked);
+  border-radius: 100px;
+}
+
+.liquid-track {
+  content: '';
+  height: calc((var(--height) * 1px) - (0 * var(--border)));
+  width: calc((var(--width) * 1px) - (0 * var(--border)));
+  background: var(--checked);
+  border-radius: 100px;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  translate: calc((var(--complete) / 100) * (100cqi - 100% - (6 * var(--border)))) -50%;
+  transition-property: height, width, filter, left;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+}
+
+[aria-pressed='true']:not([data-active='true']) .liquid-track {
+  left: calc(var(--border) * 6);
+}
+
+/* ========== LIQUID BUBBLE ========== */
+.liquid-bubble {
+  position: absolute;
+  height: calc(100% - (2 * var(--border)));
+  width: calc(60% - (2 * var(--border)));
+  container-type: inline-size;
+  top: 50%;
+  background: transparent;
+  left: var(--border);
+  border-radius: 100px;
+  translate: calc((var(--complete) / 100) * (100cqi - 100% - (2 * var(--border)))) -50%;
+  transition-property: scale;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+}
+
+.liquid-bubble-shadow {
+  opacity: 0;
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 100px;
+  box-shadow:
+    1px -1px 2px hsl(0 0% 100% / 0.5) inset,
+    0px -1px 2px hsl(0 0% 100% / 0.5) inset,
+    -1px -1px 2px hsl(0 0% 100% / 0.5) inset,
+    1px 1px 2px hsl(0 0% 30% / 0.5) inset,
+    -6px 3px 8px -4px hsl(0 0% 30% / 0.25) inset,
+    -1px 1px 4px hsl(0 0% 30% / 0.25) inset,
+    -1px -1px 6px hsl(0 0% 60% / 0.15),
+    1px 1px 2px hsl(0 0% 30% / 0.15),
+    2px 2px 4px hsl(0 0% 30% / 0.15),
+    -2px -1px 2px hsl(0 0% 100% / 0.25) inset,
+    2px 4px 12px -4px hsl(0 0% 30% / 0.5);
+  z-index: 20;
+  transition: opacity 0.2s ease-out;
+}
+
+.liquid-bubble-cover {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: white;
+  border-radius: 100px;
+  transition: opacity 0.2s ease-out;
+}
+
+/* ========== ACTIVE STATE ========== */
+[data-active='true'] .liquid-mask,
+.liquid-nav-item:active .liquid-mask {
+  height: calc((100% - (2 * var(--border))) * 1.4);
+  width: calc((60% - (2 * var(--border))) * 1.4);
+  margin-left: calc((60% - (2 * var(--border))) * -0.2);
+}
+
+[data-active='true'] .liquid-bubble,
+.liquid-nav-item:active .liquid-bubble {
+  scale: 1.4;
+}
+
+[data-active='true'] .liquid-wrapper,
+.liquid-nav-item:active .liquid-wrapper {
+  filter: blur(0px);
+}
+
+[data-active='true'] .liquid-bubble-shadow,
+.liquid-nav-item:active .liquid-bubble-shadow {
+  opacity: 1;
+}
+
+[data-active='true'] .liquid-bubble-cover,
+.liquid-nav-item:active .liquid-bubble-cover {
+  opacity: 0;
+}
+
+[data-active='true'] .liquid-track,
+.liquid-nav-item:active .liquid-track {
+  left: calc(var(--border) * 3);
+  height: calc((var(--height) * 1px) - (6 * var(--border)));
+}
+
+/* ========== BOTTOM NAVIGATION ========== */
+.bottom-nav-liquid {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top: 0.5px solid rgba(0, 0, 0, 0.1);
+  padding: 8px 0 calc(env(safe-area-inset-bottom) + 8px) 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .bottom-nav-liquid {
+    background: rgba(28, 28, 30, 0.8);
+    border-top-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.nav-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-item-icon {
+  font-size: 24px;
+  transition: transform 0.2s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+}
+
+.nav-item-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: #8e8e93;
+  transition: color 0.2s ease-out;
+  white-space: nowrap;
+}
+
+.nav-item-wrapper.active .nav-item-label {
+  color: var(--checked);
+}
+
+.nav-item-wrapper.active .nav-item-icon {
+  transform: scale(1.1);
+}
+
+/* ========== SVG FILTERS ========== */
+#liquid-goo {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+/* ========== iOS STYLE TRANSITIONS ========== */
+.page-transition-enter {
+  animation: slideInRight 0.35s cubic-bezier(0.36, 0.66, 0.04, 1);
+}
+
+.page-transition-exit {
+  animation: slideOutLeft 0.35s cubic-bezier(0.36, 0.66, 0.04, 1);
+}
+
+.page-transition-back-enter {
+  animation: slideInLeft 0.35s cubic-bezier(0.36, 0.66, 0.04, 1);
+}
+
+.page-transition-back-exit {
+  animation: slideOutRight 0.35s cubic-bezier(0.36, 0.66, 0.04, 1);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-30%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .liquid-nav-item {
+    --width: 60;
+    --height: 45;
+  }
+
+  .nav-item-icon {
+    font-size: 22px;
+    width: 26px;
+    height: 26px;
+  }
+
+  .nav-item-label {
+    font-size: 9px;
+  }
+}
+
+/* ========== HIDE OLD NAVIGATION ========== */
+.bottom-nav {
+  display: none !important;
+}

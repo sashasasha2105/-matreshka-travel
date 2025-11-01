@@ -1014,18 +1014,32 @@ class MatryoshkaProfile {
             return;
         }
 
+        // === ПОЛУЧАЕМ BASE64 ИЗОБРАЖЕНИЯ ИЗ ПРЕВЬЮ ===
+        const preview = modal.querySelector('#imagesPreview');
+        const previewImages = preview.querySelectorAll('.preview-image-item img');
+        const images = Array.from(previewImages).map(img => img.src);
+
+        console.log('📸 Извлечено изображений из превью:', images.length);
+        console.log('📸 Первое изображение (первые 100 символов):', images[0]?.substring(0, 100));
+
+        if (images.length === 0) {
+            this.showToast('❌ Нет загруженных изображений');
+            return;
+        }
+
         // === СРАЗУ закрываем модалку ===
         this.closeModal(modal);
 
         // Создаем объект путешествия
-        const images = imageFiles.map(file => URL.createObjectURL(file));
         const newTravel = {
             id: Date.now(),
             title: title,
             text: text,
-            images: images,
+            images: images, // Используем base64 данные из превью
             image: images[0],
         };
+
+        console.log('✅ Создан объект путешествия с', images.length, 'изображениями');
 
         // Обновляем данные
         this.travelStories.push(newTravel);

@@ -58,6 +58,11 @@ class TravelDatabase {
         console.log('➕ TravelDatabase.add() вызвана');
         console.log('📥 Входящее путешествие:', travel);
         console.log('👤 Входящий userInfo:', userInfo);
+        console.log('🖼️ Изображения во входящем путешествии:', travel.images);
+        console.log('🖼️ Количество изображений:', travel.images?.length);
+        if (travel.images && travel.images.length > 0) {
+            console.log('🖼️ Первое изображение (первые 100 символов):', travel.images[0].substring(0, 100));
+        }
 
         // Добавляем информацию о пользователе если есть
         const enrichedTravel = {
@@ -70,6 +75,8 @@ class TravelDatabase {
         };
 
         console.log('📦 Обогащенное путешествие:', enrichedTravel);
+        console.log('🖼️ Изображения в обогащенном путешествии:', enrichedTravel.images);
+        console.log('🖼️ Количество изображений в обогащенном:', enrichedTravel.images?.length);
 
         this.travels.unshift(enrichedTravel); // Добавляем в начало (свежие сверху)
         console.log('💾 Сохраняем в localStorage...');

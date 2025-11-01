@@ -9,14 +9,14 @@
     /**
      * Сжать изображение до заданного размера
      * @param {string} base64Image - Base64 строка изображения
-     * @param {number} maxWidth - Максимальная ширина (по умолчанию 1920)
-     * @param {number} maxHeight - Максимальная высота (по умолчанию 1080)
-     * @param {number} quality - Качество JPEG 0-1 (по умолчанию 0.8)
+     * @param {number} maxWidth - Максимальная ширина (по умолчанию 800)
+     * @param {number} maxHeight - Максимальная высота (по умолчанию 600)
+     * @param {number} quality - Качество JPEG 0-1 (по умолчанию 0.6)
      * @returns {Promise<string>} - Сжатое base64 изображение
      */
-    function compressImage(base64Image, maxWidth = 1920, maxHeight = 1080, quality = 0.8) {
+    function compressImage(base64Image, maxWidth = 800, maxHeight = 600, quality = 0.6) {
         return new Promise((resolve, reject) => {
-            console.log('🗜️ Начало сжатия изображения...');
+            console.log('🗜️ Начало АГРЕССИВНОГО сжатия изображения...');
             console.log('  - Исходный размер:', (base64Image.length / 1024).toFixed(2), 'KB');
 
             // Создаем изображение
@@ -56,8 +56,30 @@
                     // Рисуем изображение
                     ctx.drawImage(img, 0, 0, width, height);
 
-                    // Конвертируем в base64
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                    // Пытаемся использовать WebP (лучше сжатие)
+                    let compressedBase64;
+                    try {
+                        compressedBase64 = canvas.toDataURL('image/webp', quality);
+
+                        // Проверяем поддержку WebP
+                        if (!compressedBase64.startsWith('data:image/webp')) {
+                            console.log('  ⚠️ WebP не поддерживается, используем JPEG');
+                            compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                        } else {
+                            console.log('  ✅ Используем WebP формат');
+                        }
+                    } catch (e) {
+                        console.log('  ⚠️ Ошибка WebP, используем JPEG');
+                        compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+                    }
+
+                    // Если изображение всё ещё слишком большое (>150KB), сжимаем ещё сильнее
+                    if (compressedBase64.length > 150 * 1024) {
+                        console.log('  ⚠️ Изображение всё ещё большое, применяем дополнительное сжатие...');
+                        const reducedQuality = quality * 0.7; // Снижаем качество на 30%
+                        compressedBase64 = canvas.toDataURL('image/jpeg', reducedQuality);
+                        console.log('  - После дополнительного сжатия:', (compressedBase64.length / 1024).toFixed(2), 'KB');
+                    }
 
                     console.log('  - Сжатый размер:', (compressedBase64.length / 1024).toFixed(2), 'KB');
                     console.log('  - Экономия:', ((1 - compressedBase64.length / base64Image.length) * 100).toFixed(1), '%');

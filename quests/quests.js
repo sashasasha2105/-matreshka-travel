@@ -369,7 +369,7 @@
         }
 
         // Обработка выбора фото
-        handlePhotoSelect(file) {
+        async handlePhotoSelect(file) {
             if (!file.type.startsWith('image/')) {
                 showToast('❌ Пожалуйста, выберите изображение');
                 return;
@@ -382,17 +382,37 @@
 
             const reader = new FileReader();
 
-            reader.onload = (e) => {
+            reader.onload = async (e) => {
                 const preview = document.getElementById('photoPreview');
                 const previewContainer = document.getElementById('photoPreviewContainer');
                 const submitBtn = document.getElementById('submitPhotoBtn');
 
-                preview.src = e.target.result;
+                // СЖИМАЕМ изображение перед сохранением
+                let imageData = e.target.result;
+
+                if (window.imageCompression) {
+                    console.log('🗜️ Сжимаем фото задания...');
+                    try {
+                        imageData = await window.imageCompression.compressImage(
+                            imageData,
+                            800,   // maxWidth - агрессивное сжатие
+                            600,   // maxHeight - агрессивное сжатие
+                            0.6    // quality - меньше качество для экономии места
+                        );
+                        console.log(`✅ Фото задания сжато до ${(imageData.length / 1024).toFixed(2)} KB`);
+                    } catch (error) {
+                        console.warn('⚠️ Ошибка сжатия, используем оригинал:', error);
+                    }
+                } else {
+                    console.warn('⚠️ imageCompression не доступен, используем оригинал');
+                }
+
+                preview.src = imageData;
                 previewContainer.style.display = 'block';
                 submitBtn.disabled = false;
 
-                // Сохраняем данные фото
-                this.currentPhotoData = e.target.result;
+                // Сохраняем СЖАТЫЕ данные фото
+                this.currentPhotoData = imageData;
             };
 
             reader.readAsDataURL(file);

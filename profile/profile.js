@@ -82,16 +82,36 @@ class MatryoshkaProfile {
                 if (first.images && first.images.length > 0) {
                     console.log('  - Первое изображение существует:', first.images[0] ? 'ДА' : 'НЕТ');
                     console.log('  - Тип первого изображения:', typeof first.images[0]);
-                    console.log('  - Длина первого изображения:', first.images[0]?.length);
+                    console.log('  - Длина первого изображения:', (first.images[0]?.length / 1024).toFixed(2), 'KB');
                     console.log('  - Начало первого изображения:', first.images[0]?.substring(0, 100));
                 }
             }
 
-            // Сохраняем
+            // Проверяем размер ПЕРЕД сохранением
             const storiesJson = JSON.stringify(this.travelStories);
-            console.log('📦 Размер JSON для сохранения:', storiesJson.length, 'символов');
-            console.log('📦 Размер в KB:', (storiesJson.length / 1024).toFixed(2), 'KB');
+            const storiesSize = storiesJson.length;
+            console.log('📦 Размер JSON для сохранения:', (storiesSize / 1024).toFixed(2), 'KB');
 
+            // Проверяем общий размер localStorage
+            let currentSize = 0;
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key) && key !== 'matryoshka_stories') {
+                    currentSize += localStorage[key].length + key.length;
+                }
+            }
+            const totalSize = currentSize + storiesSize;
+            console.log('📦 Текущий размер localStorage:', (currentSize / 1024).toFixed(2), 'KB');
+            console.log('📦 Размер после сохранения:', (totalSize / 1024).toFixed(2), 'KB');
+            console.log('📦 Лимит обычно: 5000-10000 KB');
+
+            // ПРЕДУПРЕЖДЕНИЕ если близко к лимиту
+            if (totalSize > 4000 * 1024) {
+                console.warn('⚠️⚠️⚠️ ВНИМАНИЕ: Размер данных близок к лимиту localStorage!');
+                console.warn('Рекомендуется удалить старые путешествия или загружать меньше фото');
+                this.showToast('⚠️ Хранилище почти заполнено! Удалите старые путешествия');
+            }
+
+            // Сохраняем
             localStorage.setItem('matryoshka_profile', JSON.stringify(this.profileData));
             localStorage.setItem('matryoshka_stories', storiesJson);
             if (this.user.photo_url) {
@@ -105,7 +125,7 @@ class MatryoshkaProfile {
                 console.log('✅ Проверка: сохранено путешествий в localStorage:', parsed.length);
                 if (parsed.length > 0 && parsed[0].images) {
                     console.log('✅ Проверка: изображения в первом путешествии:', parsed[0].images.length);
-                    console.log('✅ Проверка: первое изображение начинается с:', parsed[0].images[0]?.substring(0, 50));
+                    console.log('✅ Проверка: первое изображение (размер):', (parsed[0].images[0]?.length / 1024).toFixed(2), 'KB');
                 }
             } else {
                 console.error('❌ КРИТИЧЕСКАЯ ОШИБКА: данные НЕ сохранились в localStorage!');
@@ -114,19 +134,27 @@ class MatryoshkaProfile {
         } catch (error) {
             console.error('❌❌❌ ОШИБКА СОХРАНЕНИЯ:', error);
             console.error('Детали ошибки:', error.message);
-            console.error('Возможно превышен лимит localStorage (обычно 5-10MB)');
 
-            // Пытаемся посчитать размер
-            try {
-                let total = 0;
-                for (let key in localStorage) {
-                    if (localStorage.hasOwnProperty(key)) {
-                        total += localStorage[key].length + key.length;
+            // Проверяем превышен ли лимит
+            if (error.name === 'QuotaExceededError' || error.code === 22) {
+                console.error('💥 ПРЕВЫШЕН ЛИМИТ localStorage!');
+                this.showToast('❌ Ошибка: превышен лимит хранилища! Удалите старые путешествия');
+
+                // Пытаемся посчитать размер
+                try {
+                    let total = 0;
+                    for (let key in localStorage) {
+                        if (localStorage.hasOwnProperty(key)) {
+                            total += localStorage[key].length + key.length;
+                        }
                     }
+                    console.error('Текущий размер localStorage:', (total / 1024).toFixed(2), 'KB');
+                    console.error('РЕШЕНИЕ: Удалите старые путешествия или загружайте меньше фото');
+                } catch (e) {
+                    console.error('Не удалось посчитать размер localStorage');
                 }
-                console.error('Текущий размер localStorage:', (total / 1024).toFixed(2), 'KB');
-            } catch (e) {
-                console.error('Не удалось посчитать размер localStorage');
+            } else {
+                this.showToast('❌ Ошибка сохранения данных');
             }
         }
     }
@@ -898,11 +926,11 @@ class MatryoshkaProfile {
                         console.log(`🗜️ Сжимаем фото ${index + 1}...`);
                         imageData = await window.imageCompression.compressImage(
                             imageData,
-                            1920,  // maxWidth
-                            1080,  // maxHeight
-                            0.85   // quality (чуть выше для лучшего качества)
+                            800,   // maxWidth - агрессивное сжатие
+                            600,   // maxHeight - агрессивное сжатие
+                            0.6    // quality - меньше качество для экономии места
                         );
-                        console.log(`✅ Фото ${index + 1} сжато`);
+                        console.log(`✅ Фото ${index + 1} сжато до ${(imageData.length / 1024).toFixed(2)} KB`);
                     } else {
                         console.warn('⚠️ imageCompression не доступен, используем оригинал');
                     }

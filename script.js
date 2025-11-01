@@ -1387,135 +1387,9 @@ function getRegionCenterCoords(regionId) {
     return centers[regionId] || { lat: 55.7558, lon: 37.6176, zoom: 10 };
 }
 
-/**
- * Восстановить оригинальное содержимое главной страницы
- */
-function restoreMainPageContent() {
-    console.log('🏠 Восстанавливаем оригинальное содержимое главной страницы');
-
-    const mainSection = document.getElementById('mainSection');
-    if (!mainSection) return;
-
-    // Восстанавливаем оригинальную структуру главной страницы
-    mainSection.innerHTML = `
-        <div class="hero-section">
-            <!-- 3D-модель -->
-            <div class="hero-model-container">
-                <iframe
-                    src="https://sketchfab.com/models/1a34ab2a901c47fa9dd753ebfe97bbed/embed?autostart=1&preload=1&ui_infos=0&ui_stop=0&ui_inspector=0&ui_settings=0&ui_help=0&ui_annotations=0&ui_vr=0&ui_fullscreen=0&ui_watermark=0&ui_controls=0&ui_ar=0&ui_color=transparent&camera=0&transparent=1&autospin=0.2"
-                    frameborder="0"
-                    allow="autoplay; fullscreen; xr-spatial-tracking"
-                    allowfullscreen
-                    mozallowfullscreen="true"
-                    webkitallowfullscreen="true"
-                    loading="eager"
-                ></iframe>
-            </div>
-
-            <div class="hero-overlay">
-                <h1 class="hero-title">
-                    Исследуйте Россию<br>вместе с Матрешкой
-                </h1>
-
-                <!-- Красивое окно выбора даты поездки -->
-                <div class="travel-date-picker">
-                    <div class="date-picker-header">
-                        <span class="date-icon">📅</span>
-                        <span class="date-label">Когда планируете поездку?</span>
-                    </div>
-                    <div class="date-inputs-row">
-                        <div class="date-input-group">
-                            <label class="date-input-label">Дата начала</label>
-                            <input type="date" id="travelStartDate" class="date-input" placeholder="Выберите дату">
-                        </div>
-                        <div class="date-separator">→</div>
-                        <div class="date-input-group">
-                            <label class="date-input-label">Дата окончания</label>
-                            <input type="date" id="travelEndDate" class="date-input" placeholder="Выберите дату">
-                        </div>
-                    </div>
-                    <button class="date-save-btn" onclick="saveTravelDates()">
-                        <span class="btn-icon">✓</span>
-                        <span class="btn-text">Сохранить даты</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Поиск регионов -->
-        <div class="search-section" data-animate>
-            <div class="search-container">
-                <div class="search-icon">🔍</div>
-                <input
-                    type="text"
-                    id="regionSearch"
-                    class="search-input"
-                    placeholder="Найти регион или город..."
-                    oninput="searchRegions(this.value)"
-                    autocomplete="off"
-                >
-                <button class="search-clear" onclick="clearSearch()" style="display: none;">✕</button>
-            </div>
-        </div>
-
-        <div class="regions-grid" id="regionsGrid">
-            <!-- Регионы будут загружены здесь -->
-        </div>
-
-        <!-- Готовые пакеты путешествий -->
-        <div class="packages-section" data-animate>
-            <h2 class="packages-title">
-                <span class="packages-icon">🎁</span>
-                Готовые пакеты путешествий
-            </h2>
-            <div class="packages-grid" id="packagesGrid">
-                <!-- Пакеты будут загружены здесь -->
-            </div>
-        </div>
-
-        <!-- Лента путешествий -->
-        <div class="travel-feed-section" data-animate>
-            <h2 class="feed-title">
-                <span class="feed-icon">🌟</span>
-                Лента путешествий
-            </h2>
-            <div class="travel-feed" id="travelFeed">
-                <!-- Публикации будут загружены здесь -->
-            </div>
-        </div>
-    `;
-
-    // Перезагружаем регионы и пакеты
-    loadRegions();
-    setTimeout(() => {
-        loadTravelPackages();
-    }, 300);
-
-    // Загружаем ленту на главную (последние 6)
-    setTimeout(() => {
-        loadMainFeedSection();
-    }, 500);
-
-    // Восстанавливаем сохраненные даты
-    const savedDates = localStorage.getItem('travelDates');
-    if (savedDates) {
-        try {
-            const dates = JSON.parse(savedDates);
-            const startInput = document.getElementById('travelStartDate');
-            const endInput = document.getElementById('travelEndDate');
-            if (startInput) startInput.value = dates.startDate;
-            if (endInput) endInput.value = dates.endDate;
-        } catch (e) {
-            console.error('Ошибка загрузки дат:', e);
-        }
-    }
-
-    console.log('✅ Главная страница восстановлена');
-}
-
 // Функция показа главной страницы (универсальная)
 function showMainSection() {
-    console.log('🏠 Переключаемся на главную страницу');
+    console.log('🏠 Показываем главную страницу');
 
     // Скрываем все остальные секции
     document.getElementById('regionDetails').style.display = 'none';
@@ -1525,14 +1399,12 @@ function showMainSection() {
     const questsSection = document.getElementById('questsSection');
     if (questsSection) questsSection.style.display = 'none';
 
+    // Скрываем полную ленту
+    const fullFeedContainer = document.getElementById('fullFeedContainer');
+    if (fullFeedContainer) fullFeedContainer.style.display = 'none';
+
     // Показываем главную
     document.getElementById('mainSection').style.display = 'block';
-
-    // Если были в режиме ленты - восстанавливаем оригинальное содержимое
-    if (mainPageMode === 'feed') {
-        restoreMainPageContent();
-        mainPageMode = 'home';
-    }
 
     // Показываем команду
     updateTeamVisibility();
@@ -1543,6 +1415,13 @@ function showMainSection() {
     // Очищаем карту при выходе
     if (window.matryoshka2GIS) {
         window.matryoshka2GIS.destroy();
+    }
+
+    // Обновляем ленту на главной странице
+    if (typeof loadMainFeedSection === 'function') {
+        setTimeout(() => {
+            loadMainFeedSection();
+        }, 100);
     }
 
     // Обновляем навигацию
@@ -1800,16 +1679,14 @@ function hideCart() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// Переменная для отслеживания текущего режима главной страницы
-let mainPageMode = 'home'; // 'home' или 'feed'
-
 /**
- * Показать ленту путешествий (заменяет содержимое главной страницы)
+ * Показать полную ленту путешествий
  */
 function showFeed() {
-    console.log('🌍 Переключаемся на режим ленты путешествий');
+    console.log('🌍 Показываем полную ленту путешествий');
 
-    // Скрываем все остальные секции
+    // Скрываем все секции
+    document.getElementById('mainSection').style.display = 'none';
     document.getElementById('regionDetails').style.display = 'none';
     document.getElementById('profileSection').style.display = 'none';
     document.getElementById('cartSection').style.display = 'none';
@@ -1817,46 +1694,43 @@ function showFeed() {
     const questsSection = document.getElementById('questsSection');
     if (questsSection) questsSection.style.display = 'none';
 
-    // Главная секция остается видимой
-    const mainSection = document.getElementById('mainSection');
-    mainSection.style.display = 'block';
+    // Показываем контейнер полной ленты
+    const fullFeedContainer = document.getElementById('fullFeedContainer');
+    if (!fullFeedContainer) {
+        console.error('❌ fullFeedContainer не найден!');
+        return;
+    }
+
+    fullFeedContainer.style.display = 'block';
 
     // Скрываем команду
     updateTeamVisibility();
 
-    // Меняем режим
-    mainPageMode = 'feed';
+    // Рендерим полную ленту
+    if (window.matryoshkaFeed && window.travelDatabase) {
+        const travels = window.travelDatabase.getAll();
+        console.log('📊 Рендерим полную ленту, путешествий:', travels.length);
 
-    // Рендерим ленту путешествий в mainSection
-    if (window.matryoshkaFeed) {
-        console.log('✅ matryoshkaFeed найден, рендерим полную ленту');
-        const container = document.querySelector('#mainSection');
-        if (container) {
-            // Рендерим полную ленту
-            const travels = window.travelDatabase.getAll();
-            console.log('📊 Рендерим путешествий:', travels.length);
-
-            const html = `
-                <div class="feed-container">
-                    <div class="feed-header">
-                        <h2 class="feed-title">
-                            <span class="feed-icon">🌍</span>
-                            Лента путешествий
-                        </h2>
-                        <div class="feed-stats">
-                            ${travels.length} ${window.matryoshkaFeed.getWordForm(travels.length, ['путешествие', 'путешествия', 'путешествий'])}
-                        </div>
+        const html = `
+            <div class="feed-container">
+                <div class="feed-header">
+                    <h2 class="feed-title">
+                        <span class="feed-icon">🌍</span>
+                        Лента путешествий
+                    </h2>
+                    <div class="feed-stats">
+                        ${travels.length} ${window.matryoshkaFeed.getWordForm(travels.length, ['путешествие', 'путешествия', 'путешествий'])}
                     </div>
-
-                    ${travels.length === 0 ? window.matryoshkaFeed.renderEmptyState() : `<div class="feed-grid">${travels.map(t => window.matryoshkaFeed.renderTravelCard(t)).join('')}</div>`}
                 </div>
-            `;
 
-            container.innerHTML = html;
-            console.log('✅ Лента отрендерена');
-        }
+                ${travels.length === 0 ? window.matryoshkaFeed.renderEmptyState() : `<div class="feed-grid">${travels.map(t => window.matryoshkaFeed.renderTravelCard(t)).join('')}</div>`}
+            </div>
+        `;
+
+        fullFeedContainer.innerHTML = html;
+        console.log('✅ Полная лента отрендерена');
     } else {
-        console.error('❌ window.matryoshkaFeed не найден!');
+        console.error('❌ matryoshkaFeed или travelDatabase не найдены!');
     }
 
     // Обновляем активную кнопку в навигации

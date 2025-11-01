@@ -1044,6 +1044,12 @@ class MatryoshkaProfile {
             const addedTravel = window.travelDatabase.add(newTravel, userInfo);
             console.log('✅ Путешествие добавлено в глобальную ленту:', addedTravel);
             console.log('📊 Всего в базе:', window.travelDatabase.travels.length);
+
+            // Обновляем ленту на главной странице если функция существует
+            if (typeof loadMainFeedSection === 'function') {
+                loadMainFeedSection();
+                console.log('🔄 Лента на главной обновлена');
+            }
         } else {
             console.error('❌ window.travelDatabase не найден!');
         }
@@ -1106,6 +1112,12 @@ class MatryoshkaProfile {
                 window.travelDatabase.removeByLocalId(travelId);
                 console.log('✅ Путешествие удалено из глобальной ленты');
                 console.log('📊 Осталось в базе:', window.travelDatabase.travels.length);
+
+                // Обновляем ленту на главной странице
+                if (typeof loadMainFeedSection === 'function') {
+                    loadMainFeedSection();
+                    console.log('🔄 Лента на главной обновлена после удаления');
+                }
             } else {
                 console.error('❌ window.travelDatabase не найден при удалении!');
             }

@@ -1394,6 +1394,12 @@ function showMainSection() {
     document.getElementById('profileSection').style.display = 'none';
     document.getElementById('cartSection').style.display = 'none';
 
+    const feedSection = document.getElementById('feedSection');
+    if (feedSection) feedSection.style.display = 'none';
+
+    const questsSection = document.getElementById('questsSection');
+    if (questsSection) questsSection.style.display = 'none';
+
     // Показываем главную
     document.getElementById('mainSection').style.display = 'block';
 
@@ -1406,6 +1412,11 @@ function showMainSection() {
     // Очищаем карту при выходе
     if (window.matryoshka2GIS) {
         window.matryoshka2GIS.destroy();
+    }
+
+    // Обновляем ленту путешествий на главной
+    if (typeof loadMainFeedSection === 'function') {
+        loadMainFeedSection();
     }
 
     // Обновляем навигацию
@@ -1502,6 +1513,45 @@ function hideProfile() {
 
 // Функция совместимости для старого кода (удалена встроенная версия)
 
+/**
+ * Загрузить ленту путешествий на главную страницу
+ */
+function loadMainFeedSection() {
+    if (!window.travelDatabase) {
+        console.error('❌ TravelDatabase не найдена при загрузке главной ленты');
+        return;
+    }
+
+    const feedContainer = document.getElementById('travelFeed');
+    if (!feedContainer) {
+        console.error('❌ Контейнер #travelFeed не найден');
+        return;
+    }
+
+    const travels = window.travelDatabase.getAll(6); // Берем последние 6 путешествий
+    console.log('🌟 Загружаем ленту на главную страницу, путешествий:', travels.length);
+
+    if (travels.length === 0) {
+        feedContainer.innerHTML = `
+            <div style="text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.6);">
+                <div style="font-size: 3rem; margin-bottom: 16px;">🗺️</div>
+                <p>Пока нет путешествий</p>
+                <p style="font-size: 0.9rem; margin-top: 8px;">Станьте первым, кто поделится своим путешествием!</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Используем существующий механизм рендеринга из feed.js
+    if (window.matryoshkaFeed) {
+        const html = travels.map(travel => window.matryoshkaFeed.renderTravelCard(travel)).join('');
+        feedContainer.innerHTML = `<div class="feed-grid" style="display: flex; flex-direction: column; gap: 24px;">${html}</div>`;
+        console.log('✅ Лента на главной загружена');
+    } else {
+        console.error('❌ matryoshkaFeed не найден');
+    }
+}
+
 // Инициализация приложения
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🪆 Матрешка - инициализация приложения');
@@ -1519,6 +1569,11 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         loadTravelPackages();
     }, 1000);
+
+    // Загружаем ленту путешествий на главную страницу
+    setTimeout(() => {
+        loadMainFeedSection();
+    }, 1500);
 
     // Обработчик кнопки "Назад"
     const backBtn = document.getElementById('backBtn');

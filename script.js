@@ -172,7 +172,7 @@ function getFilteredRegions() {
     });
 }
 
-// Функция загрузки регионов с пагинацией
+// Функция загрузки регионов с пагинацией + УМНАЯ ПРЕДЗАГРУЗКА
 function loadRegions() {
     console.log('🔄 Вызвана loadRegions()');
     const regionsGrid = document.getElementById('regionsGrid');
@@ -218,6 +218,14 @@ function loadRegions() {
             const regionCard = createRegionCard(region, index);
             regionsGrid.appendChild(regionCard);
         });
+
+        // 🚀 УМНАЯ ПРЕДЗАГРУЗКА следующих регионов
+        if (window.performanceOptimizer && filteredRegions.length > REGIONS_PER_PAGE) {
+            const nextRegions = filteredRegions.slice(REGIONS_PER_PAGE, REGIONS_PER_PAGE + 6);
+            const nextImages = nextRegions.map(r => r.image);
+            window.performanceOptimizer.prefetchImages(nextImages);
+            console.log('📦 Запущена предзагрузка', nextImages.length, 'следующих изображений');
+        }
     } else {
         // Дополнительная загрузка - добавляем следующие 6
         const startIndex = currentPage * REGIONS_PER_PAGE;
@@ -228,6 +236,14 @@ function loadRegions() {
             const regionCard = createRegionCard(region, startIndex + index);
             regionsGrid.appendChild(regionCard);
         });
+
+        // 🚀 ПРЕДЗАГРУЗКА следующей порции
+        if (window.performanceOptimizer && endIndex < filteredRegions.length) {
+            const nextRegions = filteredRegions.slice(endIndex, endIndex + 6);
+            const nextImages = nextRegions.map(r => r.image);
+            window.performanceOptimizer.prefetchImages(nextImages);
+            console.log('📦 Предзагрузка следующих', nextImages.length, 'изображений');
+        }
     }
 
     // Обновляем кнопку "Показать больше"
@@ -256,23 +272,44 @@ function clearSearchAndReload() {
     }
 }
 
-// Создание карточки региона
+// Создание карточки региона с ТУРБО-ОПТИМИЗАЦИЕЙ
 function createRegionCard(region, animationIndex) {
     const regionCard = document.createElement('div');
     regionCard.className = 'region-card';
     regionCard.onclick = () => showRegionDetails(region.id);
 
-    regionCard.innerHTML = `
-        <img src="${region.image}" alt="${region.name}" class="region-image" loading="lazy">
-        <div class="region-content">
-            <div class="region-name">${region.name}</div>
-            <div class="region-description">${region.description}</div>
-            <div class="region-stats">
-                <span>👥 ${region.population}</span>
-                <span>📐 ${region.area}</span>
-            </div>
+    // Создаем img элемент отдельно для оптимизации
+    const img = document.createElement('img');
+    img.className = 'region-image';
+    img.alt = region.name;
+    img.loading = 'lazy';
+
+    // Используем Performance Optimizer для мгновенной загрузки
+    if (window.performanceOptimizer) {
+        // Определяем приоритет: первые 3 карточки - высокий
+        const priority = animationIndex < 3 ? 'high' : 'normal';
+
+        // Мгновенная загрузка через оптимизатор
+        window.performanceOptimizer.loadImageInstantly(region.image, img, priority);
+    } else {
+        // Fallback
+        img.src = region.image;
+    }
+
+    // Создаем контент
+    const content = document.createElement('div');
+    content.className = 'region-content';
+    content.innerHTML = `
+        <div class="region-name">${region.name}</div>
+        <div class="region-description">${region.description}</div>
+        <div class="region-stats">
+            <span>👥 ${region.population}</span>
+            <span>📐 ${region.area}</span>
         </div>
     `;
+
+    regionCard.appendChild(img);
+    regionCard.appendChild(content);
 
     // Анимация появления
     regionCard.style.animation = `fadeInUp 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${(animationIndex % REGIONS_PER_PAGE) * 100}ms forwards`;

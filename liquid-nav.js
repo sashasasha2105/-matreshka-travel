@@ -21,6 +21,12 @@
                     label: 'Главная',
                     hue: 144,
                 },
+                feed: {
+                    id: 'fullFeedContainer',
+                    icon: '🌍',
+                    label: 'Лента',
+                    hue: 200,
+                },
                 profile: {
                     id: 'profileSection',
                     icon: '👤',
@@ -193,6 +199,9 @@
         initializeSection(sectionKey) {
             console.log(`🔧 Инициализация секции: ${sectionKey}`);
 
+            // Управление видимостью секции команды
+            this.toggleTeamSection(sectionKey);
+
             switch(sectionKey) {
                 case 'profile':
                     if (window.matryoshkaProfile && typeof window.matryoshkaProfile.initProfile === 'function') {
@@ -212,12 +221,53 @@
                     }
                     break;
 
+                case 'feed':
+                    // Рендерим полную ленту
+                    if (window.matryoshkaFeed && window.travelDatabase) {
+                        const travels = window.travelDatabase.getAll();
+                        const fullFeedContainer = document.getElementById('fullFeedContainer');
+                        if (fullFeedContainer) {
+                            const html = `
+                                <div class="feed-container">
+                                    <div class="feed-header">
+                                        <h2 class="feed-title">
+                                            <span class="feed-icon">🌍</span>
+                                            Лента путешествий
+                                        </h2>
+                                        <div class="feed-stats">
+                                            ${travels.length} ${window.matryoshkaFeed.getWordForm(travels.length, ['путешествие', 'путешествия', 'путешествий'])}
+                                        </div>
+                                    </div>
+
+                                    ${travels.length === 0 ? window.matryoshkaFeed.renderEmptyState() : `<div class="feed-grid">${travels.map(t => window.matryoshkaFeed.renderTravelCard(t)).join('')}</div>`}
+                                </div>
+                            `;
+                            fullFeedContainer.innerHTML = html;
+                        }
+                    }
+                    break;
+
                 case 'main':
                     // Обновляем главную секцию если нужно
                     if (typeof loadMainFeedSection === 'function') {
                         loadMainFeedSection();
                     }
                     break;
+            }
+        }
+
+        // Управление видимостью секции команды
+        toggleTeamSection(sectionKey) {
+            const teamSection = document.querySelector('.team-section');
+            if (!teamSection) return;
+
+            // Показываем секцию команды только на главной странице
+            if (sectionKey === 'main') {
+                teamSection.style.display = 'block';
+                console.log('👥 Секция команды показана (главная страница)');
+            } else {
+                teamSection.style.display = 'none';
+                console.log('👥 Секция команды скрыта');
             }
         }
 
@@ -243,6 +293,7 @@
     window.showProfile = () => window.liquidNav.goTo('profile');
     window.showQuests = () => window.liquidNav.goTo('quests');
     window.showCart = () => window.liquidNav.goTo('cart');
+    window.showFeed = () => window.liquidNav.goTo('feed');
     window.showMain = () => window.liquidNav.goTo('main');
 
     console.log('✅ Liquid Navigation loaded');

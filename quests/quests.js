@@ -534,6 +534,11 @@ function showQuests() {
     const questsSection = document.getElementById('questsSection');
     questsSection.style.display = 'block';
 
+    // Скрываем команду
+    if (typeof updateTeamVisibility === 'function') {
+        updateTeamVisibility();
+    }
+
     // Обновляем навигацию
     updateBottomNav('quests');
 
@@ -552,6 +557,11 @@ function hideQuests() {
 
     document.getElementById('questsSection').style.display = 'none';
     document.getElementById('mainSection').style.display = 'block';
+
+    // Показываем команду
+    if (typeof updateTeamVisibility === 'function') {
+        updateTeamVisibility();
+    }
 
     // Обновляем навигацию
     updateBottomNav(null);

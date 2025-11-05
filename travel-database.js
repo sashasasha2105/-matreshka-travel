@@ -77,7 +77,13 @@ class TravelDatabase {
 
             // Загружаем фотографии для каждого путешествия
             for (let travel of travels) {
-                travel.images = await this.getPhotosForTravel(travel.globalId);
+                // 🔥 НОВАЯ ЛОГИКА: Если images уже есть в объекте (URL-ы с сервера), НЕ перезаписываем!
+                if (!travel.images || travel.images.length === 0) {
+                    console.log(`📥 Загружаем base64 фотографии для "${travel.title}"`);
+                    travel.images = await this.getPhotosForTravel(travel.globalId);
+                } else {
+                    console.log(`🌐 Используем сохраненные URL-ы для "${travel.title}": ${travel.images.length} фото`);
+                }
             }
 
             this.travels = travels;
@@ -86,6 +92,9 @@ class TravelDatabase {
             if (this.travels.length > 0) {
                 console.log('🔍 Первое путешествие:', this.travels[0].title);
                 console.log('🖼️ Фото в первом путешествии:', this.travels[0].images?.length);
+                if (this.travels[0].images && this.travels[0].images.length > 0) {
+                    console.log('📸 Первое фото:', this.travels[0].images[0].substring(0, 50) + '...');
+                }
             }
         } catch (error) {
             console.error('❌ Ошибка загрузки в кэш:', error);
@@ -128,27 +137,31 @@ class TravelDatabase {
             createdAt: Date.now(),
             author: userInfo || this.getDefaultUserInfo(),
             likes: travel.likes || 0,
-            liked: false
+            liked: false,
+            images: travel.images || [] // 🔥 СОХРАНЯЕМ URL-Ы В ОБЪЕКТЕ!
         };
 
-        // Извлекаем фотографии
+        // Извлекаем фотографии для IndexedDB (только base64)
         const photos = enrichedTravel.images || [];
-        delete enrichedTravel.images; // Удаляем из основного объекта
+        const base64Photos = photos.filter(p => !p.startsWith('http://') && !p.startsWith('https://'));
+
+        console.log(`📸 Всего фотографий: ${photos.length}, из них base64: ${base64Photos.length}, URL: ${photos.length - base64Photos.length}`);
 
         try {
-            // Сохраняем путешествие
+            // Сохраняем путешествие (с URL-ами в объекте!)
             await this._putTravel(enrichedTravel);
-            console.log('✅ Путешествие сохранено в IndexedDB');
+            console.log('✅ Путешествие сохранено в IndexedDB (с URL-ами)');
 
-            // Сохраняем фотографии параллельно
-            const savePromises = photos.map((photoData, i) =>
-                this.savePhoto(enrichedTravel.globalId, i, photoData)
-            );
-            await Promise.all(savePromises);
-            console.log('✅ Фотографии сохранены в IndexedDB:', photos.length);
+            // Сохраняем только base64 фотографии в отдельное хранилище
+            if (base64Photos.length > 0) {
+                const savePromises = base64Photos.map((photoData, i) =>
+                    this.savePhoto(enrichedTravel.globalId, i, photoData)
+                );
+                await Promise.all(savePromises);
+                console.log('✅ Base64 фотографии сохранены в IndexedDB:', base64Photos.length);
+            }
 
-            // Добавляем в кэш с фотографиями
-            enrichedTravel.images = photos;
+            // Добавляем в кэш с фотографиями (URL-ы уже есть в объекте)
             this.travels.unshift(enrichedTravel);
 
             console.log('✅ Путешествие добавлено в глобальную ленту:', enrichedTravel.title);
@@ -163,15 +176,25 @@ class TravelDatabase {
 
     /**
      * Сохранить фотографию в IndexedDB
+     * ВАЖНО: Если photoData это URL (начинается с http), то НЕ сохраняем в IndexedDB!
      */
-    async savePhoto(globalId, index, base64Data) {
+    async savePhoto(globalId, index, photoData) {
         try {
+            // 🔥 НОВАЯ ЛОГИКА: Проверяем, это URL или base64
+            if (photoData.startsWith('http://') || photoData.startsWith('https://')) {
+                console.log(`  🌐 Фото ${index + 1} - это URL, пропускаем сохранение в IndexedDB:`, photoData.substring(0, 50) + '...');
+                // URL-ы не сохраняем в IndexedDB, они будут грузиться с сервера
+                return;
+            }
+
+            console.log(`  💾 Фото ${index + 1} - это base64, сохраняем в IndexedDB`);
+
             // Сжимаем фото если доступна компрессия
-            let compressedData = base64Data;
+            let compressedData = photoData;
             if (window.imageCompression) {
                 try {
                     compressedData = await window.imageCompression.compressImage(
-                        base64Data,
+                        photoData,
                         1200,  // Увеличил разрешение для качества
                         900,
                         0.85   // Увеличил качество

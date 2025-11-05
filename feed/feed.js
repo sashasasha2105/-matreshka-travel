@@ -12,7 +12,7 @@ class TravelFeed {
     /**
      * Отобразить ленту путешествий
      */
-    render() {
+    async render() {
         const container = document.querySelector('#feedContent');
         if (!container) {
             console.error('❌ #feedContent не найден');
@@ -20,6 +20,10 @@ class TravelFeed {
         }
 
         this.container = container;
+
+        // Ждем готовности базы данных
+        await this.database.waitForReady();
+
         const travels = this.database.getAll();
 
         console.log('📊 Загружено путешествий из базы:', travels.length);
@@ -225,8 +229,8 @@ class TravelFeed {
     /**
      * Переключить лайк
      */
-    toggleLike(globalId) {
-        const travel = this.database.toggleLike(globalId);
+    async toggleLike(globalId) {
+        const travel = await this.database.toggleLike(globalId);
         if (travel) {
             // Обновляем UI
             const card = document.querySelector(`[data-global-id="${globalId}"]`);

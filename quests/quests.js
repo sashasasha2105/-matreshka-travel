@@ -524,9 +524,6 @@
 function showQuests() {
     console.log('🎯 Открываем задания');
 
-    // Прокручиваем наверх сразу
-    window.scrollTo({ top: 0, behavior: 'instant' });
-
     // Скрываем все секции
     document.getElementById('mainSection').style.display = 'none';
     document.getElementById('regionDetails').style.display = 'none';
@@ -549,6 +546,11 @@ function showQuests() {
     if (window.matryoshkaQuests) {
         window.matryoshkaQuests.render();
     }
+
+    // Прокручиваем наверх ПОСЛЕ отрисовки
+    requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    });
 }
 
 // Функция скрытия заданий

@@ -1095,19 +1095,25 @@ class MatryoshkaProfile {
         this.updateTravelCards();
         await this.saveToStorage();
 
-        // Добавляем в глобальную базу данных
+        // Добавляем в глобальную базу данных (IndexedDB)
         if (window.travelDatabase) {
             const userInfo = this.user || {};
-            console.log('📤 Добавляем в глобальную базу:', newTravel);
+            console.log('📤 Добавляем в глобальную базу (IndexedDB):', newTravel);
             console.log('👤 Информация о пользователе:', userInfo);
-            const addedTravel = window.travelDatabase.add(newTravel, userInfo);
-            console.log('✅ Путешествие добавлено в глобальную ленту:', addedTravel);
-            console.log('📊 Всего в базе:', window.travelDatabase.travels.length);
 
-            // Обновляем ленту на главной странице если функция существует
-            if (typeof loadMainFeedSection === 'function') {
-                loadMainFeedSection();
-                console.log('🔄 Лента на главной обновлена');
+            try {
+                const addedTravel = await window.travelDatabase.add(newTravel, userInfo);
+                console.log('✅ Путешествие добавлено в глобальную ленту:', addedTravel);
+                console.log('📊 Всего в базе:', window.travelDatabase.travels.length);
+
+                // Обновляем ленту на главной странице если функция существует
+                if (typeof loadMainFeedSection === 'function') {
+                    loadMainFeedSection();
+                    console.log('🔄 Лента на главной обновлена');
+                }
+            } catch (error) {
+                console.error('❌ Ошибка добавления в глобальную базу:', error);
+                this.showToast('⚠️ Фото сохранены локально, но не добавлены в ленту');
             }
         } else {
             console.error('❌ window.travelDatabase не найден!');
@@ -1165,17 +1171,21 @@ class MatryoshkaProfile {
         if (confirm('Удалить это путешествие?')) {
             this.travelStories = this.travelStories.filter(t => t.id !== travelId);
 
-            // Удаляем из глобальной базы данных
+            // Удаляем из глобальной базы данных (IndexedDB)
             if (window.travelDatabase) {
-                console.log('🗑️ Удаляем из глобальной базы, ID:', travelId);
-                window.travelDatabase.removeByLocalId(travelId);
-                console.log('✅ Путешествие удалено из глобальной ленты');
-                console.log('📊 Осталось в базе:', window.travelDatabase.travels.length);
+                try {
+                    console.log('🗑️ Удаляем из глобальной базы, ID:', travelId);
+                    await window.travelDatabase.removeByLocalId(travelId);
+                    console.log('✅ Путешествие удалено из глобальной ленты');
+                    console.log('📊 Осталось в базе:', window.travelDatabase.travels.length);
 
-                // Обновляем ленту на главной странице
-                if (typeof loadMainFeedSection === 'function') {
-                    loadMainFeedSection();
-                    console.log('🔄 Лента на главной обновлена после удаления');
+                    // Обновляем ленту на главной странице
+                    if (typeof loadMainFeedSection === 'function') {
+                        loadMainFeedSection();
+                        console.log('🔄 Лента на главной обновлена после удаления');
+                    }
+                } catch (error) {
+                    console.error('❌ Ошибка удаления из глобальной базы:', error);
                 }
             } else {
                 console.error('❌ window.travelDatabase не найден при удалении!');
@@ -1185,7 +1195,7 @@ class MatryoshkaProfile {
             this.updateTravelCounters();
 
             this.updateTravelCards();
-            this.saveToLocalStorage();
+            await this.saveToStorage();
             this.showToast('🗑️ Путешествие удалено');
         }
     }

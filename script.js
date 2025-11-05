@@ -1536,6 +1536,8 @@ function showMainSection() {
     // Прокручиваем наверх ПОСЛЕ отрисовки
     requestAnimationFrame(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
+        // Убираем возможный overflow: hidden с body
+        document.body.style.overflow = '';
     });
 
     console.log('✅✅✅ showMainSection() ЗАВЕРШЕНА ✅✅✅');
@@ -1606,6 +1608,8 @@ function showProfile() {
     // Прокручиваем наверх ПОСЛЕ отрисовки
     requestAnimationFrame(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
+        // Убираем возможный overflow: hidden с body
+        document.body.style.overflow = '';
     });
 }
 
@@ -1777,6 +1781,8 @@ function showCart() {
     // Прокручиваем наверх ПОСЛЕ отрисовки
     requestAnimationFrame(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
+        // Убираем возможный overflow: hidden с body
+        document.body.style.overflow = '';
     });
 }
 
@@ -1875,6 +1881,8 @@ function showFeed() {
     // Прокручиваем наверх ПОСЛЕ отрисовки
     requestAnimationFrame(() => {
         window.scrollTo({ top: 0, behavior: 'instant' });
+        // Убираем возможный overflow: hidden с body
+        document.body.style.overflow = '';
     });
 
     console.log('✅✅✅ showFeed() ЗАВЕРШЕНА ✅✅✅');

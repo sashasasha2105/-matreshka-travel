@@ -223,12 +223,15 @@ def health_check():
     })
 
 if __name__ == '__main__':
+    import os
+    port = int(os.environ.get('PORT', 5000))
+
     print("🚀 Запуск сервера для фотографий...")
     print(f"📁 Папка для фотографий: {PHOTOS_DIR}")
-    print(f"🌐 Сервер доступен на: http://localhost:5000")
+    print(f"🌐 Сервер доступен на порту: {port}")
 
     app.run(
         host='0.0.0.0',
-        port=5000,
-        debug=True
+        port=port,
+        debug=False  # Отключаем debug в продакшн
     )

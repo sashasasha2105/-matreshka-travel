@@ -1,1 +1,1 @@
-worker: python bot.py
+web: gunicorn photo_server:app

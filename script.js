@@ -1354,6 +1354,14 @@ function processPayment(event) {
         if (window.matryoshkaProfile && window.matryoshkaProfile.updateCoupons) {
             window.matryoshkaProfile.updateCoupons();
         }
+
+        // 🔥 КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Разблокируем скролл после оплаты
+        if (window.ensureScrollEnabled) {
+            window.ensureScrollEnabled();
+        }
+        document.body.style.overflow = 'auto';
+        document.body.style.position = 'static';
+        document.documentElement.style.overflow = 'auto';
     }, 2000);
 }
 
@@ -1383,6 +1391,14 @@ function demoPurchase() {
     if (window.matryoshkaProfile && window.matryoshkaProfile.updateCoupons) {
         window.matryoshkaProfile.updateCoupons();
     }
+
+    // 🔥 КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Разблокируем скролл после покупки
+    if (window.ensureScrollEnabled) {
+        window.ensureScrollEnabled();
+    }
+    document.body.style.overflow = 'auto';
+    document.body.style.position = 'static';
+    document.documentElement.style.overflow = 'auto';
 }
 
 // Функция загрузки интерактивной карты 2GIS

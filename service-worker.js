@@ -10,14 +10,14 @@ const IMAGE_CACHE = `${CACHE_VERSION}-images`;
 
 // Критические ресурсы для офлайн-режима
 const CRITICAL_RESOURCES = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/script.js',
-    '/performance-optimizer.js',
-    '/storage.js',
-    '/lazy-loading.js',
-    '/error-handler.js'
+    './',
+    './index.html',
+    './style.css',
+    './script.js',
+    './performance-optimizer.js',
+    './storage.js',
+    './lazy-loading.js',
+    './error-handler.js'
 ];
 
 // Максимальный размер кэша (количество элементов)

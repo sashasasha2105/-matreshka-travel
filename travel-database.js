@@ -8,6 +8,42 @@ class TravelDatabase {
         this.storageKey = 'matryoshka_all_travels';
         this.travels = this.loadAll();
         console.log('✅ TravelDatabase инициализирована, путешествий:', this.travels.length);
+
+        // Одноразовая очистка фотографий из существующей ленты (сохранить логику постов)
+        try {
+            const cleanupFlagKey = 'matryoshka_cleanup_photos_done';
+            const isCleanupDone = localStorage.getItem(cleanupFlagKey) === 'true';
+            if (!isCleanupDone && Array.isArray(this.travels) && this.travels.length > 0) {
+                let modified = 0;
+                this.travels = this.travels.map(t => {
+                    if (t && (t.images?.length || t.image)) {
+                        const { title, text, author, createdAt, globalId, id, likes, liked } = t;
+                        modified++;
+                        return {
+                            ...t,
+                            title,
+                            text,
+                            author,
+                            createdAt,
+                            globalId,
+                            id,
+                            likes: likes || 0,
+                            liked: !!liked,
+                            images: [],
+                            image: null
+                        };
+                    }
+                    return t;
+                });
+                if (modified > 0) {
+                    console.log(`🧹 Очистка фотографий в ленте: затронуто записей: ${modified}`);
+                    this.saveAll();
+                }
+                localStorage.setItem(cleanupFlagKey, 'true');
+            }
+        } catch (e) {
+            console.warn('⚠️ Ошибка одноразовой очистки фотографий:', e);
+        }
     }
 
     /**

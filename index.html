@@ -383,11 +383,13 @@
     </nav>
 
     <script>
-        // Имитация глобальной функции addToGlobalFeed
-        function addToGlobalFeed(travel) {
-            console.log('🌟 Путешествие добавлено в ленту:', travel);
+        // Имитация глобальной функции addToGlobalFeed (без переопределения существующей)
+        if (typeof window.addToGlobalFeed !== 'function') {
+            window.addToGlobalFeed = function(travel) {
+                console.log('🌟 Путешествие добавлено в ленту:', travel);
+            };
         }
-
+        
         // Функция сохранения дат поездки
         function saveTravelDates() {
             const startDate = document.getElementById('travelStartDate').value;
@@ -473,7 +475,7 @@
             window.ANALYTICS_CONFIG = {
                 BOT_TOKEN: '7471119413:AAH8RHbU0dLSMSMRjgKS6yW4JoMBFp6ylFA',
                 CHAT_ID: '1540847019',
-                ENABLED: true,
+                ENABLED: false,
                 DEBUG: false
             };
         }

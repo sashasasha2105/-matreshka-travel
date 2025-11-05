@@ -1,10 +1,15 @@
 /**
  * Liquid Glass Navigation
  * iOS-style навигация с жидким стеклом
+ *
+ * ⚠️ ОТКЛЮЧЕНО - ИСПОЛЬЗУЕТСЯ НОВАЯ СИСТЕМА НАВИГАЦИИ (navigation.js)
  */
 
 (function() {
     'use strict';
+
+    console.log('⚠️ liquid-nav.js отключен, используется navigation.js');
+    return; // Полностью отключаем этот файл
 
     class LiquidNavigation {
         constructor() {

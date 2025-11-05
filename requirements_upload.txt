@@ -1,0 +1,21 @@
+# Зависимости для Upload API Server
+
+# Web Framework
+Flask==3.0.0
+Werkzeug==3.0.1
+
+# Image Processing
+Pillow==10.1.0
+
+# CORS Support
+Flask-CORS==4.0.0
+
+# Optional: Better performance
+gunicorn==21.2.0  # Production WSGI server
+
+# Optional: Rate limiting
+Flask-Limiter==3.5.0
+
+# Optional: Database (если хотите использовать вместо JSON)
+# SQLAlchemy==2.0.23
+# Flask-SQLAlchemy==3.1.1

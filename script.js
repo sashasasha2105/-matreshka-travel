@@ -1428,6 +1428,9 @@ function getRegionCenterCoords(regionId) {
 function showMainSection() {
     console.log('🏠🏠🏠 ВЫЗВАНА showMainSection() 🏠🏠🏠');
 
+    // Прокручиваем наверх сразу
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
     // Скрываем все остальные секции
     const regionDetails = document.getElementById('regionDetails');
     const profileSection = document.getElementById('profileSection');
@@ -1491,9 +1494,6 @@ function showMainSection() {
         tg.BackButton.hide();
     }
 
-    // Скроллим наверх
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
     console.log('✅✅✅ showMainSection() ЗАВЕРШЕНА ✅✅✅');
 }
 
@@ -1520,6 +1520,9 @@ function hideLoader() {
 
 // Показать профиль
 function showProfile() {
+    // Прокручиваем наверх сразу
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
     // Скрываем главную страницу и детали региона
     document.getElementById('mainSection').style.display = 'none';
     document.getElementById('regionDetails').style.display = 'none';
@@ -1555,9 +1558,6 @@ function showProfile() {
             }
         }, 100);
     }
-
-    // Скроллим наверх
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Скрыть профиль
@@ -1687,6 +1687,9 @@ function updateBreadcrumbs(regionName) {
 function showCart() {
     console.log('🛒 Открываем корзину');
 
+    // Прокручиваем наверх сразу
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
     // Скрываем все секции
     document.getElementById('mainSection').style.display = 'none';
     document.getElementById('regionDetails').style.display = 'none';
@@ -1716,9 +1719,6 @@ function showCart() {
 
     // Обновляем активную кнопку в навигации
     updateBottomNav('cart');
-
-    // Скроллим наверх
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 /**
@@ -1745,6 +1745,9 @@ function hideCart() {
  */
 function showFeed() {
     console.log('🌍🌍🌍 ВЫЗВАНА showFeed() 🌍🌍🌍');
+
+    // Прокручиваем наверх сразу
+    window.scrollTo({ top: 0, behavior: 'instant' });
 
     // Скрываем все секции
     const mainSection = document.getElementById('mainSection');
@@ -1809,9 +1812,6 @@ function showFeed() {
 
     // Обновляем активную кнопку в навигации
     updateBottomNav('feed');
-
-    // Скроллим наверх
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     console.log('✅✅✅ showFeed() ЗАВЕРШЕНА ✅✅✅');
 }

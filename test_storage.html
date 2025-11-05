@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Тест хранилища</title>
+    <style>
+        body {
+            background: #0f0520;
+            color: #fff;
+            font-family: monospace;
+            padding: 20px;
+        }
+        pre {
+            background: #1a0a3a;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            background: #ffcc00;
+            color: #000;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        button:hover {
+            background: #ff8e53;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Проверка localStorage</h1>
+
+    <button onclick="checkStorage()">Проверить localStorage</button>
+    <button onclick="checkIndexedDB()">Проверить IndexedDB</button>
+    <button onclick="clearAll()">Очистить ВСЁ</button>
+
+    <h2>Результат:</h2>
+    <pre id="output">Нажмите кнопку для проверки...</pre>
+
+    <script>
+        function checkStorage() {
+            const output = document.getElementById('output');
+            let result = '=== localStorage ===\n\n';
+
+            // Проверяем matryoshka_all_travels
+            const travels = localStorage.getItem('matryoshka_all_travels');
+            if (travels) {
+                const parsed = JSON.parse(travels);
+                result += `✅ matryoshka_all_travels: ${parsed.length} путешествий\n\n`;
+
+                parsed.forEach((t, i) => {
+                    result += `${i + 1}. "${t.title}"\n`;
+                    result += `   - ID: ${t.id}\n`;
+                    result += `   - GlobalID: ${t.globalId}\n`;
+                    result += `   - Изображений: ${t.images?.length || 0}\n`;
+                    if (t.images && t.images.length > 0) {
+                        result += `   - Первое изображение: ${t.images[0].substring(0, 50)}...\n`;
+                        result += `   - Длина первого: ${t.images[0].length} символов\n`;
+                    } else {
+                        result += `   ❌ НЕТ ИЗОБРАЖЕНИЙ!\n`;
+                    }
+                    result += '\n';
+                });
+            } else {
+                result += '❌ matryoshka_all_travels НЕ НАЙДЕНО\n';
+            }
+
+            // Проверяем все ключи
+            result += '\n=== Все ключи localStorage ===\n';
+            for (let key in localStorage) {
+                if (localStorage.hasOwnProperty(key)) {
+                    const value = localStorage.getItem(key);
+                    result += `\n${key}: ${(value.length / 1024).toFixed(2)} KB\n`;
+                }
+            }
+
+            output.textContent = result;
+        }
+
+        async function checkIndexedDB() {
+            const output = document.getElementById('output');
+            let result = '=== IndexedDB ===\n\n';
+
+            try {
+                const dbRequest = indexedDB.open('MatryoshkaDB', 1);
+
+                dbRequest.onsuccess = (event) => {
+                    const db = event.target.result;
+                    const tx = db.transaction(['travels'], 'readonly');
+                    const store = tx.objectStore('travels');
+                    const getAllRequest = store.getAll();
+
+                    getAllRequest.onsuccess = () => {
+                        const travels = getAllRequest.result;
+                        result += `✅ Найдено путешествий: ${travels.length}\n\n`;
+
+                        travels.forEach((t, i) => {
+                            result += `${i + 1}. "${t.title}"\n`;
+                            result += `   - ID: ${t.id}\n`;
+                            result += `   - Изображений: ${t.images?.length || 0}\n`;
+                            if (t.images && t.images.length > 0) {
+                                result += `   - Первое изображение: ${t.images[0].substring(0, 50)}...\n`;
+                            }
+                            result += '\n';
+                        });
+
+                        output.textContent = result;
+                    };
+                };
+
+                dbRequest.onerror = () => {
+                    result += '❌ Ошибка открытия IndexedDB\n';
+                    output.textContent = result;
+                };
+            } catch (error) {
+                result += `❌ Ошибка: ${error.message}\n`;
+                output.textContent = result;
+            }
+        }
+
+        function clearAll() {
+            if (confirm('Удалить ВСЕ данные из localStorage и IndexedDB?')) {
+                // Очистка localStorage
+                localStorage.clear();
+
+                // Очистка IndexedDB
+                indexedDB.deleteDatabase('MatryoshkaDB');
+
+                document.getElementById('output').textContent = '✅ Всё очищено!';
+            }
+        }
+    </script>
+</body>
+</html>

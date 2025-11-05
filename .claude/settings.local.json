@@ -54,7 +54,10 @@
       "Bash(railway:*)",
       "Bash(du -sh:*)",
       "Bash(ls:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(git checkout:*)",
+      "Bash(git rebase:*)",
+      "Bash(git diff:*)"
     ],
     "deny": [],
     "ask": []

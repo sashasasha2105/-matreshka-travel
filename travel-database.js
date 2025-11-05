@@ -1,161 +1,112 @@
 /**
  * Глобальная база данных путешествий
- * Хранит все путешествия всех пользователей в localStorage
+ * ПОЛНОСТЬЮ ПЕРЕРАБОТАНА: IndexedDB вместо localStorage
+ * Решает проблему переполнения и гарантирует постоянное отображение фото
  */
 
 class TravelDatabase {
     constructor() {
-        this.storageKey = 'matryoshka_all_travels';
-        this.travels = this.loadAll();
-        console.log('✅ TravelDatabase инициализирована, путешествий:', this.travels.length);
+        this.dbName = 'MatryoshkaGlobalDB';
+        this.dbVersion = 2;
+        this.db = null;
+        this.travels = []; // Кэш в памяти для быстрого доступа
+        this.isReady = false;
 
-        // Одноразовая очистка фотографий из существующей ленты (сохранить логику постов)
-        try {
-            const cleanupFlagKey = 'matryoshka_cleanup_photos_done';
-            const isCleanupDone = localStorage.getItem(cleanupFlagKey) === 'true';
-            if (!isCleanupDone && Array.isArray(this.travels) && this.travels.length > 0) {
-                let modified = 0;
-                this.travels = this.travels.map(t => {
-                    if (t && (t.images?.length || t.image)) {
-                        const { title, text, author, createdAt, globalId, id, likes, liked } = t;
-                        modified++;
-                        return {
-                            ...t,
-                            title,
-                            text,
-                            author,
-                            createdAt,
-                            globalId,
-                            id,
-                            likes: likes || 0,
-                            liked: !!liked,
-                            images: [],
-                            image: null
-                        };
-                    }
-                    return t;
-                });
-                if (modified > 0) {
-                    console.log(`🧹 Очистка фотографий в ленте: затронуто записей: ${modified}`);
-                    this.saveAll();
-                }
-                localStorage.setItem(cleanupFlagKey, 'true');
-            }
-        } catch (e) {
-            console.warn('⚠️ Ошибка одноразовой очистки фотографий:', e);
-        }
+        // Автоматическая инициализация
+        this.init().catch(error => {
+            console.error('❌ Ошибка инициализации TravelDatabase:', error);
+        });
     }
 
     /**
-     * Загрузить все путешествия из localStorage
+     * Инициализация IndexedDB
      */
-    loadAll() {
-        try {
-            console.log('📖📖📖 ЗАГРУЗКА ИЗ localStorage 📖📖📖');
-            console.log('🔑 Ключ:', this.storageKey);
+    async init() {
+        return new Promise((resolve, reject) => {
+            console.log('🗄️ Инициализация глобальной базы путешествий (IndexedDB)...');
 
-            const data = localStorage.getItem(this.storageKey);
+            const request = indexedDB.open(this.dbName, this.dbVersion);
 
-            if (!data) {
-                console.log('⚠️ Данные не найдены в localStorage');
-                return [];
-            }
+            request.onerror = () => {
+                console.error('❌ Ошибка открытия IndexedDB:', request.error);
+                reject(request.error);
+            };
 
-            console.log('📦 Размер данных в localStorage:', data.length, 'символов');
-            console.log('📦 Размер в KB:', (data.length / 1024).toFixed(2), 'KB');
+            request.onsuccess = async () => {
+                this.db = request.result;
+                console.log('✅ Глобальная база IndexedDB открыта');
 
-            const parsed = JSON.parse(data);
-            console.log('✅ Распарсено путешествий:', parsed.length);
+                // Загружаем данные в кэш
+                await this.loadAllToCache();
+                this.isReady = true;
 
-            if (parsed.length > 0) {
-                const first = parsed[0];
-                console.log('🔍 Проверка первого путешествия:');
-                console.log('  - Название:', first.title);
-                console.log('  - ID:', first.id);
-                console.log('  - GlobalID:', first.globalId);
-                console.log('  - Изображения:', first.images);
-                console.log('  - Количество изображений:', first.images?.length);
+                resolve(this.db);
+            };
 
-                if (first.images && first.images.length > 0) {
-                    console.log('  - Первое изображение существует:', first.images[0] ? 'ДА' : 'НЕТ');
-                    console.log('  - Тип первого изображения:', typeof first.images[0]);
-                    console.log('  - Длина первого изображения:', first.images[0]?.length);
-                    console.log('  - Начинается с:', first.images[0]?.substring(0, 100));
-                } else {
-                    console.error('❌ ПРОБЛЕМА: В первом путешествии НЕТ изображений!');
+            request.onupgradeneeded = (event) => {
+                console.log('🔧 Создание/обновление структуры глобальной базы...');
+                const db = event.target.result;
+
+                // Создаем хранилище для глобальных путешествий
+                if (!db.objectStoreNames.contains('globalTravels')) {
+                    const store = db.createObjectStore('globalTravels', { keyPath: 'globalId' });
+                    store.createIndex('createdAt', 'createdAt', { unique: false });
+                    store.createIndex('authorId', 'author.id', { unique: false });
+                    console.log('✅ Создано хранилище "globalTravels"');
                 }
-            }
 
-            return parsed;
-        } catch (error) {
-            console.error('❌ Ошибка загрузки путешествий:', error);
-            return [];
-        }
+                // Создаем хранилище для фотографий глобальной ленты
+                if (!db.objectStoreNames.contains('globalPhotos')) {
+                    const photoStore = db.createObjectStore('globalPhotos', { keyPath: 'id', autoIncrement: true });
+                    photoStore.createIndex('globalId', 'globalId', { unique: false });
+                    photoStore.createIndex('index', 'index', { unique: false });
+                    console.log('✅ Создано хранилище "globalPhotos"');
+                }
+            };
+        });
     }
 
     /**
-     * Сохранить все путешествия в localStorage
+     * Загрузить все путешествия в кэш памяти
      */
-    saveAll() {
+    async loadAllToCache() {
         try {
-            console.log('💾💾💾 СОХРАНЕНИЕ В localStorage 💾💾💾');
-            console.log('🔑 Ключ:', this.storageKey);
-            console.log('📊 Путешествий в памяти для сохранения:', this.travels.length);
+            console.log('📖 Загрузка всех путешествий в кэш...');
 
-            // Проверяем первое путешествие перед сохранением
+            const travels = await this._getAllTravels();
+
+            // Загружаем фотографии для каждого путешествия
+            for (let travel of travels) {
+                travel.images = await this.getPhotosForTravel(travel.globalId);
+            }
+
+            this.travels = travels;
+            console.log('✅ Загружено путешествий в кэш:', this.travels.length);
+
             if (this.travels.length > 0) {
-                const first = this.travels[0];
-                console.log('🔍 Проверка первого путешествия ПЕРЕД сохранением:');
-                console.log('  - Название:', first.title);
-                console.log('  - Изображения:', first.images);
-                console.log('  - Количество изображений:', first.images?.length);
-                if (first.images && first.images.length > 0) {
-                    console.log('  - Первое изображение (первые 50 символов):', first.images[0]?.substring(0, 50));
-                }
-            }
-
-            const dataToSave = JSON.stringify(this.travels);
-            console.log('📦 Размер JSON для сохранения:', dataToSave.length, 'символов');
-            console.log('📦 Размер в KB:', (dataToSave.length / 1024).toFixed(2), 'KB');
-
-            localStorage.setItem(this.storageKey, dataToSave);
-            console.log('✅ Данные записаны в localStorage');
-
-            // Проверяем, что данные действительно сохранились
-            const verification = localStorage.getItem(this.storageKey);
-            if (verification) {
-                const verParsed = JSON.parse(verification);
-                console.log('✅ Проверка: в localStorage сохранено путешествий:', verParsed.length);
-
-                if (verParsed.length > 0) {
-                    const verFirst = verParsed[0];
-                    console.log('✅ Проверка: изображения в первом путешествии:', verFirst.images?.length);
-                    if (verFirst.images && verFirst.images.length > 0) {
-                        console.log('✅ Проверка: первое изображение присутствует, длина:', verFirst.images[0]?.length);
-                    } else {
-                        console.error('❌ КРИТИЧЕСКАЯ ПРОБЛЕМА: После сохранения в первом путешествии НЕТ изображений!');
-                    }
-                }
-            } else {
-                console.error('❌ Проверка: данные НЕ сохранились в localStorage!');
+                console.log('🔍 Первое путешествие:', this.travels[0].title);
+                console.log('🖼️ Фото в первом путешествии:', this.travels[0].images?.length);
             }
         } catch (error) {
-            console.error('❌❌❌ ОШИБКА СОХРАНЕНИЯ:', error);
-            console.error('Детали:', error.message);
-
-            // Проверяем размер localStorage
-            try {
-                let total = 0;
-                for (let key in localStorage) {
-                    if (localStorage.hasOwnProperty(key)) {
-                        total += localStorage[key].length + key.length;
-                    }
-                }
-                console.error('Текущий размер localStorage:', (total / 1024).toFixed(2), 'KB');
-            } catch (e) {
-                console.error('Не удалось посчитать размер localStorage');
-            }
+            console.error('❌ Ошибка загрузки в кэш:', error);
+            this.travels = [];
         }
+    }
+
+    /**
+     * Ожидание готовности базы данных
+     */
+    async waitForReady() {
+        if (this.isReady) return;
+
+        return new Promise((resolve) => {
+            const checkInterval = setInterval(() => {
+                if (this.isReady) {
+                    clearInterval(checkInterval);
+                    resolve();
+                }
+            }, 100);
+        });
     }
 
     /**
@@ -163,92 +114,132 @@ class TravelDatabase {
      * @param {Object} travel - Объект путешествия
      * @param {Object} userInfo - Информация о пользователе (опционально)
      */
-    add(travel, userInfo = null) {
-        console.log('➕ TravelDatabase.add() вызвана');
-        console.log('📥 Входящее путешествие:', travel);
-        console.log('👤 Входящий userInfo:', userInfo);
-        console.log('🖼️ Изображения во входящем путешествии:', travel.images);
-        console.log('🖼️ Количество изображений:', travel.images?.length);
-        if (travel.images && travel.images.length > 0) {
-            console.log('🖼️ Первое изображение (первые 100 символов):', travel.images[0].substring(0, 100));
-        }
+    async add(travel, userInfo = null) {
+        await this.waitForReady();
 
-        // Добавляем информацию о пользователе если есть
+        console.log('➕ TravelDatabase.add() - добавление в IndexedDB');
+        console.log('📥 Входящее путешествие:', travel.title);
+        console.log('🖼️ Количество изображений:', travel.images?.length);
+
+        // Создаем обогащенный объект путешествия
         const enrichedTravel = {
             ...travel,
             globalId: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             createdAt: Date.now(),
             author: userInfo || this.getDefaultUserInfo(),
             likes: travel.likes || 0,
-            liked: false  // Для текущего пользователя
+            liked: false
         };
 
-        console.log('📦 Обогащенное путешествие:', enrichedTravel);
-        console.log('🖼️ Изображения в обогащенном путешествии:', enrichedTravel.images);
-        console.log('🖼️ Количество изображений в обогащенном:', enrichedTravel.images?.length);
+        // Извлекаем фотографии
+        const photos = enrichedTravel.images || [];
+        delete enrichedTravel.images; // Удаляем из основного объекта
 
-        this.travels.unshift(enrichedTravel); // Добавляем в начало (свежие сверху)
-        console.log('💾 Сохраняем в localStorage...');
-        this.saveAll();
+        try {
+            // Сохраняем путешествие
+            await this._putTravel(enrichedTravel);
+            console.log('✅ Путешествие сохранено в IndexedDB');
 
-        console.log('✅ Путешествие добавлено в глобальную ленту:', enrichedTravel.title);
-        console.log('📊 Всего путешествий в памяти:', this.travels.length);
-        return enrichedTravel;
+            // Сохраняем фотографии параллельно
+            const savePromises = photos.map((photoData, i) =>
+                this.savePhoto(enrichedTravel.globalId, i, photoData)
+            );
+            await Promise.all(savePromises);
+            console.log('✅ Фотографии сохранены в IndexedDB:', photos.length);
+
+            // Добавляем в кэш с фотографиями
+            enrichedTravel.images = photos;
+            this.travels.unshift(enrichedTravel);
+
+            console.log('✅ Путешествие добавлено в глобальную ленту:', enrichedTravel.title);
+            console.log('📊 Всего путешествий:', this.travels.length);
+
+            return enrichedTravel;
+        } catch (error) {
+            console.error('❌ Ошибка добавления путешествия:', error);
+            throw error;
+        }
     }
 
     /**
-     * Получить информацию о текущем пользователе по умолчанию
+     * Сохранить фотографию в IndexedDB
      */
-    getDefaultUserInfo() {
-        // Получаем из Telegram WebApp или используем данные по умолчанию
-        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
-            const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
-            return {
-                id: tgUser.id,
-                username: tgUser.username || `user_${tgUser.id}`,
-                firstName: tgUser.first_name,
-                lastName: tgUser.last_name,
-                photo: tgUser.photo_url || null
+    async savePhoto(globalId, index, base64Data) {
+        try {
+            // Сжимаем фото если доступна компрессия
+            let compressedData = base64Data;
+            if (window.imageCompression) {
+                try {
+                    compressedData = await window.imageCompression.compressImage(
+                        base64Data,
+                        1200,  // Увеличил разрешение для качества
+                        900,
+                        0.85   // Увеличил качество
+                    );
+                } catch (error) {
+                    console.warn('⚠️ Сжатие не удалось, используем оригинал');
+                }
+            }
+
+            // Конвертируем в Blob для эффективного хранения
+            const blob = await this._base64ToBlob(compressedData);
+
+            const photoObj = {
+                globalId: globalId,
+                index: index,
+                blob: blob,
+                timestamp: Date.now()
             };
-        }
 
-        // Данные по умолчанию
-        return {
-            id: 'local_user',
-            username: 'Путешественник',
-            firstName: 'Анонимный',
-            lastName: 'Пользователь',
-            photo: null
-        };
-    }
-
-    /**
-     * Удалить путешествие из глобальной ленты
-     * @param {Number} travelId - ID путешествия (локальный ID из профиля)
-     */
-    removeByLocalId(travelId) {
-        const beforeCount = this.travels.length;
-        this.travels = this.travels.filter(t => t.id !== travelId);
-        this.saveAll();
-
-        const removed = beforeCount - this.travels.length;
-        if (removed > 0) {
-            console.log(`🗑️ Удалено из глобальной ленты: ${removed} путешествие(-ий)`);
+            await this._putPhoto(photoObj);
+            console.log(`  📸 Фото ${index + 1} сохранено (${(blob.size / 1024).toFixed(2)} KB)`);
+        } catch (error) {
+            console.error(`❌ Ошибка сохранения фото ${index + 1}:`, error);
+            throw error;
         }
     }
 
     /**
-     * Удалить путешествие по глобальному ID
-     * @param {String} globalId - Глобальный ID путешествия
+     * Получить фотографии для путешествия
      */
-    removeByGlobalId(globalId) {
-        this.travels = this.travels.filter(t => t.globalId !== globalId);
-        this.saveAll();
-        console.log('🗑️ Путешествие удалено из ленты');
+    async getPhotosForTravel(globalId) {
+        try {
+            const transaction = this.db.transaction(['globalPhotos'], 'readonly');
+            const store = transaction.objectStore('globalPhotos');
+            const index = store.index('globalId');
+
+            return new Promise((resolve, reject) => {
+                const request = index.getAll(globalId);
+
+                request.onsuccess = async () => {
+                    const photos = request.result;
+
+                    // Сортируем по индексу
+                    photos.sort((a, b) => a.index - b.index);
+
+                    // Конвертируем Blob обратно в base64
+                    const base64Photos = [];
+                    for (let photo of photos) {
+                        const base64 = await this._blobToBase64(photo.blob);
+                        base64Photos.push(base64);
+                    }
+
+                    resolve(base64Photos);
+                };
+
+                request.onerror = () => {
+                    console.error('❌ Ошибка загрузки фото:', request.error);
+                    reject(request.error);
+                };
+            });
+        } catch (error) {
+            console.error('❌ Ошибка getPhotosForTravel:', error);
+            return [];
+        }
     }
 
     /**
-     * Получить все путешествия для ленты (отсортированные по дате)
+     * Получить все путешествия для ленты (из кэша)
      * @param {Number} limit - Максимальное количество (опционально)
      */
     getAll(limit = null) {
@@ -261,21 +252,75 @@ class TravelDatabase {
      * @param {String} userId - ID пользователя
      */
     getByUser(userId) {
-        return this.travels.filter(t => t.author.id === userId);
+        return this.travels.filter(t => t.author && t.author.id === userId);
+    }
+
+    /**
+     * Удалить путешествие по локальному ID
+     * @param {Number} travelId - ID путешествия (локальный ID из профиля)
+     */
+    async removeByLocalId(travelId) {
+        await this.waitForReady();
+
+        // Находим путешествие с таким localId
+        const travel = this.travels.find(t => t.id === travelId);
+        if (!travel) {
+            console.warn('⚠️ Путешествие не найдено:', travelId);
+            return;
+        }
+
+        await this.removeByGlobalId(travel.globalId);
+    }
+
+    /**
+     * Удалить путешествие по глобальному ID
+     * @param {String} globalId - Глобальный ID путешествия
+     */
+    async removeByGlobalId(globalId) {
+        await this.waitForReady();
+
+        try {
+            console.log('🗑️ Удаление путешествия:', globalId);
+
+            // Удаляем фотографии
+            const photos = await this._getPhotosByGlobalId(globalId);
+            for (let photo of photos) {
+                await this._deletePhoto(photo.id);
+            }
+
+            // Удаляем путешествие
+            await this._deleteTravel(globalId);
+
+            // Удаляем из кэша
+            this.travels = this.travels.filter(t => t.globalId !== globalId);
+
+            console.log('✅ Путешествие удалено');
+        } catch (error) {
+            console.error('❌ Ошибка удаления:', error);
+            throw error;
+        }
     }
 
     /**
      * Поставить/убрать лайк
      * @param {String} globalId - Глобальный ID путешествия
      */
-    toggleLike(globalId) {
+    async toggleLike(globalId) {
+        await this.waitForReady();
+
         const travel = this.travels.find(t => t.globalId === globalId);
         if (travel) {
             travel.liked = !travel.liked;
             travel.likes = (travel.likes || 0) + (travel.liked ? 1 : -1);
-            this.saveAll();
-            console.log(`${travel.liked ? '❤️' : '🤍'} Лайк переключен для:`, travel.title);
-            return travel;
+
+            // Обновляем в базе
+            try {
+                await this._updateTravel(travel);
+                console.log(`${travel.liked ? '❤️' : '🤍'} Лайк переключен для:`, travel.title);
+                return travel;
+            } catch (error) {
+                console.error('❌ Ошибка обновления лайка:', error);
+            }
         }
         return null;
     }
@@ -283,10 +328,25 @@ class TravelDatabase {
     /**
      * Очистить всю базу данных (для отладки)
      */
-    clearAll() {
-        this.travels = [];
-        this.saveAll();
-        console.log('🗑️ База данных путешествий очищена');
+    async clearAll() {
+        await this.waitForReady();
+
+        try {
+            console.log('🗑️ Очистка глобальной базы данных...');
+
+            const travelsTransaction = this.db.transaction(['globalTravels'], 'readwrite');
+            const travelsStore = travelsTransaction.objectStore('globalTravels');
+            await travelsStore.clear();
+
+            const photosTransaction = this.db.transaction(['globalPhotos'], 'readwrite');
+            const photosStore = photosTransaction.objectStore('globalPhotos');
+            await photosStore.clear();
+
+            this.travels = [];
+            console.log('✅ База данных очищена');
+        } catch (error) {
+            console.error('❌ Ошибка очистки:', error);
+        }
     }
 
     /**
@@ -296,13 +356,136 @@ class TravelDatabase {
         return {
             total: this.travels.length,
             totalLikes: this.travels.reduce((sum, t) => sum + (t.likes || 0), 0),
-            uniqueAuthors: new Set(this.travels.map(t => t.author.id)).size
+            uniqueAuthors: new Set(this.travels.map(t => t.author?.id).filter(Boolean)).size,
+            isReady: this.isReady
         };
+    }
+
+    /**
+     * Получить информацию о текущем пользователе
+     */
+    getDefaultUserInfo() {
+        if (window.Telegram?.WebApp?.initDataUnsafe?.user) {
+            const tgUser = window.Telegram.WebApp.initDataUnsafe.user;
+            return {
+                id: tgUser.id,
+                username: tgUser.username || `user_${tgUser.id}`,
+                firstName: tgUser.first_name,
+                lastName: tgUser.last_name,
+                photo: tgUser.photo_url || null
+            };
+        }
+
+        return {
+            id: 'local_user',
+            username: 'Путешественник',
+            firstName: 'Анонимный',
+            lastName: 'Пользователь',
+            photo: null
+        };
+    }
+
+    // ========== ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ IndexedDB ==========
+
+    async _putTravel(travel) {
+        const transaction = this.db.transaction(['globalTravels'], 'readwrite');
+        const store = transaction.objectStore('globalTravels');
+
+        return new Promise((resolve, reject) => {
+            const request = store.put(travel);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async _putPhoto(photo) {
+        const transaction = this.db.transaction(['globalPhotos'], 'readwrite');
+        const store = transaction.objectStore('globalPhotos');
+
+        return new Promise((resolve, reject) => {
+            const request = store.put(photo);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async _getAllTravels() {
+        const transaction = this.db.transaction(['globalTravels'], 'readonly');
+        const store = transaction.objectStore('globalTravels');
+
+        return new Promise((resolve, reject) => {
+            const request = store.getAll();
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async _getPhotosByGlobalId(globalId) {
+        const transaction = this.db.transaction(['globalPhotos'], 'readonly');
+        const store = transaction.objectStore('globalPhotos');
+        const index = store.index('globalId');
+
+        return new Promise((resolve, reject) => {
+            const request = index.getAll(globalId);
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async _deleteTravel(globalId) {
+        const transaction = this.db.transaction(['globalTravels'], 'readwrite');
+        const store = transaction.objectStore('globalTravels');
+
+        return new Promise((resolve, reject) => {
+            const request = store.delete(globalId);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async _deletePhoto(photoId) {
+        const transaction = this.db.transaction(['globalPhotos'], 'readwrite');
+        const store = transaction.objectStore('globalPhotos');
+
+        return new Promise((resolve, reject) => {
+            const request = store.delete(photoId);
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    async _updateTravel(travel) {
+        // Создаем копию без images для сохранения
+        const travelCopy = { ...travel };
+        delete travelCopy.images;
+
+        return await this._putTravel(travelCopy);
+    }
+
+    async _base64ToBlob(base64) {
+        const response = await fetch(base64);
+        return await response.blob();
+    }
+
+    async _blobToBase64(blob) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(blob);
+        });
     }
 }
 
 // Создаем глобальный экземпляр базы данных
 window.travelDatabase = new TravelDatabase();
 
-// Экспортируем для использования в других модулях
-console.log('✅ TravelDatabase готова к использованию');
+// 🗑️ ОЧИСТКА ВСЕХ ПУТЕШЕСТВИЙ ПРИ ИНИЦИАЛИЗАЦИИ
+window.travelDatabase.waitForReady().then(() => {
+    console.log('🗑️ Очистка всех путешествий из базы данных...');
+    window.travelDatabase.clearAll().then(() => {
+        console.log('✅ Все путешествия удалены из базы данных');
+    });
+});
+
+console.log('✅ TravelDatabase (IndexedDB) инициализируется...');

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Дебаг ленты</title>
+    <style>
+        body {
+            background: #0f0520;
+            color: #fff;
+            font-family: monospace;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .section {
+            background: #1a0a3a;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 2px solid #ffcc00;
+        }
+        button {
+            padding: 12px 24px;
+            margin: 10px 5px;
+            border: none;
+            border-radius: 5px;
+            background: #ffcc00;
+            color: #000;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        button:hover {
+            background: #ff8e53;
+        }
+        pre {
+            background: #0a0515;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-size: 12px;
+        }
+        .error { color: #ff5555; }
+        .success { color: #50fa7b; }
+        .warning { color: #ffb86c; }
+        img {
+            max-width: 200px;
+            max-height: 200px;
+            border: 2px solid #ffcc00;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Диагностика ленты путешествий</h1>
+
+    <div class="section">
+        <h2>Тесты</h2>
+        <button onclick="checkLocalStorage()">1. Проверить localStorage</button>
+        <button onclick="checkIndexedDB()">2. Проверить IndexedDB</button>
+        <button onclick="renderFeedTest()">3. Тест рендеринга ленты</button>
+        <button onclick="addTestTravel()">4. Добавить тестовое путешествие</button>
+        <button onclick="clearAll()">🗑️ Очистить всё</button>
+    </div>
+
+    <div class="section">
+        <h2>Результаты</h2>
+        <pre id="output">Нажмите кнопку для проверки...</pre>
+    </div>
+
+    <div class="section">
+        <h2>Превью фото</h2>
+        <div id="photos" style="display: flex; flex-wrap: wrap;"></div>
+    </div>
+
+    <script>
+        function log(text, type = 'normal') {
+            const output = document.getElementById('output');
+            let color = '#fff';
+            if (type === 'error') color = '#ff5555';
+            if (type === 'success') color = '#50fa7b';
+            if (type === 'warning') color = '#ffb86c';
+
+            output.innerHTML += `<span style="color:${color}">${text}</span>\n`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('output').textContent = '';
+            document.getElementById('photos').innerHTML = '';
+        }
+
+        function checkLocalStorage() {
+            clearOutput();
+            log('=== ПРОВЕРКА localStorage ===\n', 'success');
+
+            const key = 'matryoshka_all_travels';
+            const data = localStorage.getItem(key);
+
+            if (!data) {
+                log(`❌ Ключ "${key}" не найден!`, 'error');
+                return;
+            }
+
+            log(`✅ Найден ключ "${key}"`, 'success');
+            log(`📦 Размер: ${(data.length / 1024).toFixed(2)} KB\n`);
+
+            try {
+                const parsed = JSON.parse(data);
+                log(`✅ Путешествий: ${parsed.length}\n`, 'success');
+
+                parsed.forEach((t, i) => {
+                    log(`\n${i + 1}. "${t.title}"`);
+                    log(`   ID: ${t.id}`);
+                    log(`   GlobalID: ${t.globalId || 'нет'}`);
+                    log(`   Автор: ${t.author?.firstName || 'нет'}`);
+                    log(`   Создано: ${new Date(t.createdAt).toLocaleString()}`);
+
+                    if (t.images && t.images.length > 0) {
+                        log(`   ✅ Изображений: ${t.images.length}`, 'success');
+                        log(`   Первое изображение: ${t.images[0].substring(0, 60)}...`);
+                        log(`   Длина: ${(t.images[0].length / 1024).toFixed(2)} KB`);
+
+                        // Показываем первое фото
+                        const photosDiv = document.getElementById('photos');
+                        const img = document.createElement('img');
+                        img.src = t.images[0];
+                        img.title = t.title;
+                        photosDiv.appendChild(img);
+                    } else {
+                        log(`   ❌ Изображений: 0`, 'error');
+                    }
+                });
+
+            } catch (error) {
+                log(`❌ Ошибка парсинга: ${error.message}`, 'error');
+            }
+        }
+
+        function checkIndexedDB() {
+            clearOutput();
+            log('=== ПРОВЕРКА IndexedDB ===\n', 'success');
+
+            const request = indexedDB.open('MatryoshkaDB', 1);
+
+            request.onerror = () => {
+                log('❌ Ошибка открытия IndexedDB', 'error');
+            };
+
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                log('✅ IndexedDB открыта\n', 'success');
+
+                // Проверяем travels
+                const tx = db.transaction(['travels'], 'readonly');
+                const store = store.objectStore('travels');
+                const getAllRequest = store.getAll();
+
+                getAllRequest.onsuccess = () => {
+                    const travels = getAllRequest.result;
+                    log(`✅ Путешествий в IndexedDB: ${travels.length}\n`, 'success');
+
+                    travels.forEach((t, i) => {
+                        log(`\n${i + 1}. "${t.title}"`);
+                        log(`   ID: ${t.id}`);
+                        log(`   Изображений: ${t.images?.length || 0}`);
+                    });
+                };
+
+                getAllRequest.onerror = () => {
+                    log('❌ Ошибка чтения travels', 'error');
+                };
+            };
+        }
+
+        function renderFeedTest() {
+            clearOutput();
+            log('=== ТЕСТ РЕНДЕРИНГА ===\n', 'success');
+
+            const data = localStorage.getItem('matryoshka_all_travels');
+            if (!data) {
+                log('❌ Нет данных для рендера', 'error');
+                return;
+            }
+
+            const travels = JSON.parse(data);
+            log(`Путешествий для рендера: ${travels.length}\n`, 'success');
+
+            travels.forEach((travel, i) => {
+                log(`\n${i + 1}. Рендерим "${travel.title}":`);
+
+                const hasImages = travel.images && Array.isArray(travel.images) && travel.images.length > 0;
+                log(`   Проверка hasImages: ${hasImages}`, hasImages ? 'success' : 'error');
+
+                if (hasImages) {
+                    log(`   ✅ Будет показано ${travel.images.length} фото`, 'success');
+
+                    // Показываем фото
+                    const photosDiv = document.getElementById('photos');
+                    travel.images.forEach((img, idx) => {
+                        const imgEl = document.createElement('img');
+                        imgEl.src = img;
+                        imgEl.title = `${travel.title} - фото ${idx + 1}`;
+                        photosDiv.appendChild(imgEl);
+                    });
+                } else {
+                    log(`   ❌ Фото НЕ будет показано!`, 'error');
+                }
+            });
+        }
+
+        function addTestTravel() {
+            clearOutput();
+            log('=== ДОБАВЛЕНИЕ ТЕСТОВОГО ПУТЕШЕСТВИЯ ===\n', 'success');
+
+            // Создаем простое тестовое изображение 100x100 красный квадрат
+            const canvas = document.createElement('canvas');
+            canvas.width = 100;
+            canvas.height = 100;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#ff0000';
+            ctx.fillRect(0, 0, 100, 100);
+            ctx.fillStyle = '#fff';
+            ctx.font = '20px Arial';
+            ctx.fillText('TEST', 25, 55);
+            const testImage = canvas.toDataURL('image/jpeg', 0.8);
+
+            const testTravel = {
+                id: Date.now(),
+                globalId: `test-${Date.now()}`,
+                title: 'Тестовое путешествие ' + new Date().toLocaleTimeString(),
+                text: 'Это тестовое путешествие для проверки работы ленты',
+                images: [testImage],
+                createdAt: Date.now(),
+                author: {
+                    id: 'test_user',
+                    firstName: 'Тест',
+                    lastName: 'Пользователь'
+                },
+                likes: 0,
+                liked: false
+            };
+
+            log('✅ Создан тестовый объект', 'success');
+            log(`Размер изображения: ${(testImage.length / 1024).toFixed(2)} KB\n`);
+
+            // Сохраняем
+            const existing = localStorage.getItem('matryoshka_all_travels');
+            const travels = existing ? JSON.parse(existing) : [];
+            travels.unshift(testTravel);
+
+            try {
+                localStorage.setItem('matryoshka_all_travels', JSON.stringify(travels));
+                log('✅ Сохранено в localStorage!', 'success');
+                log('\nТеперь проверьте ленту в приложении', 'warning');
+            } catch (error) {
+                log(`❌ Ошибка сохранения: ${error.message}`, 'error');
+            }
+        }
+
+        function clearAll() {
+            if (confirm('Удалить ВСЕ данные?')) {
+                localStorage.clear();
+                indexedDB.deleteDatabase('MatryoshkaDB');
+                clearOutput();
+                log('✅ Всё очищено!', 'success');
+            }
+        }
+    </script>
+</body>
+</html>

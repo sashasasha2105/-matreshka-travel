@@ -370,6 +370,4 @@
 }
 
 /* ========== HIDE OLD NAVIGATION ========== */
-.bottom-nav {
-  display: none !important;
-}
+/* УДАЛЕНО - НЕ СКРЫВАЕМ НАВИГАЦИЮ */

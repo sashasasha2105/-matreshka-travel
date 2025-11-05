@@ -3,6 +3,77 @@
  * Простая, надежная, без конфликтов
  */
 
+console.log('🔥 navigation.js загружается...');
+
+// СРАЗУ определяем глобальные функции для onclick
+window.showMainSection = function() {
+    console.log('🏠 showMainSection вызвана');
+    if (window.MatryoshkaNavigation) {
+        window.MatryoshkaNavigation.navigate('main');
+    } else {
+        console.error('❌ MatryoshkaNavigation еще не готова');
+    }
+};
+
+window.showFeed = function() {
+    console.log('🌍 showFeed вызвана');
+    if (window.MatryoshkaNavigation) {
+        window.MatryoshkaNavigation.navigate('feed');
+    } else {
+        console.error('❌ MatryoshkaNavigation еще не готова');
+    }
+};
+
+window.showProfile = function() {
+    console.log('👤 showProfile вызвана');
+    if (window.MatryoshkaNavigation) {
+        window.MatryoshkaNavigation.navigate('profile');
+    } else {
+        console.error('❌ MatryoshkaNavigation еще не готова');
+    }
+};
+
+window.showCart = function() {
+    console.log('🛒 showCart вызвана');
+    if (window.MatryoshkaNavigation) {
+        window.MatryoshkaNavigation.navigate('cart');
+    } else {
+        console.error('❌ MatryoshkaNavigation еще не готова');
+    }
+};
+
+window.showQuests = function() {
+    console.log('🎯 showQuests вызвана');
+    if (window.MatryoshkaNavigation) {
+        window.MatryoshkaNavigation.navigate('quests');
+    } else {
+        console.error('❌ MatryoshkaNavigation еще не готова');
+    }
+};
+
+window.goBack = function() {
+    console.log('⬅️ goBack вызвана');
+    if (window.MatryoshkaNavigation) {
+        window.MatryoshkaNavigation.navigate('main');
+    } else {
+        console.error('❌ MatryoshkaNavigation еще не готова');
+    }
+};
+
+window.hideProfile = function() {
+    if (window.MatryoshkaNavigation) {
+        window.MatryoshkaNavigation.navigate('main');
+    }
+};
+
+window.hideCart = function() {
+    if (window.MatryoshkaNavigation) {
+        window.MatryoshkaNavigation.navigate('main');
+    }
+};
+
+console.log('✅ Глобальные функции навигации определены');
+
 (function() {
     'use strict';
 
@@ -204,31 +275,6 @@
         }
     };
 
-    // Глобальные функции для совместимости
-    window.showMainSection = function() {
-        window.MatryoshkaNavigation.navigate('main');
-    };
-
-    window.showFeed = function() {
-        window.MatryoshkaNavigation.navigate('feed');
-    };
-
-    window.showProfile = function() {
-        window.MatryoshkaNavigation.navigate('profile');
-    };
-
-    window.showCart = function() {
-        window.MatryoshkaNavigation.navigate('cart');
-    };
-
-    window.showQuests = function() {
-        window.MatryoshkaNavigation.navigate('quests');
-    };
-
-    window.goBack = function() {
-        window.MatryoshkaNavigation.navigate('main');
-    };
-
     // Обработчики для кнопок "Назад"
     document.addEventListener('DOMContentLoaded', function() {
         const backButtons = [
@@ -247,14 +293,6 @@
             }
         });
     });
-
-    window.hideProfile = function() {
-        window.MatryoshkaNavigation.navigate('main');
-    };
-
-    window.hideCart = function() {
-        window.MatryoshkaNavigation.navigate('main');
-    };
 
     // Автоматическая разблокировка скролла при клике на любую кнопку навигации
     document.addEventListener('click', function(e) {

@@ -1062,12 +1062,11 @@ class MatryoshkaProfile {
         // === ПОЛУЧАЕМ BASE64 ИЗОБРАЖЕНИЯ ИЗ ПРЕВЬЮ ===
         const preview = modal.querySelector('#imagesPreview');
         const previewImages = preview.querySelectorAll('.preview-image-item img');
-        const images = Array.from(previewImages).map(img => img.src);
+        const base64Images = Array.from(previewImages).map(img => img.src);
 
-        console.log('📸 Извлечено изображений из превью:', images.length);
-        console.log('📸 Первое изображение (первые 100 символов):', images[0]?.substring(0, 100));
+        console.log('📸 Извлечено изображений из превью:', base64Images.length);
 
-        if (images.length === 0) {
+        if (base64Images.length === 0) {
             this.showToast('❌ Нет загруженных изображений');
             return;
         }
@@ -1075,12 +1074,36 @@ class MatryoshkaProfile {
         // === СРАЗУ закрываем модалку ===
         this.closeModal(modal);
 
+        // Показываем индикатор загрузки
+        this.showToast('⏳ Загрузка фотографий на сервер...');
+
+        // === ЗАГРУЖАЕМ ФОТКИ НА СЕРВЕР ===
+        let images = [];
+        try {
+            if (window.photoStorageServer) {
+                const userId = this.user?.id || 'local_user';
+                const travelId = Date.now().toString();
+
+                console.log('📤 Загружаем фотографии на сервер...');
+                images = await window.photoStorageServer.uploadBase64Photos(base64Images, travelId, userId);
+                console.log('✅ Фотографии загружены на сервер:', images);
+                this.showToast('✅ Фотографии загружены на сервер!');
+            } else {
+                console.warn('⚠️ PhotoStorageServer не найден, используем base64');
+                images = base64Images;
+            }
+        } catch (error) {
+            console.error('❌ Ошибка загрузки на сервер, используем base64:', error);
+            images = base64Images;
+            this.showToast('⚠️ Загружено локально (сервер недоступен)');
+        }
+
         // Создаем объект путешествия
         const newTravel = {
             id: Date.now(),
             title: title,
             text: text,
-            images: images, // Используем base64 данные из превью
+            images: images, // URL-ы с сервера или base64 как fallback
             image: images[0],
         };
 

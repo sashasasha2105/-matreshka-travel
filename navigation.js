@@ -167,12 +167,35 @@ console.log('✅ Глобальные функции навигации опре
         },
 
         /**
-         * Прокрутка наверх
+         * Прокрутка наверх (АГРЕССИВНАЯ)
          */
         scrollToTop: function() {
+            // Немедленно
             window.scrollTo(0, 0);
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
+
+            // Через 10мс (после рендера)
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }, 10);
+
+            // Через 50мс (для гарантии)
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }, 50);
+
+            // Через 100мс (финальная проверка)
+            setTimeout(() => {
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+                console.log('✅ Прокрутка наверх завершена');
+            }, 100);
         },
 
         /**

@@ -2,27 +2,26 @@
    ИСПРАВЛЕНИЯ ДЛЯ ПРИЛОЖЕНИЯ
    ================================================ */
 
-// ========================================
-// ФУНКЦИЯ ПОКАЗА ГЛАВНОЙ СТРАНИЦЫ
-// ========================================
-function showMainSection() {
-    console.log('🏠 Переход на главную страницу');
+// 🔥 КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Глобальная функция разблокировки скролла
+window.ensureScrollEnabled = function() {
+    document.body.style.overflow = 'auto';
+    document.body.style.position = 'static';
+    document.documentElement.style.overflow = 'auto';
+    console.log('✅ Скролл разблокирован принудительно');
+};
 
-    // Скрываем все секции
-    document.getElementById('mainSection').style.display = 'block';
-    document.getElementById('regionDetails').style.display = 'none';
-    document.getElementById('profileSection').style.display = 'none';
-    document.getElementById('cartSection').style.display = 'none';
-    document.getElementById('questsSection').style.display = 'none';
-
-    // Обновляем навигацию
-    updateBottomNav('main');
-
-    // Скроллим наверх
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Hero секцию НЕ трогаем - оставляем как было!
+// Вызываем разблокировку при любом переключении страниц
+document.addEventListener('DOMContentLoaded', function() {
+    // Слушаем все клики по навигации
+    const navButtons = document.querySelectorAll('.nav-item, .bottom-nav button');
+    navButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            setTimeout(() => {
+                window.ensureScrollEnabled();
+            }, 100);
+        });
+    });
+});
 
 // ========================================
 // ИСПРАВЛЕНИЕ МОДАЛКИ ДОБАВЛЕНИЯ ФОТО

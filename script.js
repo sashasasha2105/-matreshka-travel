@@ -1533,12 +1533,21 @@ function showMainSection() {
         tg.BackButton.hide();
     }
 
-    // Прокручиваем наверх ПОСЛЕ отрисовки
-    requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        // Убираем возможный overflow: hidden с body
-        document.body.style.overflow = '';
-    });
+    // 🔥 КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Принудительная прокрутка наверх
+    // Сбрасываем скролл немедленно
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Убираем возможные блокировки скролла
+    document.body.style.overflow = 'auto';
+    document.body.style.position = 'static';
+    document.documentElement.style.overflow = 'auto';
+
+    // Вызываем глобальную функцию разблокировки
+    if (window.ensureScrollEnabled) {
+        window.ensureScrollEnabled();
+    }
 
     console.log('✅✅✅ showMainSection() ЗАВЕРШЕНА ✅✅✅');
 }
@@ -1605,12 +1614,21 @@ function showProfile() {
         }, 100);
     }
 
-    // Прокручиваем наверх ПОСЛЕ отрисовки
-    requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        // Убираем возможный overflow: hidden с body
-        document.body.style.overflow = '';
-    });
+    // 🔥 КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Принудительная прокрутка наверх
+    // Сбрасываем скролл немедленно
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Убираем возможные блокировки скролла
+    document.body.style.overflow = 'auto';
+    document.body.style.position = 'static';
+    document.documentElement.style.overflow = 'auto';
+
+    // Вызываем глобальную функцию разблокировки
+    if (window.ensureScrollEnabled) {
+        window.ensureScrollEnabled();
+    }
 }
 
 // Скрыть профиль
@@ -1778,12 +1796,21 @@ function showCart() {
     // Сохраняем текущую вкладку
     saveCurrentSection('cart');
 
-    // Прокручиваем наверх ПОСЛЕ отрисовки
-    requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        // Убираем возможный overflow: hidden с body
-        document.body.style.overflow = '';
-    });
+    // 🔥 КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Принудительная прокрутка наверх
+    // Сбрасываем скролл немедленно
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Убираем возможные блокировки скролла
+    document.body.style.overflow = 'auto';
+    document.body.style.position = 'static';
+    document.documentElement.style.overflow = 'auto';
+
+    // Вызываем глобальную функцию разблокировки
+    if (window.ensureScrollEnabled) {
+        window.ensureScrollEnabled();
+    }
 }
 
 /**
@@ -1878,12 +1905,16 @@ function showFeed() {
     // Сохраняем текущую вкладку
     saveCurrentSection('feed');
 
-    // Прокручиваем наверх ПОСЛЕ отрисовки
-    requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-        // Убираем возможный overflow: hidden с body
-        document.body.style.overflow = '';
-    });
+    // 🔥 КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Принудительная прокрутка наверх
+    // Сбрасываем скролл немедленно
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Убираем возможные блокировки скролла
+    document.body.style.overflow = 'auto';
+    document.body.style.position = 'static';
+    document.documentElement.style.overflow = 'auto';
 
     console.log('✅✅✅ showFeed() ЗАВЕРШЕНА ✅✅✅');
 }

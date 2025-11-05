@@ -188,6 +188,21 @@
 
             sectionEl.style.display = 'block';
 
+            // 🔥 КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Прокрутка наверх
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+
+            // Убираем блокировки скролла
+            document.body.style.overflow = 'auto';
+            document.body.style.position = 'static';
+            document.documentElement.style.overflow = 'auto';
+
+            // Вызываем глобальную функцию разблокировки
+            if (window.ensureScrollEnabled) {
+                window.ensureScrollEnabled();
+            }
+
             const animationClass = isForward ? 'page-transition-enter' : 'page-transition-back-enter';
             sectionEl.classList.add(animationClass);
 

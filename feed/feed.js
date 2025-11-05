@@ -149,14 +149,14 @@ class TravelFeed {
 
         if (images.length === 1) {
             console.log('📐 Одно изображение');
-            return `<img src="${images[0]}" class="single-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">`;
+            return `<img src="${images[0]}" class="single-image" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E'; console.error('Ошибка загрузки:', '${images[0]}');">`;
         }
 
         if (images.length === 2) {
             console.log('📐 Два изображения');
             return `
                 <div class="grid-two">
-                    ${images.map(img => `<img src="${img}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">`).join('')}
+                    ${images.map(img => `<img src="${img}" class="grid-image" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E';">`).join('')}
                 </div>
             `;
         }
@@ -165,10 +165,10 @@ class TravelFeed {
             console.log('📐 Три изображения');
             return `
                 <div class="grid-three">
-                    <img src="${images[0]}" class="grid-image main" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
+                    <img src="${images[0]}" class="grid-image main" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E';">
                     <div class="grid-column">
-                        <img src="${images[1]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
-                        <img src="${images[2]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
+                        <img src="${images[1]}" class="grid-image" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E';">
+                        <img src="${images[2]}" class="grid-image" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E';">
                     </div>
                 </div>
             `;
@@ -178,11 +178,11 @@ class TravelFeed {
             console.log('📐 Четыре или более изображений');
             return `
                 <div class="grid-many">
-                    <img src="${images[0]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
-                    <img src="${images[1]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
-                    <img src="${images[2]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
+                    <img src="${images[0]}" class="grid-image" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E';">
+                    <img src="${images[1]}" class="grid-image" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E';">
+                    <img src="${images[2]}" class="grid-image" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E';">
                     <div class="grid-more">
-                        <img src="${images[3]}" class="grid-image" loading="lazy" onerror="console.error('Ошибка загрузки изображения:', this.src)">
+                        <img src="${images[3]}" class="grid-image" loading="lazy" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22%3E%3Crect fill=%22%23333%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23999%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2220%22%3E Изображение недоступно %3C/text%3E%3C/svg%3E';">
                         ${images.length > 4 ? `<div class="more-overlay">+${images.length - 4}</div>` : ''}
                     </div>
                 </div>

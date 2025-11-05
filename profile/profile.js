@@ -1192,6 +1192,27 @@ class MatryoshkaProfile {
      */
     async deleteTravelStory(travelId) {
         if (confirm('Удалить это путешествие?')) {
+            // Находим путешествие перед удалением
+            const travel = this.travelStories.find(t => t.id === travelId);
+
+            // Удаляем фотографии с сервера, если они хранятся там
+            if (travel && travel.images && window.photoStorageServer) {
+                console.log('🗑️ Удаляем фотографии с сервера...');
+                for (const imageUrl of travel.images) {
+                    try {
+                        // Извлекаем ID фотографии из URL
+                        if (imageUrl.includes('/api/photo/')) {
+                            const photoId = imageUrl.split('/api/photo/')[1];
+                            await window.photoStorageServer.deletePhoto(photoId);
+                            console.log('✅ Фотография удалена:', photoId);
+                        }
+                    } catch (error) {
+                        console.error('❌ Ошибка удаления фотографии:', error);
+                    }
+                }
+            }
+
+            // Удаляем из локального массива
             this.travelStories = this.travelStories.filter(t => t.id !== travelId);
 
             // Удаляем из глобальной базы данных (IndexedDB)

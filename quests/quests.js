@@ -542,6 +542,11 @@ function showQuests() {
     // Обновляем навигацию
     updateBottomNav('quests');
 
+    // Сохраняем текущую вкладку
+    if (typeof saveCurrentSection === 'function') {
+        saveCurrentSection('quests');
+    }
+
     // Рендерим задания
     if (window.matryoshkaQuests) {
         window.matryoshkaQuests.render();

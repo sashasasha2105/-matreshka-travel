@@ -56,6 +56,43 @@ if (tg) {
 // Глобальная лента путешествий (пустая по умолчанию)
 let globalTravelFeed = [];
 
+// 🔥 СИСТЕМА УПРАВЛЕНИЯ СОСТОЯНИЕМ ВКЛАДОК
+let currentActiveSection = 'main'; // main, feed, profile, cart, quests
+
+// Сохранение текущей вкладки в sessionStorage
+function saveCurrentSection(sectionName) {
+    currentActiveSection = sectionName;
+    sessionStorage.setItem('activeSection', sectionName);
+    console.log('💾 Сохранена активная вкладка:', sectionName);
+}
+
+// Восстановление активной вкладки при загрузке
+function restoreActiveSection() {
+    const savedSection = sessionStorage.getItem('activeSection');
+    if (savedSection) {
+        console.log('🔄 Восстанавливаем вкладку:', savedSection);
+        switch (savedSection) {
+            case 'main':
+                showMainSection();
+                break;
+            case 'feed':
+                showFeed();
+                break;
+            case 'profile':
+                showProfile();
+                break;
+            case 'cart':
+                showCart();
+                break;
+            case 'quests':
+                showQuests();
+                break;
+            default:
+                showMainSection();
+        }
+    }
+}
+
 // Глобальные переменные
 
 // Утилита debounce для оптимизации производительности
@@ -136,7 +173,9 @@ function displayUserInfo() {
 
     if (tg && tg.initDataUnsafe?.user) {
         const user = tg.initDataUnsafe.user;
-        userNameEl.innerHTML = `Привет, ${user.first_name}!`;
+        // Капитализируем первую букву имени
+        const capitalizedName = user.first_name.charAt(0).toUpperCase() + user.first_name.slice(1);
+        userNameEl.innerHTML = `Привет, ${capitalizedName}!`;
     } else {
         userNameEl.innerHTML = 'Добро пожаловать!';
     }
@@ -1486,6 +1525,9 @@ function showMainSection() {
     // Обновляем навигацию
     updateBottomNav(null);
 
+    // Сохраняем текущую вкладку
+    saveCurrentSection('main');
+
     // Скрываем BackButton в Telegram
     if (tg && tg.BackButton) {
         tg.BackButton.hide();
@@ -1535,6 +1577,9 @@ function showProfile() {
 
     // Обновляем навигацию
     updateBottomNav('profile');
+
+    // Сохраняем текущую вкладку
+    saveCurrentSection('profile');
 
     // Показываем BackButton в Telegram
     if (tg && tg.BackButton) {
@@ -1645,6 +1690,11 @@ document.addEventListener('DOMContentLoaded', function() {
         loadMainFeedSection();
     }, 1500);
 
+    // 🔥 ВОССТАНАВЛИВАЕМ ПОСЛЕДНЮЮ АКТИВНУЮ ВКЛАДКУ
+    setTimeout(() => {
+        restoreActiveSection();
+    }, 500);
+
     // Обработчик кнопки "Назад"
     const backBtn = document.getElementById('backBtn');
     if (backBtn) {
@@ -1720,6 +1770,9 @@ function showCart() {
 
     // Обновляем активную кнопку в навигации
     updateBottomNav('cart');
+
+    // Сохраняем текущую вкладку
+    saveCurrentSection('cart');
 
     // Прокручиваем наверх ПОСЛЕ отрисовки
     requestAnimationFrame(() => {
@@ -1815,6 +1868,9 @@ function showFeed() {
 
     // Обновляем активную кнопку в навигации
     updateBottomNav('feed');
+
+    // Сохраняем текущую вкладку
+    saveCurrentSection('feed');
 
     // Прокручиваем наверх ПОСЛЕ отрисовки
     requestAnimationFrame(() => {

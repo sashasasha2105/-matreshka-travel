@@ -6,9 +6,10 @@
 
 class PhotoStorageServer {
     constructor() {
-        // URL сервера (меняй на свой когда задеплоишь)
-        this.serverUrl = 'http://localhost:5000';
+        // URL сервера на Railway
+        this.serverUrl = 'https://worker-production-fb0c.up.railway.app';
         console.log('✅ PhotoStorageServer инициализирован');
+        console.log('🌐 Сервер URL:', this.serverUrl);
     }
 
     /**

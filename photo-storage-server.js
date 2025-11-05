@@ -7,7 +7,7 @@
 class PhotoStorageServer {
     constructor() {
         // URL сервера на Railway
-        this.serverUrl = 'https://worker-production-fb0c.up.railway.app';
+        this.serverUrl = 'https://matreshka-photo-server-production.up.railway.app';
         console.log('✅ PhotoStorageServer инициализирован');
         console.log('🌐 Сервер URL:', this.serverUrl);
     }

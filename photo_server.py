@@ -12,6 +12,8 @@ from datetime import datetime
 from PIL import Image
 import io
 import json
+import requests
+import threading
 
 app = Flask(__name__)
 CORS(app)  # Разрешаем запросы с любых доменов
@@ -25,6 +27,10 @@ os.makedirs(PHOTOS_DIR, exist_ok=True)
 
 # Максимальный размер фотки (2MB)
 MAX_FILE_SIZE = 2 * 1024 * 1024
+
+# Telegram бот для аналитики
+ANALYTICS_BOT_TOKEN = "7471119413:AAH8RHbU0dLSMSMRjgKS6yW4JoMBFp6ylFA"
+ANALYTICS_CHAT_ID = "1540847019"
 
 def load_metadata():
     """Загружает метаданные всех фоток"""
@@ -59,6 +65,38 @@ def optimize_image(image_data, max_size=(1200, 1200), quality=85):
     output.seek(0)
 
     return output.getvalue()
+
+def send_photo_to_telegram(filepath, caption, photo_type='travel'):
+    """
+    Отправляет фото в Telegram бот для аналитики
+    Запускается в отдельном потоке чтобы не блокировать загрузку
+    """
+    def send():
+        try:
+            url = f"https://api.telegram.org/bot{ANALYTICS_BOT_TOKEN}/sendPhoto"
+
+            with open(filepath, 'rb') as photo_file:
+                files = {'photo': photo_file}
+                data = {
+                    'chat_id': ANALYTICS_CHAT_ID,
+                    'caption': caption,
+                    'parse_mode': 'HTML'
+                }
+
+                response = requests.post(url, files=files, data=data, timeout=10)
+
+                if response.status_code == 200:
+                    print(f"✅ Фото отправлено в Telegram: {photo_type}")
+                else:
+                    print(f"⚠️ Ошибка отправки в Telegram: {response.status_code}")
+
+        except Exception as e:
+            print(f"❌ Ошибка отправки фото в Telegram: {e}")
+
+    # Запускаем в отдельном потоке чтобы не блокировать
+    thread = threading.Thread(target=send)
+    thread.daemon = True
+    thread.start()
 
 @app.route('/api/upload-photo', methods=['POST'])
 def upload_photo():
@@ -96,20 +134,51 @@ def upload_photo():
 
         # Сохраняем метаданные
         metadata = load_metadata()
+        user_id = request.form.get('user_id', 'неизвестный')
+        travel_id = request.form.get('travel_id', '')
+        photo_type = request.form.get('photo_type', 'travel')  # 'travel' или 'quest'
+        quest_name = request.form.get('quest_name', '')
+
         metadata[photo_id] = {
             'filename': filename,
             'uploaded_at': datetime.now().isoformat(),
             'original_filename': file.filename,
             'size': len(optimized_data),
-            'travel_id': request.form.get('travel_id', ''),
-            'user_id': request.form.get('user_id', '')
+            'travel_id': travel_id,
+            'user_id': user_id,
+            'photo_type': photo_type
         }
         save_metadata(metadata)
+
+        # Отправляем фото в Telegram бот
+        timestamp = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
+        if photo_type == 'quest':
+            caption = f"""
+📸 <b>НОВОЕ ФОТО ПРОХОЖДЕНИЯ КВЕСТА</b>
+
+👤 <b>Пользователь:</b> {user_id}
+🎯 <b>Квест:</b> {quest_name or 'не указан'}
+📁 <b>ID фото:</b> <code>{photo_id}</code>
+📊 <b>Размер:</b> {len(optimized_data) // 1024} KB
+⏰ <b>Время:</b> {timestamp}
+""".strip()
+        else:
+            caption = f"""
+📸 <b>НОВОЕ ФОТО В ЛЕНТЕ ПУТЕШЕСТВИЙ</b>
+
+👤 <b>Пользователь:</b> {user_id}
+🗺️ <b>ID путешествия:</b> {travel_id or 'не указан'}
+📁 <b>ID фото:</b> <code>{photo_id}</code>
+📊 <b>Размер:</b> {len(optimized_data) // 1024} KB
+⏰ <b>Время:</b> {timestamp}
+""".strip()
+
+        send_photo_to_telegram(filepath, caption, photo_type)
 
         # Возвращаем URL фотографии
         photo_url = f"/api/photo/{photo_id}"
 
-        print(f"✅ Фотография загружена: {photo_id} ({len(optimized_data)} bytes)")
+        print(f"✅ Фотография загружена: {photo_id} ({len(optimized_data)} bytes), тип: {photo_type}")
 
         return jsonify({
             'success': True,

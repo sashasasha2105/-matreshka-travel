@@ -419,12 +419,19 @@
         }
 
         // Отправка фото и выполнение задания
-        submitPhoto() {
+        async submitPhoto() {
             if (!this.currentPhotoData || !this.currentQuest) return;
 
-            showLoader('Обработка фото...');
+            showLoader('Отправка фото...');
 
-            setTimeout(() => {
+            try {
+                // Отправляем фото на сервер (и в Telegram бот)
+                await this.uploadQuestPhotoToServer(
+                    this.currentPhotoData,
+                    this.currentQuest.attraction,
+                    this.currentQuest.id
+                );
+
                 // Генерируем QR-код для награды
                 const qrCode = this.generateQRCode(this.currentQuest);
 
@@ -445,7 +452,47 @@
 
                 // Перерисовываем список заданий
                 this.render();
-            }, 1500);
+            } catch (error) {
+                console.error('Ошибка отправки фото квеста:', error);
+                hideLoader();
+                showToast('⚠️ Фото сохранено локально, но не удалось отправить на сервер');
+
+                // Всё равно сохраняем локально и продолжаем
+                const qrCode = this.generateQRCode(this.currentQuest);
+                this.saveCompletedQuest(this.currentQuest.id, this.currentPhotoData);
+                localStorage.setItem(`quest_qr_${this.currentQuest.id}`, qrCode);
+                this.closePhotoUpload();
+                this.render();
+            }
+        }
+
+        // Загрузка фото квеста на сервер
+        async uploadQuestPhotoToServer(photoData, questName, questId) {
+            // Конвертируем base64 в Blob
+            const response = await fetch(photoData);
+            const blob = await response.blob();
+
+            // Создаем FormData
+            const formData = new FormData();
+            formData.append('photo', blob, 'quest_photo.jpg');
+            formData.append('photo_type', 'quest');
+            formData.append('quest_name', questName);
+            formData.append('user_id', window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 'unknown');
+            formData.append('travel_id', questId);
+
+            // Отправляем на сервер
+            const uploadResponse = await fetch('https://matreshka-travel-production.up.railway.app/api/upload-photo', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!uploadResponse.ok) {
+                throw new Error('Ошибка загрузки фото на сервер');
+            }
+
+            const result = await uploadResponse.json();
+            console.log('✅ Фото квеста отправлено на сервер и в Telegram:', result);
+            return result;
         }
 
         // Закрытие модального окна

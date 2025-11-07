@@ -1479,18 +1479,8 @@ function getRegionCenterCoords(regionId) {
     return centers[regionId] || { lat: 55.7558, lon: 37.6176, zoom: 10 };
 }
 
-// 🔥 НОВАЯ СИСТЕМА: Функции переопределены в navigation.js
-// Эти функции оставлены для совместимости, но используют новую систему
-function showMainSection() {
-    if (window.MatryoshkaNavigation) {
-        window.MatryoshkaNavigation.navigate('main');
-    }
-}
-
-// Функция возврата на главную (для совместимости)
-function goBack() {
-    showMainSection();
-}
+// 🔥 УДАЛЕНО: Функции теперь определены ТОЛЬКО в navigation.js
+// Дублирование функций вызывало конфликты навигации
 
 // Функция показа лоадера
 function showLoader(text = 'Загрузка...') {
@@ -1508,69 +1498,17 @@ function hideLoader() {
 }
 
 
-// 🔥 НОВАЯ СИСТЕМА: showProfile переопределена в navigation.js
-function showProfile() {
-    if (window.MatryoshkaNavigation) {
-        window.MatryoshkaNavigation.navigate('profile');
-    }
-}
-
-// Скрыть профиль
-function hideProfile() {
-    document.getElementById('profileSection').style.display = 'none';
-    document.getElementById('mainSection').style.display = 'block';
-
-    // Показываем команду
-    updateTeamVisibility();
-
-    // Обновляем навигацию
-    updateBottomNav(null);
-
-    // Скрываем BackButton в Telegram
-    if (tg && tg.BackButton) {
-        tg.BackButton.hide();
-    }
-}
+// 🔥 УДАЛЕНО: Функции showProfile и hideProfile теперь определены ТОЛЬКО в navigation.js
 
 // Функция совместимости для старого кода (удалена встроенная версия)
 
 /**
- * Загрузить ленту путешествий на главную страницу
+ * 🔥 УДАЛЕНО: Лента путешествий больше не отображается на главной странице
+ * Доступна через отдельную вкладку "Лента" в нижней навигации
  */
 function loadMainFeedSection() {
-    if (!window.travelDatabase) {
-        console.error('❌ TravelDatabase не найдена при загрузке главной ленты');
-        return;
-    }
-
-    const feedContainer = document.getElementById('travelFeed');
-    if (!feedContainer) {
-        console.error('❌ Контейнер #travelFeed не найден');
-        return;
-    }
-
-    const travels = window.travelDatabase.getAll(6); // Берем последние 6 путешествий
-    console.log('🌟 Загружаем ленту на главную страницу, путешествий:', travels.length);
-
-    if (travels.length === 0) {
-        feedContainer.innerHTML = `
-            <div style="text-align: center; padding: 40px 20px; color: rgba(255,255,255,0.6);">
-                <div style="font-size: 3rem; margin-bottom: 16px;">🗺️</div>
-                <p>Пока нет путешествий</p>
-                <p style="font-size: 0.9rem; margin-top: 8px;">Станьте первым, кто поделится своим путешествием!</p>
-            </div>
-        `;
-        return;
-    }
-
-    // Используем существующий механизм рендеринга из feed.js
-    if (window.matryoshkaFeed) {
-        const html = travels.map(travel => window.matryoshkaFeed.renderTravelCard(travel)).join('');
-        feedContainer.innerHTML = `<div class="feed-grid" style="display: flex; flex-direction: column; gap: 24px;">${html}</div>`;
-        console.log('✅ Лента на главной загружена');
-    } else {
-        console.error('❌ matryoshkaFeed не найден');
-    }
+    // Пустая функция для совместимости
+    console.log('ℹ️ Лента путешествий доступна через вкладку "Лента"');
 }
 
 // Инициализация приложения
@@ -1591,10 +1529,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadTravelPackages();
     }, 1000);
 
-    // Загружаем ленту путешествий на главную страницу
-    setTimeout(() => {
-        loadMainFeedSection();
-    }, 1500);
+    // 🔥 УДАЛЕНО: Лента путешествий больше не загружается на главную страницу
 
     // 🔥 ВОССТАНАВЛИВАЕМ ПОСЛЕДНЮЮ АКТИВНУЮ ВКЛАДКУ
     setTimeout(() => {
@@ -1607,11 +1542,7 @@ document.addEventListener('DOMContentLoaded', function() {
         backBtn.addEventListener('click', goBack);
     }
 
-    // Обработчик кнопки "Назад" в профиле
-    const profileBackBtn = document.getElementById('profileBackBtn');
-    if (profileBackBtn) {
-        profileBackBtn.addEventListener('click', hideProfile);
-    }
+    // 🔥 УДАЛЕНО: Обработчик для profileBackBtn уже есть в navigation.js
 
     // Инициализация Telegram Web App
     if (tg) {
@@ -1641,43 +1572,7 @@ function updateBreadcrumbs(regionName) {
 // ФУНКЦИИ ДЛЯ КОРЗИНЫ И НИЖНЕЙ НАВИГАЦИИ
 // ========================================
 
-/**
- * 🔥 НОВАЯ СИСТЕМА: showCart переопределена в navigation.js
- */
-function showCart() {
-    if (window.MatryoshkaNavigation) {
-        window.MatryoshkaNavigation.navigate('cart');
-    }
-}
-
-/**
- * Скрыть корзину
- */
-function hideCart() {
-    console.log('🛒 Закрываем корзину');
-
-    document.getElementById('cartSection').style.display = 'none';
-    document.getElementById('mainSection').style.display = 'block';
-
-    // Показываем команду
-    updateTeamVisibility();
-
-    // Обновляем навигацию
-    updateBottomNav(null);
-
-    // Скроллим наверх
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-/**
- * Показать полную ленту путешествий
- */
-// 🔥 НОВАЯ СИСТЕМА: showFeed переопределена в navigation.js
-function showFeed() {
-    if (window.MatryoshkaNavigation) {
-        window.MatryoshkaNavigation.navigate('feed');
-    }
-}
+// 🔥 УДАЛЕНО: Функции showCart, hideCart, showFeed теперь определены ТОЛЬКО в navigation.js
 
 /**
  * Обновление активной кнопки в нижней навигации
@@ -1693,10 +1588,4 @@ function updateBottomNav(activePage) {
     });
 }
 
-// Обработчик кнопки "Назад" в корзине
-document.addEventListener('DOMContentLoaded', function() {
-    const cartBackBtn = document.getElementById('cartBackBtn');
-    if (cartBackBtn) {
-        cartBackBtn.addEventListener('click', hideCart);
-    }
-});
+// 🔥 УДАЛЕНО: Обработчик для cartBackBtn уже есть в navigation.js

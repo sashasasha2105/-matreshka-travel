@@ -167,35 +167,42 @@ console.log('✅ Глобальные функции навигации опре
         },
 
         /**
-         * Прокрутка наверх (АГРЕССИВНАЯ)
+         * Прокрутка наверх (УЛЬТРА АГРЕССИВНАЯ - ГАРАНТИРОВАННАЯ)
          */
         scrollToTop: function() {
-            // Немедленно
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
-
-            // Через 10мс (после рендера)
-            setTimeout(() => {
+            // Функция форсированной прокрутки
+            const forceScrollTop = () => {
                 window.scrollTo(0, 0);
+                window.scrollTo({top: 0, left: 0, behavior: 'instant'});
                 document.documentElement.scrollTop = 0;
                 document.body.scrollTop = 0;
-            }, 10);
+            };
 
-            // Через 50мс (для гарантии)
-            setTimeout(() => {
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-            }, 50);
+            // Немедленно (синхронно)
+            forceScrollTop();
 
-            // Через 100мс (финальная проверка)
+            // Через requestAnimationFrame (после следующего рендера)
+            requestAnimationFrame(() => {
+                forceScrollTop();
+            });
+
+            // Через 0мс (следующий тик event loop)
+            setTimeout(() => forceScrollTop(), 0);
+
+            // Через 10мс (после рендера DOM)
+            setTimeout(() => forceScrollTop(), 10);
+
+            // Через 50мс (после анимаций)
+            setTimeout(() => forceScrollTop(), 50);
+
+            // Через 100мс (финальная гарантия)
+            setTimeout(() => forceScrollTop(), 100);
+
+            // Через 200мс (абсолютная гарантия для медленных устройств)
             setTimeout(() => {
-                window.scrollTo(0, 0);
-                document.documentElement.scrollTop = 0;
-                document.body.scrollTop = 0;
-                console.log('✅ Прокрутка наверх завершена');
-            }, 100);
+                forceScrollTop();
+                console.log('✅ Прокрутка наверх завершена (позиция:', window.scrollY, ')');
+            }, 200);
         },
 
         /**

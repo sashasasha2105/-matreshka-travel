@@ -58,7 +58,10 @@
       "Bash(git checkout:*)",
       "Bash(git rebase:*)",
       "Bash(git diff:*)",
-      "Bash(osascript:*)"
+      "Bash(osascript:*)",
+      "Bash(git -C /Users/alexbrizkiy/PycharmProjects/PythonProject20 log --oneline --graph -15)",
+      "Bash(tree:*)",
+      "Bash(git -C /Users/alexbrizkiy/PycharmProjects/PythonProject20 remote -v)"
     ],
     "deny": [],
     "ask": []

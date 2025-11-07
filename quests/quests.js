@@ -520,67 +520,7 @@
     console.log('✅ Система заданий Матрешка инициализирована');
 })();
 
-// Функция показа секции заданий
-function showQuests() {
-    console.log('🎯 Открываем задания');
+// 🔥 УДАЛЕНО: Функции showQuests и hideQuests теперь определены ТОЛЬКО в navigation.js
+// Старый код конфликтовал с новой системой навигации
 
-    // Скрываем все секции
-    document.getElementById('mainSection').style.display = 'none';
-    document.getElementById('regionDetails').style.display = 'none';
-    document.getElementById('profileSection').style.display = 'none';
-    document.getElementById('cartSection').style.display = 'none';
-
-    // Показываем задания
-    const questsSection = document.getElementById('questsSection');
-    questsSection.style.display = 'block';
-
-    // Скрываем команду
-    if (typeof updateTeamVisibility === 'function') {
-        updateTeamVisibility();
-    }
-
-    // Обновляем навигацию
-    updateBottomNav('quests');
-
-    // Сохраняем текущую вкладку
-    if (typeof saveCurrentSection === 'function') {
-        saveCurrentSection('quests');
-    }
-
-    // Рендерим задания
-    if (window.matryoshkaQuests) {
-        window.matryoshkaQuests.render();
-    }
-
-    // Прокручиваем наверх ПОСЛЕ отрисовки
-    requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, behavior: 'instant' });
-    });
-}
-
-// Функция скрытия заданий
-function hideQuests() {
-    console.log('🎯 Закрываем задания');
-
-    document.getElementById('questsSection').style.display = 'none';
-    document.getElementById('mainSection').style.display = 'block';
-
-    // Показываем команду
-    if (typeof updateTeamVisibility === 'function') {
-        updateTeamVisibility();
-    }
-
-    // Обновляем навигацию
-    updateBottomNav(null);
-
-    // Скроллим наверх
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// Обработчик кнопки "Назад" в заданиях
-document.addEventListener('DOMContentLoaded', function() {
-    const questsBackBtn = document.getElementById('questsBackBtn');
-    if (questsBackBtn) {
-        questsBackBtn.addEventListener('click', hideQuests);
-    }
-});
+// 🔥 УДАЛЕНО: Обработчик для questsBackBtn уже есть в navigation.js

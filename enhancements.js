@@ -103,11 +103,12 @@
 
     // ========================================
     // INTERSECTION OBSERVER ДЛЯ АНИМАЦИЙ
+    // Исправлено: работает даже при быстром скролле
     // ========================================
     function initScrollAnimations() {
         const observerOptions = {
             threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            rootMargin: '200px 0px -50px 0px'  // Увеличен rootMargin для раннего захвата
         };
 
         const observer = new IntersectionObserver((entries) => {
@@ -121,9 +122,27 @@
 
         // Наблюдаем за карточками
         const cards = document.querySelectorAll('.region-card, .package-card, .feed-post');
-        cards.forEach(card => observer.observe(card));
 
-        console.log('✨ Scroll анимации активированы');
+        // ФИКС: Сразу применяем анимацию к элементам, которые УЖЕ в viewport
+        cards.forEach(card => {
+            const rect = card.getBoundingClientRect();
+            const isInViewport = (
+                rect.top >= -200 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + 200 &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+
+            if (isInViewport) {
+                // Элемент уже в viewport - применяем анимацию сразу
+                card.classList.add('fade-in-up');
+            } else {
+                // Элемент вне viewport - наблюдаем за ним
+                observer.observe(card);
+            }
+        });
+
+        console.log('✨ Scroll анимации активированы (защита от раннего скролла)');
     }
 
     // ========================================

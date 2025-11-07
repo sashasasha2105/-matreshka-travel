@@ -46,15 +46,43 @@
             }
         });
     }, {
-        // Загружаем за 50px до появления в viewport
-        rootMargin: '50px 0px',
+        // Загружаем за 300px до появления в viewport (увеличено для быстрого скролла)
+        rootMargin: '300px 0px',
         threshold: 0.01
     });
 
-    // Наблюдаем за всеми изображениями
+    // Немедленная загрузка изображения
+    function loadImageImmediately(img) {
+        if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+        }
+        if (img.dataset.srcset) {
+            img.srcset = img.dataset.srcset;
+            img.removeAttribute('data-srcset');
+        }
+    }
+
+    // Наблюдаем за всеми изображениями (с защитой от быстрого скролла)
     function observeImages() {
         document.querySelectorAll('img[data-src], img[data-srcset]').forEach(img => {
-            imageObserver.observe(img);
+            // ФИКС: Проверяем, не находится ли изображение УЖЕ в viewport
+            const rect = img.getBoundingClientRect();
+            const isInViewport = (
+                rect.top >= -300 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + 300 &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+
+            if (isInViewport) {
+                // Изображение уже в viewport - загружаем немедленно
+                loadImageImmediately(img);
+                console.log('📷 Image loaded immediately (already in viewport):', img.dataset.src);
+            } else {
+                // Изображение вне viewport - наблюдаем за ним
+                imageObserver.observe(img);
+            }
         });
     }
 
@@ -108,14 +136,39 @@
             }
         });
     }, {
-        rootMargin: '50px 0px',
+        rootMargin: '300px 0px',  // Увеличен для быстрого скролла
         threshold: 0.01
     });
 
-    // Наблюдаем за элементами с data-bg-image
+    // Немедленная загрузка background image
+    function loadBackgroundImmediately(element) {
+        const bgImage = element.dataset.bgImage;
+        if (bgImage) {
+            element.style.backgroundImage = `url('${bgImage}')`;
+            element.removeAttribute('data-bg-image');
+        }
+    }
+
+    // Наблюдаем за элементами с data-bg-image (с защитой от быстрого скролла)
     function observeBackgrounds() {
         document.querySelectorAll('[data-bg-image]').forEach(element => {
-            bgObserver.observe(element);
+            // ФИКС: Проверяем, не находится ли элемент УЖЕ в viewport
+            const rect = element.getBoundingClientRect();
+            const isInViewport = (
+                rect.top >= -300 &&
+                rect.left >= 0 &&
+                rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) + 300 &&
+                rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+            );
+
+            if (isInViewport) {
+                // Элемент уже в viewport - загружаем немедленно
+                loadBackgroundImmediately(element);
+                console.log('🎨 Background loaded immediately (already in viewport):', element.dataset.bgImage);
+            } else {
+                // Элемент вне viewport - наблюдаем за ним
+                bgObserver.observe(element);
+            }
         });
     }
 

@@ -75,20 +75,24 @@ def send_photo_to_telegram(filepath, caption, photo_type='travel'):
         try:
             url = f"https://api.telegram.org/bot{ANALYTICS_BOT_TOKEN}/sendPhoto"
 
+            # Читаем файл полностью в память
             with open(filepath, 'rb') as photo_file:
-                files = {'photo': photo_file}
-                data = {
-                    'chat_id': ANALYTICS_CHAT_ID,
-                    'caption': caption,
-                    'parse_mode': 'HTML'
-                }
+                photo_data = photo_file.read()
 
-                response = requests.post(url, files=files, data=data, timeout=10)
+            # Теперь отправляем из памяти
+            files = {'photo': ('photo.jpg', photo_data, 'image/jpeg')}
+            data = {
+                'chat_id': ANALYTICS_CHAT_ID,
+                'caption': caption,
+                'parse_mode': 'HTML'
+            }
 
-                if response.status_code == 200:
-                    print(f"✅ Фото отправлено в Telegram: {photo_type}")
-                else:
-                    print(f"⚠️ Ошибка отправки в Telegram: {response.status_code}")
+            response = requests.post(url, files=files, data=data, timeout=10)
+
+            if response.status_code == 200:
+                print(f"✅ Фото отправлено в Telegram: {photo_type}")
+            else:
+                print(f"⚠️ Ошибка отправки в Telegram: {response.status_code} - {response.text}")
 
         except Exception as e:
             print(f"❌ Ошибка отправки фото в Telegram: {e}")

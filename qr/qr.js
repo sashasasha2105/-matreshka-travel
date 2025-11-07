@@ -133,8 +133,17 @@ class MatryoshkaQR {
 
                         <!-- Описание -->
                         <div class="qr-description">
-                            <h3>Отсканируйте для быстрого доступа</h3>
+                            ${partnerData.discount ? `
+                                <div class="qr-discount-badge">
+                                    <div class="qr-discount-percent">-${partnerData.discount}%</div>
+                                    <div class="qr-discount-label">СКИДКА</div>
+                                </div>
+                            ` : ''}
+                            <h3>${partnerData.discount ? 'Отсканируйте для получения скидки' : 'Отсканируйте для быстрого доступа'}</h3>
                             <p>${partnerData.description}</p>
+                            ${partnerData.specialOffer ? `
+                                <div class="qr-special-offer">🎁 ${partnerData.specialOffer}</div>
+                            ` : ''}
                             <div class="qr-rating">
                                 <span class="qr-stars">⭐</span>
                                 <span class="qr-rating-value">${partnerData.rating}</span>
@@ -167,7 +176,7 @@ class MatryoshkaQR {
                     <!-- Инфо -->
                     <div class="qr-info">
                         <span class="qr-info-icon">💡</span>
-                        <span>Покажите QR-код сотруднику для получения скидки</span>
+                        <span>${partnerData.discount ? `Покажите QR-код сотруднику для получения скидки ${partnerData.discount}%` : 'Покажите QR-код сотруднику'}</span>
                     </div>
                 </div>
             </div>

@@ -72,9 +72,10 @@
 }
 
 .hero-title {
-    font-size: 3.5rem !important;
+    font-size: 4.5rem !important;  /* Увеличено с 3.5rem до 4.5rem */
     font-weight: 900 !important;
     color: white !important;
+    margin-top: 40px !important;  /* Добавлен отступ сверху чтобы опустить ниже */
     margin-bottom: 16px !important;
     animation: fadeInDown 1s ease !important;
     text-shadow: 0 4px 20px rgba(0,0,0,0.8) !important;
@@ -142,7 +143,8 @@
     }
 
     .hero-title {
-        font-size: 2rem !important;
+        font-size: 2.5rem !important;  /* Увеличено с 2rem до 2.5rem */
+        margin-top: 30px !important;  /* Добавлен отступ сверху */
         margin-bottom: 12px !important;
     }
 

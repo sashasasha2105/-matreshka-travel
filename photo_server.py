@@ -132,12 +132,12 @@ def upload_photo():
         with open(filepath, 'wb') as f:
             f.write(optimized_data)
 
-        # Сохраняем метаданные
+        # Сохраняем метаданные (все параметры опциональные для совместимости)
         metadata = load_metadata()
         user_id = request.form.get('user_id', 'неизвестный')
         travel_id = request.form.get('travel_id', '')
-        photo_type = request.form.get('photo_type', 'travel')  # 'travel' или 'quest'
-        quest_name = request.form.get('quest_name', '')
+        photo_type = request.form.get('photo_type', 'travel')  # 'travel' или 'quest' (по умолчанию travel)
+        quest_name = request.form.get('quest_name', '')  # Опционально
 
         metadata[photo_id] = {
             'filename': filename,
@@ -150,10 +150,11 @@ def upload_photo():
         }
         save_metadata(metadata)
 
-        # Отправляем фото в Telegram бот
-        timestamp = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
-        if photo_type == 'quest':
-            caption = f"""
+        # Отправляем фото в Telegram бот (не блокирует загрузку при ошибке)
+        try:
+            timestamp = datetime.now().strftime("%d.%m.%Y, %H:%M:%S")
+            if photo_type == 'quest':
+                caption = f"""
 📸 <b>НОВОЕ ФОТО ПРОХОЖДЕНИЯ КВЕСТА</b>
 
 👤 <b>Пользователь:</b> {user_id}
@@ -162,8 +163,8 @@ def upload_photo():
 📊 <b>Размер:</b> {len(optimized_data) // 1024} KB
 ⏰ <b>Время:</b> {timestamp}
 """.strip()
-        else:
-            caption = f"""
+            else:
+                caption = f"""
 📸 <b>НОВОЕ ФОТО В ЛЕНТЕ ПУТЕШЕСТВИЙ</b>
 
 👤 <b>Пользователь:</b> {user_id}
@@ -173,7 +174,10 @@ def upload_photo():
 ⏰ <b>Время:</b> {timestamp}
 """.strip()
 
-        send_photo_to_telegram(filepath, caption, photo_type)
+            send_photo_to_telegram(filepath, caption, photo_type)
+        except Exception as telegram_error:
+            # НЕ падаем если Telegram не работает - фото уже сохранено!
+            print(f"⚠️ Не удалось отправить в Telegram (но фото сохранено): {telegram_error}")
 
         # Возвращаем URL фотографии
         photo_url = f"/api/photo/{photo_id}"

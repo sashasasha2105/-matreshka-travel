@@ -8,21 +8,6 @@
     <meta name="description" content="Матрешка - откройте для себя красоту и разнообразие России. Путешествуйте по регионам, выполняйте задания, получайте награды.">
     <title>Матрешка - Путешествуй по России</title>
 
-    <!-- Защита от раннего скролла: блокируем прокрутку до полной загрузки -->
-    <script>
-        // Немедленно блокируем скролл
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-
-        // Разблокируем когда все скрипты и ресурсы загружены
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.documentElement.style.overflow = '';
-                document.body.style.overflow = '';
-            }, 100); // Небольшая задержка для инициализации всех обсерверов
-        });
-    </script>
-
     <!-- Preconnect для внешних ресурсов (быстрее чем dns-prefetch) -->
     <link rel="preconnect" href="https://telegram.org" crossorigin>
     <link rel="preconnect" href="https://sketchfab.com" crossorigin>

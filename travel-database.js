@@ -85,7 +85,6 @@ class TravelDatabase {
                     console.log(`🌐 Используем сохраненные URL-ы для "${travel.title}": ${travel.images.length} фото`);
                 }
             }
-
             this.travels = travels;
             console.log('✅ Загружено путешествий в кэш:', this.travels.length);
 

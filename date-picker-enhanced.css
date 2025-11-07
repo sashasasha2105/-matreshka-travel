@@ -1,0 +1,134 @@
+/* ================================================
+   УЛУЧШЕННЫЙ DATE PICKER - УВЕЛИЧЕННАЯ ВЫСОТА
+   Загружается последним для переопределения всех стилей
+   ================================================ */
+
+/* Увеличиваем spacing между элементами */
+.date-picker-header {
+    margin-bottom: 32px !important;  /* было 24px */
+    gap: 16px !important;  /* было 12px */
+}
+
+/* Увеличиваем иконку и текст */
+.date-icon {
+    font-size: 2.2rem !important;  /* было 1.8rem */
+}
+
+.date-label {
+    font-size: 1.3rem !important;  /* было 1.1rem */
+    line-height: 1.4 !important;
+}
+
+/* Увеличиваем отступы между инпутами */
+.date-inputs-row {
+    gap: 20px !important;  /* было 16px */
+    margin-bottom: 32px !important;  /* было 24px */
+}
+
+.date-input-group {
+    gap: 12px !important;  /* было 8px */
+}
+
+/* Увеличиваем размер лейблов */
+.date-input-label {
+    font-size: 0.95rem !important;  /* было 0.85rem */
+    margin-bottom: 4px !important;
+}
+
+/* Увеличиваем высоту инпутов */
+.date-input {
+    padding: 18px 20px !important;  /* было 14px 16px */
+    font-size: 1.1rem !important;  /* было 1rem */
+    border-radius: 14px !important;  /* было 12px */
+    min-height: 56px !important;  /* новое */
+}
+
+/* Увеличиваем сепаратор */
+.date-separator {
+    font-size: 1.8rem !important;  /* было 1.5rem */
+    margin-bottom: 18px !important;  /* было 14px */
+}
+
+/* Увеличиваем кнопку сохранения */
+.date-save-btn {
+    padding: 20px 32px !important;  /* было 16px 24px */
+    font-size: 1.15rem !important;  /* было 1rem */
+    border-radius: 14px !important;  /* было 12px */
+    min-height: 60px !important;  /* новое */
+}
+
+.btn-icon {
+    font-size: 1.4rem !important;  /* увеличено */
+}
+
+.btn-text {
+    font-size: 1.15rem !important;  /* увеличено */
+}
+
+/* Мобильные устройства */
+@media (max-width: 768px) {
+    .date-picker-header {
+        margin-bottom: 24px !important;
+        gap: 12px !important;
+    }
+
+    .date-icon {
+        font-size: 1.8rem !important;
+    }
+
+    .date-label {
+        font-size: 1.1rem !important;
+    }
+
+    .date-inputs-row {
+        gap: 16px !important;
+        margin-bottom: 24px !important;
+    }
+
+    .date-input-group {
+        gap: 10px !important;
+    }
+
+    .date-input-label {
+        font-size: 0.9rem !important;
+    }
+
+    .date-input {
+        padding: 16px 18px !important;
+        font-size: 1rem !important;
+        min-height: 52px !important;
+    }
+
+    .date-save-btn {
+        padding: 18px 28px !important;
+        font-size: 1.05rem !important;
+        min-height: 56px !important;
+    }
+}
+
+/* Очень маленькие телефоны */
+@media (max-width: 480px) {
+    .date-picker-header {
+        margin-bottom: 20px !important;
+    }
+
+    .date-icon {
+        font-size: 1.6rem !important;
+    }
+
+    .date-label {
+        font-size: 1rem !important;
+    }
+
+    .date-input {
+        padding: 14px 16px !important;
+        font-size: 0.95rem !important;
+        min-height: 48px !important;
+    }
+
+    .date-save-btn {
+        padding: 16px 24px !important;
+        font-size: 1rem !important;
+        min-height: 52px !important;
+    }
+}

@@ -41,7 +41,7 @@
     transform: scale(1.1) !important;
 }
 
-/* Градиент поверх модели - темный фон для слияния */
+/* Градиент поверх модели - ОЧЕНЬ СВЕТЛЫЙ для заметности матрёшки */
 .hero-overlay {
     position: relative !important;
     z-index: 1 !important;
@@ -53,10 +53,10 @@
     padding: 60px 20px 40px !important;
     background: linear-gradient(
         to bottom,
-        rgba(0,0,0,0.2) 0%,
-        rgba(15,5,32,0.1) 30%,
-        rgba(15,5,32,0.1) 70%,
-        rgba(0,0,0,0.15) 100%
+        rgba(0,0,0,0.05) 0%,      /* почти прозрачный верх */
+        rgba(15,5,32,0.02) 30%,    /* очень светлая середина */
+        rgba(15,5,32,0.02) 70%,    /* очень светлая середина */
+        rgba(0,0,0,0.08) 100%      /* слегка темнее низ */
     ) !important;
 }
 
@@ -91,12 +91,12 @@
     z-index: 2 !important;
 }
 
-/* Календарь внизу */
+/* Календарь внизу - УВЕЛИЧЕННАЯ ВЫСОТА */
 .travel-date-picker {
     background: linear-gradient(135deg, rgba(255, 204, 0, 0.12), rgba(255, 107, 107, 0.08)) !important;
     border: 1px solid rgba(255, 204, 0, 0.25) !important;
     border-radius: 24px !important;
-    padding: 28px 32px !important;
+    padding: 48px 40px !important;  /* Увеличено с 28px до 48px по вертикали, с 32px до 40px по горизонтали */
     max-width: 600px !important;
     width: 100% !important;
     animation: fadeInUp 1s ease 0.4s both !important;
@@ -151,12 +151,12 @@
     }
 
     .travel-date-picker {
-        padding: 20px 16px !important;
+        padding: 32px 20px !important;  /* Увеличено с 20px до 32px */
         max-width: 95% !important;
     }
 
     .date-picker-header {
-        margin-bottom: 16px !important;
+        margin-bottom: 24px !important;  /* Увеличено с 16px до 24px */
     }
 
     .date-icon {

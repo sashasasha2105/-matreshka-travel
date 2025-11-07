@@ -54,9 +54,9 @@
     background: transparent !important;
 }
 
-/* Темный фон для контейнера модели */
+/* СВЕТЛЫЙ фон для контейнера модели - чтобы модель была отчётливо видна */
 .hero-model-container {
-    background: #0a0514 !important;
+    background: linear-gradient(135deg, #e8e8f0 0%, #d5d5e5 50%, #c8c8d8 100%) !important;
 }
 
 /* Заголовки сверху */
@@ -68,35 +68,31 @@
 .hero-title {
     font-size: 4.5rem !important;
     font-weight: 900 !important;
-    color: white !important;
+    color: #1a1a2e !important;  /* Темный цвет для светлого фона */
     margin-top: 40px !important;
     margin-bottom: 16px !important;
     animation: fadeInDown 1s ease !important;
     text-shadow:
-        0 0 40px rgba(0,0,0,1),
-        0 0 20px rgba(0,0,0,1),
-        0 4px 20px rgba(0,0,0,0.9),
-        0 2px 10px rgba(0,0,0,0.9) !important;
+        0 2px 4px rgba(0,0,0,0.15),
+        0 4px 8px rgba(0,0,0,0.1) !important;  /* Легкая тень для контраста */
     z-index: 2 !important;
 }
 
 .hero-subtitle {
     font-size: 1.3rem !important;
-    color: #e0e0e0 !important;
+    color: #2d2d44 !important;  /* Темный цвет для светлого фона */
     margin-bottom: 0 !important;
     animation: fadeInDown 1s ease 0.2s both !important;
-    opacity: 0.95 !important;
+    opacity: 0.9 !important;
     text-shadow:
-        0 0 30px rgba(0,0,0,1),
-        0 0 15px rgba(0,0,0,1),
-        0 2px 10px rgba(0,0,0,0.9) !important;
+        0 2px 4px rgba(0,0,0,0.1) !important;  /* Легкая тень */
     z-index: 2 !important;
 }
 
-/* Календарь внизу - УВЕЛИЧЕННАЯ ВЫСОТА + сильная тень для видимости */
+/* Календарь внизу - УВЕЛИЧЕННАЯ ВЫСОТА + контрастный фон для светлого бэкграунда */
 .travel-date-picker {
-    background: linear-gradient(135deg, rgba(255, 204, 0, 0.15), rgba(255, 107, 107, 0.12)) !important;
-    border: 1px solid rgba(255, 204, 0, 0.3) !important;
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.92), rgba(22, 33, 62, 0.92)) !important;  /* Темный контрастный фон */
+    border: 2px solid rgba(255, 204, 0, 0.5) !important;
     border-radius: 24px !important;
     padding: 48px 40px !important;
     max-width: 600px !important;
@@ -104,8 +100,8 @@
     animation: fadeInUp 1s ease 0.4s both !important;
     backdrop-filter: blur(20px) !important;
     box-shadow:
-        0 12px 40px rgba(0, 0, 0, 0.7),
-        0 0 60px rgba(0, 0, 0, 0.8) !important;
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        0 8px 20px rgba(255, 204, 0, 0.2) !important;
     z-index: 2 !important;
 }
 
@@ -142,22 +138,24 @@
     }
 
     .hero-overlay {
-        padding: 40px 16px 30px !important;
+        padding: 30px 16px 20px !important;  /* Уменьшен нижний отступ чтобы поднять календарь */
+        gap: 20px !important;  /* Добавлен gap для равномерного распределения */
     }
 
     .hero-title {
-        font-size: 2.5rem !important;  /* Увеличено с 2rem до 2.5rem */
-        margin-top: 30px !important;  /* Добавлен отступ сверху */
+        font-size: 3.8rem !important;  /* СИЛЬНО увеличено: было 2.5rem, стало 3.8rem */
+        margin-top: 20px !important;
         margin-bottom: 12px !important;
     }
 
     .hero-subtitle {
-        font-size: 1rem !important;
+        font-size: 1.15rem !important;  /* Немного увеличено */
     }
 
     .travel-date-picker {
-        padding: 32px 20px !important;  /* Увеличено с 20px до 32px */
+        padding: 32px 20px !important;
         max-width: 95% !important;
+        margin-top: auto !important;  /* Прижимает к низу, но с отступом от hero-overlay padding */
     }
 
     .date-picker-header {

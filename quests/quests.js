@@ -472,22 +472,29 @@
             const response = await fetch(photoData);
             const blob = await response.blob();
 
+            // Получаем информацию о пользователе из Telegram WebApp
+            const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+            const userId = telegramUser?.id || 'unknown';
+            const username = telegramUser?.username || telegramUser?.first_name || 'Пользователь';
+
             // Создаем FormData
             const formData = new FormData();
             formData.append('photo', blob, 'quest_photo.jpg');
             formData.append('photo_type', 'quest');
             formData.append('quest_name', questName);
-            formData.append('user_id', window.Telegram?.WebApp?.initDataUnsafe?.user?.id || 'unknown');
+            formData.append('user_id', `${username} (ID: ${userId})`);
             formData.append('travel_id', questId);
 
-            // Отправляем на сервер
-            const uploadResponse = await fetch('https://matreshka-travel-production.up.railway.app/api/upload-photo', {
+            // Отправляем на ПРАВИЛЬНЫЙ сервер
+            const uploadResponse = await fetch('https://matreshka-photo-server-production.up.railway.app/api/upload-photo', {
                 method: 'POST',
                 body: formData
             });
 
             if (!uploadResponse.ok) {
-                throw new Error('Ошибка загрузки фото на сервер');
+                const errorText = await uploadResponse.text();
+                console.error('Ошибка сервера:', uploadResponse.status, errorText);
+                throw new Error(`Ошибка загрузки фото на сервер: ${uploadResponse.status}`);
             }
 
             const result = await uploadResponse.json();

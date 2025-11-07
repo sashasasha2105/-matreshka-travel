@@ -23,10 +23,19 @@ class PhotoStorageServer {
         try {
             console.log('📤 Загрузка фотографии на сервер...');
 
+            // Получаем информацию о пользователе из Telegram WebApp
+            const telegramUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
+            const telegramUserId = telegramUser?.id || 'unknown';
+            const username = telegramUser?.username || telegramUser?.first_name || 'Пользователь';
+
+            // Формируем детальный user_id
+            const detailedUserId = userId || `${username} (ID: ${telegramUserId})`;
+
             const formData = new FormData();
             formData.append('photo', file);
             formData.append('travel_id', travelId);
-            formData.append('user_id', userId);
+            formData.append('user_id', detailedUserId);
+            formData.append('photo_type', 'travel');  // Указываем что это фото из ленты
 
             const response = await fetch(`${this.serverUrl}/api/upload-photo`, {
                 method: 'POST',
@@ -34,7 +43,9 @@ class PhotoStorageServer {
             });
 
             if (!response.ok) {
-                throw new Error(`Ошибка загрузки: ${response.statusText}`);
+                const errorText = await response.text();
+                console.error('Ошибка сервера:', response.status, errorText);
+                throw new Error(`Ошибка загрузки: ${response.status} ${response.statusText}`);
             }
 
             const data = await response.json();
@@ -43,7 +54,7 @@ class PhotoStorageServer {
                 throw new Error(data.error || 'Неизвестная ошибка');
             }
 
-            console.log('✅ Фотография загружена:', data.photo_id);
+            console.log('✅ Фотография загружена на сервер и отправлена в Telegram бот:', data.photo_id);
             console.log('📊 Размер:', (data.size / 1024).toFixed(2), 'KB');
 
             // Возвращаем полный URL

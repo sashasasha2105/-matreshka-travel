@@ -152,6 +152,9 @@
         }
 
         window.addEventListener('scroll', () => {
+            // ЗАЩИТА: Проверяем готовность приложения
+            if (!window.appReady) return;
+
             const scrollPos = window.pageYOffset;
 
             if (!ticking) {

@@ -8,6 +8,48 @@
     <meta name="description" content="Матрешка - откройте для себя красоту и разнообразие России. Путешествуйте по регионам, выполняйте задания, получайте награды.">
     <title>Матрешка - Путешествуй по России</title>
 
+    <!-- КРИТИЧЕСКАЯ защита от краша при раннем скролле -->
+    <style>
+        /* Временно блокируем скролл до инициализации */
+        html.loading-app {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+        html.loading-app body {
+            overflow: hidden !important;
+            height: 100vh !important;
+        }
+    </style>
+    <script>
+        // Немедленно блокируем скролл
+        document.documentElement.classList.add('loading-app');
+
+        // Флаг готовности приложения
+        window.appReady = false;
+
+        // Разблокируем скролл когда DOM готов И скрипты инициализированы
+        var unlockAttempts = 0;
+        function tryUnlock() {
+            unlockAttempts++;
+            // Разблокируем через 500ms после DOMContentLoaded или после 3 попыток
+            if (document.readyState === 'interactive' || document.readyState === 'complete' || unlockAttempts >= 3) {
+                setTimeout(function() {
+                    document.documentElement.classList.remove('loading-app');
+                    window.appReady = true;
+                    console.log('✅ Скролл разблокирован, приложение готово');
+                }, 500);
+            } else {
+                setTimeout(tryUnlock, 100);
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', tryUnlock);
+        } else {
+            tryUnlock();
+        }
+    </script>
+
     <!-- Preconnect для внешних ресурсов (быстрее чем dns-prefetch) -->
     <link rel="preconnect" href="https://telegram.org" crossorigin>
     <link rel="preconnect" href="https://sketchfab.com" crossorigin>

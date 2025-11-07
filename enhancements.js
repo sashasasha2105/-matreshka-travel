@@ -18,6 +18,9 @@
         let ticking = false;
 
         window.addEventListener('scroll', () => {
+            // ЗАЩИТА: Проверяем готовность приложения
+            if (!window.appReady) return;
+
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     const scrolled = window.pageYOffset;
@@ -180,6 +183,9 @@
         let ticking = false;
 
         window.addEventListener('scroll', () => {
+            // ЗАЩИТА: Проверяем готовность приложения
+            if (!window.appReady) return;
+
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     const currentScroll = window.pageYOffset;
@@ -336,6 +342,9 @@
         let ticking = false;
 
         window.addEventListener('scroll', () => {
+            // ЗАЩИТА: Проверяем готовность приложения
+            if (!window.appReady) return;
+
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     const windowHeight = document.documentElement.scrollHeight - window.innerHeight;

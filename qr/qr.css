@@ -212,61 +212,41 @@
     margin-bottom: 20px;
 }
 
-/* БЕЙДЖ СО СКИДКОЙ */
+/* БЕЙДЖ СО СКИДКОЙ - ПРОСТОЙ */
 .qr-discount-badge {
     display: inline-block;
     background: linear-gradient(135deg, #ffcc00, #ff8e53);
-    border-radius: 20px;
-    padding: 20px 32px;
-    margin-bottom: 20px;
-    box-shadow:
-        0 8px 24px rgba(255, 204, 0, 0.4),
-        0 4px 12px rgba(0, 0, 0, 0.3);
-    animation: pulse 2s ease-in-out infinite;
+    border-radius: 12px;
+    padding: 12px 20px;
+    margin-bottom: 16px;
 }
 
 .qr-discount-percent {
-    font-size: 3.5rem;
-    font-weight: 900;
+    font-size: 2rem;
+    font-weight: 700;
     color: #0f0520;
     line-height: 1;
-    margin-bottom: 4px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2px;
 }
 
 .qr-discount-label {
-    font-size: 0.9rem;
-    font-weight: 700;
+    font-size: 0.75rem;
+    font-weight: 600;
     color: #0f0520;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-        box-shadow:
-            0 8px 24px rgba(255, 204, 0, 0.4),
-            0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-    50% {
-        transform: scale(1.05);
-        box-shadow:
-            0 12px 32px rgba(255, 204, 0, 0.6),
-            0 6px 16px rgba(0, 0, 0, 0.4);
-    }
 }
 
 /* СПЕЦИАЛЬНОЕ ПРЕДЛОЖЕНИЕ */
 .qr-special-offer {
-    background: linear-gradient(135deg, rgba(255, 204, 0, 0.15), rgba(255, 107, 107, 0.15));
-    border: 1px solid rgba(255, 204, 0, 0.3);
-    border-radius: 12px;
-    padding: 12px 16px;
-    margin: 14px 0;
-    color: #ffcc00;
-    font-size: 0.9rem;
-    font-weight: 500;
+    background: rgba(255, 204, 0, 0.1);
+    border: 1px solid rgba(255, 204, 0, 0.25);
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 12px 0;
+    color: #d0d0d0;
+    font-size: 0.85rem;
+    font-weight: 400;
     line-height: 1.4;
     text-align: left;
 }

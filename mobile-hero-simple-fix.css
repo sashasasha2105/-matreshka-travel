@@ -137,29 +137,50 @@
         margin-bottom: 20px !important;
     }
 
+    /* 🔥 МОДЕЛЬ НАМНОГО БОЛЬШЕ И ЗАМЕТНЕЕ НА МОБИЛЬНЫХ */
+    .hero-model-container iframe {
+        transform: scale(2.5) !important;  /* УВЕЛИЧЕНО С 1.1 ДО 2.5 - В 2.5 РАЗА БОЛЬШЕ! */
+        transform-origin: center center !important;
+    }
+
+    /* Overlay с МИНИМАЛЬНЫМ затемнением чтобы модель была видна */
     .hero-overlay {
-        padding: 30px 16px 20px !important;  /* Уменьшен нижний отступ чтобы поднять календарь */
-        gap: 20px !important;  /* Добавлен gap для равномерного распределения */
+        padding: 30px 16px 20px !important;
+        gap: 20px !important;
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.3) 0%,      /* Прозрачнее сверху */
+            rgba(0, 0, 0, 0.15) 30%,     /* Еще прозрачнее в центре где модель */
+            rgba(0, 0, 0, 0.15) 60%,     /* Держим прозрачность */
+            rgba(0, 0, 0, 0.75) 100%     /* Темнее только внизу где календарь */
+        ) !important;
     }
 
     .hero-title {
-        font-size: 3.8rem !important;  /* СИЛЬНО увеличено: было 2.5rem, стало 3.8rem */
+        font-size: 3.5rem !important;  /* УВЕЛИЧЕНО с 2.2rem для лучшей читаемости */
         margin-top: 20px !important;
         margin-bottom: 12px !important;
+        text-shadow:
+            0 0 20px rgba(0,0,0,0.9),
+            0 0 40px rgba(0,0,0,0.7),
+            2px 2px 8px rgba(0,0,0,1) !important;  /* Сильная тень для читаемости */
     }
 
     .hero-subtitle {
-        font-size: 1.15rem !important;  /* Немного увеличено */
+        font-size: 1rem !important;
+        text-shadow:
+            0 0 15px rgba(0,0,0,0.9),
+            2px 2px 6px rgba(0,0,0,1) !important;  /* Сильная тень для читаемости */
     }
 
     .travel-date-picker {
         padding: 32px 20px !important;
         max-width: 95% !important;
-        margin-top: auto !important;  /* Прижимает к низу, но с отступом от hero-overlay padding */
+        margin-top: auto !important;
     }
 
     .date-picker-header {
-        margin-bottom: 24px !important;  /* Увеличено с 16px до 24px */
+        margin-bottom: 24px !important;
     }
 
     .date-icon {
@@ -201,8 +222,13 @@
 
 /* Очень маленькие телефоны */
 @media (max-width: 480px) {
+    /* 🔥 НА МАЛЕНЬКИХ ТЕЛЕФОНАХ МОДЕЛЬ ЕЩЕ БОЛЬШЕ! */
+    .hero-model-container iframe {
+        transform: scale(3.0) !important;  /* ЕЩЕ БОЛЬШЕ - В 3 РАЗА! */
+    }
+
     .hero-title {
-        font-size: 1.6rem !important;
+        font-size: 2.8rem !important;  /* УВЕЛИЧЕНО с 1.6rem для лучшей читаемости */
     }
 
     .hero-subtitle {
@@ -210,7 +236,7 @@
     }
 
     .travel-date-picker {
-        padding: 16px 12px !important;
+        padding: 20px 16px !important;  /* Немного увеличен для комфорта */
     }
 
     .date-input {

@@ -3,7 +3,7 @@
  * Обеспечивает мгновенную загрузку и офлайн-режим
  */
 
-const CACHE_VERSION = 'matryoshka-v3.0';
+const CACHE_VERSION = 'matryoshka-v3.1-stable';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;

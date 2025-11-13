@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
-Модуль для работы с базой данных Supabase
+Упрощенный модуль для работы с базой данных Supabase
+Только для ленты путешествий
 """
 
 import os
 import logging
 from typing import Optional, Dict, List, Any
+from datetime import datetime
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
@@ -16,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 class Database:
-    """Класс для работы с Supabase"""
+    """Класс для работы с Supabase - упрощенная версия"""
 
     def __init__(self):
         """Инициализация подключения к Supabase"""
@@ -80,187 +82,223 @@ class Database:
             logger.error(f"❌ Ошибка получения пользователя: {e}")
             return None
 
-    async def update_user(self, telegram_id: int, user_data: Dict[str, Any]) -> Optional[Dict]:
+    # ==================== ЛЕНТА ПУТЕШЕСТВИЙ ====================
+
+    async def add_travel_photo(
+        self,
+        telegram_id: int,
+        username: str,
+        photo_url: str,
+        description: str = None
+    ) -> Optional[Dict]:
         """
-        Обновить данные пользователя
+        Добавить фотографию в ленту путешествий
 
         Args:
             telegram_id: ID пользователя в Telegram
-            user_data: Словарь с новыми данными
+            username: Username пользователя (@username)
+            photo_url: URL фотографии в Supabase Storage
+            description: Описание фотографии (опционально)
 
         Returns:
-            Словарь с обновленными данными или None
+            Словарь с данными добавленной записи или None
         """
         try:
-            result = self.client.table('users')\
-                .update(user_data)\
-                .eq('telegram_id', telegram_id)\
-                .execute()
+            data = {
+                'telegram_id': telegram_id,
+                'username': username,
+                'photo_url': photo_url,
+            }
+            if description:
+                data['description'] = description
 
-            logger.info(f"✅ Пользователь обновлен: {telegram_id}")
+            result = self.client.table('travel_feed').insert(data).execute()
+            logger.info(f"✅ Фото добавлено в ленту: {telegram_id} - {photo_url}")
             return result.data[0] if result.data else None
         except Exception as e:
-            logger.error(f"❌ Ошибка обновления пользователя: {e}")
+            logger.error(f"❌ Ошибка добавления фото в ленту: {e}")
             return None
 
-    # ==================== ПУТЕШЕСТВИЯ ====================
-
-    async def create_trip(self, trip_data: Dict[str, Any]) -> Optional[Dict]:
+    async def get_travel_feed(
+        self,
+        limit: int = 50,
+        offset: int = 0
+    ) -> List[Dict]:
         """
-        Создать новое путешествие
+        Получить ленту путешествий (все фото)
 
         Args:
-            trip_data: Словарь с данными путешествия
-                - user_id: ID пользователя (из таблицы users)
-                - region: Регион путешествия
-                - start_date: Дата начала
-                - end_date: Дата окончания
-                - status: Статус (planned, active, completed)
+            limit: Максимальное количество записей
+            offset: Смещение для пагинации
 
         Returns:
-            Словарь с данными созданного путешествия или None
+            Список записей из ленты
         """
         try:
-            result = self.client.table('trips').insert(trip_data).execute()
-            logger.info(f"✅ Путешествие создано для пользователя: {trip_data.get('user_id')}")
-            return result.data[0] if result.data else None
-        except Exception as e:
-            logger.error(f"❌ Ошибка создания путешествия: {e}")
-            return None
-
-    async def get_user_trips(self, user_id: int) -> List[Dict]:
-        """
-        Получить все путешествия пользователя
-
-        Args:
-            user_id: ID пользователя (из таблицы users)
-
-        Returns:
-            Список путешествий
-        """
-        try:
-            result = self.client.table('trips')\
+            result = self.client.table('travel_feed')\
                 .select('*')\
-                .eq('user_id', user_id)\
                 .order('created_at', desc=True)\
+                .range(offset, offset + limit - 1)\
                 .execute()
 
             return result.data if result.data else []
         except Exception as e:
-            logger.error(f"❌ Ошибка получения путешествий: {e}")
+            logger.error(f"❌ Ошибка получения ленты: {e}")
             return []
 
-    async def update_trip(self, trip_id: int, trip_data: Dict[str, Any]) -> Optional[Dict]:
+    async def get_user_travel_photos(
+        self,
+        telegram_id: int,
+        limit: int = 50
+    ) -> List[Dict]:
         """
-        Обновить данные путешествия
+        Получить фотографии конкретного пользователя
 
         Args:
-            trip_id: ID путешествия
-            trip_data: Словарь с новыми данными
+            telegram_id: ID пользователя в Telegram
+            limit: Максимальное количество записей
 
         Returns:
-            Словарь с обновленными данными или None
+            Список фотографий пользователя
         """
         try:
-            result = self.client.table('trips')\
-                .update(trip_data)\
-                .eq('id', trip_id)\
-                .execute()
-
-            logger.info(f"✅ Путешествие обновлено: {trip_id}")
-            return result.data[0] if result.data else None
-        except Exception as e:
-            logger.error(f"❌ Ошибка обновления путешествия: {e}")
-            return None
-
-    # ==================== ФОТОГРАФИИ ====================
-
-    async def create_photo(self, photo_data: Dict[str, Any]) -> Optional[Dict]:
-        """
-        Сохранить информацию о фотографии
-
-        Args:
-            photo_data: Словарь с данными фотографии
-                - user_id: ID пользователя
-                - photo_url: URL фотографии
-
-        Returns:
-            Словарь с данными сохраненной фотографии или None
-        """
-        try:
-            # Оставляем только нужные поля
-            clean_data = {
-                'user_id': photo_data['user_id'],
-                'photo_url': photo_data['photo_url']
-            }
-            result = self.client.table('photos').insert(clean_data).execute()
-            logger.info(f"✅ Фотография сохранена для пользователя: {clean_data.get('user_id')}")
-            return result.data[0] if result.data else None
-        except Exception as e:
-            logger.error(f"❌ Ошибка сохранения фотографии: {e}")
-            return None
-
-    async def get_user_photos(self, user_id: int, limit: int = 50) -> List[Dict]:
-        """
-        Получить фотографии пользователя
-
-        Args:
-            user_id: ID пользователя
-            limit: Максимальное количество фотографий
-
-        Returns:
-            Список фотографий
-        """
-        try:
-            result = self.client.table('photos')\
+            result = self.client.table('travel_feed')\
                 .select('*')\
-                .eq('user_id', user_id)\
+                .eq('telegram_id', telegram_id)\
                 .order('created_at', desc=True)\
                 .limit(limit)\
                 .execute()
 
             return result.data if result.data else []
         except Exception as e:
-            logger.error(f"❌ Ошибка получения фотографий: {e}")
+            logger.error(f"❌ Ошибка получения фотографий пользователя: {e}")
             return []
 
-    # ==================== ОБЩИЕ МЕТОДЫ ====================
-
-    async def execute_query(self, table: str, query_type: str, **kwargs) -> Any:
+    async def delete_travel_photo(self, photo_id: int) -> bool:
         """
-        Выполнить произвольный запрос к базе данных
+        Удалить фотографию из ленты
 
         Args:
-            table: Название таблицы
-            query_type: Тип запроса (select, insert, update, delete)
-            **kwargs: Дополнительные параметры запроса
+            photo_id: ID записи в таблице travel_feed
 
         Returns:
-            Результат запроса
+            True если удалено успешно, False иначе
         """
         try:
-            if query_type == 'select':
-                result = self.client.table(table).select(kwargs.get('columns', '*')).execute()
-            elif query_type == 'insert':
-                result = self.client.table(table).insert(kwargs.get('data')).execute()
-            elif query_type == 'update':
-                result = self.client.table(table)\
-                    .update(kwargs.get('data'))\
-                    .eq(kwargs.get('column'), kwargs.get('value'))\
-                    .execute()
-            elif query_type == 'delete':
-                result = self.client.table(table)\
-                    .delete()\
-                    .eq(kwargs.get('column'), kwargs.get('value'))\
-                    .execute()
-            else:
-                logger.error(f"❌ Неизвестный тип запроса: {query_type}")
-                return None
+            result = self.client.table('travel_feed')\
+                .delete()\
+                .eq('id', photo_id)\
+                .execute()
 
-            return result.data if result.data else None
+            logger.info(f"✅ Фото удалено из ленты: {photo_id}")
+            return True
         except Exception as e:
-            logger.error(f"❌ Ошибка выполнения запроса: {e}")
+            logger.error(f"❌ Ошибка удаления фото: {e}")
+            return False
+
+    # ==================== SUPABASE STORAGE ====================
+
+    def upload_photo_to_storage(
+        self,
+        file_path: str,
+        bucket_name: str = 'travel-photos'
+    ) -> Optional[str]:
+        """
+        Загрузить фотографию в Supabase Storage
+
+        Args:
+            file_path: Путь к файлу на диске
+            bucket_name: Название bucket в Storage
+
+        Returns:
+            URL загруженной фотографии или None
+        """
+        try:
+            # Генерируем уникальное имя файла
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            file_name = f"{timestamp}_{os.path.basename(file_path)}"
+
+            # Читаем файл
+            with open(file_path, 'rb') as f:
+                file_data = f.read()
+
+            # Загружаем в Storage
+            result = self.client.storage.from_(bucket_name).upload(
+                file_name,
+                file_data,
+                {'content-type': 'image/jpeg'}
+            )
+
+            # Получаем публичный URL
+            public_url = self.client.storage.from_(bucket_name).get_public_url(file_name)
+
+            logger.info(f"✅ Фото загружено в Storage: {file_name}")
+            return public_url
+
+        except Exception as e:
+            logger.error(f"❌ Ошибка загрузки фото в Storage: {e}")
             return None
+
+    def delete_photo_from_storage(
+        self,
+        photo_url: str,
+        bucket_name: str = 'travel-photos'
+    ) -> bool:
+        """
+        Удалить фотографию из Supabase Storage
+
+        Args:
+            photo_url: URL фотографии
+            bucket_name: Название bucket в Storage
+
+        Returns:
+            True если удалено успешно, False иначе
+        """
+        try:
+            # Извлекаем имя файла из URL
+            file_name = photo_url.split('/')[-1]
+
+            # Удаляем из Storage
+            self.client.storage.from_(bucket_name).remove([file_name])
+
+            logger.info(f"✅ Фото удалено из Storage: {file_name}")
+            return True
+
+        except Exception as e:
+            logger.error(f"❌ Ошибка удаления фото из Storage: {e}")
+            return False
+
+    # ==================== СТАТИСТИКА ====================
+
+    async def get_feed_stats(self) -> Dict[str, Any]:
+        """
+        Получить статистику ленты
+
+        Returns:
+            Словарь со статистикой
+        """
+        try:
+            # Общее количество фото
+            total = self.client.table('travel_feed').select('id', count='exact').execute()
+            total_count = total.count if hasattr(total, 'count') else 0
+
+            # Количество уникальных пользователей
+            users = self.client.table('travel_feed')\
+                .select('telegram_id')\
+                .execute()
+
+            unique_users = len(set(item['telegram_id'] for item in users.data)) if users.data else 0
+
+            return {
+                'total_photos': total_count,
+                'unique_users': unique_users,
+            }
+        except Exception as e:
+            logger.error(f"❌ Ошибка получения статистики: {e}")
+            return {
+                'total_photos': 0,
+                'unique_users': 0,
+            }
 
     def close(self):
         """Закрыть соединение с базой данных"""

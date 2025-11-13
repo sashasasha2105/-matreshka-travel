@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-API для работы с лентой фотографий
+Упрощенное API для работы с лентой путешествий
+Работает с новой таблицей travel_feed
 """
 
 import asyncio
@@ -23,9 +24,23 @@ app = Flask(__name__)
 CORS(app)  # Разрешаем CORS для всех доменов
 
 
-@app.route('/api/photos', methods=['GET'])
-def get_photos():
-    """Получить все фотографии для ленты"""
+def async_route(f):
+    """Декоратор для асинхронных роутов"""
+    def wrapper(*args, **kwargs):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        try:
+            return loop.run_until_complete(f(*args, **kwargs))
+        finally:
+            loop.close()
+    wrapper.__name__ = f.__name__
+    return wrapper
+
+
+@app.route('/api/feed', methods=['GET'])
+@async_route
+async def get_feed():
+    """Получить ленту путешествий"""
     try:
         # Получаем параметры из запроса
         limit = request.args.get('limit', 50, type=int)
@@ -36,31 +51,10 @@ def get_photos():
                 'error': 'База данных не инициализирована'
             }), 500
 
-        # Получаем фотографии из БД с информацией о пользователях
-        photos_result = db.client.table('photos')\
-            .select('id, photo_url, created_at, users!inner(telegram_id, username, first_name, last_name)')\
-            .order('created_at', desc=True)\
-            .limit(limit)\
-            .range(offset, offset + limit - 1)\
-            .execute()
+        # Получаем ленту из БД
+        photos = await db.get_travel_feed(limit=limit, offset=offset)
 
-        photos = []
-        if photos_result.data:
-            for item in photos_result.data:
-                user_info = item.get('users', {})
-                photos.append({
-                    'id': item['id'],
-                    'photo_url': item['photo_url'],
-                    'created_at': item['created_at'],
-                    'user': {
-                        'telegram_id': user_info.get('telegram_id'),
-                        'username': user_info.get('username'),
-                        'first_name': user_info.get('first_name'),
-                        'last_name': user_info.get('last_name', '')
-                    }
-                })
-
-        logger.info(f"✅ Получено {len(photos)} фотографий")
+        logger.info(f"✅ Получено {len(photos)} фотографий из ленты")
 
         return jsonify({
             'success': True,
@@ -71,42 +65,30 @@ def get_photos():
         })
 
     except Exception as e:
-        logger.error(f"❌ Ошибка получения фотографий: {e}", exc_info=True)
+        logger.error(f"❌ Ошибка получения ленты: {e}", exc_info=True)
         return jsonify({
             'error': str(e),
             'success': False
         }), 500
 
 
-@app.route('/api/photos/<int:photo_id>', methods=['GET'])
-def get_photo(photo_id):
+@app.route('/api/feed/<int:photo_id>', methods=['GET'])
+def get_feed_photo(photo_id):
     """Получить конкретную фотографию по ID"""
     try:
         if not db:
             return jsonify({'error': 'База данных не инициализирована'}), 500
 
-        result = db.client.table('photos')\
-            .select('id, photo_url, created_at, users!inner(telegram_id, username, first_name, last_name)')\
+        # Получаем фото напрямую из travel_feed
+        result = db.client.table('travel_feed')\
+            .select('*')\
             .eq('id', photo_id)\
             .execute()
 
         if not result.data:
             return jsonify({'error': 'Фотография не найдена'}), 404
 
-        item = result.data[0]
-        user_info = item.get('users', {})
-
-        photo = {
-            'id': item['id'],
-            'photo_url': item['photo_url'],
-            'created_at': item['created_at'],
-            'user': {
-                'telegram_id': user_info.get('telegram_id'),
-                'username': user_info.get('username'),
-                'first_name': user_info.get('first_name'),
-                'last_name': user_info.get('last_name', '')
-            }
-        }
+        photo = result.data[0]
 
         return jsonify({
             'success': True,
@@ -118,8 +100,50 @@ def get_photo(photo_id):
         return jsonify({'error': str(e), 'success': False}), 500
 
 
+@app.route('/api/feed/<int:photo_id>', methods=['DELETE'])
+@async_route
+async def delete_feed_photo(photo_id):
+    """Удалить фотографию из ленты"""
+    try:
+        if not db:
+            return jsonify({'error': 'База данных не инициализирована'}), 500
+
+        # Получаем информацию о фото перед удалением
+        result = db.client.table('travel_feed')\
+            .select('photo_url')\
+            .eq('id', photo_id)\
+            .execute()
+
+        if not result.data:
+            return jsonify({'error': 'Фотография не найдена'}), 404
+
+        photo_url = result.data[0]['photo_url']
+
+        # Удаляем запись из БД
+        success = await db.delete_travel_photo(photo_id)
+
+        if success:
+            # Удаляем фото из Storage
+            db.delete_photo_from_storage(photo_url)
+
+            return jsonify({
+                'success': True,
+                'message': 'Фотография удалена'
+            })
+        else:
+            return jsonify({
+                'error': 'Не удалось удалить фотографию',
+                'success': False
+            }), 500
+
+    except Exception as e:
+        logger.error(f"❌ Ошибка удаления фотографии: {e}", exc_info=True)
+        return jsonify({'error': str(e), 'success': False}), 500
+
+
 @app.route('/api/users/<int:telegram_id>/photos', methods=['GET'])
-def get_user_photos(telegram_id):
+@async_route
+async def get_user_photos(telegram_id):
     """Получить фотографии конкретного пользователя"""
     try:
         limit = request.args.get('limit', 50, type=int)
@@ -127,26 +151,8 @@ def get_user_photos(telegram_id):
         if not db:
             return jsonify({'error': 'База данных не инициализирована'}), 500
 
-        # Находим пользователя
-        user_result = db.client.table('users')\
-            .select('id')\
-            .eq('telegram_id', telegram_id)\
-            .execute()
-
-        if not user_result.data:
-            return jsonify({'error': 'Пользователь не найден'}), 404
-
-        user_id = user_result.data[0]['id']
-
         # Получаем фотографии пользователя
-        photos_result = db.client.table('photos')\
-            .select('*')\
-            .eq('user_id', user_id)\
-            .order('created_at', desc=True)\
-            .limit(limit)\
-            .execute()
-
-        photos = photos_result.data if photos_result.data else []
+        photos = await db.get_user_travel_photos(telegram_id=telegram_id, limit=limit)
 
         return jsonify({
             'success': True,
@@ -159,6 +165,26 @@ def get_user_photos(telegram_id):
         return jsonify({'error': str(e), 'success': False}), 500
 
 
+@app.route('/api/stats', methods=['GET'])
+@async_route
+async def get_stats():
+    """Получить статистику ленты"""
+    try:
+        if not db:
+            return jsonify({'error': 'База данных не инициализирована'}), 500
+
+        stats = await db.get_feed_stats()
+
+        return jsonify({
+            'success': True,
+            'stats': stats
+        })
+
+    except Exception as e:
+        logger.error(f"❌ Ошибка получения статистики: {e}", exc_info=True)
+        return jsonify({'error': str(e), 'success': False}), 500
+
+
 @app.route('/api/health', methods=['GET'])
 def health_check():
     """Проверка работоспособности API"""
@@ -168,7 +194,8 @@ def health_check():
         return jsonify({
             'status': 'healthy',
             'database': db_status,
-            'message': 'Feed API is running'
+            'message': 'Travel Feed API is running',
+            'version': '2.0 (Simplified)'
         })
     except Exception as e:
         return jsonify({
@@ -178,13 +205,14 @@ def health_check():
 
 
 if __name__ == '__main__':
-    logger.info("🚀 Запуск Feed API...")
+    logger.info("🚀 Запуск Travel Feed API v2.0...")
 
     if not db:
         logger.error("❌ База данных не инициализирована!")
         logger.error("Проверьте переменные окружения SUPABASE_URL и SUPABASE_KEY")
     else:
         logger.info("✅ База данных подключена")
+        logger.info("📊 Работаю с таблицей: travel_feed")
 
     # Запускаем сервер
     app.run(

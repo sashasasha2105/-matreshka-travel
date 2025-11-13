@@ -210,7 +210,7 @@ async def about_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 
 
 async def photo_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Обработчик фотографий - сохраняет фото в базу данных"""
+    """Обработчик фотографий - загружает фото в Supabase Storage и сохраняет в базу данных"""
     user = update.effective_user
     message = update.message
 
@@ -221,11 +221,10 @@ async def photo_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
         # Получаем фото наивысшего качества
         photo = message.photo[-1]
 
-        # Получаем информацию о файле
-        file = await context.bot.get_file(photo.file_id)
-        photo_url = file.file_path
+        logger.info(f"📸 Получено фото от пользователя {user.id} (@{user.username}): {photo.file_id}")
 
-        logger.info(f"📸 Получено фото от пользователя {user.id}: {photo.file_id}")
+        # Отправляем сообщение о загрузке
+        status_message = await message.reply_text("⏳ Загружаю фото...")
 
         # Сохраняем в базу данных
         if db:
@@ -242,37 +241,75 @@ async def photo_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
                     db_user = await db.create_user(user_data)
                     logger.info(f"✅ Создан новый пользователь: {user.id}")
 
-                # Сохраняем фотографию (только URL)
-                photo_data = {
-                    "user_id": db_user['id'],
-                    "photo_url": photo_url
-                }
+                # Скачиваем фото из Telegram
+                file = await context.bot.get_file(photo.file_id)
 
-                saved_photo = await db.create_photo(photo_data)
+                # Создаем временное имя файла
+                import os
+                import tempfile
+                temp_dir = tempfile.gettempdir()
+                temp_file_path = os.path.join(temp_dir, f"{photo.file_id}.jpg")
 
-                if saved_photo:
-                    logger.info(f"✅ Фото сохранено в БД: ID={saved_photo['id']}")
+                # Скачиваем фото во временный файл
+                await file.download_to_drive(temp_file_path)
+                logger.info(f"📥 Фото скачано во временный файл: {temp_file_path}")
 
-                    # Отправляем подтверждение пользователю
-                    await message.reply_text(
-                        "✅ Отлично! Фото добавлено в ленту путешествий!\n\n"
-                        "📱 Оно будет видно в разделе 'Лента' приложения Матрешка.",
-                        parse_mode='HTML'
+                # Загружаем фото в Supabase Storage
+                photo_url = db.upload_photo_to_storage(temp_file_path)
+
+                # Удаляем временный файл
+                try:
+                    os.remove(temp_file_path)
+                except:
+                    pass
+
+                if photo_url:
+                    logger.info(f"☁️ Фото загружено в Supabase Storage: {photo_url}")
+
+                    # Сохраняем запись в таблицу travel_feed
+                    username = f"@{user.username}" if user.username else user.first_name
+                    description = message.caption if message.caption else None
+
+                    saved_photo = await db.add_travel_photo(
+                        telegram_id=user.id,
+                        username=username,
+                        photo_url=photo_url,
+                        description=description
                     )
+
+                    if saved_photo:
+                        logger.info(f"✅ Фото добавлено в ленту: ID={saved_photo['id']}")
+
+                        # Обновляем сообщение о статусе
+                        await status_message.edit_text(
+                            "✅ Отлично! Фото добавлено в ленту путешествий!\n\n"
+                            "📱 Оно будет видно в разделе 'Лента' приложения Матрешка.\n"
+                            f"🕒 Время добавления: {datetime.now().strftime('%d.%m.%Y %H:%M')}",
+                            parse_mode='HTML'
+                        )
+                    else:
+                        logger.error(f"❌ Не удалось сохранить запись в БД")
+                        await status_message.edit_text("❌ Произошла ошибка при сохранении записи в БД.")
                 else:
-                    logger.error(f"❌ Не удалось сохранить фото в БД")
-                    await message.reply_text("❌ Произошла ошибка при сохранении фото. Попробуйте позже.")
+                    logger.error(f"❌ Не удалось загрузить фото в Storage")
+                    await status_message.edit_text("❌ Произошла ошибка при загрузке фото в хранилище.")
 
             except Exception as e:
-                logger.error(f"❌ Ошибка при сохранении фото в БД: {e}")
-                await message.reply_text("❌ Произошла ошибка при сохранении фото. Попробуйте позже.")
+                logger.error(f"❌ Ошибка при обработке фото: {e}", exc_info=True)
+                try:
+                    await status_message.edit_text("❌ Произошла ошибка при сохранении фото. Попробуйте позже.")
+                except:
+                    pass
         else:
             logger.warning("⚠️ База данных не инициализирована")
             await message.reply_text("⚠️ Сервис временно недоступен. Попробуйте позже.")
 
     except Exception as e:
         logger.error(f"❌ Ошибка обработки фото: {e}", exc_info=True)
-        await message.reply_text("❌ Произошла ошибка при обработке фото.")
+        try:
+            await message.reply_text("❌ Произошла ошибка при обработке фото.")
+        except:
+            pass
 
 
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:

@@ -21,12 +21,37 @@ class TravelFeed {
 
         this.container = container;
 
-        // Ждем готовности базы данных
-        await this.database.waitForReady();
+        // Показываем лоадер
+        container.innerHTML = '<div class="feed-loading">⏳ Загрузка...</div>';
 
-        const travels = this.database.getAll();
+        // Загружаем фотографии из Supabase
+        let travels = [];
 
-        console.log('📊 Загружено путешествий из базы:', travels.length);
+        if (window.supabaseFeed) {
+            console.log('📥 Загружаем фотографии из Supabase...');
+            const photos = await window.supabaseFeed.loadPhotos(50, 0);
+
+            if (photos && photos.length > 0) {
+                console.log(`✅ Получено ${photos.length} фото из Supabase`);
+                // Преобразуем фотографии в формат путешествий
+                travels = photos.map(photo => window.supabaseFeed.convertPhotoToTravel(photo));
+            } else {
+                console.log('⚠️ Фотографий из Supabase не найдено');
+            }
+        }
+
+        // Если нет фото из Supabase, пробуем локальную базу
+        if (travels.length === 0 && this.database) {
+            console.log('📦 Загружаем из локальной базы данных...');
+            await this.database.waitForReady();
+            const localTravels = this.database.getAll();
+            if (localTravels && localTravels.length > 0) {
+                travels = localTravels;
+                console.log(`✅ Загружено ${travels.length} путешествий из локальной БД`);
+            }
+        }
+
+        console.log('📊 Всего путешествий для отображения:', travels.length);
         console.log('🗄️ Данные путешествий:', travels);
 
         const html = `
@@ -119,15 +144,10 @@ class TravelFeed {
                     <p class="feed-card-text">${travel.text || 'Нет описания'}</p>
                 </div>
 
-                <!-- Футер с лайками -->
+                <!-- Футер с информацией -->
                 <div class="feed-card-footer">
-                    <button class="feed-like-btn ${travel.liked ? 'liked' : ''}"
-                            onclick="matryoshkaFeed.toggleLike('${travel.globalId || travel.id}')">
-                        <span class="feed-like-icon">${travel.liked ? '❤️' : '🤍'}</span>
-                        <span class="feed-like-count">${travel.likes || 0}</span>
-                    </button>
                     <div class="feed-card-location">
-                        📍 ${(travel.title || 'Неизвестно').split(',')[0]}
+                        👤 ${travel.title || 'Неизвестно'}
                     </div>
                 </div>
             </div>
@@ -227,29 +247,10 @@ class TravelFeed {
     }
 
     /**
-     * Переключить лайк
+     * Переключить лайк (упрощенная версия без сохранения)
      */
     async toggleLike(globalId) {
-        const travel = await this.database.toggleLike(globalId);
-        if (travel) {
-            // Обновляем UI
-            const card = document.querySelector(`[data-global-id="${globalId}"]`);
-            if (card) {
-                const likeBtn = card.querySelector('.feed-like-btn');
-                const likeIcon = likeBtn.querySelector('.feed-like-icon');
-                const likeCount = likeBtn.querySelector('.feed-like-count');
-
-                likeBtn.classList.toggle('liked', travel.liked);
-                likeIcon.textContent = travel.liked ? '❤️' : '🤍';
-                likeCount.textContent = travel.likes || 0;
-
-                // Анимация
-                likeIcon.style.transform = 'scale(1.3)';
-                setTimeout(() => {
-                    likeIcon.style.transform = 'scale(1)';
-                }, 200);
-            }
-        }
+        console.log('Лайки отключены');
     }
 
     /**

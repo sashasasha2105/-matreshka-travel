@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Telegram бот для Матрешка - путешествия по России
-Оптимизированная версия для 24/7 работы
+Оптимизированная версия для 24/7 работы с интеграцией Supabase
 """
 
 import logging
@@ -11,8 +11,9 @@ import sys
 import aiohttp
 from datetime import datetime
 from telegram import Update, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, MessageHandler, ContextTypes, filters
 from telegram.error import NetworkError, TimedOut
+from database import db
 
 # Настройка логирования с ротацией
 logging.basicConfig(
@@ -83,6 +84,35 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     # Отправляем аналитику
     await send_analytics(user)
+
+    # Сохраняем/обновляем пользователя в базе данных
+    if db:
+        try:
+            db_user = await db.get_user(user.id)
+            if not db_user:
+                # Создаем нового пользователя
+                user_data = {
+                    "telegram_id": user.id,
+                    "username": user.username,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name or "",
+                    "is_premium": user.is_premium or False,
+                    "language_code": user.language_code or 'ru'
+                }
+                db_user = await db.create_user(user_data)
+                logger.info(f"✅ Новый пользователь зарегистрирован в БД: {user.id}")
+            else:
+                # Обновляем данные существующего пользователя
+                user_data = {
+                    "username": user.username,
+                    "first_name": user.first_name,
+                    "last_name": user.last_name or "",
+                    "is_premium": user.is_premium or False,
+                }
+                await db.update_user(user.id, user_data)
+                logger.info(f"✅ Данные пользователя обновлены: {user.id}")
+        except Exception as e:
+            logger.error(f"❌ Ошибка работы с БД для пользователя {user.id}: {e}")
 
     # Создаем кнопку для запуска Web App
     keyboard = [
@@ -179,6 +209,72 @@ async def about_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     )
 
 
+async def photo_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Обработчик фотографий - сохраняет фото в базу данных"""
+    user = update.effective_user
+    message = update.message
+
+    if not message or not message.photo:
+        return
+
+    try:
+        # Получаем фото наивысшего качества
+        photo = message.photo[-1]
+
+        # Получаем информацию о файле
+        file = await context.bot.get_file(photo.file_id)
+        photo_url = file.file_path
+
+        logger.info(f"📸 Получено фото от пользователя {user.id}: {photo.file_id}")
+
+        # Сохраняем в базу данных
+        if db:
+            try:
+                # Сначала проверяем/создаем пользователя
+                db_user = await db.get_user(user.id)
+                if not db_user:
+                    user_data = {
+                        "telegram_id": user.id,
+                        "username": user.username,
+                        "first_name": user.first_name,
+                        "last_name": user.last_name or "",
+                    }
+                    db_user = await db.create_user(user_data)
+                    logger.info(f"✅ Создан новый пользователь: {user.id}")
+
+                # Сохраняем фотографию (только URL)
+                photo_data = {
+                    "user_id": db_user['id'],
+                    "photo_url": photo_url
+                }
+
+                saved_photo = await db.create_photo(photo_data)
+
+                if saved_photo:
+                    logger.info(f"✅ Фото сохранено в БД: ID={saved_photo['id']}")
+
+                    # Отправляем подтверждение пользователю
+                    await message.reply_text(
+                        "✅ Отлично! Фото добавлено в ленту путешествий!\n\n"
+                        "📱 Оно будет видно в разделе 'Лента' приложения Матрешка.",
+                        parse_mode='HTML'
+                    )
+                else:
+                    logger.error(f"❌ Не удалось сохранить фото в БД")
+                    await message.reply_text("❌ Произошла ошибка при сохранении фото. Попробуйте позже.")
+
+            except Exception as e:
+                logger.error(f"❌ Ошибка при сохранении фото в БД: {e}")
+                await message.reply_text("❌ Произошла ошибка при сохранении фото. Попробуйте позже.")
+        else:
+            logger.warning("⚠️ База данных не инициализирована")
+            await message.reply_text("⚠️ Сервис временно недоступен. Попробуйте позже.")
+
+    except Exception as e:
+        logger.error(f"❌ Ошибка обработки фото: {e}", exc_info=True)
+        await message.reply_text("❌ Произошла ошибка при обработке фото.")
+
+
 async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Обработчик ошибок с улучшенной диагностикой"""
     logger.error("Exception while handling an update:", exc_info=context.error)
@@ -222,6 +318,9 @@ def main() -> None:
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     application.add_handler(CommandHandler("about", about_command))
+
+    # Регистрируем обработчик фотографий
+    application.add_handler(MessageHandler(filters.PHOTO, photo_handler))
 
     # Регистрируем обработчик ошибок
     application.add_error_handler(error_handler)

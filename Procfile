@@ -1,1 +1,1 @@
-web: gunicorn photo_server:app
+web: gunicorn backend.api.photo_server:app

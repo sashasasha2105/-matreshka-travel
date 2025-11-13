@@ -63,97 +63,94 @@
     <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
 
     <!-- Preload критических ресурсов -->
-    <link rel="preload" href="style.css?v=3.0" as="style">
-    <link rel="preload" href="script.js" as="script">
-    <link rel="preload" href="performance-optimizer.js" as="script">
+    <link rel="preload" href="styles/style.css?v=3.0" as="style">
+    <link rel="preload" href="scripts/script.js" as="script">
+    <link rel="preload" href="scripts/components/performance-optimizer.js" as="script">
 
     <!-- Основные стили -->
-    <link rel="stylesheet" href="style.css?v=3.0">
+    <link rel="stylesheet" href="styles/style.css?v=3.0">
     <link rel="stylesheet" href="profile/profile.css?v=3.0">
     <link rel="stylesheet" href="profile/modern-modal.css?v=3.0">
     <link rel="stylesheet" href="qr/qr.css?v=2.0">
     <link rel="stylesheet" href="maps/maps2gis_new.css?v=2.0">
     <link rel="stylesheet" href="maps/organization_card.css?v=2.0">
     <link rel="stylesheet" href="quests/quests.css?v=2.0">
-    <link rel="stylesheet" href="enhancements.css?v=2.0">
+    <link rel="stylesheet" href="styles/modules/enhancements.css?v=2.0">
 
     <!-- Идеально ровные кнопки и иконки -->
-    <link rel="stylesheet" href="button-redesign.css?v=2.0">
+    <link rel="stylesheet" href="styles/components/button-redesign.css?v=2.0">
 
     <!-- Улучшенная лента в стиле VK -->
-    <link rel="stylesheet" href="feed-redesign.css?v=2.0">
+    <link rel="stylesheet" href="styles/components/feed-redesign.css?v=2.0">
 
     <!-- Исправления CSS для профиля -->
-    <link rel="stylesheet" href="profile-fix.css?v=2.0">
 
     <!-- Восстановление героя из старой версии -->
-    <link rel="stylesheet" href="hero-restore-old.css?v=2.0">
 
     <!-- Исправление для мобильных устройств -->
-    <link rel="stylesheet" href="mobile-hero-simple-fix.css?v=2.0">
+    <link rel="stylesheet" href="styles/modules/mobile-hero-simple-fix.css?v=2.0">
 
     <!-- Секция команды -->
-    <link rel="stylesheet" href="team.css?v=2.0">
+    <link rel="stylesheet" href="styles/components/team.css?v=2.0">
 
     <!-- 🎯 ЕДИНАЯ АДАПТИВНАЯ СИСТЕМА - загружается последней для переопределения -->
-    <link rel="stylesheet" href="responsive.css?v=4.0">
+    <link rel="stylesheet" href="styles/modules/responsive.css?v=4.0">
 
     <!-- 📱 МОБИЛЬНЫЕ УЛУЧШЕНИЯ - специфичные оптимизации для телефонов -->
-    <link rel="stylesheet" href="mobile-enhancements.css?v=4.0">
+    <link rel="stylesheet" href="styles/modules/mobile-enhancements.css?v=4.0">
 
     <!-- 🔧 ВИЗУАЛЬНЫЕ ИСПРАВЛЕНИЯ - загружается ПОСЛЕДНИМ -->
-    <link rel="stylesheet" href="visual-fixes.css?v=5.0">
+    <link rel="stylesheet" href="styles/modules/visual-fixes.css?v=5.0">
 
     <!-- ✨ СОВРЕМЕННЫЕ ЭФФЕКТЫ - профессиональные улучшения -->
-    <link rel="stylesheet" href="modern-effects.css?v=1.0">
+    <link rel="stylesheet" href="styles/modules/modern-effects.css?v=1.0">
 
     <!-- 🎯 ЕДИНАЯ Z-INDEX СИСТЕМА -->
-    <link rel="stylesheet" href="z-index-system.css?v=1.0">
+    <link rel="stylesheet" href="styles/components/z-index-system.css?v=1.0">
 
     <!-- 🌍 ЛЕНТА ПУТЕШЕСТВИЙ -->
     <link rel="stylesheet" href="feed/feed.css?v=1.0">
 
     <!-- 📱 КРИТИЧЕСКИЕ МОБИЛЬНЫЕ ИСПРАВЛЕНИЯ - загружается последним для override -->
-    <link rel="stylesheet" href="mobile-fixes.css?v=1.0">
+    <link rel="stylesheet" href="styles/modules/mobile-fixes.css?v=1.0">
 
     <!-- 🌊 LIQUID GLASS NAVIGATION - iOS style -->
-    <link rel="stylesheet" href="liquid-nav.css?v=1.0">
+    <link rel="stylesheet" href="styles/modules/liquid-nav.css?v=1.0">
 
     <!-- 📅 УВЕЛИЧЕННЫЙ DATE PICKER - загружается ПОСЛЕДНИМ для максимального приоритета -->
-    <link rel="stylesheet" href="date-picker-enhanced.css?v=1.0">
+    <link rel="stylesheet" href="styles/modules/date-picker-enhanced.css?v=1.0">
 
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <!-- 🔥 НОВАЯ СИСТЕМА НАВИГАЦИИ - ЗАГРУЖАЕТСЯ ПЕРВОЙ -->
-    <script src="navigation.js"></script>
+    <script src="scripts/core/navigation.js"></script>
 
     <!-- 📊 PRODUCTION LOGGER - загружается ПЕРВЫМ для перехвата всех логов -->
-    <script src="logger.js"></script>
+    <script src="scripts/core/logger.js"></script>
 
     <!-- 🚀 ТУРБО-ОПТИМИЗАЦИЯ -->
-    <script src="performance-optimizer.js"></script>
+    <script src="scripts/components/performance-optimizer.js"></script>
 
     <!-- Service Worker регистрация -->
-    <script src="sw-register.js"></script>
+    <script src="scripts/components/sw-register.js"></script>
 
     <!-- Глобальный обработчик ошибок -->
-    <script src="error-handler.js"></script>
+    <script src="scripts/core/error-handler.js"></script>
 
     <!-- Debug helpers для отладки localStorage -->
-    <script src="debug-helpers.js"></script>
 
     <!-- Новая система хранения на IndexedDB вместо localStorage -->
-    <script src="storage.js"></script>
+    <script src="scripts/core/storage.js"></script>
 
     <!-- Modal Manager с focus trap и keyboard navigation -->
-    <script src="modal-manager.js"></script>
+    <script src="scripts/core/modal-manager.js"></script>
 
     <!-- Viewport height fix для iOS Safari -->
-    <script src="viewport-height-fix.js"></script>
+    <script src="scripts/components/viewport-height-fix.js"></script>
 
     <!-- Lazy loading для изображений -->
-    <script src="lazy-loading.js" defer></script>
+    <script src="scripts/components/lazy-loading.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -517,13 +514,13 @@
             };
         }
     </script>
-    <script src="analytics.config.js" onerror="console.log('⚠️ analytics.config.js не загружен, используется fallback')"></script>
-    <script src="analytics.js"></script>
-    <script src="analytics-integration.js"></script>
+    <script src="scripts/components/analytics.config.js" onerror="console.log('⚠️ analytics.config.js не загружен, используется fallback')"></script>
+    <script src="scripts/modules/analytics.js"></script>
+    <script src="scripts/modules/analytics-integration.js"></script>
 
     <!-- Сначала загружаем данные -->
-    <script src="data/regions.js"></script>
-    <script src="data/packages.js"></script>
+    <script src="assets/data/regions.js"></script>
+    <script src="assets/data/packages.js"></script>
 
     <!-- Потом модули -->
     <script src="qr/qr.js"></script>
@@ -534,34 +531,34 @@
     <script src="cart/cart.js"></script>
 
     <!-- Основная логика -->
-    <script src="script.js"></script>
-    <script src="packages.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/modules/packages.js"></script>
 
     <!-- 🌍 ГЛОБАЛЬНАЯ БАЗА ДАННЫХ ПУТЕШЕСТВИЙ -->
-    <script src="travel-database.js"></script>
+    <script src="scripts/core/travel-database.js"></script>
 
     <!-- 📸 ХРАНИЛИЩЕ ФОТОГРАФИЙ НА СЕРВЕРЕ -->
-    <script src="photo-storage-server.js"></script>
 
     <script src="profile/profile.js"></script>
     <script src="profile/avatar_fix.js"></script>
 
     <!-- 🌍 ЛЕНТА ПУТЕШЕСТВИЙ -->
+    <script src="feed/feed-supabase.js"></script>
     <script src="feed/feed.js"></script>
 
     <!-- Система заданий -->
     <script src="quests/quests.js"></script>
 
     <!-- Нереальные улучшения -->
-    <script src="enhancements.js"></script>
+    <script src="scripts/modules/enhancements.js"></script>
 
     <!-- Исправления и улучшения -->
-    <script src="fixes.js"></script>
+    <script src="scripts/modules/fixes.js"></script>
 
     <!-- 🔔 ОБНОВЛЕНИЕ BADGES - загружается последним -->
-    <script src="badges-update.js"></script>
+    <script src="scripts/modules/badges-update.js"></script>
 
     <!-- ✨ СОВРЕМЕННЫЕ ВЗАИМОДЕЙСТВИЯ - профессиональные улучшения UX -->
-    <script src="modern-interactions.js" defer></script>
+    <script src="scripts/components/modern-interactions.js" defer></script>
 </body>
 </html>

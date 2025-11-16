@@ -1,0 +1,584 @@
+/**
+ * 🚀 MATRESHKA OPTIMIZED - Единый легкий CSS
+ * Все стили в одном файле для максимальной производительности
+ * Russian Heritage Theme + минимум анимаций
+ */
+
+/* ========================================
+   RUSSIAN HERITAGE - Цветовая палитра
+   ======================================== */
+:root {
+    /* Основные цвета */
+    --gold: #C9A961;
+    --gold-dark: #B8984F;
+    --red: #B8312F;
+    --blue: #2E5266;
+    --brown: #8B4513;
+    --white: #F5F1E8;
+    --dark: #1a0e2e;
+    --dark-bg: #0a0118;
+
+    /* Spacing */
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-8: 3rem;
+
+    /* Radius */
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-2xl: 2rem;
+}
+
+/* ========================================
+   БАЗОВЫЕ СТИЛИ
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    background: var(--dark-bg) !important;
+    color: var(--white) !important;
+    line-height: 1.6;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ========================================
+   HERO SECTION - Упрощенная
+   ======================================== */
+.hero-section {
+    position: relative;
+    min-height: 600px;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--dark) 0%, #1a0a3e 100%) !important;
+    border: 1px solid rgba(201, 169, 97, 0.2) !important;
+    margin-bottom: var(--space-8);
+}
+
+.hero-model-container {
+    position: absolute;
+    inset: 0;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.hero-model-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.hero-overlay {
+    position: relative;
+    z-index: 1;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-8) var(--space-5);
+    background: linear-gradient(180deg, transparent 0%, rgba(10, 1, 24, 0.8) 100%);
+}
+
+.hero-title {
+    font-size: clamp(2rem, 8vw, 4rem) !important;
+    font-weight: 900 !important;
+    text-align: center;
+    margin-bottom: var(--space-6);
+    background: linear-gradient(135deg, var(--white) 0%, var(--gold) 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+/* ========================================
+   DATE PICKER - Упрощенный
+   ======================================== */
+.travel-date-picker {
+    background: rgba(26, 14, 46, 0.8);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    max-width: 600px;
+    width: 100%;
+}
+
+.date-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+.date-icon {
+    font-size: 1.5rem;
+}
+
+.date-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.date-inputs-row {
+    display: flex;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+}
+
+.date-input-group {
+    flex: 1;
+}
+
+.date-input-label {
+    display: block;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: var(--space-2);
+}
+
+.date-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    color: var(--white);
+    font-size: 1rem;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: var(--gold);
+}
+
+.date-separator {
+    align-self: flex-end;
+    padding-bottom: var(--space-3);
+    color: var(--gold);
+}
+
+.date-save-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%) !important;
+    color: var(--dark) !important;
+    border: none !important;
+    border-radius: var(--radius-md);
+    padding: var(--space-4);
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+}
+
+.date-save-btn:hover {
+    opacity: 0.9;
+}
+
+/* ========================================
+   SEARCH
+   ======================================== */
+.search-section {
+    margin: var(--space-6) 0;
+}
+
+.search-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: rgba(26, 14, 46, 0.6);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: 50px;
+    padding: var(--space-3) var(--space-5);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-size: 1rem;
+    outline: none;
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.search-clear {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+/* ========================================
+   REGION CARDS - Упрощенные
+   ======================================== */
+.regions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-5);
+    margin-top: var(--space-6);
+}
+
+.region-card {
+    background: rgba(26, 14, 46, 0.6);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.region-card:hover {
+    transform: translateY(-8px) !important;
+    border-color: var(--gold) !important;
+}
+
+.region-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.region-content {
+    padding: var(--space-5);
+}
+
+.region-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+    color: var(--gold) !important;
+}
+
+.region-description {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--space-3);
+}
+
+.region-stats {
+    display: flex;
+    gap: var(--space-4);
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* ========================================
+   PACKAGES
+   ======================================== */
+.packages-section {
+    margin: var(--space-8) 0;
+}
+
+.packages-title {
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: var(--space-6);
+    background: linear-gradient(135deg, var(--gold) 0%, var(--red) 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+}
+
+.packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-5);
+}
+
+.package-card {
+    background: rgba(26, 14, 46, 0.6);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.package-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--gold);
+}
+
+/* ========================================
+   BOTTOM NAVIGATION - Упрощенная
+   ======================================== */
+.bottom-nav {
+    position: fixed;
+    bottom: var(--space-5);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-3);
+
+    background: rgba(10, 1, 24, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    border-radius: var(--radius-2xl);
+}
+
+.nav-item {
+    position: relative;
+    min-width: 50px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-lg);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.6);
+    transition: all 0.3s ease;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    color: var(--gold) !important;
+}
+
+.nav-icon {
+    font-size: 1.5rem;
+}
+
+.nav-label {
+    font-size: 0.7rem;
+    margin-top: 2px;
+}
+
+.quests-badge,
+.cart-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    background: var(--red) !important;
+    color: white !important;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ========================================
+   TEAM SECTION
+   ======================================== */
+.team-section {
+    margin: var(--space-8) 0;
+}
+
+.team-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: var(--space-6);
+    color: var(--gold);
+}
+
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--space-5);
+}
+
+.team-member {
+    text-align: center;
+}
+
+.member-photo-wrapper {
+    position: relative;
+    margin-bottom: var(--space-3);
+}
+
+.member-photo {
+    width: 100%;
+    max-width: 200px;
+    height: 200px;
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    border: 2px solid var(--gold);
+}
+
+.member-badge {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--dark);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.member-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: var(--space-2);
+}
+
+.member-role {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* ========================================
+   REGION DETAILS
+   ======================================== */
+.region-details {
+    display: none;
+}
+
+.region-details-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--space-5);
+}
+
+.back-btn {
+    background: rgba(201, 169, 97, 0.2);
+    border: 1px solid var(--gold);
+    color: var(--white);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.user-profile-btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--white);
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* ========================================
+   FOOTER
+   ======================================== */
+.footer {
+    text-align: center;
+    padding: var(--space-8) 0;
+    margin-top: var(--space-8);
+    color: rgba(255, 255, 255, 0.6);
+    border-top: 1px solid rgba(201, 169, 97, 0.2);
+}
+
+/* ========================================
+   LOADER
+   ======================================== */
+.loader {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 1, 24, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loader-spinner {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(201, 169, 97, 0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loader-text {
+    margin-top: var(--space-4);
+    color: var(--white);
+}
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 500px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .date-inputs-row {
+        flex-direction: column;
+        gap: var(--space-3);
+    }
+
+    .date-separator {
+        display: none;
+    }
+
+    .regions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bottom-nav {
+        bottom: var(--space-3);
+        padding: var(--space-2);
+    }
+
+    .nav-item {
+        min-width: 44px;
+        height: 44px;
+    }
+
+    .nav-label {
+        display: none;
+    }
+}
+
+/* ========================================
+   UTILITIES
+   ======================================== */
+.hidden {
+    display: none !important;
+}
+
+button {
+    font-family: inherit;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}

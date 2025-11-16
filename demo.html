@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Матрешка - Russian Heritage Demo</title>
+
+    <!-- ТОЛЬКО ОДИН CSS -->
+    <link rel="stylesheet" href="styles/matreshka-optimized.css?v=999">
+</head>
+<body>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <div class="hero-overlay">
+                <h1 class="hero-title">Матрешка</h1>
+
+                <!-- Date Picker -->
+                <div class="travel-date-picker">
+                    <div class="date-picker-header">
+                        <span class="date-icon">📅</span>
+                        <span class="date-label">Выберите даты путешествия</span>
+                    </div>
+                    <div class="date-inputs-row">
+                        <div class="date-input-group">
+                            <label class="date-input-label">Начало</label>
+                            <input type="date" class="date-input" value="2025-06-01">
+                        </div>
+                        <span class="date-separator">→</span>
+                        <div class="date-input-group">
+                            <label class="date-input-label">Конец</label>
+                            <input type="date" class="date-input" value="2025-06-15">
+                        </div>
+                    </div>
+                    <button class="date-save-btn">Сохранить даты</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <div class="search-section">
+            <div class="search-container">
+                <span>🔍</span>
+                <input type="text" class="search-input" placeholder="Поиск региона...">
+                <button class="search-clear">✕</button>
+            </div>
+        </div>
+
+        <!-- Regions Grid -->
+        <div class="regions-grid">
+            <div class="region-card">
+                <img src="https://images.unsplash.com/photo-1513326738677-b964603b136d?w=400" alt="Москва" class="region-image">
+                <div class="region-content">
+                    <h3 class="region-name">Москва</h3>
+                    <p class="region-description">Столица России с богатой историей</p>
+                    <div class="region-stats">
+                        <span>⭐ 4.9</span>
+                        <span>📍 125 мест</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-card">
+                <img src="https://images.unsplash.com/photo-1555991260-8c60c3f7c7e9?w=400" alt="Санкт-Петербург" class="region-image">
+                <div class="region-content">
+                    <h3 class="region-name">Санкт-Петербург</h3>
+                    <p class="region-description">Культурная столица России</p>
+                    <div class="region-stats">
+                        <span>⭐ 4.8</span>
+                        <span>📍 98 мест</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="region-card">
+                <img src="https://images.unsplash.com/photo-1520106212299-d99c443e4568?w=400" alt="Казань" class="region-image">
+                <div class="region-content">
+                    <h3 class="region-name">Казань</h3>
+                    <p class="region-description">Древний город с уникальной культурой</p>
+                    <div class="region-stats">
+                        <span>⭐ 4.7</span>
+                        <span>📍 67 мест</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Packages -->
+        <div class="packages-section">
+            <h2 class="packages-title">Готовые туры</h2>
+            <div class="packages-grid">
+                <div class="package-card">
+                    <h3>Золотое кольцо</h3>
+                    <p>7 дней по древним городам России</p>
+                    <p style="color: var(--gold); font-weight: 700; margin-top: 1rem;">от 45 000 ₽</p>
+                </div>
+                <div class="package-card">
+                    <h3>Байкал и Алтай</h3>
+                    <p>10 дней в сердце Сибири</p>
+                    <p style="color: var(--gold); font-weight: 700; margin-top: 1rem;">от 65 000 ₽</p>
+                </div>
+                <div class="package-card">
+                    <h3>Камчатка</h3>
+                    <p>14 дней среди вулканов</p>
+                    <p style="color: var(--gold); font-weight: 700; margin-top: 1rem;">от 120 000 ₽</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <button class="nav-item active">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Главная</span>
+            </button>
+            <button class="nav-item">
+                <span class="nav-icon">🎯</span>
+                <span class="nav-label">Квесты</span>
+                <span class="quests-badge">3</span>
+            </button>
+            <button class="nav-item">
+                <span class="nav-icon">📸</span>
+                <span class="nav-label">Лента</span>
+            </button>
+            <button class="nav-item">
+                <span class="nav-icon">🛒</span>
+                <span class="nav-label">Корзина</span>
+                <span class="cart-badge">2</span>
+            </button>
+            <button class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span class="nav-label">Профиль</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- ZERO JavaScript - только чистый дизайн -->
+</body>
+</html>

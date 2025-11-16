@@ -1,0 +1,529 @@
+/**
+ * 🚀 ACETERNITY UI THEME - Modern Design System
+ * Адаптировано для Матрешка Travel App
+ * Вдохновлено: ui.aceternity.com
+ */
+
+/* ========================================
+   СОВРЕМЕННАЯ ЦВЕТОВАЯ ПАЛИТРА
+   ======================================== */
+:root {
+    /* Основные цвета - приглушенная премиум палитра */
+    --primary-50: #fef9e7;
+    --primary-100: #fdf2d0;
+    --primary-200: #fbe6a1;
+    --primary-300: #f9d972;
+    --primary-400: #f7cd43;
+    --primary-500: #d4af37;  /* Золото вместо яркого желтого */
+    --primary-600: #aa8c2c;
+    --primary-700: #7f6921;
+    --primary-800: #554616;
+    --primary-900: #2a230b;
+
+    /* Акцентные цвета */
+    --accent-coral: #e85d75;
+    --accent-purple: #a78bfa;
+    --accent-blue: #60a5fa;
+
+    /* Нейтральные (темная тема) */
+    --neutral-50: #fafafa;
+    --neutral-100: #f5f5f5;
+    --neutral-200: #e5e5e5;
+    --neutral-300: #d4d4d4;
+    --neutral-400: #a3a3a3;
+    --neutral-500: #737373;
+    --neutral-600: #525252;
+    --neutral-700: #404040;
+    --neutral-800: #262626;
+    --neutral-900: #171717;
+    --neutral-950: #0a0a0a;
+
+    /* Фоны */
+    --bg-primary: #0a0118;
+    --bg-secondary: #1a0a3e;
+    --bg-card: rgba(26, 26, 46, 0.6);
+
+    /* Градиенты Aceternity Style */
+    --gradient-aurora: linear-gradient(
+        var(--aurora-first, 120deg),
+        var(--accent-coral) 0%,
+        var(--accent-purple) 50%,
+        var(--primary-500) 100%
+    );
+
+    --gradient-mesh:
+        radial-gradient(at 27% 37%, var(--accent-coral) 0px, transparent 50%),
+        radial-gradient(at 97% 21%, var(--accent-purple) 0px, transparent 50%),
+        radial-gradient(at 52% 99%, var(--primary-500) 0px, transparent 50%),
+        radial-gradient(at 10% 29%, var(--accent-blue) 0px, transparent 50%),
+        radial-gradient(at 97% 96%, var(--accent-coral) 0px, transparent 50%),
+        radial-gradient(at 33% 50%, var(--accent-purple) 0px, transparent 50%),
+        radial-gradient(at 79% 53%, var(--primary-500) 0px, transparent 50%);
+
+    /* Тени Aceternity Style */
+    --shadow-brutal:
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        0 1px 1px rgba(0, 0, 0, 0.05),
+        0 2px 2px rgba(0, 0, 0, 0.05),
+        0 4px 4px rgba(0, 0, 0, 0.05),
+        0 8px 8px rgba(0, 0, 0, 0.05),
+        0 16px 16px rgba(0, 0, 0, 0.05);
+
+    --shadow-glow: 0 0 40px var(--primary-500);
+
+    /* Easing functions */
+    --ease-spring: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-bounce: cubic-bezier(0.68, -0.6, 0.32, 1.6);
+
+    /* Spacing (16px base) */
+    --space-1: 0.25rem;  /* 4px */
+    --space-2: 0.5rem;   /* 8px */
+    --space-3: 0.75rem;  /* 12px */
+    --space-4: 1rem;     /* 16px */
+    --space-5: 1.5rem;   /* 24px */
+    --space-6: 2rem;     /* 32px */
+    --space-8: 3rem;     /* 48px */
+    --space-10: 4rem;    /* 64px */
+
+    /* Border Radius */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-2xl: 2rem;
+    --radius-full: 9999px;
+}
+
+/* ========================================
+   AURORA BACKGROUND ANIMATION
+   ======================================== */
+@keyframes aurora {
+    0% {
+        background-position: 50% 50%, 50% 50%;
+        --aurora-first: 120deg;
+    }
+    50% {
+        background-position: 350% 50%, 350% 50%;
+        --aurora-first: 180deg;
+    }
+    100% {
+        background-position: 50% 50%, 50% 50%;
+        --aurora-first: 120deg;
+    }
+}
+
+.aurora-background {
+    background-image: var(--gradient-aurora);
+    background-size: 400% 400%;
+    animation: aurora 60s linear infinite;
+}
+
+/* Aurora для body */
+body {
+    background: var(--bg-primary);
+    position: relative;
+}
+
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-mesh);
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* ========================================
+   GLASSMORPHISM EFFECTS
+   ======================================== */
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-strong {
+    background: rgba(10, 1, 24, 0.7);
+    backdrop-filter: blur(30px) saturate(200%);
+    -webkit-backdrop-filter: blur(30px) saturate(200%);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* ========================================
+   3D CARD EFFECT - Адаптация для Vanilla JS
+   ======================================== */
+.card-3d-container {
+    perspective: 1000px;
+    transition: all 0.3s var(--ease-smooth);
+}
+
+.card-3d-body {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.6s var(--ease-spring);
+    will-change: transform;
+}
+
+.card-3d-container:hover .card-3d-body {
+    transform: rotateY(10deg) rotateX(10deg) scale3d(1.05, 1.05, 1.05);
+}
+
+.card-3d-item {
+    position: relative;
+    transition: transform 0.6s var(--ease-spring);
+}
+
+.card-3d-item[data-depth="10"] {
+    transform: translateZ(10px);
+}
+
+.card-3d-item[data-depth="20"] {
+    transform: translateZ(20px);
+}
+
+.card-3d-item[data-depth="30"] {
+    transform: translateZ(30px);
+}
+
+.card-3d-item[data-depth="50"] {
+    transform: translateZ(50px);
+}
+
+.card-3d-item[data-depth="100"] {
+    transform: translateZ(100px);
+}
+
+/* ========================================
+   BACKGROUND BEAMS - CSS Only версия
+   ======================================== */
+.beams-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.beam {
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        var(--primary-500) 50%,
+        transparent 100%
+    );
+    opacity: 0.1;
+    animation: beam-move 10s linear infinite;
+}
+
+.beam:nth-child(1) { left: 10%; animation-delay: 0s; }
+.beam:nth-child(2) { left: 25%; animation-delay: 2s; }
+.beam:nth-child(3) { left: 45%; animation-delay: 4s; }
+.beam:nth-child(4) { left: 65%; animation-delay: 1s; }
+.beam:nth-child(5) { left: 85%; animation-delay: 3s; }
+
+@keyframes beam-move {
+    0% {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    50% {
+        opacity: 0.2;
+    }
+    100% {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}
+
+/* ========================================
+   FLOATING DOCK NAVIGATION
+   ======================================== */
+.floating-dock {
+    position: fixed;
+    bottom: var(--space-6);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+
+    display: flex;
+    gap: var(--space-2);
+    padding: var(--space-3);
+
+    background: rgba(10, 1, 24, 0.8);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    border-radius: var(--radius-2xl);
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dock-item {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-lg);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.4s var(--ease-spring);
+    color: var(--neutral-400);
+}
+
+.dock-item:hover {
+    transform: translateY(-12px) scale(1.2);
+    color: var(--primary-500);
+}
+
+.dock-item.active {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--primary-500);
+}
+
+.dock-item::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: var(--gradient-aurora);
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: -1;
+}
+
+.dock-item.active::before {
+    opacity: 1;
+}
+
+.dock-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: var(--radius-full);
+    background: var(--accent-coral);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(232, 93, 117, 0.4);
+}
+
+/* ========================================
+   SHIMMER EFFECT
+   ======================================== */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        transparent 100%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 3s infinite;
+}
+
+/* ========================================
+   GRADIENT TEXT
+   ======================================== */
+.gradient-text {
+    background: linear-gradient(
+        to bottom right,
+        var(--neutral-200) 0%,
+        var(--neutral-600) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-text-gold {
+    background: linear-gradient(
+        135deg,
+        var(--primary-400) 0%,
+        var(--accent-coral) 50%,
+        var(--accent-purple) 100%
+    );
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-shift 3s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* ========================================
+   SPOTLIGHT EFFECT
+   ======================================== */
+.spotlight-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.spotlight-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(212, 175, 55, 0.15),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.spotlight-card:hover::before {
+    opacity: 1;
+}
+
+/* ========================================
+   BENTO GRID LAYOUT
+   ======================================== */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-4);
+    grid-auto-rows: 280px;
+}
+
+.bento-item:nth-child(1) {
+    grid-row: span 2;
+}
+
+.bento-item:nth-child(5) {
+    grid-column: span 2;
+}
+
+/* ========================================
+   MICRO ANIMATIONS
+   ======================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.6s var(--ease-smooth) backwards;
+}
+
+.animate-scaleIn {
+    animation: scaleIn 0.4s var(--ease-spring) backwards;
+}
+
+/* Stagger delays */
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+.delay-5 { animation-delay: 0.5s; }
+
+/* ========================================
+   RESPONSIVE
+   ======================================== */
+@media (max-width: 768px) {
+    .floating-dock {
+        bottom: var(--space-4);
+        padding: var(--space-2);
+        gap: var(--space-1);
+    }
+
+    .dock-item {
+        width: 40px;
+        height: 40px;
+    }
+
+    .dock-item:hover {
+        transform: translateY(-8px) scale(1.1);
+    }
+
+    .bento-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: 240px;
+    }
+
+    .bento-item:nth-child(1),
+    .bento-item:nth-child(5) {
+        grid-row: span 1;
+        grid-column: span 1;
+    }
+}
+
+/* ========================================
+   PERFORMANCE OPTIMIZATIONS
+   ======================================== */
+.card-3d-container,
+.dock-item,
+.spotlight-card {
+    will-change: transform;
+}
+
+/* Reduce motion для accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

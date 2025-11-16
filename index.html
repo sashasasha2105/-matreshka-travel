@@ -8,149 +8,23 @@
     <meta name="description" content="Матрешка - откройте для себя красоту и разнообразие России. Путешествуйте по регионам, выполняйте задания, получайте награды.">
     <title>Матрешка - Путешествуй по России</title>
 
-    <!-- КРИТИЧЕСКАЯ защита от краша при раннем скролле -->
-    <style>
-        /* Временно блокируем скролл до инициализации */
-        html.loading-app {
-            overflow: hidden !important;
-            height: 100vh !important;
-        }
-        html.loading-app body {
-            overflow: hidden !important;
-            height: 100vh !important;
-        }
-    </style>
-    <script>
-        // Немедленно блокируем скролл
-        document.documentElement.classList.add('loading-app');
 
-        // Флаг готовности приложения
-        window.appReady = false;
+    <!-- Специфичные модули -->
+    <link rel="stylesheet" href="profile/profile.css?v=999">
+    <link rel="stylesheet" href="feed/feed.css?v=999">
+    <link rel="stylesheet" href="quests/quests.css?v=999">
+    <link rel="stylesheet" href="qr/qr.css?v=999">
+    <link rel="stylesheet" href="maps/maps2gis_new.css?v=999">
 
-        // Разблокируем скролл когда DOM готов И скрипты инициализированы
-        var unlockAttempts = 0;
-        function tryUnlock() {
-            unlockAttempts++;
-            // Разблокируем через 500ms после DOMContentLoaded или после 3 попыток
-            if (document.readyState === 'interactive' || document.readyState === 'complete' || unlockAttempts >= 3) {
-                setTimeout(function() {
-                    document.documentElement.classList.remove('loading-app');
-                    window.appReady = true;
-                    console.log('✅ Скролл разблокирован, приложение готово');
-                }, 500);
-            } else {
-                setTimeout(tryUnlock, 100);
-            }
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', tryUnlock);
-        } else {
-            tryUnlock();
-        }
-    </script>
-
-    <!-- Preconnect для внешних ресурсов (быстрее чем dns-prefetch) -->
-    <link rel="preconnect" href="https://telegram.org" crossorigin>
-    <link rel="preconnect" href="https://sketchfab.com" crossorigin>
-    <link rel="preconnect" href="https://mapgl.2gis.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-
-    <!-- DNS Prefetch как fallback -->
-    <link rel="dns-prefetch" href="//telegram.org">
-    <link rel="dns-prefetch" href="//sketchfab.com">
-    <link rel="dns-prefetch" href="//mapgl.2gis.com">
-    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-
-    <!-- Preload критических ресурсов -->
-    <link rel="preload" href="styles/style.css?v=3.0" as="style">
-    <link rel="preload" href="scripts/script.js" as="script">
-    <link rel="preload" href="scripts/components/performance-optimizer.js" as="script">
-
-    <!-- Основные стили -->
-    <link rel="stylesheet" href="styles/style.css?v=3.0">
-    <link rel="stylesheet" href="profile/profile.css?v=3.0">
-    <link rel="stylesheet" href="profile/modern-modal.css?v=3.0">
-    <link rel="stylesheet" href="qr/qr.css?v=2.0">
-    <link rel="stylesheet" href="maps/maps2gis_new.css?v=2.0">
-    <link rel="stylesheet" href="maps/organization_card.css?v=2.0">
-    <link rel="stylesheet" href="quests/quests.css?v=2.0">
-    <link rel="stylesheet" href="styles/modules/enhancements.css?v=2.0">
-
-    <!-- Идеально ровные кнопки и иконки -->
-    <link rel="stylesheet" href="styles/components/button-redesign.css?v=2.0">
-
-    <!-- Улучшенная лента в стиле VK -->
-    <link rel="stylesheet" href="styles/components/feed-redesign.css?v=2.0">
-
-    <!-- Исправления CSS для профиля -->
-
-    <!-- Восстановление героя из старой версии -->
-
-    <!-- Исправление для мобильных устройств -->
-    <link rel="stylesheet" href="styles/modules/mobile-hero-simple-fix.css?v=2.0">
-
-    <!-- Секция команды -->
-    <link rel="stylesheet" href="styles/components/team.css?v=2.0">
-
-    <!-- 🎯 ЕДИНАЯ АДАПТИВНАЯ СИСТЕМА - загружается последней для переопределения -->
-    <link rel="stylesheet" href="styles/modules/responsive.css?v=4.0">
-
-    <!-- 📱 МОБИЛЬНЫЕ УЛУЧШЕНИЯ - специфичные оптимизации для телефонов -->
-    <link rel="stylesheet" href="styles/modules/mobile-enhancements.css?v=4.0">
-
-    <!-- 🔧 ВИЗУАЛЬНЫЕ ИСПРАВЛЕНИЯ - загружается ПОСЛЕДНИМ -->
-    <link rel="stylesheet" href="styles/modules/visual-fixes.css?v=5.0">
-
-    <!-- ✨ СОВРЕМЕННЫЕ ЭФФЕКТЫ - профессиональные улучшения -->
-    <link rel="stylesheet" href="styles/modules/modern-effects.css?v=1.0">
-
-    <!-- 🎯 ЕДИНАЯ Z-INDEX СИСТЕМА -->
-    <link rel="stylesheet" href="styles/components/z-index-system.css?v=1.0">
-
-    <!-- 🌍 ЛЕНТА ПУТЕШЕСТВИЙ -->
-    <link rel="stylesheet" href="feed/feed.css?v=1.0">
-
-    <!-- 📱 КРИТИЧЕСКИЕ МОБИЛЬНЫЕ ИСПРАВЛЕНИЯ - загружается последним для override -->
-    <link rel="stylesheet" href="styles/modules/mobile-fixes.css?v=1.0">
-
-    <!-- 🌊 LIQUID GLASS NAVIGATION - iOS style -->
-    <link rel="stylesheet" href="styles/modules/liquid-nav.css?v=1.0">
-
-    <!-- 📅 УВЕЛИЧЕННЫЙ DATE PICKER - загружается ПОСЛЕДНИМ для максимального приоритета -->
-    <link rel="stylesheet" href="styles/modules/date-picker-enhanced.css?v=1.0">
+    <!-- 🚀 ОПТИМИЗИРОВАННЫЙ CSS ЗАГРУЖАЕТСЯ ПОСЛЕДНИМ - Russian Heritage Theme -->
+    <link rel="stylesheet" href="styles/matreshka-optimized.css?v=999">
 
     <!-- Telegram Web App SDK -->
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
 
-    <!-- 🔥 НОВАЯ СИСТЕМА НАВИГАЦИИ - ЗАГРУЖАЕТСЯ ПЕРВОЙ -->
-    <script src="scripts/core/navigation.js"></script>
-
-    <!-- 📊 PRODUCTION LOGGER - загружается ПЕРВЫМ для перехвата всех логов -->
-    <script src="scripts/core/logger.js"></script>
-
-    <!-- 🚀 ТУРБО-ОПТИМИЗАЦИЯ -->
-    <script src="scripts/components/performance-optimizer.js"></script>
-
-    <!-- Service Worker регистрация -->
-    <script src="scripts/components/sw-register.js"></script>
-
-    <!-- Глобальный обработчик ошибок -->
-    <script src="scripts/core/error-handler.js"></script>
-
-    <!-- Debug helpers для отладки localStorage -->
-
-    <!-- Новая система хранения на IndexedDB вместо localStorage -->
-    <script src="scripts/core/storage.js"></script>
-
-    <!-- Modal Manager с focus trap и keyboard navigation -->
-    <script src="scripts/core/modal-manager.js"></script>
-
-    <!-- Viewport height fix для iOS Safari -->
-    <script src="scripts/components/viewport-height-fix.js"></script>
-
-    <!-- Lazy loading для изображений -->
-    <script src="scripts/components/lazy-loading.js" defer></script>
+    <script src="scripts/core/navigation.js" defer></script>
+    <script src="scripts/core/modal-manager.js" defer></script>
+    <script src="scripts/core/storage.js" defer></script>
 </head>
 <body>
     <div class="container">
@@ -497,68 +371,22 @@
         });
     </script>
     <!-- Подключаем официальный MapGL API -->
-    <script src="https://mapgl.2gis.com/api/js/v1"></script>
+    <script src="https://mapgl.2gis.com/api/js/v1" async defer></script>
 
     <!-- QR Code Library -->
-    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js" async defer></script>
 
-    <!-- 📊 АНАЛИТИКА - загружается первой -->
-    <script>
-        // Fallback конфигурация, если analytics.config.js не загрузится
-        if (!window.ANALYTICS_CONFIG) {
-            window.ANALYTICS_CONFIG = {
-                BOT_TOKEN: '7471119413:AAH8RHbU0dLSMSMRjgKS6yW4JoMBFp6ylFA',
-                CHAT_ID: '1540847019',
-                ENABLED: false,
-                DEBUG: false
-            };
-        }
-    </script>
-    <script src="scripts/components/analytics.config.js" onerror="console.log('⚠️ analytics.config.js не загружен, используется fallback')"></script>
-    <script src="scripts/modules/analytics.js"></script>
-    <script src="scripts/modules/analytics-integration.js"></script>
+    <!-- ТОЛЬКО КРИТИЧНЫЕ ДЛЯ ГЛАВНОЙ -->
+    <script src="assets/data/regions.js" defer></script>
+    <script src="assets/data/packages.js" defer></script>
+    <script src="scripts/script.js" defer></script>
+    <script src="cart/cart.js" defer></script>
 
-    <!-- Сначала загружаем данные -->
-    <script src="assets/data/regions.js"></script>
-    <script src="assets/data/packages.js"></script>
-
-    <!-- Потом модули -->
-    <script src="qr/qr.js"></script>
-    <script src="maps/organization_card.js"></script>
-    <script src="maps/maps2gis_new.js"></script>
-
-    <!-- 🔥 КОРЗИНА ЗАГРУЖАЕТСЯ ПЕРВОЙ - до script.js! -->
-    <script src="cart/cart.js"></script>
-
-    <!-- Основная логика -->
-    <script src="scripts/script.js"></script>
-    <script src="scripts/modules/packages.js"></script>
-
-    <!-- 🌍 ГЛОБАЛЬНАЯ БАЗА ДАННЫХ ПУТЕШЕСТВИЙ -->
-    <script src="scripts/core/travel-database.js"></script>
-
-    <!-- 📸 ХРАНИЛИЩЕ ФОТОГРАФИЙ НА СЕРВЕРЕ -->
-
-    <script src="profile/profile.js"></script>
-    <script src="profile/avatar_fix.js"></script>
-
-    <!-- 🌍 ЛЕНТА ПУТЕШЕСТВИЙ -->
-    <script src="feed/feed-supabase.js"></script>
-    <script src="feed/feed.js"></script>
-
-    <!-- Система заданий -->
-    <script src="quests/quests.js"></script>
-
-    <!-- Нереальные улучшения -->
-    <script src="scripts/modules/enhancements.js"></script>
-
-    <!-- Исправления и улучшения -->
-    <script src="scripts/modules/fixes.js"></script>
-
-    <!-- 🔔 ОБНОВЛЕНИЕ BADGES - загружается последним -->
-    <script src="scripts/modules/badges-update.js"></script>
-
-    <!-- ✨ СОВРЕМЕННЫЕ ВЗАИМОДЕЙСТВИЯ - профессиональные улучшения UX -->
-    <script src="scripts/components/modern-interactions.js" defer></script>
+    <!-- ОСТАЛЬНЫЕ ГРУЗЯТСЯ ПО ТРЕБОВАНИЮ -->
+    <script src="qr/qr.js" defer></script>
+    <script src="maps/maps2gis_new.js" defer></script>
+    <script src="profile/profile.js" defer></script>
+    <script src="feed/feed.js" defer></script>
+    <script src="quests/quests.js" defer></script>
 </body>
 </html>

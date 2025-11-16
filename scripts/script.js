@@ -311,11 +311,34 @@ function clearSearchAndReload() {
     }
 }
 
-// Создание карточки региона с ТУРБО-ОПТИМИЗАЦИЕЙ
+// Создание карточки региона с ТУРБО-ОПТИМИЗАЦИЕЙ + ACETERNITY EFFECTS
 function createRegionCard(region, animationIndex) {
     const regionCard = document.createElement('div');
-    regionCard.className = 'region-card';
+    regionCard.className = 'region-card aceternity-card spotlight-container ripple';
     regionCard.onclick = () => showRegionDetails(region.id);
+
+    // Добавляем spotlight эффект
+    const spotlight = document.createElement('div');
+    spotlight.className = 'spotlight';
+    regionCard.appendChild(spotlight);
+
+    // 3D tilt эффект при движении мыши
+    regionCard.addEventListener('mousemove', (e) => {
+        const rect = regionCard.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 20;
+        const y = ((e.clientY - rect.top) / rect.height - 0.5) * -20;
+        regionCard.style.setProperty('--mouse-x', `${x}deg`);
+        regionCard.style.setProperty('--mouse-y', `${y}deg`);
+
+        // Перемещаем spotlight
+        spotlight.style.left = `${e.clientX - rect.left - 200}px`;
+        spotlight.style.top = `${e.clientY - rect.top - 200}px`;
+    });
+
+    regionCard.addEventListener('mouseleave', () => {
+        regionCard.style.setProperty('--mouse-x', '0deg');
+        regionCard.style.setProperty('--mouse-y', '0deg');
+    });
 
     // Создаем img элемент отдельно для оптимизации
     const img = document.createElement('img');

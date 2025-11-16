@@ -19,6 +19,10 @@
     <!-- 🚀 ОПТИМИЗИРОВАННЫЙ CSS ЗАГРУЖАЕТСЯ ПОСЛЕДНИМ - Russian Heritage Theme -->
     <link rel="stylesheet" href="styles/matreshka-optimized.css?v=999">
 
+    <!-- 🎨 ACETERNITY UI + LIQUID GLASS EFFECTS -->
+    <link rel="stylesheet" href="styles/aceternity-effects.css?v=999">
+    <link rel="stylesheet" href="styles/liquid-glass.css?v=999">
+
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
 
@@ -379,6 +383,10 @@
     <!-- QR Code Library -->
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js" async defer></script>
 
+    <!-- 🎨 GSAP для анимаций + Draggable для liquid glass -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Draggable.min.js"></script>
+
     <!-- ТОЛЬКО КРИТИЧНЫЕ ДЛЯ ГЛАВНОЙ -->
     <script src="assets/data/regions.js" defer></script>
     <script src="assets/data/packages.js" defer></script>
@@ -392,5 +400,71 @@
     <script src="profile/profile.js" defer></script>
     <script src="feed/feed.js" defer></script>
     <script src="quests/quests.js" defer></script>
+
+    <!-- 🎨 LIQUID GLASS + ACETERNITY EFFECTS -->
+    <script src="scripts/liquid-glass.js" defer></script>
+
+    <!-- SVG ФИЛЬТРЫ ДЛЯ LIQUID GLASS ЭФФЕКТА -->
+    <svg class="sr-only" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <!-- GOO FILTER (жидкий эффект) -->
+            <filter id="goo">
+                <feGaussianBlur result="blur" in="SourceGraphic" stdDeviation="13"></feGaussianBlur>
+                <feColorMatrix
+                    result="matrix"
+                    in="blur"
+                    values="
+                        1 0 0 0 0
+                        0 1 0 0 0
+                        0 0 1 0 0
+                        0 0 0 13 -10
+                    "
+                    type="matrix"
+                ></feColorMatrix>
+                <feComposite result="composite" in="matrix" operator="atop"></feComposite>
+            </filter>
+
+            <!-- KNOCKOUT FILTER (маска) -->
+            <filter id="knockout" colorInterpolationFilters="sRGB">
+                <feColorMatrix
+                    result="knocked"
+                    type="matrix"
+                    values="1 0 0 0 0
+                            0 1 0 0 0
+                            0 0 1 0 0
+                            -1 -1 -1 1 0"
+                />
+                <feComponentTransfer>
+                    <feFuncR type="linear" slope="3" intercept="-1" />
+                    <feFuncG type="linear" slope="3" intercept="-1" />
+                    <feFuncB type="linear" slope="3" intercept="-1" />
+                </feComponentTransfer>
+                <feComponentTransfer>
+                    <feFuncR type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+                    <feFuncG type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+                    <feFuncB type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
+                </feComponentTransfer>
+            </filter>
+
+            <!-- REMOVE BLACK FILTER (удаление черного) -->
+            <filter id="remove-black" color-interpolation-filters="sRGB">
+                <feColorMatrix
+                    type="matrix"
+                    values="1 0 0 0 0
+                              0 1 0 0 0
+                              0 0 1 0 0
+                              -255 -255 -255 0 1"
+                    result="black-pixels"
+                />
+                <feMorphology
+                    in="black-pixels"
+                    operator="dilate"
+                    radius="0.5"
+                    result="smoothed"
+                />
+                <feComposite in="SourceGraphic" in2="smoothed" operator="out" />
+            </filter>
+        </defs>
+    </svg>
 </body>
 </html>

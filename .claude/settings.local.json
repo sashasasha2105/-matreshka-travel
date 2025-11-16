@@ -125,7 +125,12 @@
       "Bash(index.html)",
       "Bash(source .venv/bin/activate)",
       "Bash(pip install:*)",
-      "Bash(pip index:*)"
+      "Bash(pip index:*)",
+      "WebFetch(domain:ui.aceternity.com)",
+      "WebFetch(domain:colorhunt.co)",
+      "WebFetch(domain:icolorpalette.com)",
+      "WebFetch(domain:colorswall.com)",
+      "Bash(gh api:*)"
     ],
     "deny": [],
     "ask": []

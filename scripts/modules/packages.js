@@ -54,8 +54,9 @@ function loadTravelPackages() {
     loadPackagesAttempts = 0; // Сбрасываем счетчик после успешной загрузки
 
     packagesGrid.innerHTML = TRAVEL_PACKAGES.map(pkg => `
-        <div class="package-card" onclick="showPackageModal('${pkg.id}')">
-            <div class="package-image" style="background-image: url('${pkg.image}')"></div>
+        <div class="package-card aceternity-card spotlight-container ripple" onclick="showPackageModal('${pkg.id}')" data-package-id="${pkg.id}">
+            <div class="spotlight"></div>
+            <div class="package-image shimmer" style="background-image: url('${pkg.image}')"></div>
             <div class="package-content">
                 <h3 class="package-name">${pkg.name}</h3>
                 <div class="package-duration">${pkg.duration}</div>
@@ -74,6 +75,35 @@ function loadTravelPackages() {
             </div>
         </div>
     `).join('');
+
+    // Инициализируем Aceternity эффекты для карточек пакетов
+    setTimeout(() => {
+        const packageCards = document.querySelectorAll('.package-card.aceternity-card');
+        packageCards.forEach(card => {
+            const spotlight = card.querySelector('.spotlight');
+
+            // 3D tilt эффект при движении мыши
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width - 0.5) * 15;
+                const y = ((e.clientY - rect.top) / rect.height - 0.5) * -15;
+                card.style.setProperty('--mouse-x', `${x}deg`);
+                card.style.setProperty('--mouse-y', `${y}deg`);
+
+                // Перемещаем spotlight
+                if (spotlight) {
+                    spotlight.style.left = `${e.clientX - rect.left - 200}px`;
+                    spotlight.style.top = `${e.clientY - rect.top - 200}px`;
+                }
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.setProperty('--mouse-x', '0deg');
+                card.style.setProperty('--mouse-y', '0deg');
+            });
+        });
+        console.log('✨ Aceternity эффекты применены к', packageCards.length, 'карточкам пакетов');
+    }, 100);
 }
 
 // Получить партнеров из городов пакета

@@ -9,7 +9,7 @@ const TRAVEL_PACKAGES = [
         duration: '5 дней',
         price: 500,
         oldPrice: null,
-        image: 'city_photos/GOLDRING.jpg',
+        image: 'assets/images/city_photos/GOLDRING.jpg',
         description: 'Путешествие по древним городам России с посещением главных достопримечательностей',
         cities: ['Москва', 'Владимир', 'Суздаль', 'Ярославль', 'Кострома'],
         partners: [
@@ -94,7 +94,7 @@ const TRAVEL_PACKAGES = [
         duration: '6 дней',
         price: 500,
         oldPrice: null,
-        image: 'city_photos/кавказ.jpg',
+        image: 'assets/images/city_photos/кавказ.jpg',
         description: 'Путешествие по самым красивым местам Северного Кавказа с посещением горных курортов',
         cities: ['Пятигорск', 'Кисловодск', 'Минеральные Воды', 'Домбай'],
         partners: [
@@ -187,7 +187,7 @@ const TRAVEL_PACKAGES = [
         duration: '5 дней',
         price: 500,
         oldPrice: null,
-        image: 'city_photos/Снимок экрана 2025-10-07 в 13.34.49.png',
+        image: 'assets/images/city_photos/Снимок экрана 2025-10-07 в 13.34.49.png',
         description: 'Путешествие по живописным местам Урала с посещением природных парков и исторических городов',
         cities: ['Екатеринбург', 'Невьянск', 'Нижний Тагил'],
         partners: [

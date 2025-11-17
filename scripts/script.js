@@ -340,23 +340,15 @@ function createRegionCard(region, animationIndex) {
         regionCard.style.setProperty('--mouse-y', '0deg');
     });
 
-    // Создаем img элемент отдельно для оптимизации
-    const img = document.createElement('img');
-    img.className = 'region-image';
-    img.alt = region.name;
-    img.loading = 'lazy';
-
-    // Используем Performance Optimizer для мгновенной загрузки
-    if (window.performanceOptimizer) {
-        // Определяем приоритет: первые 3 карточки - высокий
-        const priority = animationIndex < 3 ? 'high' : 'normal';
-
-        // Мгновенная загрузка через оптимизатор
-        window.performanceOptimizer.loadImageInstantly(region.image, img, priority);
-    } else {
-        // Fallback
-        img.src = region.image;
-    }
+    // Создаем контейнер для изображения с background-image (как у пакетов)
+    const imageContainer = document.createElement('div');
+    imageContainer.className = 'region-card-image shimmer';
+    imageContainer.style.backgroundImage = `url('${region.image}')`;
+    imageContainer.style.backgroundSize = 'cover';
+    imageContainer.style.backgroundPosition = 'center';
+    imageContainer.style.height = '200px';
+    imageContainer.style.borderRadius = '12px 12px 0 0';
+    imageContainer.style.position = 'relative';
 
     // Создаем контент
     const content = document.createElement('div');
@@ -370,7 +362,7 @@ function createRegionCard(region, animationIndex) {
         </div>
     `;
 
-    regionCard.appendChild(img);
+    regionCard.appendChild(imageContainer);
     regionCard.appendChild(content);
 
     // Анимация появления
@@ -731,6 +723,7 @@ function loadAttractions(attractions) {
     attractionsList.innerHTML = '';
     attractions.forEach((attraction, index) => {
         const li = document.createElement('li');
+        li.className = 'attraction-item ripple';
         const uniqueId = `attraction-${index}`;
         li.innerHTML = `
             <div class="attraction-header">
@@ -789,7 +782,30 @@ function loadPartners(partners) {
 
     partners.forEach((partner, index) => {
         const card = document.createElement('div');
-        card.className = 'partner-card';
+        card.className = 'partner-card aceternity-card spotlight-container ripple';
+
+        // Добавляем spotlight эффект
+        const spotlight = document.createElement('div');
+        spotlight.className = 'spotlight';
+        card.appendChild(spotlight);
+
+        // 3D tilt эффект при движении мыши
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
+            const y = ((e.clientY - rect.top) / rect.height - 0.5) * -10;
+            card.style.setProperty('--mouse-x', `${x}deg`);
+            card.style.setProperty('--mouse-y', `${y}deg`);
+
+            // Перемещаем spotlight
+            spotlight.style.left = `${e.clientX - rect.left - 200}px`;
+            spotlight.style.top = `${e.clientY - rect.top - 200}px`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.setProperty('--mouse-x', '0deg');
+            card.style.setProperty('--mouse-y', '0deg');
+        });
 
         // Создаем кнопку QR для каждого партнера
         const qrButtonHTML = isPaid
@@ -803,15 +819,12 @@ function loadPartners(partners) {
                </button>`;
 
         card.innerHTML = `
-            <div class="partner-image">${partner.emoji}</div>
-            <div class="partner-info">
-                <div class="partner-name">${partner.name}</div>
-                <div class="partner-type">${partner.type}</div>
-                <div class="partner-description">${partner.description}</div>
-                <div class="partner-rating">
-                    <span>⭐</span>
-                    <span>${partner.rating}</span>
-                </div>
+            <div class="partner-emoji">${partner.emoji}</div>
+            <div class="partner-name">${partner.name}</div>
+            <div class="partner-type">${partner.type}</div>
+            <div class="partner-description">${partner.description}</div>
+            <div class="partner-rating">⭐ ${partner.rating}</div>
+            ${partner.specialOffer ? `<div class="partner-offer">${partner.specialOffer}</div>` : ''}
                 <button class="partner-route-btn" data-partner-index="${index}">
                     <span class="route-icon">🗺️</span>
                     <span class="route-text">Маршрут, отзывы, время работы</span>

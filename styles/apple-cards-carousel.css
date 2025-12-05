@@ -307,15 +307,25 @@
 
   .apple-carousel-track {
     gap: 1rem;
-    padding: 1rem 0.5rem 2rem;
+    padding: 1rem 0 2rem;
     scroll-snap-type: x mandatory;
+    /* Убираем padding слева для peek-эффекта */
+    padding-left: 1rem;
   }
 
   .apple-card {
-    width: calc(100vw - 3rem);
-    max-width: 400px;
+    /* Показываем peek следующей карточки - уменьшаем ширину */
+    width: calc(100vw - 5rem);
+    max-width: 360px;
     height: 380px;
     scroll-snap-align: start;
+    /* Небольшая прозрачность для неактивных */
+    transition: opacity 0.3s ease;
+  }
+
+  /* Первая карточка полностью видна */
+  .apple-card:first-child {
+    opacity: 1;
   }
 
   .apple-card-title {

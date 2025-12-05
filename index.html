@@ -29,6 +29,9 @@
     <!-- 🎠 MARQUEE HERO STYLES -->
     <link rel="stylesheet" href="styles/marquee-hero.css?v=999">
 
+    <!-- Premium Date Picker Styles -->
+    <link rel="stylesheet" href="components/TripDatePicker/TripDatePickerSection.css">
+
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
 
@@ -62,37 +65,8 @@
                 </div>
             </section>
 
-            <!-- Date Picker Section -->
-            <div class="hero-section" style="min-height: auto; background: transparent; border: none; margin-top: 2rem;">
-                <div class="hero-overlay" style="background: transparent; padding: 2rem 1.5rem;">
-                    <h1 class="hero-title" style="display: none;">
-                        Исследуйте Россию<br>вместе с Матрешкой
-                    </h1>
-
-                    <!-- Красивое окно выбора даты поездки -->
-                    <div class="travel-date-picker">
-                        <div class="date-picker-header">
-                            <span class="date-icon">📅</span>
-                            <span class="date-label">Когда планируете поездку?</span>
-                        </div>
-                        <div class="date-inputs-row">
-                            <div class="date-input-group">
-                                <label class="date-input-label">Дата начала</label>
-                                <input type="date" id="travelStartDate" class="date-input" placeholder="Выберите дату">
-                            </div>
-                            <div class="date-separator">→</div>
-                            <div class="date-input-group">
-                                <label class="date-input-label">Дата окончания</label>
-                                <input type="date" id="travelEndDate" class="date-input" placeholder="Выберите дату">
-                            </div>
-                        </div>
-                        <button class="date-save-btn" onclick="saveTravelDates()">
-                            <span class="btn-icon">✓</span>
-                            <span class="btn-text">Сохранить даты</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+            <!-- 🎨 Premium Date Picker Section -->
+            <div id="premiumDatePicker"></div>
 
             <!-- Поиск регионов -->
             <div class="search-section" data-animate>
@@ -422,6 +396,9 @@
     <!-- 🎠 Marquee Hero Script -->
     <script src="scripts/marquee-hero.js" defer></script>
 
+    <!-- 🎨 Premium Date Picker Script -->
+    <script src="scripts/date-picker-premium.js"></script>
+
     <!-- SVG ФИЛЬТРЫ ДЛЯ LIQUID GLASS ЭФФЕКТА -->
     <svg class="sr-only" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -484,5 +461,70 @@
             </filter>
         </defs>
     </svg>
+
+    <!-- 🎨 ИНИЦИАЛИЗАЦИЯ PREMIUM DATE PICKER -->
+    <script>
+    // Инициализация Premium Date Picker после загрузки DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🎨 Инициализация Premium Date Picker...');
+
+        // Создание компонента
+        const premiumDatePicker = new PremiumDatePicker({
+            containerId: 'premiumDatePicker',
+            title: 'Когда планируете начать поездку?',
+            buttonText: 'Выбрать даты',
+            showEndDate: true,
+            onDateSelect: (startDate, endDate) => {
+                console.log('✅ Даты выбраны:', { startDate, endDate });
+
+                // Сохранение в localStorage
+                localStorage.setItem('matreshka_trip_dates', JSON.stringify({
+                    startDate,
+                    endDate,
+                    timestamp: Date.now()
+                }));
+
+                // Вызов существующей функции для совместимости
+                if (typeof saveTravelDates === 'function') {
+                    saveTravelDates(startDate, endDate);
+                }
+
+                console.log('💾 Даты сохранены в localStorage');
+            }
+        });
+
+        // Восстановление сохраненных дат при загрузке
+        try {
+            const savedDates = localStorage.getItem('matreshka_trip_dates');
+            if (savedDates) {
+                const { startDate, endDate, timestamp } = JSON.parse(savedDates);
+
+                // Проверяем что даты не старше 30 дней
+                const daysSinceSelection = (Date.now() - timestamp) / (1000 * 60 * 60 * 24);
+                if (daysSinceSelection < 30) {
+                    premiumDatePicker.setDates(startDate, endDate);
+                    console.log('📦 Восстановлены сохраненные даты');
+                } else {
+                    console.log('⏰ Сохраненные даты устарели');
+                }
+            }
+        } catch (e) {
+            console.warn('⚠️ Ошибка восстановления дат:', e);
+        }
+
+        // Делаем доступным глобально для других скриптов
+        window.premiumDatePicker = premiumDatePicker;
+
+        console.log('✅ Premium Date Picker инициализирован');
+    });
+
+    // Функция для совместимости с существующим кодом
+    function saveTravelDates(startDate, endDate) {
+        console.log('💾 Сохранение дат:', { startDate, endDate });
+
+        // Здесь можно добавить отправку на сервер
+        // fetch('/api/save-dates', { ... });
+    }
+    </script>
 </body>
 </html>

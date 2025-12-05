@@ -297,13 +297,25 @@
     padding: 2rem 0;
   }
 
+  .apple-carousel-container {
+    padding: 0 1rem;
+  }
+
   .apple-carousel-title {
     margin-bottom: 2rem;
   }
 
+  .apple-carousel-track {
+    gap: 1rem;
+    padding: 1rem 0.5rem 2rem;
+    scroll-snap-type: x mandatory;
+  }
+
   .apple-card {
-    width: 280px;
-    height: 360px;
+    width: calc(100vw - 3rem);
+    max-width: 400px;
+    height: 380px;
+    scroll-snap-align: start;
   }
 
   .apple-card-title {
@@ -311,7 +323,7 @@
   }
 
   .apple-card-description {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
   }
 }
 

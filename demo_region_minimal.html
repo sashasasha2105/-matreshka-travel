@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Москва - Матрешка</title>
+
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="styles/card-stack.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0118;
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .region-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 1, 24, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 1.5rem;
+        }
+
+        .back-btn {
+            background: rgba(23, 23, 23, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 0.75rem 1.5rem;
+
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
+
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+            transform: translateX(-4px);
+        }
+
+        /* Hero */
+        .region-hero {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .region-hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .region-hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(10, 1, 24, 1) 0%,
+                rgba(10, 1, 24, 0.8) 40%,
+                rgba(10, 1, 24, 0.3) 70%,
+                transparent 100%
+            );
+
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem 1.5rem;
+        }
+
+        .region-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .region-subtitle {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: rgba(99, 102, 241, 0.9);
+            margin-bottom: 1rem;
+        }
+
+        .region-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Content */
+        .region-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .region-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.01em;
+            text-align: center;
+        }
+
+        .region-description {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Info box */
+        .info-box {
+            background: rgba(23, 23, 23, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .info-box h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 1rem;
+        }
+
+        .info-box p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .info-box li {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: rgba(99, 102, 241, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="region-header">
+        <button class="back-btn" onclick="window.history.back()">
+            ← Назад
+        </button>
+    </div>
+
+    <!-- Hero -->
+    <div class="region-hero">
+        <img src="assets/images/city_photos/Moscow.jpg" alt="Москва" class="region-hero-image">
+        <div class="region-hero-overlay">
+            <h1 class="region-title">🏛️ Москва</h1>
+            <p class="region-subtitle">Столица России</p>
+            <div class="region-meta">
+                <span>👥 12.7 млн</span>
+                <span>📐 2561 км²</span>
+                <span>🏛️ Основана в 1147 году</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="region-content">
+        <!-- Описание -->
+        <section class="region-section">
+            <h2 class="section-title">О регионе</h2>
+            <p class="region-description">
+                Москва — столица России, политический, экономический, культурный и научный центр страны.
+                Город федерального значения с богатейшей историей, множеством достопримечательностей
+                и уникальной атмосферой. Здесь сосредоточены главные памятники архитектуры, музеи,
+                театры и другие культурные объекты мирового значения.
+            </p>
+        </section>
+
+        <!-- Card Stack - Партнёры -->
+        <section class="region-section">
+            <h2 class="section-title">🍽️ Партнёры со скидками</h2>
+            <div id="partnersCardStack"></div>
+        </section>
+
+        <!-- Информация -->
+        <div class="info-box">
+            <h3>✨ Как работает Card Stack</h3>
+            <p>Карточки партнёров организованы в стек с интерактивной анимацией:</p>
+            <ul>
+                <li><strong>Клик:</strong> Карточка уходит вправо, следующая становится активной</li>
+                <li><strong>Стек:</strong> Видны 3 карточки одновременно с эффектом глубины</li>
+                <li><strong>Автоматическая ротация:</strong> Можно включить автосмену карточек</li>
+                <li><strong>Минималистичный дизайн:</strong> Согласован с общим стилем страницы</li>
+                <li><strong>Highlight:</strong> Важная информация выделена цветом</li>
+            </ul>
+            <p style="margin-top: 1.5rem;">
+                <strong>Попробуйте:</strong> Кликните на верхнюю карточку, чтобы увидеть анимацию!
+            </p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/card-stack.js"></script>
+
+    <script>
+        // Данные партнёров для Москвы
+        const partnersData = [
+            {
+                id: 1,
+                name: 'Кофемания на Никитском',
+                designation: 'Кафе-кондитерская',
+                emoji: '☕',
+                rating: '4.6',
+                content: 'Популярная сеть кафе с <span class="card-highlight">авторскими десертами</span> и качественным кофе. Уютная атмосфера в <span class="card-highlight">центре Москвы</span>.',
+                offer: 'Десерт в подарок при заказе от 1000₽'
+            },
+            {
+                id: 2,
+                name: 'Чайхона №1 Тимура Ланского',
+                designation: 'Ресторан узбекской кухни',
+                emoji: '🍛',
+                rating: '4.5',
+                content: 'Аутентичная узбекская кухня с <span class="card-highlight">лучшим пловом в Москве</span>. Восточное гостеприимство и домашняя атмосфера.',
+                offer: 'Зеленый чай в подарок к каждому заказу'
+            },
+            {
+                id: 3,
+                name: 'Му-Му на Арбате',
+                designation: 'Столовая русской кухни',
+                emoji: '🍲',
+                rating: '4.3',
+                content: 'Сеть демократичных столовых с <span class="card-highlight">домашней едой</span>. Быстрое обслуживание и <span class="card-highlight">приятные цены</span>.',
+                offer: 'Скидка 10% на комплексный обед'
+            }
+        ];
+
+        // Инициализация Card Stack
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🃏 Инициализация Card Stack...');
+
+            const cardStack = new CardStack({
+                containerId: 'partnersCardStack',
+                items: partnersData,
+                autoRotate: false
+            });
+
+            window.cardStack = cardStack;
+
+            console.log('✅ Card Stack инициализирован с', partnersData.length, 'партнёрами');
+        });
+    </script>
+</body>
+</html>

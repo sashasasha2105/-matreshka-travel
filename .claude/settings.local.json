@@ -130,7 +130,8 @@
       "WebFetch(domain:colorhunt.co)",
       "WebFetch(domain:icolorpalette.com)",
       "WebFetch(domain:colorswall.com)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(git revert:*)"
     ],
     "deny": [],
     "ask": []

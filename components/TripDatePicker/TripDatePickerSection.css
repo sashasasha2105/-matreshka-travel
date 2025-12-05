@@ -1,0 +1,426 @@
+/**
+ * 🎨 TRIP DATE PICKER SECTION STYLES
+ * Премиальный дизайн в стиле Aceternity UI
+ * Согласовано с marquee hero carousel
+ */
+
+/* ========================================
+   СЕКЦИЯ
+   ======================================== */
+.trip-date-picker-section {
+  width: 100%;
+  padding: 3rem 1.5rem;
+  margin: 2rem 0;
+}
+
+.trip-date-picker-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* ========================================
+   ЗАГОЛОВОК
+   ======================================== */
+.trip-date-picker-title {
+  /* Стиль как у marquee-overlay-title, но меньше */
+  font-family: 'Unbounded', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 2rem;
+
+  /* Градиент как у карусели */
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Деликатное свечение */
+  filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.2));
+
+  animation: titlePulse 4s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 35px rgba(255, 255, 255, 0.3));
+  }
+}
+
+/* ========================================
+   КНОПКА ВЫБОРА ДАТ
+   ======================================== */
+.trip-date-picker-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  max-width: 600px;
+}
+
+.trip-date-select-button {
+  /* Похоже на marquee-demo-wrapper */
+  width: 100%;
+  position: relative;
+  padding: 1.5rem 2rem;
+
+  background: rgba(23, 23, 23, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+
+  /* Стиль как у marquee-item-main */
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+
+  outline: none;
+}
+
+.trip-date-select-button:hover {
+  /* Как у marquee-item-main:hover */
+  transform: translateY(-2px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow:
+    0 10px 40px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.trip-date-select-button:active {
+  transform: translateY(0);
+}
+
+.trip-date-select-button.has-dates {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+.button-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.button-text {
+  flex: 1;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.button-chevron {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+}
+
+.button-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* ========================================
+   ПОПОВЕР
+   ======================================== */
+.trip-date-picker-popover {
+  position: absolute;
+  top: calc(100% + 1rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: 100%;
+  min-width: 400px;
+  max-width: 550px;
+
+  /* Анимация появления */
+  animation: popoverSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes popoverSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.popover-content {
+  /* Премиальная карточка */
+  background: rgba(15, 5, 32, 0.95);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.5rem;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(99, 102, 241, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  padding: 2rem;
+  overflow: hidden;
+}
+
+/* Header поповера */
+.popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.popover-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.01em;
+}
+
+.popover-close {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popover-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  transform: rotate(90deg);
+}
+
+/* ========================================
+   ИНПУТЫ ДАТ
+   ======================================== */
+.date-inputs-grid {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: end;
+}
+
+.date-separator-icon {
+  color: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.date-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.date-input-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: left;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.date-input-wrapper {
+  position: relative;
+}
+
+.date-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.75rem;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.date-input:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.date-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Стилизация нативного календаря */
+.date-input::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.6);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.date-input::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* ========================================
+   КНОПКИ ДЕЙСТВИЙ
+   ======================================== */
+.popover-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.action-button {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.action-button.secondary {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.action-button.secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.action-button.primary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-color: rgba(99, 102, 241, 0.5);
+  color: #ffffff;
+
+  box-shadow:
+    0 4px 12px rgba(99, 102, 241, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.action-button.primary:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 20px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.action-button.primary:active {
+  transform: translateY(0);
+}
+
+/* ========================================
+   ПОДСКАЗКА
+   ======================================== */
+.trip-date-picker-hint {
+  margin-top: 1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.02em;
+}
+
+/* ========================================
+   МОБИЛЬНАЯ АДАПТАЦИЯ
+   ======================================== */
+@media (max-width: 768px) {
+  .trip-date-picker-section {
+    padding: 2rem 1rem;
+  }
+
+  .trip-date-picker-title {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .trip-date-select-button {
+    padding: 1.25rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .trip-date-picker-popover {
+    min-width: unset;
+    width: calc(100vw - 2rem);
+    max-width: unset;
+  }
+
+  .popover-content {
+    padding: 1.5rem;
+  }
+
+  .date-inputs-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .date-separator-icon {
+    display: none;
+  }
+
+  .popover-actions {
+    flex-direction: column;
+  }
+
+  .action-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .trip-date-picker-title {
+    font-size: 1.75rem;
+  }
+
+  .button-icon {
+    font-size: 1.25rem;
+  }
+
+  .button-text {
+    font-size: 0.9rem;
+  }
+}

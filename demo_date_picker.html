@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Date Picker Demo - Matreshka Travel</title>
+
+    <!-- Шрифты как у карусели -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="styles/matreshka-optimized.css">
+    <link rel="stylesheet" href="styles/marquee-hero.css">
+    <link rel="stylesheet" href="components/TripDatePicker/TripDatePickerSection.css">
+
+    <style>
+        body {
+            background: #0f0520;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .demo-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .demo-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .demo-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.125rem;
+        }
+
+        /* Анимации для toast */
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        /* Демо секция с кодом */
+        .demo-section {
+            margin-top: 4rem;
+            padding: 2rem;
+            background: rgba(23, 23, 23, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+        }
+
+        .demo-section h3 {
+            font-family: 'Unbounded', sans-serif;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .selected-dates-display {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            border-radius: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <!-- Header -->
+        <div class="demo-header">
+            <h1 class="demo-title">Premium Date Picker</h1>
+            <p class="demo-subtitle">Премиальный компонент выбора дат в стиле Aceternity UI</p>
+        </div>
+
+        <!-- Date Picker Component -->
+        <div id="premiumDatePicker"></div>
+
+        <!-- Отображение выбранных дат -->
+        <div id="selectedDatesDisplay" style="display: none;" class="selected-dates-display">
+            <strong>✅ Выбранные даты:</strong>
+            <div id="selectedDatesContent"></div>
+        </div>
+
+        <!-- Примеры кода -->
+        <div class="demo-section">
+            <h3>📖 Пример использования (Vanilla JS)</h3>
+            <div class="code-block">
+<pre>// 1. Подключите CSS и JS
+&lt;link rel="stylesheet" href="components/TripDatePicker/TripDatePickerSection.css"&gt;
+&lt;script src="scripts/date-picker-premium.js"&gt;&lt;/script&gt;
+
+// 2. Создайте контейнер
+&lt;div id="premiumDatePicker"&gt;&lt;/div&gt;
+
+// 3. Инициализируйте компонент
+const datePicker = new PremiumDatePicker({
+  containerId: 'premiumDatePicker',
+  title: 'Когда планируете начать поездку?',
+  buttonText: 'Выбрать даты',
+  showEndDate: true,
+  onDateSelect: (startDate, endDate) => {
+    console.log('Выбраны даты:', { startDate, endDate });
+
+    // Отправка на сервер
+    fetch('/api/save-dates', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ startDate, endDate })
+    });
+  }
+});
+
+// Методы:
+datePicker.getSelectedDates();  // Получить выбранные даты
+datePicker.setDates('2025-06-01', '2025-06-15');  // Установить даты
+datePicker.clearDates();  // Очистить
+datePicker.destroy();  // Уничтожить
+</pre>
+            </div>
+        </div>
+
+        <div class="demo-section">
+            <h3>⚛️ Пример использования (React)</h3>
+            <div class="code-block">
+<pre>import TripDatePickerSection from './components/TripDatePicker/TripDatePickerSection';
+
+function App() {
+  const handleDateSelect = (startDate, endDate) => {
+    console.log('Даты выбраны:', { startDate, endDate });
+  };
+
+  return (
+    &lt;TripDatePickerSection
+      title="Когда планируете начать поездку?"
+      buttonText="Выбрать даты"
+      showEndDate={true}
+      onDateSelect={handleDateSelect}
+    /&gt;
+  );
+}
+</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="scripts/date-picker-premium.js"></script>
+    <script>
+        // Инициализация компонента
+        const datePicker = new PremiumDatePicker({
+            containerId: 'premiumDatePicker',
+            title: 'Когда планируете начать поездку?',
+            buttonText: 'Выбрать даты',
+            showEndDate: true,
+            onDateSelect: (startDate, endDate) => {
+                console.log('✅ Даты выбраны:', { startDate, endDate });
+
+                // Отображение выбранных дат
+                const display = document.getElementById('selectedDatesDisplay');
+                const content = document.getElementById('selectedDatesContent');
+
+                if (display && content) {
+                    const dates = datePicker.getSelectedDates();
+                    content.innerHTML = `
+                        <p><strong>Начало:</strong> ${dates.formatted.start}</p>
+                        ${dates.endDate ? `<p><strong>Окончание:</strong> ${dates.formatted.end}</p>` : ''}
+                        <p style="margin-top: 1rem; opacity: 0.7;">
+                            <code>${JSON.stringify({ startDate, endDate }, null, 2)}</code>
+                        </p>
+                    `;
+                    display.style.display = 'block';
+                }
+
+                // Сохранение в localStorage
+                localStorage.setItem('tripDates', JSON.stringify({ startDate, endDate }));
+
+                // Здесь можно отправить на сервер
+                // fetch('/api/save-dates', { ... });
+            }
+        });
+
+        // Восстановление из localStorage при загрузке
+        window.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('tripDates');
+            if (saved) {
+                const dates = JSON.parse(saved);
+                console.log('📦 Загружены сохраненные даты:', dates);
+                // При необходимости можно автоматически применить:
+                // datePicker.setDates(dates.startDate, dates.endDate);
+            }
+        });
+    </script>
+</body>
+</html>

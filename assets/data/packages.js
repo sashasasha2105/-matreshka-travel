@@ -283,3 +283,6 @@ const TRAVEL_PACKAGES = [
         ]
     }
 ];
+
+// Экспорт для глобального использования
+window.TRAVEL_PACKAGES = TRAVEL_PACKAGES;

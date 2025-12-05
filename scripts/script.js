@@ -1566,7 +1566,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log('🍎 Клик на пакет:', card.name);
                     // Вызываем существующую функцию показа деталей пакета
                     if (typeof showPackageModal === 'function') {
-                        showPackageModal(card);
+                        showPackageModal(card.id);
                     }
                 }
             });

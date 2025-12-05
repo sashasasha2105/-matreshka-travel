@@ -89,7 +89,7 @@ class AppleCardsCarousel {
           <div class="apple-card-description">${card.description}</div>
           <div class="apple-card-meta">
             <span>📍 ${card.cities.length} ${this.pluralize(card.cities.length, 'город', 'города', 'городов')}</span>
-            <span class="apple-card-price">${card.price}$</span>
+            <span class="apple-card-price">${card.price}₽</span>
           </div>
         </div>
       </div>

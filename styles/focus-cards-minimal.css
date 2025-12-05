@@ -1,0 +1,232 @@
+/**
+ * 🎨 MINIMAL FOCUS CARDS
+ * Стиль согласован с date picker - тёмный, минималистичный, без золота
+ * Единая дизайн-система с компонентом выбора дат
+ */
+
+/* ========================================
+   СЕКЦИЯ РЕГИОНОВ
+   ======================================== */
+.regions-section {
+  width: 100%;
+  padding: 2rem 1.5rem;
+  margin: 3rem 0;
+}
+
+/* ========================================
+   FOCUS CARDS GRID
+   ======================================== */
+.focus-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+@media (min-width: 640px) {
+  .focus-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .focus-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ========================================
+   КАРТОЧКА РЕГИОНА
+   ======================================== */
+.focus-card {
+  position: relative;
+  height: 20rem;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  cursor: pointer;
+
+  /* Стиль как у date picker button */
+  background: rgba(23, 23, 23, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+  .focus-card {
+    height: 24rem;
+  }
+}
+
+/* Hover state - аккуратный как у date picker */
+.focus-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow:
+    0 10px 40px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Focus эффект - blur для других карточек */
+.focus-card.blurred {
+  filter: blur(4px);
+  transform: scale(0.98);
+  opacity: 0.6;
+}
+
+/* ========================================
+   ИЗОБРАЖЕНИЕ
+   ======================================== */
+.focus-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  transition: transform 0.3s ease;
+}
+
+.focus-card:hover .focus-card-image {
+  transform: scale(1.05);
+}
+
+/* ========================================
+   OVERLAY - появляется при hover
+   ======================================== */
+.focus-card-overlay {
+  position: absolute;
+  inset: 0;
+
+  /* Градиент как у date picker popover */
+  background: linear-gradient(
+    to top,
+    rgba(15, 5, 32, 0.95) 0%,
+    rgba(15, 5, 32, 0.8) 40%,
+    rgba(15, 5, 32, 0.3) 70%,
+    transparent 100%
+  );
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem 1.5rem;
+
+  /* ВСЕГДА ВИДИМЫЙ для мобильного приложения */
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* ========================================
+   КОНТЕНТ КАРТОЧКИ
+   ======================================== */
+.focus-card-title {
+  /* Шрифт как у date picker */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 768px) {
+  .focus-card-title {
+    font-size: 1.75rem;
+  }
+}
+
+.focus-card-description {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.focus-card-meta {
+  display: flex;
+  gap: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.focus-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ========================================
+   LOADING STATE
+   ======================================== */
+.focus-card.loading {
+  background: linear-gradient(
+    90deg,
+    rgba(23, 23, 23, 0.5) 25%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(23, 23, 23, 0.5) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ========================================
+   АДАПТИВНОСТЬ
+   ======================================== */
+@media (max-width: 640px) {
+  .focus-card {
+    height: 18rem;
+  }
+
+  .focus-card-title {
+    font-size: 1.25rem;
+  }
+
+  .focus-card-description {
+    font-size: 0.85rem;
+  }
+
+  .focus-card-overlay {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+.focus-card:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.5);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .focus-card,
+  .focus-card-image,
+  .focus-card-overlay {
+    transition: none;
+    animation: none;
+  }
+}

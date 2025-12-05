@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minimal Focus Cards - Стиль Date Picker</title>
+
+    <!-- Шрифты как у date picker -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="styles/matreshka-optimized.css">
+    <link rel="stylesheet" href="styles/focus-cards-minimal.css">
+
+    <style>
+        body {
+            background: #0a0118;
+            min-height: 100vh;
+        }
+
+        .demo-header {
+            text-align: center;
+            padding: 3rem 2rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .demo-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .demo-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1rem;
+        }
+
+        .demo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(23, 23, 23, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0.25rem;
+        }
+
+        .info-box {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: rgba(23, 23, 23, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-box h3 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 1rem;
+        }
+
+        .info-box p {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .info-box li {
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: rgba(99, 102, 241, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1 class="demo-title">Minimal Focus Cards</h1>
+        <p class="demo-subtitle">Карточки регионов в стиле date picker - минимализм без золота</p>
+        <div>
+            <span class="demo-badge">🎯 Focus Effect</span>
+            <span class="demo-badge">🎨 Date Picker Style</span>
+            <span class="demo-badge">📱 Responsive</span>
+        </div>
+    </div>
+
+    <!-- Focus Cards Container -->
+    <section class="regions-section">
+        <div id="focusCardsContainer"></div>
+    </section>
+
+    <!-- Информация -->
+    <div class="info-box">
+        <h3>✨ Стиль согласован с date picker</h3>
+        <p>Карточки используют те же параметры дизайна, что и блок выбора дат:</p>
+        <ul>
+            <li><strong>Фон:</strong> rgba(23, 23, 23, 0.5) с backdrop-filter: blur(20px)</li>
+            <li><strong>Границы:</strong> 1px solid rgba(255, 255, 255, 0.1)</li>
+            <li><strong>Скругления:</strong> border-radius: 1.5rem</li>
+            <li><strong>Тени:</strong> 0 4px 20px rgba(0, 0, 0, 0.5)</li>
+            <li><strong>Hover:</strong> border-color: rgba(99, 102, 241, 0.4) с голубым свечением</li>
+            <li><strong>Шрифт:</strong> Inter, размеры и веса совпадают</li>
+            <li><strong>Focus эффект:</strong> при hover остальные карточки blur(4px) и scale(0.98)</li>
+        </ul>
+        <p style="margin-top: 1.5rem;">
+            <strong>Наведите курсор на карточку</strong> - остальные размоются и уменьшатся, создавая эффект фокусировки.
+        </p>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/data/regions.js"></script>
+    <script src="scripts/focus-cards-minimal.js"></script>
+
+    <script>
+        // Инициализация после загрузки DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎨 Инициализация Minimal Focus Cards...');
+
+            // Конвертируем данные регионов
+            const allRegions = window.convertRegionsToCards(window.RUSSIA_REGIONS_DATA);
+
+            console.log('📦 Загружено регионов:', allRegions.length);
+
+            // Берем первые 6 регионов для демо
+            const demoRegions = allRegions.slice(0, 6);
+
+            // Создаем компонент
+            const focusCards = new MinimalFocusCards({
+                containerId: 'focusCardsContainer',
+                cards: demoRegions,
+                onCardClick: (card, index) => {
+                    console.log('🎯 Клик на регион:', card.name);
+                    alert(`Вы выбрали: ${card.name}\n${card.description}`);
+
+                    // В реальном проекте здесь будет переход:
+                    // showRegionDetails(card.id);
+                }
+            });
+
+            // Делаем доступным глобально
+            window.focusCards = focusCards;
+
+            console.log('✅ Minimal Focus Cards инициализирован');
+        });
+    </script>
+</body>
+</html>

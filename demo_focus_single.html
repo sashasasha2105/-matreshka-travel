@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focus Cards - Один регион (Москва)</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0520;
+            color: white;
+            min-height: 100vh;
+            padding: 3rem 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #C9A961 0%, #F5F1E8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.125rem;
+        }
+
+        /* ========================================
+           FOCUS CARDS
+           ======================================== */
+        .focus-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            max-width: 80rem;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .focus-cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .focus-card {
+            position: relative;
+            border-radius: 0.75rem;
+            background: rgba(23, 23, 23, 0.9);
+            overflow: hidden;
+            height: 15rem;
+            transition: all 0.3s ease-out;
+            cursor: pointer;
+            border: 1px solid rgba(201, 169, 97, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (min-width: 768px) {
+            .focus-card {
+                height: 24rem;
+            }
+        }
+
+        .focus-card:hover {
+            border-color: rgba(201, 169, 97, 0.5);
+            box-shadow: 0 8px 40px rgba(201, 169, 97, 0.2);
+        }
+
+        .focus-card.blurred {
+            filter: blur(4px);
+            transform: scale(0.98);
+        }
+
+        .focus-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .focus-card-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 6, 18, 0.95) 0%, rgba(10, 6, 18, 0.7) 50%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 2rem 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .focus-card:hover .focus-card-overlay {
+            opacity: 1;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #C9A961 0%, #F5F1E8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .card-title {
+                font-size: 2rem;
+            }
+        }
+
+        .card-description {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .info-box {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(23, 23, 23, 0.5);
+            border: 1px solid rgba(201, 169, 97, 0.2);
+            border-radius: 1rem;
+        }
+
+        .info-box h3 {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+
+        .info-box p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Focus Cards Demo</h1>
+            <p class="subtitle">Один регион - Москва (показана 3 раза для демонстрации эффекта)</p>
+        </div>
+
+        <!-- Focus Cards Grid -->
+        <div class="focus-cards-grid" id="focusCardsGrid"></div>
+
+        <!-- Информация -->
+        <div class="info-box">
+            <h3>✨ Что происходит?</h3>
+            <p><strong>Наведите курсор</strong> на любую карточку:</p>
+            <p>• Появляется overlay с названием региона, описанием и метаданными</p>
+            <p>• Другие две карточки размываются (blur) и уменьшаются (scale 0.98)</p>
+            <p>• Плавные переходы создают эффект фокусировки внимания</p>
+            <p style="margin-top: 1rem;"><strong>Кликните</strong> на карточку - в консоли появится сообщение</p>
+        </div>
+    </div>
+
+    <script>
+        // 📦 ДАННЫЕ РЕГИОНА (МОСКВА)
+        const moscowRegion = {
+            id: 'moscow',
+            name: 'Москва',
+            description: 'Столица России, сердце нашей великой Родины',
+            image: 'assets/images/city_photos/Moscow.jpg',
+            population: '12.7 млн',
+            area: '2561 км²'
+        };
+
+        // 🎨 СОЗДАНИЕ КАРТОЧКИ
+        function createFocusCard(region, index) {
+            const card = document.createElement('div');
+            card.className = 'focus-card';
+            card.dataset.index = index;
+
+            card.innerHTML = `
+                <img
+                    src="${region.image}"
+                    alt="${region.name}"
+                    class="focus-card-image"
+                    loading="lazy"
+                />
+                <div class="focus-card-overlay">
+                    <div class="card-title">${region.name}</div>
+                    <div class="card-description">${region.description}</div>
+                    <div class="card-meta">
+                        <span>👥 ${region.population}</span>
+                        <span>📐 ${region.area}</span>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // ⚡ НАСТРОЙКА FOCUS ЭФФЕКТА
+        function setupFocusEffect() {
+            const cards = document.querySelectorAll('.focus-card');
+
+            cards.forEach((card, index) => {
+                // Hover - размытие других карточек
+                card.addEventListener('mouseenter', () => {
+                    cards.forEach((other, otherIndex) => {
+                        if (otherIndex !== index) {
+                            other.classList.add('blurred');
+                        }
+                    });
+                });
+
+                // Leave - убираем размытие
+                card.addEventListener('mouseleave', () => {
+                    cards.forEach(other => {
+                        other.classList.remove('blurred');
+                    });
+                });
+
+                // Click - логируем в консоль
+                card.addEventListener('click', () => {
+                    console.log('🎯 Клик на регион:', moscowRegion.name);
+                    // Здесь можно добавить переход на детальную страницу:
+                    // window.location.href = `region-details.html?id=${moscowRegion.id}`;
+                });
+            });
+        }
+
+        // 🚀 ИНИЦИАЛИЗАЦИЯ
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('focusCardsGrid');
+
+            // Добавляем карточку Москвы 3 раза для демо эффекта
+            for (let i = 0; i < 3; i++) {
+                const card = createFocusCard(moscowRegion, i);
+                grid.appendChild(card);
+            }
+
+            setupFocusEffect();
+
+            console.log('✅ Focus Cards Demo инициализирован');
+            console.log('📍 Регион:', moscowRegion.name);
+        });
+    </script>
+</body>
+</html>

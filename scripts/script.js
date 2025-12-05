@@ -710,9 +710,22 @@ function showRegionDetails(regionId) {
 
 // Функция загрузки достопримечательностей (скрытое описание с кнопкой раскрыть)
 function loadAttractions(attractions) {
+    console.log('🏛️ loadAttractions вызвана с:', attractions);
     const attractionsList = document.getElementById('attractionsList');
-    if (!attractionsList) return;
+    console.log('📍 attractionsList элемент:', attractionsList);
 
+    if (!attractionsList) {
+        console.error('❌ attractionsList не найден!');
+        return;
+    }
+
+    if (!attractions || attractions.length === 0) {
+        console.warn('⚠️ Нет достопримечательностей для отображения');
+        attractionsList.innerHTML = '<p style="color: rgba(255, 255, 255, 0.7); padding: 20px;">Достопримечательности не найдены</p>';
+        return;
+    }
+
+    console.log(`✅ Загружаем ${attractions.length} достопримечательностей`);
     attractionsList.innerHTML = '';
     attractions.forEach((attraction, index) => {
         const li = document.createElement('li');

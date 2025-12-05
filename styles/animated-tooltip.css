@@ -9,13 +9,13 @@
    ======================================== */
 .team-section {
   width: 100%;
-  padding: 4rem 1.5rem;
-  margin: 3rem 0;
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
 }
 
 .team-header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .team-title {
@@ -51,8 +51,8 @@
   justify-content: center;
   gap: 0;
   width: 100%;
-  margin-bottom: 2rem;
-  padding: 2rem 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
 }
 
 /* ========================================
@@ -71,11 +71,11 @@
 }
 
 .tooltip-avatar {
-  width: 60px;
-  height: 60px;
+  width: 180px;
+  height: 180px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid rgba(23, 23, 23, 0.8);
+  border: 4px solid rgba(23, 23, 23, 0.8);
   box-shadow:
     0 4px 20px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -92,7 +92,7 @@
 
 /* Overlapping effect */
 .tooltip-avatar-wrapper:not(:first-child) {
-  margin-left: -15px;
+  margin-left: -45px;
 }
 
 /* Captain badge */
@@ -182,13 +182,13 @@
    ======================================== */
 @media (max-width: 768px) {
   .tooltip-avatar {
-    width: 50px;
-    height: 50px;
-    border-width: 2px;
+    width: 120px;
+    height: 120px;
+    border-width: 3px;
   }
 
   .tooltip-avatar-wrapper:not(:first-child) {
-    margin-left: -12px;
+    margin-left: -30px;
   }
 
   .avatar-badge {
@@ -208,12 +208,13 @@
 
 @media (max-width: 480px) {
   .tooltip-avatar {
-    width: 45px;
-    height: 45px;
+    width: 90px;
+    height: 90px;
+    border-width: 3px;
   }
 
   .tooltip-avatar-wrapper:not(:first-child) {
-    margin-left: -10px;
+    margin-left: -22px;
   }
 
   .avatar-badge {

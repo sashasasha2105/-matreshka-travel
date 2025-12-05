@@ -1584,8 +1584,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 id: 1,
                 name: 'Егор Говоруха',
                 designation: 'Капитан команды',
-                image: 'assets/images/TeamPhotos/Говоруха Егор.png',
-                badge: '👑'
+                image: 'assets/images/TeamPhotos/Говоруха Егор.png'
             },
             {
                 id: 2,

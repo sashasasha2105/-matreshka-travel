@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apple Cards Carousel - Пакеты путешествий</title>
+
+    <!-- Шрифты -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Стили -->
+    <link rel="stylesheet" href="styles/apple-cards-carousel.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0118;
+            color: white;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .demo-header {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .demo-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-subtitle {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+        }
+
+        .demo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(23, 23, 23, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            margin: 0.25rem;
+        }
+
+        .info-section {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .info-box {
+            background: rgba(23, 23, 23, 0.5);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .info-box h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 1rem;
+        }
+
+        .info-box p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .info-box li {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: rgba(99, 102, 241, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1 class="demo-title">Apple Cards Carousel</h1>
+        <p class="demo-subtitle">Готовые пакеты путешествий в стиле Apple</p>
+        <div>
+            <span class="demo-badge">🍎 Apple Design</span>
+            <span class="demo-badge">🎯 Horizontal Scroll</span>
+            <span class="demo-badge">📱 Touch Support</span>
+        </div>
+    </div>
+
+    <!-- Apple Cards Carousel Container -->
+    <div id="appleCardsCarousel"></div>
+
+    <!-- Информация -->
+    <div class="info-section">
+        <div class="info-box">
+            <h3>✨ Особенности компонента</h3>
+            <p>Apple Cards Carousel вдохновлён дизайном Apple с горизонтальной прокруткой:</p>
+            <ul>
+                <li><strong>Горизонтальная прокрутка:</strong> карточки располагаются в один ряд</li>
+                <li><strong>Крупные изображения:</strong> высококачественные фото пакетов</li>
+                <li><strong>Плавная анимация:</strong> мягкие переходы при скролле</li>
+                <li><strong>Клик для деталей:</strong> нажатие открывает полную информацию</li>
+                <li><strong>Touch support:</strong> поддержка свайпов на мобильных</li>
+                <li><strong>Минималистичный стиль:</strong> согласован с date picker и focus cards</li>
+            </ul>
+            <p style="margin-top: 1.5rem;">
+                <strong>Попробуйте:</strong> Прокрутите карточки горизонтально или кликните для просмотра деталей.
+            </p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/data/packages.js"></script>
+    <script src="scripts/apple-cards-carousel.js"></script>
+
+    <script>
+        // Инициализация после загрузки DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🍎 Инициализация Apple Cards Carousel...');
+
+            if (!window.TRAVEL_PACKAGES) {
+                console.error('❌ TRAVEL_PACKAGES не найдены');
+                return;
+            }
+
+            console.log('📦 Загружено пакетов:', window.TRAVEL_PACKAGES.length);
+
+            // Создаём карусель
+            const carousel = new AppleCardsCarousel({
+                containerId: 'appleCardsCarousel',
+                title: 'Готовые пакеты путешествий',
+                cards: window.TRAVEL_PACKAGES,
+                onCardClick: (card) => {
+                    console.log('🎯 Клик на пакет:', card.name);
+                    alert(`Вы выбрали: ${card.name}\n${card.description}\n\nДлительность: ${card.duration}\nЦена: ${card.price}$`);
+                }
+            });
+
+            window.appleCarousel = carousel;
+
+            console.log('✅ Apple Cards Carousel инициализирован');
+        });
+    </script>
+</body>
+</html>

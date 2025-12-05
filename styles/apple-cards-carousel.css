@@ -1,0 +1,335 @@
+/**
+ * 🍎 APPLE CARDS CAROUSEL
+ * Горизонтальная карусель в стиле Apple для пакетов путешествий
+ * Согласовано с минималистичным дизайном date picker и focus cards
+ */
+
+/* ========================================
+   СЕКЦИЯ КАРУСЕЛИ
+   ======================================== */
+.apple-carousel-section {
+  width: 100%;
+  padding: 4rem 0;
+  overflow: hidden;
+}
+
+.apple-carousel-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* ========================================
+   ЗАГОЛОВОК
+   ======================================== */
+.apple-carousel-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 3rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+
+  /* Минималистичный белый градиент */
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  /* Деликатное свечение */
+  text-shadow: 0 0 40px rgba(224, 231, 255, 0.1);
+}
+
+/* ========================================
+   КАРУСЕЛЬ - ГОРИЗОНТАЛЬНАЯ ПРОКРУТКА
+   ======================================== */
+.apple-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.apple-carousel-track {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 1rem 0 2rem;
+
+  /* Скрываем скроллбар на WebKit */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.apple-carousel-track::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* ========================================
+   КАРТОЧКА ПАКЕТА
+   ======================================== */
+.apple-card {
+  position: relative;
+  flex: 0 0 auto;
+  width: 320px;
+  height: 400px;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  cursor: pointer;
+
+  /* Стиль как у date picker */
+  background: rgba(23, 23, 23, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (min-width: 768px) {
+  .apple-card {
+    width: 380px;
+    height: 480px;
+  }
+}
+
+/* Hover state */
+.apple-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow:
+    0 20px 60px rgba(99, 102, 241, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* ========================================
+   ИЗОБРАЖЕНИЕ
+   ======================================== */
+.apple-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s ease;
+}
+
+.apple-card:hover .apple-card-image {
+  transform: scale(1.1);
+}
+
+/* ========================================
+   OVERLAY - всегда видимый для мобильного
+   ======================================== */
+.apple-card-overlay {
+  position: absolute;
+  inset: 0;
+
+  /* Градиент снизу вверх */
+  background: linear-gradient(
+    to top,
+    rgba(10, 1, 24, 0.98) 0%,
+    rgba(10, 1, 24, 0.85) 40%,
+    rgba(10, 1, 24, 0.4) 70%,
+    transparent 100%
+  );
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.75rem 1.5rem;
+
+  /* ВСЕГДА ВИДИМЫЙ для мобильного */
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* ========================================
+   КОНТЕНТ КАРТОЧКИ
+   ======================================== */
+.apple-card-category {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(99, 102, 241, 0.9);
+  margin-bottom: 0.5rem;
+}
+
+.apple-card-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .apple-card-title {
+    font-size: 1.75rem;
+  }
+}
+
+.apple-card-description {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+
+  /* Ограничиваем количество строк */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.apple-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.apple-card-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.apple-card-price {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 1.25rem;
+}
+
+/* ========================================
+   КНОПКИ НАВИГАЦИИ (опционально)
+   ======================================== */
+.apple-carousel-nav {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: rgba(23, 23, 23, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+@media (min-width: 768px) {
+  .apple-carousel-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.apple-carousel-nav:hover {
+  background: rgba(23, 23, 23, 0.95);
+  border-color: rgba(99, 102, 241, 0.4);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+}
+
+.apple-carousel-nav-prev {
+  left: -1.5rem;
+}
+
+.apple-carousel-nav-next {
+  right: -1.5rem;
+}
+
+/* ========================================
+   ИНДИКАТОРЫ ПРОКРУТКИ
+   ======================================== */
+.apple-carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.apple-carousel-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.apple-carousel-dot.active {
+  background: rgba(99, 102, 241, 0.8);
+  width: 24px;
+  border-radius: 4px;
+}
+
+.apple-carousel-dot:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* ========================================
+   АДАПТИВНОСТЬ
+   ======================================== */
+@media (max-width: 640px) {
+  .apple-carousel-section {
+    padding: 2rem 0;
+  }
+
+  .apple-carousel-title {
+    margin-bottom: 2rem;
+  }
+
+  .apple-card {
+    width: 280px;
+    height: 360px;
+  }
+
+  .apple-card-title {
+    font-size: 1.25rem;
+  }
+
+  .apple-card-description {
+    font-size: 0.8rem;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+   ======================================== */
+.apple-card:focus-visible {
+  outline: 2px solid rgba(99, 102, 241, 0.5);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .apple-card,
+  .apple-card-image,
+  .apple-card-overlay,
+  .apple-carousel-track {
+    transition: none;
+    animation: none;
+  }
+}

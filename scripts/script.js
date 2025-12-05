@@ -759,7 +759,7 @@ function toggleAttractionDescription(elementId, button) {
     }
 }
 
-// Функция загрузки партнеров с QR-кодами (Card Stack)
+// Функция загрузки партнеров - ВСЕ партнеры с новым минималистичным дизайном
 function loadPartners(partners) {
     const partnersGrid = document.getElementById('partnersGrid');
     if (!partnersGrid) return;
@@ -773,41 +773,70 @@ function loadPartners(partners) {
     const currentRegionId = getCurrentRegionId();
     const isPaid = isRegionPaid(currentRegionId);
 
-    // Преобразуем партнёров в формат Card Stack
-    const cardStackItems = partners.map((partner, index) => {
+    // Отображаем ВСЕ карточки партнёров с новым дизайном
+    partners.forEach((partner, index) => {
+        const card = document.createElement('div');
+        card.className = 'partner-card-minimal';
+
         // Формируем контент с highlight
         const descriptionWithHighlight = partner.description
-            ? partner.description.replace(/(лучш\w+|авторск\w+|домашн\w+|качественн\w+|уютн\w+|аутентичн\w+)/gi,
+            ? partner.description.replace(/(лучш\w+|авторск\w+|домашн\w+|качественн\w+|уютн\w+|аутентичн\w+|популярн\w+)/gi,
                 '<span class="card-highlight">$1</span>')
             : partner.type;
 
-        return {
-            id: index + 1,
-            name: partner.name,
-            designation: partner.type,
-            emoji: partner.emoji || '🏪',
-            rating: partner.rating,
-            content: descriptionWithHighlight,
-            offer: partner.specialOffer || null
-        };
-    });
+        // Создаем кнопку QR для каждого партнера
+        const qrButtonHTML = isPaid
+            ? `<button class="partner-qr-btn-minimal" onclick='showPartnerQRByName("${partner.name.replace(/'/g, "\\'")}","${partner.emoji}")'>
+                   <span class="qr-btn-icon">📱</span>
+                   <span class="qr-btn-text">Показать QR</span>
+               </button>`
+            : `<button class="partner-qr-btn-minimal disabled" disabled title="Оплатите доступ для получения QR-кода">
+                   <span class="qr-btn-icon">🔒</span>
+                   <span class="qr-btn-text">Показать QR</span>
+               </button>`;
 
-    // Создаём контейнер для Card Stack
-    const cardStackContainer = document.createElement('div');
-    cardStackContainer.id = 'partnersCardStack';
-    partnersGrid.appendChild(cardStackContainer);
+        card.innerHTML = `
+            <div class="card-header">
+                <div class="card-emoji">${partner.emoji || '🏪'}</div>
+                <div class="card-info">
+                    <div class="card-name">${partner.name}</div>
+                    <div class="card-designation">${partner.type}</div>
+                    ${partner.rating ? `<div class="card-rating">⭐ ${partner.rating}</div>` : ''}
+                </div>
+            </div>
+            <div class="card-content">${descriptionWithHighlight}</div>
+            ${partner.specialOffer ? `
+                <div class="card-offer">
+                    <div class="card-offer-icon">🎁</div>
+                    <div class="card-offer-text">${partner.specialOffer}</div>
+                </div>
+            ` : ''}
+            <div class="card-actions">
+                <button class="partner-route-btn-minimal" data-partner-index="${index}">
+                    <span class="route-icon">🗺️</span>
+                    <span class="route-text">Маршрут и инфо</span>
+                </button>
+                ${qrButtonHTML}
+            </div>
+        `;
 
-    // Инициализируем Card Stack
-    if (typeof CardStack !== 'undefined') {
-        const cardStack = new CardStack({
-            containerId: 'partnersCardStack',
-            items: cardStackItems,
-            autoRotate: false
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        partnersGrid.appendChild(card);
+
+        // Добавляем обработчик для кнопки маршрута
+        const routeBtn = card.querySelector('.partner-route-btn-minimal');
+        routeBtn.addEventListener('click', () => {
+            openPartnerRoute(partner);
         });
-        window.partnersCardStack = cardStack;
-    } else {
-        console.error('❌ CardStack не загружен');
-    }
+
+        // Анимация появления
+        setTimeout(() => {
+            card.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 80);
+    });
 
     // Добавляем кнопки оплаты внизу только если еще не оплачено
     if (!isPaid) {

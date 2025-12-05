@@ -211,7 +211,7 @@ function getFilteredRegions() {
     });
 }
 
-// 🎯 НОВАЯ ФУНКЦИЯ ЗАГРУЗКИ РЕГИОНОВ - использует MinimalFocusCards
+// 🎯 НОВАЯ ФУНКЦИЯ ЗАГРУЗКИ РЕГИОНОВ - использует MinimalFocusCards + пагинация
 function loadRegions() {
     console.log('🔄 Вызвана loadRegions() - MinimalFocusCards');
     const regionsGrid = document.getElementById('regionsGrid');
@@ -258,8 +258,9 @@ function loadRegions() {
         emoji: region.emoji
     }));
 
-    // Берём первые 6 регионов для отображения
-    const regionsToShow = allRegions.slice(0, 6);
+    // Рассчитываем сколько регионов показать с учётом пагинации
+    const displayCount = (currentPage + 1) * REGIONS_PER_PAGE;
+    const regionsToShow = allRegions.slice(0, displayCount);
 
     // Если компонент уже существует, обновляем карточки
     if (window.minimalFocusCards) {
@@ -280,6 +281,9 @@ function loadRegions() {
     }
 
     console.log('✅ Загружено регионов:', regionsToShow.length);
+
+    // Обновляем кнопку "Показать больше"
+    updateLoadMoreButton();
 
     // Загружаем ленту путешествий после первой загрузки
     if (currentPage === 0) {

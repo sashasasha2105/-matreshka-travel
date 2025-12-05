@@ -849,12 +849,20 @@ function loadPartners(partners) {
                 <span class="pay-btn-text">Оплатить пакет региона</span>
                 <span class="pay-btn-price">300 ₽</span>
             </button>
-            <button class="partners-demo-btn" onclick="demoPurchase()">
+            <button class="partners-demo-btn" id="demoPurchaseBtn">
                 <span class="demo-btn-icon">✨</span>
                 <span class="demo-btn-text">Демо-покупка</span>
             </button>
         `;
         partnersGrid.appendChild(buttonsContainer);
+
+        // Добавляем обработчик для кнопки демо-покупки с stateful эффектом
+        setTimeout(() => {
+            const demoBtn = document.getElementById('demoPurchaseBtn');
+            if (demoBtn) {
+                demoBtn.addEventListener('click', handleDemoPurchaseStateful);
+            }
+        }, 0);
     }
 }
 
@@ -1388,6 +1396,80 @@ function processPayment(event) {
         document.body.style.position = 'static';
         document.documentElement.style.overflow = 'auto';
     }, 2000);
+}
+
+// Демо-покупка со stateful эффектом
+async function handleDemoPurchaseStateful(event) {
+    const btn = event.currentTarget;
+    const textSpan = btn.querySelector('.demo-btn-text');
+    const iconSpan = btn.querySelector('.demo-btn-icon');
+
+    if (btn.disabled) return;
+
+    // Сохраняем оригинальный текст
+    const originalText = textSpan.textContent;
+    const originalIcon = iconSpan.textContent;
+
+    // Переключаем в состояние загрузки
+    btn.disabled = true;
+    btn.classList.add('loading');
+    iconSpan.textContent = '⏳';
+    textSpan.textContent = 'Обработка...';
+
+    try {
+        // Имитация API запроса (4 секунды как в примере)
+        await new Promise(resolve => setTimeout(resolve, 4000));
+
+        // Успешная покупка
+        btn.classList.remove('loading');
+        btn.classList.add('success');
+        iconSpan.textContent = '✅';
+        textSpan.textContent = 'Оплачено!';
+
+        // Показываем уведомление
+        showToast('✅ Оплата прошла успешно! (Демо)', 3000);
+
+        // Выполняем логику покупки
+        const currentRegionId = getCurrentRegionId();
+        const regionData = window.RUSSIA_REGIONS_DATA?.[currentRegionId];
+
+        // Отмечаем регион как оплаченный
+        markRegionAsPaid(currentRegionId);
+
+        // Перезагружаем партнеров для обновления кнопок
+        if (regionData && regionData.partners) {
+            setTimeout(() => {
+                loadPartners(regionData.partners);
+            }, 2000);
+        }
+
+        // Обновляем корзину
+        if (window.matryoshkaCart) {
+            window.matryoshkaCart.refresh();
+        }
+
+        // Обновляем профиль
+        if (window.matryoshkaProfile && window.matryoshkaProfile.updateCoupons) {
+            window.matryoshkaProfile.updateCoupons();
+        }
+
+    } catch (error) {
+        // Ошибка покупки
+        btn.classList.remove('loading');
+        btn.classList.add('error');
+        iconSpan.textContent = '❌';
+        textSpan.textContent = 'Ошибка';
+
+        showToast('❌ Ошибка оплаты. Попробуйте позже.', 3000);
+
+        // Возвращаем в исходное состояние
+        setTimeout(() => {
+            btn.classList.remove('error');
+            btn.disabled = false;
+            iconSpan.textContent = originalIcon;
+            textSpan.textContent = originalText;
+        }, 3000);
+    }
 }
 
 // Демо-покупка (мгновенная)

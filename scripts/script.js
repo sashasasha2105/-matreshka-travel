@@ -1553,9 +1553,28 @@ document.addEventListener('DOMContentLoaded', function() {
     // Загружаем регионы
     loadRegions();
 
-    // Загружаем пакеты путешествий
+    // 🍎 ИНИЦИАЛИЗАЦИЯ APPLE CARDS CAROUSEL для пакетов
     setTimeout(() => {
-        loadTravelPackages();
+        if (window.TRAVEL_PACKAGES && window.AppleCardsCarousel) {
+            const packagesCarousel = new AppleCardsCarousel({
+                containerId: 'applePackagesCarousel',
+                title: 'Готовые пакеты путешествий',
+                cards: window.TRAVEL_PACKAGES,
+                showNavButtons: true,
+                showDots: false,
+                onCardClick: (card) => {
+                    console.log('🍎 Клик на пакет:', card.name);
+                    // Вызываем существующую функцию показа деталей пакета
+                    if (typeof showPackageModal === 'function') {
+                        showPackageModal(card);
+                    }
+                }
+            });
+            window.applePackagesCarousel = packagesCarousel;
+            console.log('✅ Apple Cards Carousel инициализирован с', window.TRAVEL_PACKAGES.length, 'пакетами');
+        } else {
+            console.error('❌ TRAVEL_PACKAGES или AppleCardsCarousel не найдены');
+        }
     }, 1000);
 
     // 🔥 УДАЛЕНО: Лента путешествий больше не загружается на главную страницу

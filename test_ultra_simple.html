@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ultra Simple Test</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #111; color: #fff; padding: 2rem; font-family: monospace; }
+        .log { margin: 0.5rem 0; padding: 0.5rem; background: #222; }
+        .error { background: #500; }
+        .success { background: #050; }
+    </style>
+</head>
+<body>
+    <h1>Ultra Simple Test</h1>
+    <div id="logs"></div>
+    <div id="test" style="margin-top: 2rem;"></div>
+
+    <!-- БЕЗ DEFER - синхронная загрузка -->
+    <script src="scripts/utils/animations.js"></script>
+    <script>
+        console.log('1. animations.js loaded');
+        addLog('✅ animations.js loaded', false);
+        addLog('typeof motion: ' + typeof motion, typeof motion === 'undefined');
+    </script>
+
+    <script src="scripts/utils/aceternity-adapter.js"></script>
+    <script>
+        console.log('2. aceternity-adapter.js loaded');
+        addLog('✅ aceternity-adapter.js loaded', false);
+        addLog('typeof AceternityComponent: ' + typeof AceternityComponent, typeof AceternityComponent === 'undefined');
+        addLog('typeof cn: ' + typeof cn, typeof cn === 'undefined');
+    </script>
+
+    <script src="components/aceternity/shimmer-button.js"></script>
+    <script>
+        console.log('3. shimmer-button.js loaded');
+        addLog('✅ shimmer-button.js loaded', false);
+        addLog('typeof ShimmerButton: ' + typeof ShimmerButton, typeof ShimmerButton === 'undefined');
+
+        // Пробуем создать
+        try {
+            const btn = new ShimmerButton('test', {
+                text: 'TEST BUTTON',
+                onClick: () => alert('WORKS!')
+            });
+            addLog('✅✅✅ ShimmerButton СОЗДАН УСПЕШНО!', false);
+        } catch(e) {
+            addLog('❌❌❌ ОШИБКА: ' + e.message, true);
+            console.error(e);
+        }
+    </script>
+
+    <script>
+        function addLog(msg, isError) {
+            const div = document.createElement('div');
+            div.className = 'log ' + (isError ? 'error' : 'success');
+            div.textContent = msg;
+            document.getElementById('logs').appendChild(div);
+        }
+    </script>
+</body>
+</html>

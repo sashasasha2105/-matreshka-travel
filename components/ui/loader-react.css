@@ -1,0 +1,113 @@
+/* ========================================
+   LOADER THREE - React Component Styles
+   Минимальные стили для React компонента
+   ======================================== */
+
+/* Контейнер React компонента */
+.loader-three-react-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 16rem; /* 256px */
+}
+
+/* SVG с bounce анимацией */
+.loader-three-react-svg {
+    animation: reactLoaderBounce 1s infinite;
+    filter: drop-shadow(0 4px 8px rgba(255, 165, 0, 0.3));
+}
+
+/* Bounce анимация (Tailwind-style) */
+@keyframes reactLoaderBounce {
+    0%, 100% {
+        transform: translateY(-25%);
+        animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+    }
+    50% {
+        transform: translateY(0);
+        animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+    }
+}
+
+/* Demo обертка */
+.loader-three-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.loader-three-demo-text {
+    margin-top: 2rem;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    animation: reactLoaderTextPulse 2s ease-in-out infinite;
+    text-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+}
+
+/* Пульсация текста */
+@keyframes reactLoaderTextPulse {
+    0%, 100% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Fullscreen overlay для использования как модальный лоадер */
+.loader-three-fullscreen {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 1, 24, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.loader-three-fullscreen.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .loader-three-react-svg {
+        width: 36px;
+        height: 36px;
+    }
+
+    .loader-three-react-container {
+        height: 12rem;
+    }
+
+    .loader-three-demo-text {
+        font-size: 0.9rem;
+        margin-top: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .loader-three-react-svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .loader-three-react-container {
+        height: 10rem;
+    }
+
+    .loader-three-demo-text {
+        font-size: 0.85rem;
+        margin-top: 1.25rem;
+    }
+}

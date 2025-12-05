@@ -1,0 +1,223 @@
+/* ================================
+   🎨 ACETERNITY-STYLE SEARCH COMPONENT
+   Красивый поиск в стиле Aceternity UI
+   без React - чистый CSS + JS
+   ================================ */
+
+.aceternity-search-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 42rem; /* 672px */
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.aceternity-search-form {
+    position: relative;
+    width: 100%;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Основной input с эффектом glass */
+.aceternity-search-input {
+    width: 100%;
+    padding: 0.875rem 6rem 0.875rem 1.5rem;
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.75rem;
+    color: #1a1a1a;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid rgba(148, 163, 184, 0.3);
+    border-radius: 2rem;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Glass morphism эффект */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    /* Тени как в Aceternity */
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 2px 4px -1px rgba(0, 0, 0, 0.03),
+        inset 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Dark theme support */
+@media (prefers-color-scheme: dark) {
+    .aceternity-search-input {
+        color: #f1f5f9;
+        background: rgba(15, 23, 42, 0.75);
+        border-color: rgba(148, 163, 184, 0.15);
+        box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.2),
+            0 2px 4px -1px rgba(0, 0, 0, 0.1),
+            inset 0 1px 2px rgba(255, 255, 255, 0.03);
+    }
+}
+
+.aceternity-search-input::placeholder {
+    color: rgba(148, 163, 184, 0.6);
+    transition: opacity 0.3s ease;
+}
+
+.aceternity-search-input:focus {
+    border-color: rgba(59, 130, 246, 0.5);
+    transform: scale(1.01);
+    box-shadow:
+        0 10px 15px -3px rgba(59, 130, 246, 0.1),
+        0 4px 6px -2px rgba(59, 130, 246, 0.05),
+        0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Анимация placeholder typing */
+@keyframes typing {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+.aceternity-search-input.typing::placeholder {
+    animation: typing 2s ease-in-out infinite;
+}
+
+/* Кнопка поиска */
+.aceternity-search-button {
+    position: absolute;
+    right: 0.375rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.5rem 1.25rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border: none;
+    border-radius: 1.5rem;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 6px -1px rgba(59, 130, 246, 0.3),
+        0 2px 4px -1px rgba(59, 130, 246, 0.2);
+}
+
+.aceternity-search-button:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: translateY(-50%) translateY(-1px);
+    box-shadow:
+        0 10px 15px -3px rgba(59, 130, 246, 0.4),
+        0 4px 6px -2px rgba(59, 130, 246, 0.3);
+}
+
+.aceternity-search-button:active {
+    transform: translateY(-50%) scale(0.95);
+}
+
+/* ================================
+   🎬 VANISH ANIMATION
+   Эффект исчезновения при сабмите
+   ================================ */
+
+@keyframes vanish {
+    0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.98) translateY(-4px);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.95) translateY(-8px);
+        filter: blur(4px);
+    }
+}
+
+@keyframes vanishReverse {
+    0% {
+        opacity: 0;
+        transform: scale(0.95) translateY(-8px);
+        filter: blur(4px);
+    }
+    50% {
+        opacity: 0.5;
+        transform: scale(0.98) translateY(-4px);
+        filter: blur(2px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+    }
+}
+
+.aceternity-search-form.vanishing {
+    animation: vanish 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    pointer-events: none;
+}
+
+.aceternity-search-form.appearing {
+    animation: vanishReverse 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ================================
+   ✨ FOCUS GLOW EFFECT
+   Свечение при фокусе
+   ================================ */
+
+.aceternity-search-input:focus::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    border-radius: 2rem;
+    opacity: 0.15;
+    filter: blur(8px);
+    z-index: -1;
+}
+
+/* ================================
+   📱 RESPONSIVE DESIGN
+   ================================ */
+
+@media (max-width: 768px) {
+    .aceternity-search-input {
+        padding: 0.75rem 5rem 0.75rem 1.25rem;
+        font-size: 1rem;
+    }
+
+    .aceternity-search-button {
+        padding: 0.375rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .aceternity-search-input {
+        padding: 0.625rem 4.5rem 0.625rem 1rem;
+        font-size: 0.9375rem;
+    }
+
+    .aceternity-search-button {
+        padding: 0.375rem 0.875rem;
+        font-size: 0.8125rem;
+    }
+}
+
+/* ================================
+   🎯 SUCCESS STATE
+   Состояние после успешного поиска
+   ================================ */
+
+.aceternity-search-form.success .aceternity-search-input {
+    border-color: rgba(34, 197, 94, 0.5);
+    box-shadow:
+        0 10px 15px -3px rgba(34, 197, 94, 0.1),
+        0 4px 6px -2px rgba(34, 197, 94, 0.05),
+        0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.aceternity-search-form.success .aceternity-search-button {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+}

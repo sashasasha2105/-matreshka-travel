@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Marquee Demo - Aceternity UI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800;900&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #0a0a0a;
+            min-height: 100vh;
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .marquee-container {
+            perspective: 2000px;
+            overflow: hidden;
+            position: relative;
+            height: 600px;
+            border-radius: 1.5rem;
+        }
+
+        .marquee-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .marquee-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            will-change: transform;
+        }
+
+        /* Вертикальная анимация для каждой колонки с разной скоростью */
+        .marquee-column:nth-child(1) {
+            animation: marqueeUp 60s linear infinite;
+        }
+
+        .marquee-column:nth-child(2) {
+            animation: marqueeDown 70s linear infinite;
+        }
+
+        .marquee-column:nth-child(3) {
+            animation: marqueeUp 65s linear infinite;
+        }
+
+        .marquee-column:nth-child(4) {
+            animation: marqueeDown 75s linear infinite;
+        }
+
+        @keyframes marqueeUp {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+
+        @keyframes marqueeDown {
+            0% {
+                transform: translateY(-50%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .marquee-item {
+            position: relative;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            flex-shrink: 0;
+        }
+
+        .marquee-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            border-radius: 0.75rem;
+        }
+
+        .marquee-item:hover {
+            transform: scale(1.05) translateZ(20px);
+            box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        /* Градиентные оверлеи сверху и снизу для плавного исчезновения */
+        .marquee-container::before,
+        .marquee-container::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 100px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .marquee-container::before {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0) 100%);
+        }
+
+        .marquee-container::after {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0) 100%);
+        }
+
+        .title {
+            background: linear-gradient(to right, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .description {
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            font-size: 1.125rem;
+        }
+
+        /* Контейнер с обводкой как в оригинале */
+        .demo-wrapper {
+            background: rgba(23, 23, 23, 0.3);
+            border-radius: 1.5rem;
+            padding: 0.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Надпись поверх marquee */
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .overlay-title {
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 900;
+            font-size: 5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, #c7d2fe 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 80px rgba(255, 255, 255, 0.3);
+            margin-bottom: 0.5rem;
+            animation: titleGlow 3s ease-in-out infinite;
+            letter-spacing: -0.02em;
+        }
+
+        .overlay-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes titleGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(255, 255, 255, 0.5));
+            }
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .overlay-title {
+                font-size: 3rem;
+            }
+            .overlay-subtitle {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto max-w-7xl">
+        <h1 class="title">3D Marquee</h1>
+        <p class="description">
+            A 3D Marquee effect with grid, good for showcasing testimonials and hero sections
+        </p>
+
+        <div class="demo-wrapper">
+            <div class="marquee-container">
+                <!-- Надпись поверх -->
+                <div class="overlay-text">
+                    <h2 class="overlay-title">Матрешка</h2>
+                    <p class="overlay-subtitle">Уникальные предложения</p>
+                </div>
+
+                <div class="marquee-grid" id="marqueeGrid">
+                    <!-- Columns will be generated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-8">
+            <a href="https://ui.aceternity.com/components/3d-marquee"
+               target="_blank"
+               class="inline-block px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-lg font-semibold hover:shadow-lg hover:shadow-indigo-500/50 transition-all">
+                View Original Component
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Фотографии регионов России
+        const regionImages = [
+            "assets/images/city_photos/Moscow.jpg",
+            "assets/images/city_photos/Piter.png",
+            "assets/images/city_photos/kazan.jpg",
+            "assets/images/city_photos/sochi.jpg",
+            "assets/images/city_photos/Ecater.jpg",
+            "assets/images/city_photos/GOLDRING.jpg",
+            "assets/images/city_photos/кавказ.jpg",
+            "assets/images/city_photos/Волгоградская республика.jpg",
+            "assets/images/city_photos/байкал.jpg",
+            "assets/images/city_photos/екб.jpg",
+            "assets/images/city_photos/Иркутская область.jpg",
+            "assets/images/city_photos/Калининград.jpg",
+            "assets/images/city_photos/Костромская область.jpg",
+            "assets/images/city_photos/Краснодар.jpg",
+            "assets/images/city_photos/Нижегородская область.jpg",
+            "assets/images/city_photos/Челябинская область.jpg",
+            "assets/images/city_photos/Ярославская область.jpg",
+            "assets/images/city_photos/Дагестан.jpeg",
+            "assets/images/city_photos/Чечня.jpg",
+            "assets/images/city_photos/ингушетия.jpg",
+            "assets/images/city_photos/кострома.jpg",
+            "assets/images/city_photos/нижний новгород.jpg",
+            "assets/images/city_photos/ставрополь.jpg",
+            "assets/images/city_photos/челябинск.jpg",
+            "assets/images/city_photos/ярославль.jpg",
+            "assets/images/city_photos/Кабардино-Балкария.jpg",
+        ];
+
+        // Партнеры с акциями и скидками (культурные заведения и достопримечательности)
+        const partners = [
+            { emoji: '🎭', name: 'Большой театр', type: 'Театр', discount: '30%', offer: 'Билеты со скидкой' },
+            { emoji: '🏛️', name: 'Эрмитаж', type: 'Музей', discount: '25%', offer: 'Экскурсия бесплатно' },
+            { emoji: '🌊', name: 'Петергоф', type: 'Парк-музей', discount: '20%', offer: 'Фонтаны + парк' },
+            { emoji: '🎪', name: 'Цирк на Цветном', type: 'Развлечения', discount: '20%', offer: 'Детский билет -50%' },
+            { emoji: '🏰', name: 'Кремль', type: 'Исторический памятник', discount: '15%', offer: 'Аудиогид в подарок' },
+            { emoji: '🎨', name: 'Третьяковская галерея', type: 'Галерея', discount: '20%', offer: 'Мастер-класс бесплатно' },
+            { emoji: '🎼', name: 'Мариинский театр', type: 'Оперный театр', discount: '25%', offer: 'Экскурсия за кулисы' },
+            { emoji: '🕌', name: 'Казанский кремль', type: 'Музей-заповедник', discount: '18%', offer: 'Экскурсия в подарок' },
+            { emoji: '⛪', name: 'Храм Спаса на Крови', type: 'Собор-музей', discount: '15%', offer: 'Аудиогид включен' },
+            { emoji: '🌿', name: 'Санаторий Кавказ', type: 'Оздоровление', discount: '15%', offer: 'SPA в подарок' },
+            { emoji: '🏨', name: 'Отель Метрополь', type: 'Гостиница', discount: '25%', offer: 'Завтрак бесплатно' },
+            { emoji: '🚗', name: 'Прокат авто', type: 'Аренда', discount: '15%', offer: 'День в подарок' },
+            { emoji: '🎿', name: 'Роза Хутор', type: 'Горнолыжный курорт', discount: '30%', offer: 'Скипасс +1 день' },
+            { emoji: '🏖️', name: 'Пляжный клуб', type: 'Отдых в Сочи', discount: '20%', offer: 'Шезлонг бесплатно' },
+            { emoji: '🏺', name: 'Русский музей', type: 'Музей', discount: '22%', offer: 'Семейный билет -30%' },
+            { emoji: '🎻', name: 'Филармония', type: 'Концертный зал', discount: '20%', offer: 'Балкон бесплатно' },
+            { emoji: '🏯', name: 'Новодевичий монастырь', type: 'Музей-заповедник', discount: '18%', offer: 'Экскурсия включена' },
+            { emoji: '🗿', name: 'Царское Село', type: 'Дворец-музей', discount: '25%', offer: 'Янтарная комната' },
+            { emoji: '🎬', name: 'Мосфильм', type: 'Киностудия-музей', discount: '20%', offer: 'Экскурсия по павильонам' },
+            { emoji: '🌌', name: 'Планетарий', type: 'Научно-просветительский', discount: '15%', offer: 'Сеанс в подарок' },
+        ];
+
+        // Функция создания SVG карточки партнера
+        function createPartnerCard(partner) {
+            const svg = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+                    <defs>
+                        <linearGradient id="grad-${partner.name}" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:rgb(99,102,241);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgb(192,132,252);stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="400" height="300" fill="url(#grad-${partner.name})" rx="16"/>
+                    <rect x="10" y="10" width="380" height="280" fill="rgba(255,255,255,0.1)" rx="12" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+
+                    <text x="200" y="80" font-size="60" text-anchor="middle" fill="white">${partner.emoji}</text>
+
+                    <text x="200" y="130" font-size="24" font-weight="bold" text-anchor="middle" fill="white" font-family="Arial, sans-serif">${partner.name}</text>
+                    <text x="200" y="155" font-size="14" text-anchor="middle" fill="rgba(255,255,255,0.8)" font-family="Arial, sans-serif">${partner.type}</text>
+
+                    <rect x="120" y="175" width="160" height="40" fill="rgba(255,255,255,0.2)" rx="20"/>
+                    <text x="200" y="200" font-size="22" font-weight="bold" text-anchor="middle" fill="white" font-family="Arial, sans-serif">СКИДКА ${partner.discount}</text>
+
+                    <text x="200" y="240" font-size="14" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="Arial, sans-serif">${partner.offer}</text>
+
+                    <circle cx="40" cy="260" r="8" fill="rgba(255,255,255,0.5)"/>
+                    <circle cx="60" cy="260" r="8" fill="rgba(255,255,255,0.5)"/>
+                    <circle cx="80" cy="260" r="8" fill="rgba(255,255,255,0.5)"/>
+                </svg>
+            `;
+            return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+        }
+
+        // Создаем массив изображений партнеров
+        const partnerImages = partners.map(createPartnerCard);
+
+        // Смешиваем фото регионов и карточки партнеров
+        const images = [];
+        const totalImages = 80; // Увеличили количество карточек
+
+        for (let i = 0; i < totalImages; i++) {
+            if (i % 3 === 0) {
+                // Каждый третий - партнер
+                images.push(partnerImages[i % partnerImages.length]);
+            } else {
+                // Остальные - регионы
+                images.push(regionImages[i % regionImages.length]);
+            }
+        }
+
+        function initMarquee() {
+            const grid = document.getElementById('marqueeGrid');
+            const numColumns = 4;
+            const imagesPerColumn = Math.ceil(images.length / numColumns);
+
+            for (let col = 0; col < numColumns; col++) {
+                const column = document.createElement('div');
+                column.className = 'marquee-column';
+
+                // Получаем изображения для этой колонки
+                const columnImages = images.slice(col * imagesPerColumn, (col + 1) * imagesPerColumn);
+
+                // Удваиваем изображения для бесконечного эффекта
+                const doubledImages = [...columnImages, ...columnImages];
+
+                doubledImages.forEach(imgSrc => {
+                    const item = document.createElement('div');
+                    item.className = 'marquee-item';
+
+                    const img = document.createElement('img');
+                    img.src = imgSrc;
+                    img.alt = 'Aceternity Component';
+                    img.loading = 'lazy';
+
+                    item.appendChild(img);
+                    column.appendChild(item);
+                });
+
+                grid.appendChild(column);
+            }
+        }
+
+        // Инициализация при загрузке
+        window.addEventListener('DOMContentLoaded', initMarquee);
+    </script>
+</body>
+</html>

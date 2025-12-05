@@ -1,0 +1,349 @@
+/*
+ * Date Picker Modal - Aceternity UI Style
+ * Стиль совпадает с marquee carousel
+ */
+
+/* Кнопка-триггер для открытия модального окна */
+.date-picker-trigger {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg,
+        rgba(59, 130, 246, 0.9) 0%,
+        rgba(37, 99, 235, 0.9) 100%
+    );
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 10px 25px -5px rgba(59, 130, 246, 0.3),
+        0 8px 10px -6px rgba(59, 130, 246, 0.2),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.date-picker-trigger::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: left 0.5s;
+}
+
+.date-picker-trigger:hover::before {
+    left: 100%;
+}
+
+.date-picker-trigger:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 20px 35px -5px rgba(59, 130, 246, 0.4),
+        0 10px 15px -3px rgba(59, 130, 246, 0.3),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+.date-picker-trigger:active {
+    transform: translateY(0);
+}
+
+/* Overlay (фон модального окна) */
+.date-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.date-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Контейнер модального окна */
+.date-modal-container {
+    background: rgba(23, 23, 23, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1.5rem;
+    padding: 0.5rem;
+    max-width: 500px;
+    width: 100%;
+    box-shadow:
+        0 25px 50px -12px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.date-modal-overlay.active .date-modal-container {
+    transform: scale(1);
+    opacity: 1;
+}
+
+/* Внутренний контент */
+.date-modal-content {
+    background: linear-gradient(
+        135deg,
+        rgba(26, 14, 46, 0.95) 0%,
+        rgba(15, 5, 32, 0.95) 100%
+    );
+    border-radius: 1.25rem;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Декоративный фоновый градиент */
+.date-modal-content::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle,
+        rgba(201, 169, 97, 0.05) 0%,
+        transparent 50%
+    );
+    animation: rotate 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Заголовок */
+.date-modal-header {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 2rem;
+}
+
+.date-modal-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.date-modal-subtitle {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Кнопка закрытия */
+.date-modal-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 2;
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.date-modal-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+    transform: rotate(90deg);
+}
+
+/* Поля ввода */
+.date-modal-inputs {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.date-input-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.date-input-label-new {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.025em;
+}
+
+.date-input-new {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(201, 169, 97, 0.3);
+    border-radius: 0.75rem;
+    color: white;
+    font-size: 1rem;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.date-input-new:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(201, 169, 97, 0.6);
+    box-shadow:
+        0 0 0 3px rgba(201, 169, 97, 0.1),
+        0 4px 12px rgba(201, 169, 97, 0.15);
+}
+
+.date-input-new::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+/* Футер с кнопками */
+.date-modal-footer {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+/* Кнопка "Отмена" */
+.date-modal-btn-cancel {
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.date-modal-btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+/* Кнопка "Сохранить" */
+.date-modal-btn-save {
+    padding: 0.75rem 1.75rem;
+    background: linear-gradient(135deg,
+        rgba(201, 169, 97, 1) 0%,
+        rgba(181, 149, 77, 1) 100%
+    );
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
+    color: rgba(15, 5, 32, 1);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow:
+        0 4px 12px rgba(201, 169, 97, 0.3),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.date-modal-btn-save::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: left 0.5s;
+}
+
+.date-modal-btn-save:hover::before {
+    left: 100%;
+}
+
+.date-modal-btn-save:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 6px 16px rgba(201, 169, 97, 0.4),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+}
+
+.date-modal-btn-save:active {
+    transform: translateY(0);
+}
+
+/* Адаптив для мобильных */
+@media (max-width: 640px) {
+    .date-modal-container {
+        max-width: calc(100vw - 2rem);
+    }
+
+    .date-modal-content {
+        padding: 1.5rem;
+    }
+
+    .date-modal-title {
+        font-size: 1.5rem;
+    }
+
+    .date-modal-footer {
+        flex-direction: column;
+    }
+
+    .date-modal-btn-cancel,
+    .date-modal-btn-save {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .date-picker-trigger {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+/* Скрыть стандартный date picker */
+.travel-date-picker {
+    display: none;
+}

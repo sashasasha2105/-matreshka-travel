@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Матрешка - Путешествия по России</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 2rem;
+        }
+
+        .section {
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            background: rgba(15, 23, 42, 0.5);
+            padding: 3rem 2rem;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #60a5fa;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .buttons-row {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🌍 Путешествуй по России с Матрешкой</h1>
+    <p style="text-align: center; color: #94a3b8; margin-bottom: 3rem; font-size: 1.25rem;">
+        Откройте для себя самые красивые города России
+    </p>
+
+    <!-- Section 1: Spotlight Cards - Регионы России -->
+    <div class="section">
+        <h2>🌍 Популярные направления России</h2>
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem;">
+            <div id="card1"></div>
+            <div id="card2"></div>
+            <div id="card3"></div>
+            <div id="card4"></div>
+            <div id="card5"></div>
+        </div>
+    </div>
+
+    <!-- Section 2: Buttons -->
+    <div class="section">
+        <h2>2. Кнопки</h2>
+        <div class="buttons-row">
+            <div id="btn1"></div>
+            <div id="btn2"></div>
+            <div id="btn3"></div>
+        </div>
+    </div>
+
+    <!-- Section 3: Text Generate -->
+    <div class="section">
+        <h2>3. Text Generate</h2>
+        <div id="text1" style="font-size: 2rem; font-weight: 700; margin: 2rem 0;"></div>
+    </div>
+
+    <!-- Scripts - БЕЗ DEFER -->
+    <script src="scripts/utils/animations.js"></script>
+    <script src="scripts/utils/aceternity-adapter.js"></script>
+    <script src="components/aceternity/region-card-mobile.js"></script>
+    <script src="components/aceternity/shimmer-button.js"></script>
+    <script src="components/aceternity/moving-border-button.js"></script>
+    <script src="components/aceternity/text-generate.js"></script>
+
+    <script>
+        console.log('🎨 Инициализация...');
+
+        // Проверка загрузки
+        console.log('motion:', typeof motion);
+        console.log('AceternityComponent:', typeof AceternityComponent);
+        console.log('cn:', typeof cn);
+        console.log('RegionCardMobile:', typeof RegionCardMobile);
+        console.log('ShimmerButton:', typeof ShimmerButton);
+
+        // 1. Region Cards - РЕАЛЬНЫЕ РЕГИОНЫ (мобильная версия без hover)
+        try {
+            new RegionCardMobile('card1', {
+                title: 'Москва',
+                description: 'Столица России, сердце нашей великой Родины',
+                emoji: '🏛️',
+                image: 'assets/images/city_photos/Moscow.jpg'
+            });
+            console.log('✅ Card 1 (Moscow) created');
+        } catch(e) {
+            console.error('❌ Card 1 error:', e);
+            document.getElementById('card1').innerHTML = '<div style="color: red; padding: 2rem;">ERROR: ' + e.message + '</div>';
+        }
+
+        try {
+            new RegionCardMobile('card2', {
+                title: 'Санкт-Петербург',
+                description: 'Северная Венеция, культурная столица России',
+                emoji: '🎭',
+                image: 'assets/images/city_photos/Piter.png'
+            });
+            console.log('✅ Card 2 (St. Petersburg) created');
+        } catch(e) {
+            console.error('❌ Card 2 error:', e);
+        }
+
+        try {
+            new RegionCardMobile('card3', {
+                title: 'Казань',
+                description: 'Третья столица России, где встречаются Восток и Запад',
+                emoji: '🕌',
+                image: 'assets/images/city_photos/kazan.jpg'
+            });
+            console.log('✅ Card 3 (Kazan) created');
+        } catch(e) {
+            console.error('❌ Card 3 error:', e);
+        }
+
+        try {
+            new RegionCardMobile('card4', {
+                title: 'Сочи',
+                description: 'Курортная столица России, город солнца и моря',
+                emoji: '🌊',
+                image: 'assets/images/city_photos/sochi.jpg'
+            });
+            console.log('✅ Card 4 (Sochi) created');
+        } catch(e) {
+            console.error('❌ Card 4 error:', e);
+        }
+
+        try {
+            new RegionCardMobile('card5', {
+                title: 'Иркутск',
+                description: 'Ворота Байкала, сибирский Париж',
+                emoji: '🏔️',
+                image: 'assets/images/city_photos/Иркутская область.jpg'
+            });
+            console.log('✅ Card 5 (Irkutsk) created');
+        } catch(e) {
+            console.error('❌ Card 5 error:', e);
+        }
+
+        // 2. Buttons
+        try {
+            new ShimmerButton('btn1', {
+                text: 'Shimmer Button',
+                backgroundColor: '#3b82f6',
+                onClick: () => alert('Shimmer clicked!')
+            });
+            console.log('✅ Shimmer button created');
+        } catch(e) {
+            console.error('❌ Shimmer button error:', e);
+            document.getElementById('btn1').innerHTML = '<div style="color: red;">ERROR: ' + e.message + '</div>';
+        }
+
+        try {
+            new MovingBorderButton('btn2', {
+                text: 'Moving Border',
+                onClick: () => alert('Moving Border clicked!')
+            });
+            console.log('✅ Moving border created');
+        } catch(e) {
+            console.error('❌ Moving border error:', e);
+        }
+
+        try {
+            new ShimmerButton('btn3', {
+                text: 'Shimmer Purple',
+                backgroundColor: '#8b5cf6',
+                onClick: () => alert('Purple clicked!')
+            });
+            console.log('✅ Purple button created');
+        } catch(e) {
+            console.error('❌ Purple button error:', e);
+        }
+
+        // 3. Text Generate
+        try {
+            new TextGenerate('text1', {
+                text: 'Путешествуй по России вместе с Матрешкой',
+                duration: 50,
+                animateBy: 'words'
+            });
+            console.log('✅ Text generate created');
+        } catch(e) {
+            console.error('❌ Text generate error:', e);
+            document.getElementById('text1').innerHTML = '<div style="color: red;">ERROR: ' + e.message + '</div>';
+        }
+
+        console.log('✅ Инициализация завершена!');
+    </script>
+</body>
+</html>

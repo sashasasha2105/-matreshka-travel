@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Focus Cards Demo - Aceternity UI</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Utilities -->
+    <script src="scripts/utils/animations.js" defer></script>
+    <script src="scripts/utils/aceternity-adapter.js" defer></script>
+
+    <!-- FocusCards Component -->
+    <script src="components/aceternity/focus-cards.js" defer></script>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 2rem;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .demo-header h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-header p {
+            font-size: 1.25rem;
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.375rem 0.875rem;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin: 0 0.25rem;
+        }
+
+        .section {
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+        }
+
+        .code-block {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .code-block pre {
+            overflow-x: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+
+        .demo-section {
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 1.5rem;
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+        }
+
+        .demo-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #60a5fa;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: none;
+            margin: 0.5rem;
+        }
+
+        .button:hover {
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>🎨 FocusCards Component</h1>
+        <p>Красивые карточки с эффектом фокуса из Aceternity UI</p>
+        <div>
+            <span class="badge">✨ Focus Effect</span>
+            <span class="badge">🎬 Smooth Animations</span>
+            <span class="badge">📱 Responsive</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <!-- Demo 1: Russian Regions -->
+        <div class="demo-section">
+            <h2 class="demo-title">Регионы России</h2>
+            <p style="color: #94a3b8; margin-bottom: 2rem;">
+                Наведи мышь на любую карточку - остальные размоются и уменьшатся
+            </p>
+
+            <div id="focusCards1"></div>
+
+            <div class="code-block" style="margin-top: 2rem;">
+                <pre>new FocusCards('focusCards1', {
+    cards: [
+        { title: 'Байкал', src: './city_photos/...' },
+        { title: 'Сочи', src: './city_photos/...' },
+        { title: 'Казань', src: './city_photos/...' }
+    ],
+    onCardClick: (card) => {
+        alert('Clicked: ' + card.title);
+    }
+});</pre>
+            </div>
+        </div>
+
+        <!-- Demo 2: Different Heights -->
+        <div class="demo-section">
+            <h2 class="demo-title">Разные размеры</h2>
+            <p style="color: #94a3b8; margin-bottom: 2rem;">
+                Можно настроить высоту карточек для разных устройств
+            </p>
+
+            <div id="focusCards2"></div>
+
+            <div class="code-block" style="margin-top: 2rem;">
+                <pre>new FocusCards('focusCards2', {
+    cards: [...],
+    imageHeight: { sm: '12rem', md: '18rem' },
+    columns: { sm: 1, md: 2, lg: 4 }
+});</pre>
+            </div>
+        </div>
+
+        <!-- Demo 3: Custom Blur -->
+        <div class="demo-section">
+            <h2 class="demo-title">Кастомное размытие</h2>
+            <p style="color: #94a3b8; margin-bottom: 2rem;">
+                Настраиваемое размытие и масштаб неактивных карточек
+            </p>
+
+            <div id="focusCards3"></div>
+
+            <div class="code-block" style="margin-top: 2rem;">
+                <pre>new FocusCards('focusCards3', {
+    cards: [...],
+    blurAmount: '12px',      // Больше размытие
+    scaleInactive: 0.95      // Больше уменьшение
+});</pre>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="demo-section">
+            <h2 class="demo-title">Динамическое управление</h2>
+            <p style="color: #94a3b8; margin-bottom: 1.5rem;">
+                Управляй карточками через API
+            </p>
+
+            <div style="margin-bottom: 2rem;">
+                <button class="button" onclick="addMoreCards()">
+                    ➕ Добавить карточки
+                </button>
+                <button class="button" onclick="clearAllCards()">
+                    🗑️ Очистить все
+                </button>
+                <button class="button" onclick="resetCards()">
+                    🔄 Сбросить
+                </button>
+            </div>
+
+            <div id="focusCards4"></div>
+        </div>
+
+        <!-- Features -->
+        <div class="demo-section">
+            <h2 class="demo-title">✨ Особенности</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                <div>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">🎯 Focus Effect</h3>
+                    <p style="color: #94a3b8; font-size: 0.875rem;">
+                        При наведении на карточку остальные размываются и уменьшаются
+                    </p>
+                </div>
+
+                <div>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">📱 Responsive</h3>
+                    <p style="color: #94a3b8; font-size: 0.875rem;">
+                        Адаптивная сетка: 1/2/3/4 колонки в зависимости от экрана
+                    </p>
+                </div>
+
+                <div>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">🎬 Smooth Animations</h3>
+                    <p style="color: #94a3b8; font-size: 0.875rem;">
+                        Плавные переходы 300ms с ease-out timing
+                    </p>
+                </div>
+
+                <div>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">⚙️ Configurable</h3>
+                    <p style="color: #94a3b8; font-size: 0.875rem;">
+                        Настраиваемое размытие, масштаб, высота и количество колонок
+                    </p>
+                </div>
+
+                <div>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">🔧 API Methods</h3>
+                    <p style="color: #94a3b8; font-size: 0.875rem;">
+                        addCards(), updateCards(), clearCards() для управления
+                    </p>
+                </div>
+
+                <div>
+                    <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">⚡ Optimized</h3>
+                    <p style="color: #94a3b8; font-size: 0.875rem;">
+                        Lazy loading изображений и GPU acceleration для анимаций
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample images data
+        const russianRegions = [
+            { title: 'Байкал ⛰️', src: './city_photos/Иркутская область.jpg', id: 1 },
+            { title: 'Сочи 🏖️', src: './city_photos/Краснодарский край.jpg', id: 2 },
+            { title: 'Казань 🕌', src: './city_photos/Татарстан.jpg', id: 3 },
+            { title: 'Камчатка 🌋', src: './city_photos/Камчатский край.jpg', id: 4 },
+            { title: 'Алтай 🏔️', src: './city_photos/Алтайский край.jpg', id: 5 },
+            { title: 'Карелия 🌲', src: './city_photos/Карелия.jpg', id: 6 }
+        ];
+
+        let instance4;
+
+        window.addEventListener('load', () => {
+            console.log('🎨 Initializing FocusCards demos...');
+
+            // Demo 1: Russian Regions
+            new FocusCards('focusCards1', {
+                cards: russianRegions,
+                columns: { sm: 1, md: 2, lg: 3 },
+                onCardClick: (card) => {
+                    alert('Вы выбрали: ' + card.title);
+                },
+                imageHeight: { sm: '15rem', md: '20rem' }
+            });
+
+            // Demo 2: Different Heights
+            new FocusCards('focusCards2', {
+                cards: russianRegions.slice(0, 4),
+                imageHeight: { sm: '12rem', md: '18rem' },
+                columns: { sm: 1, md: 2, lg: 4 }
+            });
+
+            // Demo 3: Custom Blur
+            new FocusCards('focusCards3', {
+                cards: russianRegions.slice(0, 3),
+                blurAmount: '12px',
+                scaleInactive: 0.95,
+                columns: { sm: 1, md: 3, lg: 3 }
+            });
+
+            // Demo 4: Dynamic control
+            instance4 = new FocusCards('focusCards4', {
+                cards: russianRegions.slice(0, 3),
+                columns: { sm: 1, md: 2, lg: 3 }
+            });
+
+            console.log('✅ All demos loaded!');
+        });
+
+        // Dynamic controls
+        function addMoreCards() {
+            const newCards = [
+                { title: 'Санкт-Петербург 🏛️', src: './city_photos/Санкт-Петербург.jpg', id: 7 },
+                { title: 'Владивосток 🌊', src: './city_photos/Приморский край.jpg', id: 8 },
+                { title: 'Якутия ❄️', src: './city_photos/Якутия.jpg', id: 9 }
+            ];
+
+            if (instance4) {
+                instance4.addCards(newCards);
+                alert('Добавлено 3 новых карточки!');
+            }
+        }
+
+        function clearAllCards() {
+            if (instance4) {
+                instance4.clearCards();
+                alert('Все карточки удалены!');
+            }
+        }
+
+        function resetCards() {
+            if (instance4) {
+                instance4.updateCards(russianRegions.slice(0, 3));
+                alert('Карточки восстановлены!');
+            }
+        }
+    </script>
+</body>
+</html>

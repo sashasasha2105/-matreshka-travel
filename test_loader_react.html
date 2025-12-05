@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LoaderThree React - Тест</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0118 0%, #1a0f2e 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #C9A961;
+        }
+
+        .demo-section {
+            background: rgba(26, 15, 46, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(201, 169, 97, 0.2);
+        }
+
+        .demo-section h2 {
+            color: #C9A961;
+            margin-bottom: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0a0118;
+            background: linear-gradient(135deg, #C9A961 0%, #FFD700 100%);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 169, 97, 0.5);
+        }
+
+        .info-box {
+            background: rgba(201, 169, 97, 0.1);
+            border: 1px solid rgba(201, 169, 97, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .info-box code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #FFD700;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            color: #C9A961;
+            text-decoration: none;
+        }
+    </style>
+
+    <!-- React LoaderThree CSS -->
+    <link rel="stylesheet" href="components/ui/loader-react.css">
+</head>
+<body>
+    <div class="container">
+        <h1>⚛️ LoaderThree React Component</h1>
+
+        <!-- Demo 1: Inline LoaderThree -->
+        <div class="demo-section">
+            <h2>1. Inline LoaderThree (только компонент)</h2>
+            <div id="loader-inline"></div>
+            <div class="info-box">
+                <p><strong>Код:</strong></p>
+                <code>&lt;LoaderThree /&gt;</code>
+            </div>
+        </div>
+
+        <!-- Demo 2: LoaderThreeDemo (с текстом) -->
+        <div class="demo-section">
+            <h2>2. LoaderThreeDemo (компонент + текст)</h2>
+            <div id="loader-demo"></div>
+            <div class="info-box">
+                <p><strong>Код:</strong></p>
+                <code>&lt;LoaderThreeDemo /&gt;</code>
+            </div>
+        </div>
+
+        <!-- Demo 3: Fullscreen Modal -->
+        <div class="demo-section">
+            <h2>3. Fullscreen Modal (как в основном проекте)</h2>
+            <div class="button-group">
+                <button class="btn" onclick="showFullscreenLoader()">
+                    Показать на 3 секунды
+                </button>
+                <button class="btn" onclick="showFullscreenLoaderLong()">
+                    Показать на 10 секунд
+                </button>
+            </div>
+            <div class="info-box">
+                <p><strong>Использование:</strong></p>
+                <code>showFullscreenLoader() / hideFullscreenLoader()</code>
+            </div>
+        </div>
+
+        <!-- Demo 4: Интеграция с vanilla JS -->
+        <div class="demo-section">
+            <h2>4. Интеграция с Vanilla JavaScript</h2>
+            <div class="button-group">
+                <button class="btn" onclick="testFromVanillaJS()">
+                    Вызвать из обычного JS
+                </button>
+            </div>
+            <div class="info-box">
+                <p><strong>Пример кода:</strong></p>
+                <pre style="color: #FFD700; margin-top: 0.5rem;">
+// Vanilla JS может вызывать React компонент:
+ReactDOM.render(
+  React.createElement(LoaderThreeDemo),
+  document.getElementById('target')
+);</pre>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-link">← Вернуться на главную</a>
+    </div>
+
+    <!-- Fullscreen loader container -->
+    <div id="fullscreen-loader" class="loader-three-fullscreen"></div>
+
+    <!-- React и ReactDOM через CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+    <!-- Babel для JSX (только для development) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- React компоненты -->
+    <script type="text/babel" src="components/ui/LoaderThree.jsx"></script>
+    <script type="text/babel" src="components/ui/LoaderThreeDemo.jsx"></script>
+
+    <!-- Инициализация и тесты -->
+    <script type="text/babel">
+        const { createElement } = React;
+        const { createRoot } = ReactDOM;
+
+        // Demo 1: Inline LoaderThree
+        const inlineRoot = createRoot(document.getElementById('loader-inline'));
+        inlineRoot.render(<LoaderThree />);
+
+        // Demo 2: LoaderThreeDemo
+        const demoRoot = createRoot(document.getElementById('loader-demo'));
+        demoRoot.render(<LoaderThreeDemo />);
+
+        // Demo 3: Fullscreen loader
+        const fullscreenRoot = createRoot(document.getElementById('fullscreen-loader'));
+
+        window.showFullscreenLoader = () => {
+            fullscreenRoot.render(<LoaderThreeDemo />);
+            document.getElementById('fullscreen-loader').classList.add('active');
+        };
+
+        window.hideFullscreenLoader = () => {
+            document.getElementById('fullscreen-loader').classList.remove('active');
+        };
+
+        window.showFullscreenLoaderLong = () => {
+            showFullscreenLoader();
+            setTimeout(hideFullscreenLoader, 10000);
+        };
+
+        // Автоматически скрыть через 3 секунды
+        const originalShow = window.showFullscreenLoader;
+        window.showFullscreenLoader = () => {
+            originalShow();
+            setTimeout(hideFullscreenLoader, 3000);
+        };
+
+        // Demo 4: Интеграция с vanilla JS
+        window.testFromVanillaJS = () => {
+            alert('✅ Vanilla JavaScript успешно вызвал React компонент!');
+            showFullscreenLoader();
+        };
+
+        console.log('✅ React LoaderThree инициализирован!');
+        console.log('Доступные компоненты:', { LoaderThree, LoaderThreeDemo });
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Simple</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background: #0a0a0a;
+            color: white;
+            padding: 2rem;
+            font-family: sans-serif;
+        }
+        .test-card {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        .error {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+        .success {
+            color: #44ff44;
+            background: rgba(68, 255, 68, 0.1);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-card">
+        <h1 style="font-size: 2rem; margin-bottom: 1rem;">🔍 Проверка компонентов</h1>
+
+        <div id="status">Загрузка...</div>
+
+        <div id="results"></div>
+
+        <div id="testContainer" style="margin-top: 2rem;"></div>
+    </div>
+
+    <!-- Утилиты -->
+    <script src="scripts/utils/animations.js"></script>
+    <script src="scripts/utils/aceternity-adapter.js"></script>
+
+    <!-- Компоненты -->
+    <script src="components/aceternity/spotlight-card.js"></script>
+    <script src="components/aceternity/shimmer-button.js"></script>
+
+    <script>
+        const results = document.getElementById('results');
+        const status = document.getElementById('status');
+
+        function addResult(message, isError = false) {
+            const div = document.createElement('div');
+            div.className = isError ? 'error' : 'success';
+            div.textContent = message;
+            results.appendChild(div);
+        }
+
+        // Проверка через небольшую задержку
+        setTimeout(() => {
+            console.log('=== ПРОВЕРКА ЗАГРУЗКИ ===');
+
+            // Проверка утилит
+            if (typeof motion === 'undefined') {
+                addResult('❌ motion не загружен', true);
+            } else {
+                addResult('✅ motion загружен');
+            }
+
+            if (typeof AceternityComponent === 'undefined') {
+                addResult('❌ AceternityComponent не загружен', true);
+            } else {
+                addResult('✅ AceternityComponent загружен');
+            }
+
+            if (typeof cn === 'undefined') {
+                addResult('❌ cn не загружен', true);
+            } else {
+                addResult('✅ cn загружен');
+            }
+
+            // Проверка компонентов
+            if (typeof SpotlightCard === 'undefined') {
+                addResult('❌ SpotlightCard не загружен', true);
+            } else {
+                addResult('✅ SpotlightCard загружен');
+
+                // Попытка создать
+                try {
+                    new SpotlightCard('testContainer', {
+                        title: 'Тест',
+                        description: 'Это тестовая карточка',
+                        icon: '✨'
+                    });
+                    addResult('✅ SpotlightCard создан успешно!');
+                } catch(e) {
+                    addResult('❌ Ошибка создания SpotlightCard: ' + e.message, true);
+                    console.error(e);
+                }
+            }
+
+            if (typeof ShimmerButton === 'undefined') {
+                addResult('❌ ShimmerButton не загружен', true);
+            } else {
+                addResult('✅ ShimmerButton загружен');
+            }
+
+            status.textContent = 'Проверка завершена!';
+
+        }, 1000);
+    </script>
+</body>
+</html>

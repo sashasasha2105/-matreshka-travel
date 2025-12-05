@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Aceternity UI Showcase - Матрешка</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Animation utilities -->
+    <script src="scripts/utils/animations.js" defer></script>
+
+    <!-- Aceternity adapter -->
+    <script src="scripts/utils/aceternity-adapter.js" defer></script>
+
+    <!-- Components -->
+    <script src="components/aceternity/spotlight-card.js" defer></script>
+    <script src="components/aceternity/background-beams.js" defer></script>
+    <script src="components/aceternity/shimmer-button.js" defer></script>
+    <script src="components/aceternity/text-generate.js" defer></script>
+    <script src="components/aceternity/moving-border-button.js" defer></script>
+    <script src="components/aceternity/card-3d.js" defer></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 900px;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #94a3b8;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .section {
+            position: relative;
+            padding: 6rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 1.125rem;
+            margin-bottom: 4rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .code-demo {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .code-demo pre {
+            overflow-x: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: #e2e8f0;
+        }
+
+        .component-label {
+            display: inline-block;
+            padding: 0.375rem 0.875rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #60a5fa;
+        }
+
+        .buttons-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 0;
+        }
+
+        .text-showcase {
+            padding: 3rem 2rem;
+            background: rgba(15, 23, 42, 0.3);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+            color: #64748b;
+        }
+
+        .footer a {
+            color: #60a5fa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #93c5fd;
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 4rem 1rem;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section with Background Beams -->
+    <section class="hero-section">
+        <!-- Background Beams -->
+        <div id="heroBeams"></div>
+
+        <div class="hero-content">
+            <h1 class="hero-title" id="heroTitle">Aceternity UI для Vanilla JS</h1>
+
+            <div id="heroSubtitle" class="hero-subtitle"></div>
+
+            <div class="buttons-showcase">
+                <div id="heroButton1"></div>
+                <div id="heroButton2"></div>
+            </div>
+
+            <p style="color: #64748b; font-size: 0.875rem; margin-top: 2rem;">
+                Все компоненты взяты с
+                <a href="https://ui.aceternity.com/" target="_blank" style="color: #60a5fa; text-decoration: none;">
+                    ui.aceternity.com
+                </a>
+            </p>
+        </div>
+    </section>
+
+    <!-- Spotlight Cards Section -->
+    <section class="section">
+        <h2 class="section-title">Spotlight Cards</h2>
+        <p class="section-subtitle">
+            Карточки со светящимся эффектом при наведении мыши.
+            Идеально для демонстрации услуг или продуктов.
+        </p>
+
+        <span class="component-label">Источник: ui.aceternity.com/components/card-spotlight</span>
+
+        <div class="grid-3">
+            <div id="spotlightCard1"></div>
+            <div id="spotlightCard2"></div>
+            <div id="spotlightCard3"></div>
+        </div>
+
+        <div class="code-demo">
+            <pre>new SpotlightCard('container', {
+    title: 'Байкал',
+    description: 'Самое глубокое озеро в мире',
+    icon: '⛰️',
+    spotlightColor: 'rgba(59, 130, 246, 0.3)'
+});</pre>
+        </div>
+    </section>
+
+    <!-- 3D Cards Section -->
+    <section class="section">
+        <h2 class="section-title">3D Card Effect</h2>
+        <p class="section-subtitle">
+            Карточки с 3D эффектом перспективы при движении мыши.
+            Создают ощущение глубины и интерактивности.
+        </p>
+
+        <span class="component-label">Источник: ui.aceternity.com/components/3d-card-effect</span>
+
+        <div class="grid-2">
+            <div id="card3d1"></div>
+            <div id="card3d2"></div>
+        </div>
+
+        <div class="code-demo">
+            <pre>new Card3D('container', {
+    title: 'Карточка',
+    description: 'Описание карточки',
+    width: '100%',
+    height: '350px',
+    maxRotation: 15
+});</pre>
+        </div>
+    </section>
+
+    <!-- Buttons Section -->
+    <section class="section">
+        <h2 class="section-title">Анимированные Кнопки</h2>
+        <p class="section-subtitle">
+            Коллекция красивых кнопок с различными эффектами анимации.
+        </p>
+
+        <span class="component-label">Источник: ui.aceternity.com/components/buttons</span>
+
+        <div class="buttons-showcase" style="background: rgba(15, 23, 42, 0.3); border-radius: 1.5rem; padding: 3rem;">
+            <div>
+                <p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1rem; text-align: center;">Shimmer Button</p>
+                <div id="shimmerBtn1"></div>
+            </div>
+
+            <div>
+                <p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1rem; text-align: center;">Moving Border</p>
+                <div id="movingBorderBtn"></div>
+            </div>
+
+            <div>
+                <p style="color: #94a3b8; font-size: 0.875rem; margin-bottom: 1rem; text-align: center;">Shimmer (Purple)</p>
+                <div id="shimmerBtn2"></div>
+            </div>
+        </div>
+
+        <div class="code-demo">
+            <pre>// Shimmer Button
+new ShimmerButton('container', {
+    text: 'Кнопка',
+    backgroundColor: '#3b82f6',
+    onClick: () => alert('Clicked!')
+});
+
+// Moving Border Button
+new MovingBorderButton('container', {
+    text: 'Кнопка',
+    borderColor: 'linear-gradient(90deg, #3b82f6, #8b5cf6)'
+});</pre>
+        </div>
+    </section>
+
+    <!-- Text Generate Section -->
+    <section class="section">
+        <h2 class="section-title">Text Generate Effect</h2>
+        <p class="section-subtitle">
+            Эффект появления текста по словам или буквам с плавной анимацией.
+        </p>
+
+        <span class="component-label">Источник: ui.aceternity.com/components/text-generate-effect</span>
+
+        <div class="text-showcase">
+            <div id="textGenerate1" style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem;"></div>
+            <div id="textGenerate2" style="font-size: 1.25rem; color: #94a3b8;"></div>
+        </div>
+
+        <div class="code-demo">
+            <pre>new TextGenerate('container', {
+    text: 'Ваш текст здесь',
+    duration: 50,        // Задержка между словами (мс)
+    animateBy: 'words',  // 'words' или 'chars'
+    filter: true         // Blur эффект
+});</pre>
+        </div>
+    </section>
+
+    <!-- Background Beams Section -->
+    <section class="section">
+        <h2 class="section-title">Background Beams</h2>
+        <p class="section-subtitle">
+            Анимированные световые лучи для фона. Идеально для hero секций.
+        </p>
+
+        <span class="component-label">Источник: ui.aceternity.com/components/background-beams</span>
+
+        <div style="position: relative; height: 400px; background: rgba(15, 23, 42, 0.5); border-radius: 1.5rem; overflow: hidden; border: 1px solid rgba(148, 163, 184, 0.1);">
+            <div id="demoBeams"></div>
+            <div style="position: relative; z-index: 10; display: flex; align-items: center; justify-content: center; height: 100%; flex-direction: column;">
+                <h3 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem;">Background Beams</h3>
+                <p style="color: #94a3b8;">Анимированные лучи света на фоне</p>
+            </div>
+        </div>
+
+        <div class="code-demo">
+            <pre>new BackgroundBeams('container', {
+    beamCount: 8,
+    colors: ['#3b82f6', '#8b5cf6', '#ec4899'],
+    duration: 8000,
+    delay: 1000
+});</pre>
+        </div>
+    </section>
+
+    <!-- Integration Info -->
+    <section class="section" style="background: rgba(15, 23, 42, 0.5); border-radius: 1.5rem; border: 1px solid rgba(148, 163, 184, 0.1); padding: 4rem;">
+        <h2 class="section-title">🚀 Как интегрировать?</h2>
+        <p class="section-subtitle">
+            Все компоненты адаптированы для работы без React
+        </p>
+
+        <div class="grid-2" style="text-align: left; margin-top: 3rem;">
+            <div>
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #60a5fa;">1. Подключи утилиты</h3>
+                <div class="code-demo" style="margin-top: 1rem;">
+                    <pre>&lt;script src="scripts/utils/animations.js"&gt;&lt;/script&gt;
+&lt;script src="scripts/utils/aceternity-adapter.js"&gt;&lt;/script&gt;</pre>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #60a5fa;">2. Подключи компонент</h3>
+                <div class="code-demo" style="margin-top: 1rem;">
+                    <pre>&lt;script src="components/aceternity/spotlight-card.js"&gt;&lt;/script&gt;</pre>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #60a5fa;">3. Создай контейнер</h3>
+                <div class="code-demo" style="margin-top: 1rem;">
+                    <pre>&lt;div id="myCard"&gt;&lt;/div&gt;</pre>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; color: #60a5fa;">4. Инициализируй</h3>
+                <div class="code-demo" style="margin-top: 1rem;">
+                    <pre>new SpotlightCard('myCard', {
+    title: 'Заголовок',
+    description: 'Описание'
+});</pre>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <a href="ACETERNITY_QUICKSTART.md" style="display: inline-block; padding: 1rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; text-decoration: none; border-radius: 0.75rem; font-weight: 600; transition: transform 0.3s;">
+                📚 Читать полный гайд
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p style="font-size: 1.125rem; margin-bottom: 0.5rem;">
+            Сделано с ❤️ для <strong>Матрешка Travel App</strong>
+        </p>
+        <p>
+            Все компоненты взяты с <a href="https://ui.aceternity.com/" target="_blank">Aceternity UI</a>
+            и адаптированы для Vanilla JavaScript
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.875rem;">
+            <a href="ACETERNITY_README.md">Документация</a> •
+            <a href="ACETERNITY_QUICKSTART.md">Быстрый старт</a> •
+            <a href="ACETERNITY_INTEGRATION_GUIDE.md">Полный гайд</a>
+        </p>
+    </footer>
+
+    <script>
+        // Инициализация после загрузки
+        window.addEventListener('load', () => {
+            console.log('🎨 Initializing Aceternity Showcase...');
+
+            // Hero Section
+            // Background Beams
+            new BackgroundBeams('heroBeams', {
+                beamCount: 6,
+                colors: ['#667eea', '#764ba2', '#f093fb'],
+                duration: 10000,
+                delay: 1500
+            });
+
+            // Hero Subtitle with Text Generate
+            new TextGenerate('heroSubtitle', {
+                text: 'Красивые компоненты из Aceternity UI, адаптированные для работы без React. Только Vanilla JavaScript.',
+                duration: 30,
+                animateBy: 'words'
+            });
+
+            // Hero Buttons
+            new ShimmerButton('heroButton1', {
+                text: 'Посмотреть демо ✨',
+                backgroundColor: '#667eea',
+                size: 'lg',
+                onClick: () => {
+                    document.querySelector('.section').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            new MovingBorderButton('heroButton2', {
+                text: 'Читать документацию 📚',
+                borderColor: 'linear-gradient(90deg, #667eea, #764ba2, #f093fb)',
+                backgroundColor: 'transparent',
+                onClick: () => {
+                    window.open('ACETERNITY_README.md', '_blank');
+                }
+            });
+
+            // Spotlight Cards
+            new SpotlightCard('spotlightCard1', {
+                title: 'Байкал',
+                description: 'Самое глубокое озеро в мире с уникальной экосистемой и кристально чистой водой.',
+                icon: '⛰️',
+                spotlightColor: 'rgba(59, 130, 246, 0.3)'
+            });
+
+            new SpotlightCard('spotlightCard2', {
+                title: 'Сочи',
+                description: 'Курорт на Черном море с субтропическим климатом, горами и пляжами.',
+                icon: '🏖️',
+                spotlightColor: 'rgba(139, 92, 246, 0.3)'
+            });
+
+            new SpotlightCard('spotlightCard3', {
+                title: 'Казань',
+                description: 'Столица Татарстана с удивительным сочетанием восточной и европейской культур.',
+                icon: '🕌',
+                spotlightColor: 'rgba(236, 72, 153, 0.3)'
+            });
+
+            // 3D Cards
+            new Card3D('card3d1', {
+                title: 'Камчатка 🌋',
+                description: 'Край вулканов, гейзеров и дикой природы. Уникальные ландшафты и нетронутая природа полуострова.',
+                width: '100%',
+                height: '350px',
+                maxRotation: 15
+            });
+
+            new Card3D('card3d2', {
+                title: 'Алтай 🏔️',
+                description: 'Горная система с живописными долинами, озерами и древними петроглифами. Рай для туристов.',
+                width: '100%',
+                height: '350px',
+                maxRotation: 15
+            });
+
+            // Buttons
+            new ShimmerButton('shimmerBtn1', {
+                text: 'Забронировать тур',
+                backgroundColor: '#3b82f6',
+                size: 'md',
+                onClick: () => alert('Бронирование тура! 🎒')
+            });
+
+            new MovingBorderButton('movingBorderBtn', {
+                text: 'Узнать больше',
+                borderColor: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899)',
+                onClick: () => alert('Подробнее о турах! 📖')
+            });
+
+            new ShimmerButton('shimmerBtn2', {
+                text: 'Связаться с нами',
+                backgroundColor: '#8b5cf6',
+                size: 'md',
+                onClick: () => alert('Свяжитесь с нами! 📞')
+            });
+
+            // Text Generate
+            new TextGenerate('textGenerate1', {
+                text: 'Путешествуй по России вместе с Матрешкой',
+                duration: 50,
+                animateBy: 'words',
+                className: 'text-white'
+            });
+
+            setTimeout(() => {
+                new TextGenerate('textGenerate2', {
+                    text: 'Открывай новые места, выполняй задания, получай награды и делись впечатлениями с друзьями.',
+                    duration: 40,
+                    animateBy: 'words'
+                });
+            }, 2000);
+
+            // Demo Beams
+            new BackgroundBeams('demoBeams', {
+                beamCount: 8,
+                colors: ['#3b82f6', '#8b5cf6', '#ec4899', '#06b6d4'],
+                duration: 8000,
+                delay: 1000
+            });
+
+            console.log('✅ All components initialized!');
+        });
+    </script>
+</body>
+</html>

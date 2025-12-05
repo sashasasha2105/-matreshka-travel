@@ -2728,94 +2728,95 @@ body {
    PAYMENT SYSTEM
    ======================================== */
 
-/* Контейнер для кнопок партнеров */
+/* Контейнер для кнопок партнеров - MINIMAL */
 .partners-buttons-container {
     grid-column: 1 / -1;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-top: 30px;
-    padding: 0 20px;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding: 0;
 }
 
 /* Заблокированная кнопка QR */
 .partners-qr-btn-common.disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    background: linear-gradient(135deg, rgba(150, 150, 150, 0.5), rgba(100, 100, 100, 0.5));
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .partners-qr-btn-common.disabled:hover {
     transform: none;
-    box-shadow: 0 4px 16px rgba(150, 150, 150, 0.3);
+    box-shadow: none;
 }
 
-/* Кнопка оплаты */
+/* Кнопка оплаты - MINIMAL */
 .partners-pay-btn {
-    padding: 18px 32px;
-    background: linear-gradient(135deg, #4CAF50, #45a049);
-    border: none;
-    border-radius: 16px;
-    color: white;
+    padding: 1rem 2rem;
+    background: rgba(99, 102, 241, 0.15);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 1rem;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
-    min-width: 250px;
-    margin: 0 auto;
+    gap: 0.75rem;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
 }
 
 .partners-pay-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(76, 175, 80, 0.5);
-    background: linear-gradient(135deg, #45a049, #3d8b40);
+    background: rgba(99, 102, 241, 0.25);
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
 }
 
 .pay-btn-icon {
-    font-size: 1.4rem;
+    font-size: 1.25rem;
 }
 
 .pay-btn-price {
-    margin-left: 8px;
-    font-size: 1.1rem;
-    padding: 2px 12px;
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(99, 102, 241, 0.3);
+    border-radius: 0.5rem;
 }
 
-/* Кнопка демо-покупки */
+/* Кнопка демо-покупки - MINIMAL */
 .partners-demo-btn {
-    padding: 14px 28px;
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.8), rgba(75, 0, 130, 0.8));
-    border: 1px solid rgba(138, 43, 226, 0.5);
-    border-radius: 16px;
-    color: white;
+    padding: 0.875rem 1.75rem;
+    background: rgba(23, 23, 23, 0.5);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    box-shadow: 0 4px 16px rgba(138, 43, 226, 0.3);
-    min-width: 200px;
-    margin: 0 auto;
+    gap: 0.625rem;
 }
 
 .partners-demo-btn:hover {
+    background: rgba(23, 23, 23, 0.8);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(138, 43, 226, 0.5);
-    background: linear-gradient(135deg, rgba(138, 43, 226, 0.9), rgba(75, 0, 130, 0.9));
 }
 
 .demo-btn-icon {
-    font-size: 1.2rem;
+    font-size: 1.125rem;
 }
 
 /* Модальное окно оплаты */

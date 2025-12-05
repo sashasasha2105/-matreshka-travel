@@ -759,7 +759,7 @@ function toggleAttractionDescription(elementId, button) {
     }
 }
 
-// Функция загрузки партнеров с QR-кодами
+// Функция загрузки партнеров с QR-кодами (Card Stack)
 function loadPartners(partners) {
     const partnersGrid = document.getElementById('partnersGrid');
     if (!partnersGrid) return;
@@ -773,80 +773,47 @@ function loadPartners(partners) {
     const currentRegionId = getCurrentRegionId();
     const isPaid = isRegionPaid(currentRegionId);
 
-    partners.forEach((partner, index) => {
-        const card = document.createElement('div');
-        card.className = 'partner-card aceternity-card spotlight-container ripple';
+    // Преобразуем партнёров в формат Card Stack
+    const cardStackItems = partners.map((partner, index) => {
+        // Формируем контент с highlight
+        const descriptionWithHighlight = partner.description
+            ? partner.description.replace(/(лучш\w+|авторск\w+|домашн\w+|качественн\w+|уютн\w+|аутентичн\w+)/gi,
+                '<span class="card-highlight">$1</span>')
+            : partner.type;
 
-        // Добавляем spotlight эффект
-        const spotlight = document.createElement('div');
-        spotlight.className = 'spotlight';
-        card.appendChild(spotlight);
-
-        // 3D tilt эффект при движении мыши
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = ((e.clientX - rect.left) / rect.width - 0.5) * 10;
-            const y = ((e.clientY - rect.top) / rect.height - 0.5) * -10;
-            card.style.setProperty('--mouse-x', `${x}deg`);
-            card.style.setProperty('--mouse-y', `${y}deg`);
-
-            // Перемещаем spotlight
-            spotlight.style.left = `${e.clientX - rect.left - 200}px`;
-            spotlight.style.top = `${e.clientY - rect.top - 200}px`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-            card.style.setProperty('--mouse-x', '0deg');
-            card.style.setProperty('--mouse-y', '0deg');
-        });
-
-        // Создаем кнопку QR для каждого партнера
-        const qrButtonHTML = isPaid
-            ? `<button class="partner-qr-btn" onclick='showPartnerQRByName("${partner.name.replace(/'/g, "\\'")}","${partner.emoji}")'>
-                   <span class="qr-btn-icon">📱</span>
-                   <span class="qr-btn-text">Показать QR</span>
-               </button>`
-            : `<button class="partner-qr-btn disabled" disabled title="Оплатите доступ для получения QR-кода">
-                   <span class="qr-btn-icon">🔒</span>
-                   <span class="qr-btn-text">Показать QR</span>
-               </button>`;
-
-        card.innerHTML = `
-            <div class="partner-emoji">${partner.emoji}</div>
-            <div class="partner-name">${partner.name}</div>
-            <div class="partner-type">${partner.type}</div>
-            <div class="partner-description">${partner.description}</div>
-            <div class="partner-rating">⭐ ${partner.rating}</div>
-            ${partner.specialOffer ? `<div class="partner-offer">${partner.specialOffer}</div>` : ''}
-                <button class="partner-route-btn" data-partner-index="${index}">
-                    <span class="route-icon">🗺️</span>
-                    <span class="route-text">Маршрут, отзывы, время работы</span>
-                </button>
-                ${qrButtonHTML}
-            </div>
-        `;
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        partnersGrid.appendChild(card);
-
-        // Добавляем обработчик для кнопки маршрута
-        const routeBtn = card.querySelector('.partner-route-btn');
-        routeBtn.addEventListener('click', () => {
-            openPartnerRoute(partner);
-        });
-
-        // Анимация появления
-        setTimeout(() => {
-            card.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 100);
+        return {
+            id: index + 1,
+            name: partner.name,
+            designation: partner.type,
+            emoji: partner.emoji || '🏪',
+            rating: partner.rating,
+            content: descriptionWithHighlight,
+            offer: partner.specialOffer || null
+        };
     });
+
+    // Создаём контейнер для Card Stack
+    const cardStackContainer = document.createElement('div');
+    cardStackContainer.id = 'partnersCardStack';
+    partnersGrid.appendChild(cardStackContainer);
+
+    // Инициализируем Card Stack
+    if (typeof CardStack !== 'undefined') {
+        const cardStack = new CardStack({
+            containerId: 'partnersCardStack',
+            items: cardStackItems,
+            autoRotate: false
+        });
+        window.partnersCardStack = cardStack;
+    } else {
+        console.error('❌ CardStack не загружен');
+    }
 
     // Добавляем кнопки оплаты внизу только если еще не оплачено
     if (!isPaid) {
         const buttonsContainer = document.createElement('div');
         buttonsContainer.className = 'partners-buttons-container';
+        buttonsContainer.style.marginTop = '2rem';
         buttonsContainer.innerHTML = `
             <button class="partners-pay-btn" onclick="showPaymentModal()">
                 <span class="pay-btn-icon">💳</span>

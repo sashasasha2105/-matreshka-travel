@@ -8,11 +8,12 @@
    CONTAINER
    ======================================== */
 .card-stack-container {
-  height: 40rem;
+  min-height: 500px;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
+  padding: 3rem 1.5rem;
   position: relative;
 }
 
@@ -22,21 +23,24 @@
 .card-stack {
   position: relative;
   width: 100%;
-  max-width: 400px;
-  height: 280px;
+  max-width: 450px;
+  height: 320px;
+  margin: 0 auto;
 }
 
 .card-stack-item {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
+  min-height: 280px;
 
   /* Стиль как у всех компонентов */
-  background: rgba(23, 23, 23, 0.8);
+  background: rgba(23, 23, 23, 0.95);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
 
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 1.5rem;
 
   box-shadow:
@@ -47,57 +51,67 @@
   cursor: pointer;
 
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  display: flex;
+  flex-direction: column;
 }
 
-/* Stacking effect */
+/* Stacking effect - правильное позиционирование */
 .card-stack-item:nth-child(1) {
-  z-index: 3;
-  transform: translateY(0) scale(1);
+  z-index: 30;
+  transform: translateY(0) scale(1) rotate(0deg);
+  opacity: 1;
+  top: 0;
 }
 
 .card-stack-item:nth-child(2) {
-  z-index: 2;
-  transform: translateY(-8px) scale(0.98);
-  opacity: 0.8;
+  z-index: 20;
+  transform: translateY(12px) scale(0.96) rotate(-1deg);
+  opacity: 0.7;
+  top: 0;
 }
 
 .card-stack-item:nth-child(3) {
-  z-index: 1;
-  transform: translateY(-16px) scale(0.96);
-  opacity: 0.6;
+  z-index: 10;
+  transform: translateY(24px) scale(0.92) rotate(1deg);
+  opacity: 0.4;
+  top: 0;
 }
 
 .card-stack-item:nth-child(n+4) {
   z-index: 0;
-  transform: translateY(-24px) scale(0.94);
+  transform: translateY(36px) scale(0.88) rotate(0deg);
   opacity: 0;
   pointer-events: none;
+  top: 0;
 }
 
-/* Hover effect */
-.card-stack-item:hover {
-  border-color: rgba(99, 102, 241, 0.4);
+/* Hover effect - только для первой карточки */
+.card-stack-item:nth-child(1):hover {
+  border-color: rgba(99, 102, 241, 0.5);
   box-shadow:
-    0 20px 60px rgba(99, 102, 241, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    0 20px 60px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.02) rotate(0deg);
 }
 
 /* Animation when card is clicked */
 .card-stack-item.exiting {
-  animation: cardExit 0.5s ease-out forwards;
+  animation: cardExit 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  z-index: 50 !important;
 }
 
 @keyframes cardExit {
   0% {
-    transform: translateY(0) rotate(0deg);
+    transform: translateY(0) scale(1) rotate(0deg);
     opacity: 1;
   }
-  50% {
-    transform: translateX(100px) rotate(10deg);
-    opacity: 0.5;
+  30% {
+    transform: translateX(60px) rotate(5deg) scale(1.05);
+    opacity: 0.8;
   }
   100% {
-    transform: translateX(200px) rotate(20deg);
+    transform: translateX(400px) rotate(20deg) scale(0.8);
     opacity: 0;
   }
 }

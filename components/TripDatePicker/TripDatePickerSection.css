@@ -43,6 +43,12 @@
   animation: titlePulse 4s ease-in-out infinite;
 }
 
+/* Скрыть заголовок если пустой */
+.trip-date-picker-title:empty {
+  display: none;
+  margin: 0;
+}
+
 @keyframes titlePulse {
   0%, 100% {
     filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.2));

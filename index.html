@@ -26,6 +26,9 @@
     <!-- 🏛️ PREMIUM REGION DETAILS STYLES -->
     <link rel="stylesheet" href="styles/region-details-premium.css?v=999">
 
+    <!-- 🎠 MARQUEE HERO STYLES -->
+    <link rel="stylesheet" href="styles/marquee-hero.css?v=999">
+
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
 
@@ -40,20 +43,29 @@
     <div class="container">
         <!-- Главная страница с регионами -->
         <div id="mainSection">
-            <div class="hero-section">
-                <!-- 3D-модель: Родина-мать зовёт! -->
-                <div class="hero-model-container">
-                    <iframe
-                        title="Motherland Calls!"
-                        frameborder="0"
-                        allowfullscreen
-                        allow="autoplay; fullscreen"
-                        src="https://sketchfab.com/models/1a34ab2a901c47fa9dd753ebfe97bbed/embed?autostart=1&preload=1&ui_infos=0&ui_stop=0&ui_inspector=0&ui_settings=0&ui_help=0&ui_annotations=0&ui_vr=0&ui_fullscreen=0&ui_watermark=0&ui_controls=0&ui_ar=0&transparent=1&autospin=0.15">
-                    </iframe>
-                </div>
+            <!-- 🎠 3D Marquee Hero Section -->
+            <section class="marquee-hero-section">
+                <div class="marquee-demo-wrapper">
+                    <div class="marquee-container-main">
+                        <div class="marquee-grid-main" id="marqueeGridMain">
+                            <!-- Колонки с изображениями добавятся через JS -->
+                        </div>
 
-                <div class="hero-overlay">
-                    <h1 class="hero-title">
+                        <!-- Текст поверх карусели -->
+                        <div class="marquee-overlay-text">
+                            <h1 class="marquee-overlay-title">
+                                Исследуйте<br>Россию
+                            </h1>
+                            <p class="marquee-overlay-subtitle">вместе с Матрешкой</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Date Picker Section -->
+            <div class="hero-section" style="min-height: auto; background: transparent; border: none; margin-top: 2rem;">
+                <div class="hero-overlay" style="background: transparent; padding: 2rem 1.5rem;">
+                    <h1 class="hero-title" style="display: none;">
                         Исследуйте Россию<br>вместе с Матрешкой
                     </h1>
 
@@ -406,6 +418,9 @@
 
     <!-- 🎨 LIQUID GLASS + ACETERNITY EFFECTS -->
     <script src="scripts/liquid-glass.js" defer></script>
+
+    <!-- 🎠 Marquee Hero Script -->
+    <script src="scripts/marquee-hero.js" defer></script>
 
     <!-- SVG ФИЛЬТРЫ ДЛЯ LIQUID GLASS ЭФФЕКТА -->
     <svg class="sr-only" xmlns="http://www.w3.org/2000/svg">

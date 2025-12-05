@@ -41,6 +41,9 @@
     <!-- 🍎 Package Modal Minimal Styles -->
     <link rel="stylesheet" href="styles/package-modal-minimal.css">
 
+    <!-- 🎨 Animated Tooltip Styles -->
+    <link rel="stylesheet" href="styles/animated-tooltip.css">
+
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
 
@@ -213,7 +216,7 @@
             <div id="loaderText" class="loader-text">Загрузка...</div>
         </div>
 
-        <!-- Секция Команда -->
+        <!-- 🎨 Секция Команда - Animated Tooltip -->
         <div class="team-section" data-animate>
             <div class="team-header">
                 <h2 class="team-title">
@@ -221,40 +224,7 @@
                     Наша команда
                 </h2>
             </div>
-            <div class="team-grid">
-                <div class="team-member" data-animate>
-                    <div class="member-photo-wrapper">
-                        <img src="TeamPhotos/Говоруха Егор.png" alt="Говоруха Егор" class="member-photo" loading="lazy">
-                        <div class="member-badge captain">Капитан</div>
-                    </div>
-                    <h3 class="member-name">Егор Говоруха</h3>
-                    <p class="member-role">Капитан команды</p>
-                </div>
-
-                <div class="team-member" data-animate>
-                    <div class="member-photo-wrapper">
-                        <img src="TeamPhotos/Антонова Юлия.png" alt="Антонова Юлия" class="member-photo" loading="lazy">
-                    </div>
-                    <h3 class="member-name">Юлия Антонова</h3>
-                    <p class="member-role">Дизайнер • Аналитик</p>
-                </div>
-
-                <div class="team-member" data-animate>
-                    <div class="member-photo-wrapper">
-                        <img src="TeamPhotos/Флёр Михаил.png" alt="Флёр Михаил" class="member-photo" loading="lazy">
-                    </div>
-                    <h3 class="member-name">Михаил Флёр</h3>
-                    <p class="member-role">Аналитик</p>
-                </div>
-
-                <div class="team-member" data-animate>
-                    <div class="member-photo-wrapper">
-                        <img src="TeamPhotos/Цыпкайкин Александр.png" alt="Цыпкайкин Александр" class="member-photo" loading="lazy">
-                    </div>
-                    <h3 class="member-name">Александр Цыпкайкин</h3>
-                    <p class="member-role">Программист-разработчик</p>
-                </div>
-            </div>
+            <div id="animatedTooltipContainer"></div>
         </div>
 
         <div class="footer">
@@ -406,6 +376,9 @@
 
     <!-- 🍎 Apple Cards Carousel Script -->
     <script src="scripts/apple-cards-carousel.js"></script>
+
+    <!-- 🎨 Animated Tooltip Script -->
+    <script src="scripts/animated-tooltip.js"></script>
 
     <!-- SVG ФИЛЬТРЫ ДЛЯ LIQUID GLASS ЭФФЕКТА -->
     <svg class="sr-only" xmlns="http://www.w3.org/2000/svg">

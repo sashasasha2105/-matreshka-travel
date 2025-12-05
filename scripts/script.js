@@ -1577,6 +1577,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 1000);
 
+    // 🎨 ИНИЦИАЛИЗАЦИЯ ANIMATED TOOLTIP для команды
+    if (window.AnimatedTooltip) {
+        const teamMembers = [
+            {
+                id: 1,
+                name: 'Егор Говоруха',
+                designation: 'Капитан команды',
+                image: 'assets/images/TeamPhotos/Говоруха Егор.png',
+                badge: '👑'
+            },
+            {
+                id: 2,
+                name: 'Юлия Антонова',
+                designation: 'Дизайнер • Аналитик',
+                image: 'assets/images/TeamPhotos/Антонова Юлия.png'
+            },
+            {
+                id: 3,
+                name: 'Михаил Флёр',
+                designation: 'Аналитик',
+                image: 'assets/images/TeamPhotos/Флёр Михаил.png'
+            },
+            {
+                id: 4,
+                name: 'Александр Цыпкайкин',
+                designation: 'Программист-разработчик',
+                image: 'assets/images/TeamPhotos/Цыпкайкин Александр.png'
+            }
+        ];
+
+        const animatedTooltip = new AnimatedTooltip({
+            containerId: 'animatedTooltipContainer',
+            items: teamMembers
+        });
+
+        window.animatedTooltip = animatedTooltip;
+        console.log('✅ Animated Tooltip инициализирован с', teamMembers.length, 'членами команды');
+    }
+
     // 🔥 УДАЛЕНО: Лента путешествий больше не загружается на главную страницу
 
     // 🔥 ВОССТАНАВЛИВАЕМ ПОСЛЕДНЮЮ АКТИВНУЮ ВКЛАДКУ

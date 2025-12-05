@@ -308,9 +308,14 @@
   .apple-carousel-track {
     gap: 1rem;
     padding: 1rem 0 2rem;
-    scroll-snap-type: x mandatory;
+    /* Убираем snap для плавной прокрутки */
+    scroll-snap-type: none;
+    /* Momentum scrolling для iOS */
+    -webkit-overflow-scrolling: touch;
     /* Убираем padding слева для peek-эффекта */
     padding-left: 1rem;
+    /* Плавная прокрутка */
+    scroll-behavior: smooth;
   }
 
   .apple-card {
@@ -318,14 +323,11 @@
     width: calc(100vw - 5rem);
     max-width: 360px;
     height: 380px;
-    scroll-snap-align: start;
-    /* Небольшая прозрачность для неактивных */
-    transition: opacity 0.3s ease;
-  }
-
-  /* Первая карточка полностью видна */
-  .apple-card:first-child {
-    opacity: 1;
+    /* Убираем snap */
+    scroll-snap-align: none;
+    /* Быстрый transition */
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
   }
 
   .apple-card-title {

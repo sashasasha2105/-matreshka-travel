@@ -211,9 +211,9 @@ function getFilteredRegions() {
     });
 }
 
-// Функция загрузки регионов с пагинацией + УМНАЯ ПРЕДЗАГРУЗКА
+// 🎯 НОВАЯ ФУНКЦИЯ ЗАГРУЗКИ РЕГИОНОВ - использует MinimalFocusCards
 function loadRegions() {
-    console.log('🔄 Вызвана loadRegions()');
+    console.log('🔄 Вызвана loadRegions() - MinimalFocusCards');
     const regionsGrid = document.getElementById('regionsGrid');
     if (!regionsGrid) {
         console.error('❌ Элемент regionsGrid не найден!');
@@ -230,63 +230,56 @@ function loadRegions() {
     filteredRegions = getFilteredRegions();
     console.log('🔍 Отфильтровано регионов:', filteredRegions.length);
 
-    if (currentPage === 0) {
-        // Первая загрузка - очищаем все и показываем первые 6
-        regionsGrid.innerHTML = '';
-
-        // Проверяем есть ли результаты поиска
-        if (filteredRegions.length === 0 && searchQuery) {
-            // Показываем сообщение о пустом результате поиска
-            regionsGrid.innerHTML = `
-                <div class="search-empty">
-                    <div class="search-empty-icon">🔍</div>
-                    <div class="search-empty-title">Ничего не найдено</div>
-                    <div class="search-empty-text">По запросу "${searchQuery}" регионы не найдены</div>
-                    <button class="search-clear-btn" onclick="clearSearchAndReload()">
-                        <span>✕</span>
-                        <span>Очистить поиск</span>
-                    </button>
-                </div>
-            `;
-            return;
-        }
-
-        const regionsToShow = filteredRegions.slice(0, REGIONS_PER_PAGE);
-
-        regionsToShow.forEach((region, index) => {
-            const regionCard = createRegionCard(region, index);
-            regionsGrid.appendChild(regionCard);
-        });
-
-        // 🚀 УМНАЯ ПРЕДЗАГРУЗКА следующих регионов
-        if (window.performanceOptimizer && filteredRegions.length > REGIONS_PER_PAGE) {
-            const nextRegions = filteredRegions.slice(REGIONS_PER_PAGE, REGIONS_PER_PAGE + 6);
-            const nextImages = nextRegions.map(r => r.image);
-            window.performanceOptimizer.prefetchImages(nextImages);
-            console.log('📦 Запущена предзагрузка', nextImages.length, 'следующих изображений');
-        }
-    } else {
-        // Дополнительная загрузка - добавляем следующие 6
-        const startIndex = currentPage * REGIONS_PER_PAGE;
-        const endIndex = startIndex + REGIONS_PER_PAGE;
-        const regionsToShow = filteredRegions.slice(startIndex, endIndex);
-
-        regionsToShow.forEach((region, index) => {
-            const regionCard = createRegionCard(region, startIndex + index);
-            regionsGrid.appendChild(regionCard);
-        });
-
-        // 🚀 ПРЕДЗАГРУЗКА следующей порции
-        if (window.performanceOptimizer && endIndex < filteredRegions.length) {
-            const nextRegions = filteredRegions.slice(endIndex, endIndex + 6);
-            const nextImages = nextRegions.map(r => r.image);
-            window.performanceOptimizer.prefetchImages(nextImages);
-            console.log('📦 Предзагрузка следующих', nextImages.length, 'изображений');
-        }
+    // Проверяем есть ли результаты поиска
+    if (filteredRegions.length === 0 && searchQuery) {
+        // Показываем сообщение о пустом результате поиска
+        regionsGrid.innerHTML = `
+            <div class="search-empty">
+                <div class="search-empty-icon">🔍</div>
+                <div class="search-empty-title">Ничего не найдено</div>
+                <div class="search-empty-text">По запросу "${searchQuery}" регионы не найдены</div>
+                <button class="search-clear-btn" onclick="clearSearchAndReload()">
+                    <span>✕</span>
+                    <span>Очистить поиск</span>
+                </button>
+            </div>
+        `;
+        return;
     }
 
-    // Обновляем кнопку "Показать больше"
-    updateLoadMoreButton();
+    // Конвертируем данные регионов в формат карточек
+    const allRegions = filteredRegions.map(region => ({
+        id: region.id,
+        name: region.name,
+        description: region.description,
+        image: region.image,
+        population: region.population,
+        area: region.area,
+        emoji: region.emoji
+    }));
+
+    // Берём первые 6 регионов для отображения
+    const regionsToShow = allRegions.slice(0, 6);
+
+    // Если компонент уже существует, обновляем карточки
+    if (window.minimalFocusCards) {
+        window.minimalFocusCards.updateCards(regionsToShow);
+    } else {
+        // Создаём новый компонент
+        const focusCards = new MinimalFocusCards({
+            containerId: 'regionsGrid',
+            cards: regionsToShow,
+            onCardClick: (card, index) => {
+                console.log('🎯 Клик на регион:', card.name);
+                if (typeof showRegionDetails === 'function') {
+                    showRegionDetails(card.id);
+                }
+            }
+        });
+        window.minimalFocusCards = focusCards;
+    }
+
+    console.log('✅ Загружено регионов:', regionsToShow.length);
 
     // Загружаем ленту путешествий после первой загрузки
     if (currentPage === 0) {

@@ -3,7 +3,7 @@
  * Инициализирует 3D Marquee на главной странице
  */
 
-// Фотографии регионов России
+// Фотографии регионов России - расширенный список
 const regionImages = [
     "assets/images/city_photos/Moscow.jpg",
     "assets/images/city_photos/Piter.png",
@@ -31,6 +31,27 @@ const regionImages = [
     "assets/images/city_photos/челябинск.jpg",
     "assets/images/city_photos/ярославль.jpg",
     "assets/images/city_photos/Кабардино-Балкария.jpg",
+    // Дополнительные повторения для большего количества контента
+    "assets/images/city_photos/Moscow.jpg",
+    "assets/images/city_photos/Piter.png",
+    "assets/images/city_photos/kazan.jpg",
+    "assets/images/city_photos/sochi.jpg",
+    "assets/images/city_photos/Ecater.jpg",
+    "assets/images/city_photos/GOLDRING.jpg",
+    "assets/images/city_photos/кавказ.jpg",
+    "assets/images/city_photos/Волгоградская республика.jpg",
+    "assets/images/city_photos/байкал.jpg",
+    "assets/images/city_photos/екб.jpg",
+    "assets/images/city_photos/Иркутская область.jpg",
+    "assets/images/city_photos/Калининград.jpg",
+    "assets/images/city_photos/Костромская область.jpg",
+    "assets/images/city_photos/Краснодар.jpg",
+    "assets/images/city_photos/Нижегородская область.jpg",
+    "assets/images/city_photos/Челябинская область.jpg",
+    "assets/images/city_photos/Ярославская область.jpg",
+    "assets/images/city_photos/Дагестан.jpeg",
+    "assets/images/city_photos/Чечня.jpg",
+    "assets/images/city_photos/ингушетия.jpg",
 ];
 
 // Партнеры с акциями и скидками (культурные заведения и достопримечательности)
@@ -93,7 +114,7 @@ const partnerImages = partners.map(createPartnerCard);
 
 // Смешиваем фото регионов и карточки партнеров
 const marqueeImages = [];
-const totalImages = 80; // Увеличили количество карточек
+const totalImages = 120; // Значительно увеличили количество карточек для стабильной работы
 
 for (let i = 0; i < totalImages; i++) {
     if (i % 3 === 0) {
@@ -109,8 +130,13 @@ function initMarqueeHero() {
     const grid = document.getElementById('marqueeGridMain');
     if (!grid) return;
 
-    const numColumns = 4;
+    // Определяем количество колонок в зависимости от ширины экрана
+    const isMobile = window.innerWidth <= 768;
+    const numColumns = isMobile ? 2 : 4;
     const imagesPerColumn = Math.ceil(marqueeImages.length / numColumns);
+
+    // Очищаем grid перед добавлением колонок
+    grid.innerHTML = '';
 
     for (let col = 0; col < numColumns; col++) {
         const column = document.createElement('div');
@@ -119,10 +145,13 @@ function initMarqueeHero() {
         // Получаем изображения для этой колонки
         const columnImages = marqueeImages.slice(col * imagesPerColumn, (col + 1) * imagesPerColumn);
 
-        // Удваиваем изображения для бесконечного эффекта
-        const doubledImages = [...columnImages, ...columnImages];
+        // Увеличиваем количество повторений до 6 раз для бесшовной прокрутки
+        const repeatedImages = [];
+        for (let i = 0; i < 6; i++) {
+            repeatedImages.push(...columnImages);
+        }
 
-        doubledImages.forEach(imgSrc => {
+        repeatedImages.forEach(imgSrc => {
             const item = document.createElement('div');
             item.className = 'marquee-item-main';
 
@@ -131,6 +160,11 @@ function initMarqueeHero() {
             img.alt = 'Регион России или партнер';
             img.loading = 'lazy';
 
+            // Добавляем обработку ошибок загрузки
+            img.onerror = function() {
+                this.style.display = 'none';
+            };
+
             item.appendChild(img);
             column.appendChild(item);
         });
@@ -138,8 +172,26 @@ function initMarqueeHero() {
         grid.appendChild(column);
     }
 
-    console.log('✅ 3D Marquee инициализирован на главной странице');
+    console.log(`✅ 3D Marquee инициализирован на главной странице (${numColumns} колонок, ${marqueeImages.length} изображений)`);
 }
+
+// Переинициализация при изменении размера окна
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        const grid = document.getElementById('marqueeGridMain');
+        if (grid) {
+            const currentColumns = grid.children.length;
+            const shouldHaveColumns = window.innerWidth <= 768 ? 2 : 4;
+
+            // Переинициализируем только если количество колонок изменилось
+            if (currentColumns !== shouldHaveColumns) {
+                initMarqueeHero();
+            }
+        }
+    }, 300);
+});
 
 // Инициализация при загрузке DOM
 if (document.readyState === 'loading') {

@@ -37,19 +37,19 @@
 
 /* Вертикальная анимация для каждой колонки с разной скоростью */
 .marquee-column-main:nth-child(1) {
-    animation: marqueeUp 60s linear infinite;
+    animation: marqueeUp 120s linear infinite;
 }
 
 .marquee-column-main:nth-child(2) {
-    animation: marqueeDown 70s linear infinite;
+    animation: marqueeDown 130s linear infinite;
 }
 
 .marquee-column-main:nth-child(3) {
-    animation: marqueeUp 65s linear infinite;
+    animation: marqueeUp 125s linear infinite;
 }
 
 .marquee-column-main:nth-child(4) {
-    animation: marqueeDown 75s linear infinite;
+    animation: marqueeDown 135s linear infinite;
 }
 
 @keyframes marqueeUp {
@@ -57,16 +57,16 @@
         transform: translateY(0);
     }
     100% {
-        transform: translateY(-50%);
+        transform: translateY(-50%); /* Половина от 6 повторений для бесшовной прокрутки */
     }
 }
 
 @keyframes marqueeDown {
     0% {
-        transform: translateY(-25%);
+        transform: translateY(-50%);
     }
     100% {
-        transform: translateY(25%);
+        transform: translateY(0); /* Обратная прокрутка для бесшовного эффекта */
     }
 }
 
@@ -165,18 +165,61 @@
 /* Адаптивность */
 @media (max-width: 768px) {
     .marquee-container-main {
-        height: 400px;
+        height: 500px; /* Увеличена высота для мобильных */
+        perspective: 1500px; /* Уменьшена перспектива для лучшей видимости */
     }
 
     .marquee-overlay-title {
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
 
     .marquee-overlay-subtitle {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
     .marquee-grid-main {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* 2 колонки на мобильных */
+        gap: 0.75rem;
+    }
+
+    /* Более медленная анимация для мобильных */
+    .marquee-column-main:nth-child(1) {
+        animation: marqueeUp 140s linear infinite;
+    }
+
+    .marquee-column-main:nth-child(2) {
+        animation: marqueeDown 150s linear infinite;
+    }
+
+    .marquee-item-main {
+        min-height: 150px; /* Минимальная высота карточек */
+    }
+
+    .marquee-item-main:hover {
+        transform: scale(1.03) translateZ(10px); /* Меньший масштаб при ховере */
+    }
+}
+
+/* Дополнительная адаптивность для очень маленьких экранов */
+@media (max-width: 480px) {
+    .marquee-container-main {
+        height: 450px;
+    }
+
+    .marquee-overlay-title {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    .marquee-overlay-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .marquee-grid-main {
+        gap: 0.5rem;
+    }
+
+    .marquee-demo-wrapper {
+        padding: 0.25rem;
     }
 }

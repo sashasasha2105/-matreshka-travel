@@ -258,8 +258,9 @@ function loadRegions() {
         emoji: region.emoji
     }));
 
-    // Берём первые 6 регионов для отображения
-    const regionsToShow = allRegions.slice(0, 6);
+    // Рассчитываем сколько регионов показывать с учетом пагинации
+    const regionsToDisplay = (currentPage + 1) * REGIONS_PER_PAGE;
+    const regionsToShow = allRegions.slice(0, regionsToDisplay);
 
     // Если компонент уже существует, обновляем карточки
     if (window.minimalFocusCards) {
@@ -279,7 +280,10 @@ function loadRegions() {
         window.minimalFocusCards = focusCards;
     }
 
-    console.log('✅ Загружено регионов:', regionsToShow.length);
+    console.log('✅ Загружено регионов:', regionsToShow.length, 'из', allRegions.length);
+
+    // Обновляем кнопку "Показать еще"
+    updateLoadMoreButton();
 
     // Загружаем ленту путешествий после первой загрузки
     if (currentPage === 0) {

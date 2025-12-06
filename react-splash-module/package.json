@@ -1,0 +1,33 @@
+{
+  "name": "matreshka-splash-module",
+  "version": "1.0.0",
+  "description": "React splash screen and welcome modal for Matreshka Travel",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start -p 3001",
+    "lint": "next lint",
+    "export": "npm run build && next export"
+  },
+  "dependencies": {
+    "next": "^15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "motion": "12.0.0-alpha.2",
+    "dotted-map": "^1.0.4",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.5.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "typescript": "^5.7.2",
+    "tailwindcss": "^4.0.0",
+    "postcss": "^8.4.49",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "^15.1.6"
+  }
+}

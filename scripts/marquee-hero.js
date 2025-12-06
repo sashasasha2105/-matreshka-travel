@@ -154,12 +154,13 @@ function initMarqueeHero() {
     // Полностью очищаем grid
     grid.innerHTML = '';
 
-    // ОТКЛЮЧАЕМ анимацию до полной загрузки
+    // ОТКЛЮЧАЕМ анимацию до частичной загрузки
     grid.style.opacity = '0';
     grid.style.transition = 'opacity 0.5s ease';
 
     let loadedImagesCount = 0;
     let totalImages = 0;
+    let animationStarted = false;
 
     // Создаем колонки
     for (let col = 0; col < numColumns; col++) {
@@ -201,9 +202,13 @@ function initMarqueeHero() {
             img.onload = function() {
                 loadedImagesCount++;
 
-                // Когда все изображения загружены - включаем анимацию
-                if (loadedImagesCount === totalImages) {
-                    console.log(`✅ Все ${totalImages} изображений загружены, запускаем анимацию`);
+                // Вычисляем процент загрузки
+                const loadedPercent = (loadedImagesCount / totalImages) * 100;
+
+                // Запускаем анимацию когда загружено 15% изображений (быстрый старт!)
+                if (!animationStarted && loadedPercent >= 15) {
+                    animationStarted = true;
+                    console.log(`🚀 Загружено ${loadedPercent.toFixed(1)}% (${loadedImagesCount}/${totalImages}), запускаем анимацию!`);
 
                     // Показываем карусель плавно
                     grid.style.opacity = '1';
@@ -216,6 +221,11 @@ function initMarqueeHero() {
                         });
                     }, 100);
                 }
+
+                // Логируем когда все загружено
+                if (loadedImagesCount === totalImages) {
+                    console.log(`✅ Все ${totalImages} изображений полностью загружены`);
+                }
             };
 
             // Обработка ошибок загрузки
@@ -227,8 +237,13 @@ function initMarqueeHero() {
                 // Считаем ошибку как "загруженное" чтобы не блокировать
                 loadedImagesCount++;
 
-                if (loadedImagesCount === totalImages) {
-                    console.log(`✅ Загрузка завершена (с ошибками), запускаем анимацию`);
+                // Вычисляем процент
+                const loadedPercent = (loadedImagesCount / totalImages) * 100;
+
+                // Запускаем анимацию при достижении 15%
+                if (!animationStarted && loadedPercent >= 15) {
+                    animationStarted = true;
+                    console.log(`🚀 Загружено ${loadedPercent.toFixed(1)}% (с ошибками), запускаем анимацию!`);
                     grid.style.opacity = '1';
 
                     setTimeout(() => {

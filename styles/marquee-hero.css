@@ -79,6 +79,7 @@
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
+    min-height: 200px; /* Фиксированная минимальная высота для предотвращения layout shift */
 }
 
 .marquee-item-main img {
@@ -87,6 +88,10 @@
     display: block;
     object-fit: cover;
     border-radius: 0.75rem;
+    /* Предотвращаем скачки при загрузке */
+    image-rendering: auto;
+    image-rendering: crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 .marquee-item-main:hover {

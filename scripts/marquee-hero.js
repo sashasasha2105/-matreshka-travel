@@ -126,18 +126,40 @@ for (let i = 0; i < totalImages; i++) {
     }
 }
 
+// Глобальная переменная для отслеживания инициализации
+let marqueeInitialized = false;
+let currentNumColumns = 0;
+
 function initMarqueeHero() {
     const grid = document.getElementById('marqueeGridMain');
-    if (!grid) return;
+    if (!grid) {
+        console.warn('⚠️ Marquee grid не найден');
+        return;
+    }
 
     // Определяем количество колонок в зависимости от ширины экрана
     const isMobile = window.innerWidth <= 768;
     const numColumns = isMobile ? 2 : 4;
+
+    // Проверяем, нужна ли переинициализация
+    if (marqueeInitialized && currentNumColumns === numColumns) {
+        console.log('✅ Marquee уже инициализирован с правильным количеством колонок');
+        return;
+    }
+
+    console.log(`🔄 Инициализация Marquee: ${numColumns} колонок`);
+
     const imagesPerColumn = Math.ceil(marqueeImages.length / numColumns);
 
-    // Очищаем grid перед добавлением колонок
+    // Полностью очищаем grid
     grid.innerHTML = '';
 
+    // Сбрасываем анимации
+    grid.style.animation = 'none';
+    void grid.offsetHeight; // Принудительный reflow
+    grid.style.animation = '';
+
+    // Создаем колонки
     for (let col = 0; col < numColumns; col++) {
         const column = document.createElement('div');
         column.className = 'marquee-column-main';
@@ -145,24 +167,34 @@ function initMarqueeHero() {
         // Получаем изображения для этой колонки
         const columnImages = marqueeImages.slice(col * imagesPerColumn, (col + 1) * imagesPerColumn);
 
-        // Увеличиваем количество повторений до 6 раз для бесшовной прокрутки
+        // Увеличиваем количество повторений до 8 раз для гарантированной бесшовности
         const repeatedImages = [];
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < 8; i++) {
             repeatedImages.push(...columnImages);
         }
 
-        repeatedImages.forEach(imgSrc => {
+        // Создаем элементы изображений
+        repeatedImages.forEach((imgSrc, index) => {
             const item = document.createElement('div');
             item.className = 'marquee-item-main';
 
             const img = document.createElement('img');
             img.src = imgSrc;
             img.alt = 'Регион России или партнер';
-            img.loading = 'lazy';
 
-            // Добавляем обработку ошибок загрузки
+            // УБИРАЕМ lazy loading - загружаем все сразу для стабильности
+            img.loading = 'eager';
+
+            // Устанавливаем фиксированные размеры для предотвращения layout shift
+            img.style.width = '100%';
+            img.style.height = 'auto';
+            img.style.display = 'block';
+
+            // Обработка ошибок загрузки
             img.onerror = function() {
-                this.style.display = 'none';
+                console.warn(`⚠️ Ошибка загрузки изображения: ${imgSrc}`);
+                this.style.minHeight = '200px';
+                this.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
             };
 
             item.appendChild(img);
@@ -172,30 +204,39 @@ function initMarqueeHero() {
         grid.appendChild(column);
     }
 
-    console.log(`✅ 3D Marquee инициализирован на главной странице (${numColumns} колонок, ${marqueeImages.length} изображений)`);
+    marqueeInitialized = true;
+    currentNumColumns = numColumns;
+
+    console.log(`✅ 3D Marquee инициализирован: ${numColumns} колонок × ${repeatedImages.length} изображений каждая`);
 }
 
-// Переинициализация при изменении размера окна
+// Переинициализация при изменении размера окна (debounced)
 let resizeTimeout;
+let lastWidth = window.innerWidth;
+
 window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(() => {
-        const grid = document.getElementById('marqueeGridMain');
-        if (grid) {
-            const currentColumns = grid.children.length;
-            const shouldHaveColumns = window.innerWidth <= 768 ? 2 : 4;
+        const currentWidth = window.innerWidth;
+        const wasMobile = lastWidth <= 768;
+        const isNowMobile = currentWidth <= 768;
 
-            // Переинициализируем только если количество колонок изменилось
-            if (currentColumns !== shouldHaveColumns) {
-                initMarqueeHero();
-            }
+        // Переинициализируем только если произошло переключение между мобильной и десктоп версией
+        if (wasMobile !== isNowMobile) {
+            console.log(`🔄 Переключение режима: ${isNowMobile ? 'мобильный' : 'десктоп'}`);
+            marqueeInitialized = false; // Сбрасываем флаг для принудительной переинициализации
+            initMarqueeHero();
+            lastWidth = currentWidth;
         }
-    }, 300);
+    }, 500);
 });
 
-// Инициализация при загрузке DOM
+// Инициализация при полной загрузке страницы
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMarqueeHero);
+    document.addEventListener('DOMContentLoaded', () => {
+        // Небольшая задержка для гарантии загрузки стилей
+        setTimeout(initMarqueeHero, 100);
+    });
 } else {
-    initMarqueeHero();
+    setTimeout(initMarqueeHero, 100);
 }

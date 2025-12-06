@@ -402,3 +402,156 @@
     transform: translateX(5px);
   }
 }
+
+/* ========================================
+   АККОРДЕОНЫ КАТЕГОРИЙ ПАРТНЕРОВ
+   ======================================== */
+
+/* Контейнер аккордеона */
+.partners-accordion {
+  margin-bottom: 1.5rem;
+  background: rgba(23, 23, 23, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.partners-accordion:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Заголовок аккордеона */
+.partners-accordion-header {
+  padding: 1.5rem 2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.partners-accordion-header:hover {
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.partners-accordion-header.active {
+  background: rgba(99, 102, 241, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Левая часть заголовка */
+.accordion-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.accordion-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.accordion-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.02em;
+}
+
+.accordion-count {
+  background: rgba(99, 102, 241, 0.2);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Стрелка */
+.accordion-arrow {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: transform 0.3s ease;
+}
+
+.partners-accordion-header.active .accordion-arrow {
+  transform: rotate(180deg);
+  color: rgba(99, 102, 241, 0.9);
+}
+
+/* Контент аккордеона */
+.partners-accordion-content {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  background: rgba(15, 15, 15, 0.3);
+}
+
+/* Переопределяем grid для partnersGrid при использовании аккордеонов */
+#partnersGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 1rem 0;
+}
+
+/* Адаптивность для аккордеонов */
+@media (max-width: 768px) {
+  .partners-accordion-header {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .accordion-text {
+    font-size: 1.25rem;
+  }
+
+  .accordion-emoji {
+    font-size: 1.75rem;
+  }
+
+  .accordion-count {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.8rem;
+  }
+
+  .partners-accordion-content {
+    padding: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .partners-accordion-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .accordion-title {
+    gap: 0.75rem;
+  }
+
+  .accordion-text {
+    font-size: 1.125rem;
+  }
+
+  .accordion-emoji {
+    font-size: 1.5rem;
+  }
+
+  .partners-accordion-content {
+    padding: 1.25rem;
+  }
+}

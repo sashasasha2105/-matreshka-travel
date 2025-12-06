@@ -776,7 +776,39 @@ function toggleAttractionDescription(elementId, button) {
     }
 }
 
-// Функция загрузки партнеров - ВСЕ партнеры с новым минималистичным дизайном
+// Функция категоризации партнеров
+function categorizePartners(partners) {
+    const categories = {
+        food: { title: 'Еда', emoji: '🍽️', partners: [] },
+        entertainment: { title: 'Развлечения', emoji: '🎉', partners: [] },
+        souvenirs: { title: 'Сувениры', emoji: '🎁', partners: [] }
+    };
+
+    // Ключевые слова для определения категорий
+    const foodKeywords = ['кафе', 'ресторан', 'столовая', 'кофейня', 'кондитерская', 'кухн', 'еда', 'пицц', 'бургер', 'чай'];
+    const entertainmentKeywords = ['театр', 'музей', 'парк', 'развлечен', 'аттракцион', 'кино', 'концерт', 'выставк', 'галере', 'экскурси'];
+    const souvenirKeywords = ['сувенир', 'подарк', 'магазин', 'лавк', 'ремесл', 'handmade', 'изделия', 'промысл'];
+
+    partners.forEach(partner => {
+        const searchText = (partner.type + ' ' + partner.name + ' ' + (partner.description || '')).toLowerCase();
+
+        // Определяем категорию по ключевым словам
+        if (foodKeywords.some(keyword => searchText.includes(keyword))) {
+            categories.food.partners.push(partner);
+        } else if (entertainmentKeywords.some(keyword => searchText.includes(keyword))) {
+            categories.entertainment.partners.push(partner);
+        } else if (souvenirKeywords.some(keyword => searchText.includes(keyword))) {
+            categories.souvenirs.partners.push(partner);
+        } else {
+            // По умолчанию отправляем в еду (т.к. большинство партнеров - еда)
+            categories.food.partners.push(partner);
+        }
+    });
+
+    return categories;
+}
+
+// Функция загрузки партнеров - С АККОРДЕОНАМИ ПО КАТЕГОРИЯМ
 function loadPartners(partners) {
     const partnersGrid = document.getElementById('partnersGrid');
     if (!partnersGrid) return;
@@ -790,8 +822,39 @@ function loadPartners(partners) {
     const currentRegionId = getCurrentRegionId();
     const isPaid = isRegionPaid(currentRegionId);
 
-    // Отображаем ВСЕ карточки партнёров с новым дизайном
-    partners.forEach((partner, index) => {
+    // Категоризируем партнеров
+    const categories = categorizePartners(partners);
+
+    // Создаем аккордеоны для каждой категории
+    Object.keys(categories).forEach(categoryKey => {
+        const category = categories[categoryKey];
+
+        // Пропускаем пустые категории
+        if (category.partners.length === 0) return;
+
+        // Создаем контейнер аккордеона
+        const accordion = document.createElement('div');
+        accordion.className = 'partners-accordion';
+
+        // Создаем заголовок аккордеона
+        const header = document.createElement('div');
+        header.className = 'partners-accordion-header';
+        header.innerHTML = `
+            <div class="accordion-title">
+                <span class="accordion-emoji">${category.emoji}</span>
+                <span class="accordion-text">${category.title}</span>
+                <span class="accordion-count">${category.partners.length}</span>
+            </div>
+            <div class="accordion-arrow">▼</div>
+        `;
+
+        // Создаем контейнер для карточек (изначально скрытый)
+        const content = document.createElement('div');
+        content.className = 'partners-accordion-content';
+        content.style.display = 'none';
+
+        // Добавляем карточки партнеров в контейнер
+        category.partners.forEach((partner, index) => {
         const card = document.createElement('div');
         card.className = 'partner-card-minimal';
 
@@ -837,22 +900,50 @@ function loadPartners(partners) {
             </div>
         `;
 
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-        partnersGrid.appendChild(card);
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            content.appendChild(card);
 
-        // Добавляем обработчик для кнопки маршрута
-        const routeBtn = card.querySelector('.partner-route-btn-minimal');
-        routeBtn.addEventListener('click', () => {
-            openPartnerRoute(partner);
+            // Добавляем обработчик для кнопки маршрута
+            const routeBtn = card.querySelector('.partner-route-btn-minimal');
+            routeBtn.addEventListener('click', () => {
+                openPartnerRoute(partner);
+            });
+
+            // Анимация появления при раскрытии аккордеона
+            setTimeout(() => {
+                card.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+            }, 0);
         });
 
-        // Анимация появления
-        setTimeout(() => {
-            card.style.transition = 'all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 80);
+        // Обработчик клика на заголовок аккордеона
+        header.addEventListener('click', () => {
+            const isOpen = content.style.display !== 'none';
+
+            if (isOpen) {
+                // Закрываем
+                content.style.display = 'none';
+                header.classList.remove('active');
+            } else {
+                // Открываем
+                content.style.display = 'grid';
+                header.classList.add('active');
+
+                // Анимация карточек при открытии
+                const cards = content.querySelectorAll('.partner-card-minimal');
+                cards.forEach((card, idx) => {
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, idx * 80);
+                });
+            }
+        });
+
+        // Собираем аккордеон
+        accordion.appendChild(header);
+        accordion.appendChild(content);
+        partnersGrid.appendChild(accordion);
     });
 
     // Добавляем кнопки оплаты внизу только если еще не оплачено

@@ -1,4 +1,4 @@
-/* 3D Marquee Hero Section Styles */
+/* 3D Marquee Hero Section Styles - MOBILE FIRST: TWO HORIZONTAL ROWS */
 
 .marquee-hero-section {
     width: 100%;
@@ -13,60 +13,72 @@
 }
 
 .marquee-container-main {
-    perspective: 2000px;
     overflow: hidden;
     position: relative;
-    height: 600px;
     border-radius: 1.5rem;
 }
 
 .marquee-grid-main {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    height: 100%;
-    transform-style: preserve-3d;
-}
-
-.marquee-column-main {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    will-change: transform;
+    width: 100%;
 }
 
-/* Вертикальная анимация для каждой колонки с разной скоростью */
-.marquee-column-main:nth-child(1) {
-    animation: marqueeUp 60s linear infinite;
+/* ROW CONTAINER - горизонтальный скролл */
+.marquee-row-main {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+
+    /* iOS momentum scrolling */
+    -webkit-overflow-scrolling: touch;
+
+    /* Скрываем скроллбар */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    /* Всегда горизонтальный скролл */
+    width: 100%;
+    padding: 0.5rem 0;
 }
 
-.marquee-column-main:nth-child(2) {
-    animation: marqueeDown 70s linear infinite;
+.marquee-row-main::-webkit-scrollbar {
+    display: none;
 }
 
-.marquee-column-main:nth-child(3) {
-    animation: marqueeUp 65s linear infinite;
+/* Первая строка - прокрутка слева направо */
+.marquee-row-main:nth-child(1) {
+    animation: marqueeScrollRight 40s linear infinite;
 }
 
-.marquee-column-main:nth-child(4) {
-    animation: marqueeDown 75s linear infinite;
+/* Вторая строка - прокрутка справа налево */
+.marquee-row-main:nth-child(2) {
+    animation: marqueeScrollLeft 45s linear infinite;
 }
 
-@keyframes marqueeUp {
+/* Пауза анимации при наведении */
+.marquee-row-main:hover {
+    animation-play-state: paused;
+}
+
+@keyframes marqueeScrollRight {
     0% {
-        transform: translateY(0);
+        transform: translateX(0);
     }
     100% {
-        transform: translateY(-50%);
+        transform: translateX(-50%);
     }
 }
 
-@keyframes marqueeDown {
+@keyframes marqueeScrollLeft {
     0% {
-        transform: translateY(-25%);
+        transform: translateX(-50%);
     }
     100% {
-        transform: translateY(25%);
+        transform: translateX(0);
     }
 }
 
@@ -79,42 +91,46 @@
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
+
+    /* Фиксированные размеры для карточек */
+    width: 280px;
+    height: 200px;
 }
 
 .marquee-item-main img {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
     object-fit: cover;
     border-radius: 0.75rem;
 }
 
 .marquee-item-main:hover {
-    transform: scale(1.05) translateZ(20px);
+    transform: scale(1.05);
     box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
     border-color: rgba(99, 102, 241, 0.4);
 }
 
-/* Градиентные оверлеи сверху и снизу для плавного исчезновения */
+/* Градиентные оверлеи слева и справа для плавного исчезновения */
 .marquee-container-main::before,
 .marquee-container-main::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    height: 100px;
+    top: 0;
+    bottom: 0;
+    width: 100px;
     z-index: 10;
     pointer-events: none;
 }
 
 .marquee-container-main::before {
-    top: 0;
-    background: linear-gradient(to bottom, #0f0520 0%, rgba(15, 5, 32, 0) 100%);
+    left: 0;
+    background: linear-gradient(to right, #0f0520 0%, rgba(15, 5, 32, 0) 100%);
 }
 
 .marquee-container-main::after {
-    bottom: 0;
-    background: linear-gradient(to top, #0f0520 0%, rgba(15, 5, 32, 0) 100%);
+    right: 0;
+    background: linear-gradient(to left, #0f0520 0%, rgba(15, 5, 32, 0) 100%);
 }
 
 /* Надпись поверх marquee */
@@ -164,19 +180,41 @@
 
 /* Адаптивность */
 @media (max-width: 768px) {
-    .marquee-container-main {
-        height: 400px;
-    }
-
     .marquee-overlay-title {
-        font-size: 3rem;
+        font-size: 2.5rem;
     }
 
     .marquee-overlay-subtitle {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 
-    .marquee-grid-main {
-        grid-template-columns: repeat(2, 1fr);
+    .marquee-item-main {
+        width: 240px;
+        height: 180px;
+    }
+
+    .marquee-container-main::before,
+    .marquee-container-main::after {
+        width: 60px;
+    }
+}
+
+@media (max-width: 480px) {
+    .marquee-overlay-title {
+        font-size: 2rem;
+    }
+
+    .marquee-overlay-subtitle {
+        font-size: 0.75rem;
+    }
+
+    .marquee-item-main {
+        width: 200px;
+        height: 150px;
+    }
+
+    .marquee-container-main::before,
+    .marquee-container-main::after {
+        width: 40px;
     }
 }

@@ -154,15 +154,20 @@ function initMarqueeHero() {
     // Полностью очищаем grid
     grid.innerHTML = '';
 
-    // Сбрасываем анимации
-    grid.style.animation = 'none';
-    void grid.offsetHeight; // Принудительный reflow
-    grid.style.animation = '';
+    // ОТКЛЮЧАЕМ анимацию до полной загрузки
+    grid.style.opacity = '0';
+    grid.style.transition = 'opacity 0.5s ease';
+
+    let loadedImagesCount = 0;
+    let totalImages = 0;
 
     // Создаем колонки
     for (let col = 0; col < numColumns; col++) {
         const column = document.createElement('div');
         column.className = 'marquee-column-main';
+
+        // ВРЕМЕННО отключаем анимацию колонки
+        column.style.animationPlayState = 'paused';
 
         // Получаем изображения для этой колонки
         const columnImages = marqueeImages.slice(col * imagesPerColumn, (col + 1) * imagesPerColumn);
@@ -172,6 +177,8 @@ function initMarqueeHero() {
         for (let i = 0; i < 8; i++) {
             repeatedImages.push(...columnImages);
         }
+
+        totalImages += repeatedImages.length;
 
         // Создаем элементы изображений
         repeatedImages.forEach((imgSrc, index) => {
@@ -190,11 +197,47 @@ function initMarqueeHero() {
             img.style.height = 'auto';
             img.style.display = 'block';
 
+            // Обработка УСПЕШНОЙ загрузки
+            img.onload = function() {
+                loadedImagesCount++;
+
+                // Когда все изображения загружены - включаем анимацию
+                if (loadedImagesCount === totalImages) {
+                    console.log(`✅ Все ${totalImages} изображений загружены, запускаем анимацию`);
+
+                    // Показываем карусель плавно
+                    grid.style.opacity = '1';
+
+                    // Запускаем анимацию всех колонок
+                    setTimeout(() => {
+                        const columns = grid.querySelectorAll('.marquee-column-main');
+                        columns.forEach(col => {
+                            col.style.animationPlayState = 'running';
+                        });
+                    }, 100);
+                }
+            };
+
             // Обработка ошибок загрузки
             img.onerror = function() {
                 console.warn(`⚠️ Ошибка загрузки изображения: ${imgSrc}`);
                 this.style.minHeight = '200px';
                 this.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+
+                // Считаем ошибку как "загруженное" чтобы не блокировать
+                loadedImagesCount++;
+
+                if (loadedImagesCount === totalImages) {
+                    console.log(`✅ Загрузка завершена (с ошибками), запускаем анимацию`);
+                    grid.style.opacity = '1';
+
+                    setTimeout(() => {
+                        const columns = grid.querySelectorAll('.marquee-column-main');
+                        columns.forEach(col => {
+                            col.style.animationPlayState = 'running';
+                        });
+                    }, 100);
+                }
             };
 
             item.appendChild(img);
@@ -207,7 +250,7 @@ function initMarqueeHero() {
     marqueeInitialized = true;
     currentNumColumns = numColumns;
 
-    console.log(`✅ 3D Marquee инициализирован: ${numColumns} колонок × ${repeatedImages.length} изображений каждая`);
+    console.log(`🎬 3D Marquee создан: ${numColumns} колонок × ${totalImages} изображений. Ожидание загрузки...`);
 }
 
 // Переинициализация при изменении размера окна (debounced)

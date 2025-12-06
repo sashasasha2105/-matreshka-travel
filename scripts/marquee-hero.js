@@ -109,15 +109,48 @@ function createPartnerCard(partner) {
     return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
 }
 
+// Функция создания SVG карточки экономии
+function createSavingsCard() {
+    const svg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+            <defs>
+                <linearGradient id="grad-savings" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgb(255,215,0);stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:rgb(255,140,0);stop-opacity:1" />
+                </linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="url(#grad-savings)" rx="16"/>
+            <rect x="10" y="10" width="380" height="280" fill="rgba(255,255,255,0.1)" rx="12" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+
+            <text x="200" y="80" font-size="60" text-anchor="middle" fill="white">💰</text>
+
+            <text x="200" y="130" font-size="22" font-weight="bold" text-anchor="middle" fill="white" font-family="Arial, sans-serif">Наши клиенты</text>
+            <text x="200" y="155" font-size="22" font-weight="bold" text-anchor="middle" fill="white" font-family="Arial, sans-serif">экономят</text>
+
+            <rect x="100" y="175" width="200" height="50" fill="rgba(255,255,255,0.3)" rx="25"/>
+            <text x="200" y="208" font-size="28" font-weight="bold" text-anchor="middle" fill="white" font-family="Arial, sans-serif">от 1750₽</text>
+
+            <text x="200" y="250" font-size="16" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="Arial, sans-serif">за каждую поездку</text>
+        </svg>
+    `;
+    return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+}
+
 // Создаем массив изображений партнеров
 const partnerImages = partners.map(createPartnerCard);
 
-// Смешиваем фото регионов и карточки партнеров
+// Создаем карточку экономии
+const savingsCard = createSavingsCard();
+
+// Смешиваем фото регионов, карточки партнеров и карточку экономии
 const marqueeImages = [];
 const totalImages = 120; // Значительно увеличили количество карточек для стабильной работы
 
 for (let i = 0; i < totalImages; i++) {
-    if (i % 3 === 0) {
+    if (i % 15 === 0) {
+        // Каждый 15-й - карточка экономии
+        marqueeImages.push(savingsCard);
+    } else if (i % 3 === 0) {
         // Каждый третий - партнер
         marqueeImages.push(partnerImages[i % partnerImages.length]);
     } else {

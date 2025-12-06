@@ -62,6 +62,11 @@
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
 
+  /* МГНОВЕННАЯ РЕАКЦИЯ НА TOUCH */
+  touch-action: pan-x;
+  user-select: none;
+  -webkit-user-drag: none;
+
   /* Скрываем скроллбар на WebKit */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
@@ -86,7 +91,12 @@
 
   border-radius: 1.5rem;
   overflow: hidden;
-  cursor: pointer;
+
+  /* УБРАН cursor: pointer для мобильных */
+  cursor: default;
+
+  /* НЕ БЛОКИРУЕМ touch events - сразу позволяем свайп */
+  touch-action: pan-x pan-y;
 
   /* Стиль как у date picker */
   background: rgba(23, 23, 23, 0.5);
@@ -110,16 +120,19 @@
   .apple-card {
     width: 380px;
     height: 480px;
+    cursor: pointer; /* Возвращаем pointer только на десктопе */
   }
 }
 
-/* Hover state */
-.apple-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow:
-    0 20px 60px rgba(99, 102, 241, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+/* Hover state - ОТКЛЮЧЕН для мобильных */
+@media (hover: hover) and (pointer: fine) {
+  .apple-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow:
+      0 20px 60px rgba(99, 102, 241, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
 }
 
 /* ========================================
@@ -131,11 +144,18 @@
   object-fit: cover;
   position: absolute;
   inset: 0;
-  transition: transform 0.5s ease;
+  /* УБРАНА анимация для мобильных */
 }
 
-.apple-card:hover .apple-card-image {
-  transform: scale(1.1);
+/* Zoom только на десктопе */
+@media (hover: hover) and (pointer: fine) {
+  .apple-card-image {
+    transition: transform 0.5s ease;
+  }
+
+  .apple-card:hover .apple-card-image {
+    transform: scale(1.1);
+  }
 }
 
 /* ========================================

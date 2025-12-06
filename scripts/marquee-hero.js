@@ -109,18 +109,18 @@ function initMarqueeHero() {
     const grid = document.getElementById('marqueeGridMain');
     if (!grid) return;
 
-    const numRows = 2;
-    const imagesPerRow = Math.ceil(marqueeImages.length / numRows);
+    const numColumns = 4;
+    const imagesPerColumn = Math.ceil(marqueeImages.length / numColumns);
 
-    for (let row = 0; row < numRows; row++) {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = 'marquee-row-main';
+    for (let col = 0; col < numColumns; col++) {
+        const column = document.createElement('div');
+        column.className = 'marquee-column-main';
 
-        // Получаем изображения для этой строки
-        const rowImages = marqueeImages.slice(row * imagesPerRow, (row + 1) * imagesPerRow);
+        // Получаем изображения для этой колонки
+        const columnImages = marqueeImages.slice(col * imagesPerColumn, (col + 1) * imagesPerColumn);
 
         // Удваиваем изображения для бесконечного эффекта
-        const doubledImages = [...rowImages, ...rowImages];
+        const doubledImages = [...columnImages, ...columnImages];
 
         doubledImages.forEach(imgSrc => {
             const item = document.createElement('div');
@@ -132,13 +132,13 @@ function initMarqueeHero() {
             img.loading = 'lazy';
 
             item.appendChild(img);
-            rowDiv.appendChild(item);
+            column.appendChild(item);
         });
 
-        grid.appendChild(rowDiv);
+        grid.appendChild(column);
     }
 
-    console.log('✅ Marquee Hero инициализирован с двумя горизонтальными рядами');
+    console.log('✅ 3D Marquee инициализирован на главной странице');
 }
 
 // Инициализация при загрузке DOM

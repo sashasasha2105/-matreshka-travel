@@ -68,19 +68,6 @@
 }
 
 /* ========================================
-   TWO-ROW MODE для мобильных
-   ======================================== */
-.apple-carousel-wrapper.two-row-mode {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.apple-carousel-wrapper.two-row-mode .apple-carousel-track {
-  padding: 0.5rem 0;
-}
-
-/* ========================================
    КАРТОЧКА ПАКЕТА
    ======================================== */
 .apple-card {

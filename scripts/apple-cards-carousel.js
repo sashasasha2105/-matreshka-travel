@@ -13,7 +13,6 @@ class AppleCardsCarousel {
       onCardClick: options.onCardClick || null,
       showNavButtons: options.showNavButtons !== undefined ? options.showNavButtons : true,
       showDots: options.showDots !== undefined ? options.showDots : false,
-      twoRowMode: options.twoRowMode !== undefined ? options.twoRowMode : true,
       ...options
     };
 
@@ -52,51 +51,24 @@ class AppleCardsCarousel {
     const section = document.createElement('div');
     section.className = 'apple-carousel-section';
 
-    if (this.options.twoRowMode) {
-      // TWO-ROW MODE: разделяем карточки на две строки
-      const midpoint = Math.ceil(this.state.cards.length / 2);
-      const row1Cards = this.state.cards.slice(0, midpoint);
-      const row2Cards = this.state.cards.slice(midpoint);
-
-      section.innerHTML = `
-        <div class="apple-carousel-container">
-          <h2 class="apple-carousel-title">${this.options.title}</h2>
-          <div class="apple-carousel-wrapper two-row-mode">
-            <div class="apple-carousel-track" id="appleCarouselTrack1">
-              ${row1Cards.map((card, index) => this.createCard(card, index)).join('')}
-            </div>
-            <div class="apple-carousel-track" id="appleCarouselTrack2">
-              ${row2Cards.map((card, index) => this.createCard(card, midpoint + index)).join('')}
-            </div>
+    section.innerHTML = `
+      <div class="apple-carousel-container">
+        <h2 class="apple-carousel-title">${this.options.title}</h2>
+        <div class="apple-carousel-wrapper">
+          ${this.options.showNavButtons ? '<button class="apple-carousel-nav apple-carousel-nav-prev" aria-label="Previous">‹</button>' : ''}
+          <div class="apple-carousel-track" id="appleCarouselTrack">
+            ${this.state.cards.map((card, index) => this.createCard(card, index)).join('')}
           </div>
+          ${this.options.showNavButtons ? '<button class="apple-carousel-nav apple-carousel-nav-next" aria-label="Next">›</button>' : ''}
         </div>
-      `;
-    } else {
-      // SINGLE-ROW MODE: оригинальный режим
-      section.innerHTML = `
-        <div class="apple-carousel-container">
-          <h2 class="apple-carousel-title">${this.options.title}</h2>
-          <div class="apple-carousel-wrapper">
-            ${this.options.showNavButtons ? '<button class="apple-carousel-nav apple-carousel-nav-prev" aria-label="Previous">‹</button>' : ''}
-            <div class="apple-carousel-track" id="appleCarouselTrack">
-              ${this.state.cards.map((card, index) => this.createCard(card, index)).join('')}
-            </div>
-            ${this.options.showNavButtons ? '<button class="apple-carousel-nav apple-carousel-nav-next" aria-label="Next">›</button>' : ''}
-          </div>
-          ${this.options.showDots ? this.createDots() : ''}
-        </div>
-      `;
-    }
+        ${this.options.showDots ? this.createDots() : ''}
+      </div>
+    `;
 
     this.container.innerHTML = '';
     this.container.appendChild(section);
 
-    if (this.options.twoRowMode) {
-      this.track1 = document.getElementById('appleCarouselTrack1');
-      this.track2 = document.getElementById('appleCarouselTrack2');
-    } else {
-      this.track = document.getElementById('appleCarouselTrack');
-    }
+    this.track = document.getElementById('appleCarouselTrack');
   }
 
   /**
@@ -158,26 +130,22 @@ class AppleCardsCarousel {
       });
     });
 
-    // Touch/Drag support для треков
-    const tracks = this.options.twoRowMode ? [this.track1, this.track2] : [this.track];
+    // Touch/Drag support для трека
+    if (this.track) {
+      // Mouse events
+      this.track.addEventListener('mousedown', this.handleDragStart.bind(this));
+      this.track.addEventListener('mousemove', this.handleDragMove.bind(this));
+      this.track.addEventListener('mouseup', this.handleDragEnd.bind(this));
+      this.track.addEventListener('mouseleave', this.handleDragEnd.bind(this));
 
-    tracks.forEach(track => {
-      if (track) {
-        // Mouse events
-        track.addEventListener('mousedown', this.handleDragStart.bind(this));
-        track.addEventListener('mousemove', this.handleDragMove.bind(this));
-        track.addEventListener('mouseup', this.handleDragEnd.bind(this));
-        track.addEventListener('mouseleave', this.handleDragEnd.bind(this));
+      // Touch events
+      this.track.addEventListener('touchstart', this.handleDragStart.bind(this), { passive: true });
+      this.track.addEventListener('touchmove', this.handleDragMove.bind(this), { passive: true });
+      this.track.addEventListener('touchend', this.handleDragEnd.bind(this));
+    }
 
-        // Touch events
-        track.addEventListener('touchstart', this.handleDragStart.bind(this), { passive: true });
-        track.addEventListener('touchmove', this.handleDragMove.bind(this), { passive: true });
-        track.addEventListener('touchend', this.handleDragEnd.bind(this));
-      }
-    });
-
-    // Кнопки навигации (только для single-row mode)
-    if (!this.options.twoRowMode && this.options.showNavButtons) {
+    // Кнопки навигации
+    if (this.options.showNavButtons) {
       const prevBtn = this.container.querySelector('.apple-carousel-nav-prev');
       const nextBtn = this.container.querySelector('.apple-carousel-nav-next');
 
@@ -190,8 +158,8 @@ class AppleCardsCarousel {
       }
     }
 
-    // Индикаторы (dots) - только для single-row mode
-    if (!this.options.twoRowMode && this.options.showDots) {
+    // Индикаторы (dots)
+    if (this.options.showDots) {
       const dots = this.container.querySelectorAll('.apple-carousel-dot');
       dots.forEach(dot => {
         dot.addEventListener('click', (e) => {
@@ -199,11 +167,11 @@ class AppleCardsCarousel {
           this.scrollToIndex(index);
         });
       });
+    }
 
-      // Обновление активного индикатора при скролле
-      if (this.track) {
-        this.track.addEventListener('scroll', this.updateActiveDot.bind(this));
-      }
+    // Обновление активного индикатора при скролле
+    if (this.track) {
+      this.track.addEventListener('scroll', this.updateActiveDot.bind(this));
     }
   }
 
@@ -213,32 +181,28 @@ class AppleCardsCarousel {
   handleDragStart(e) {
     this.state.isDragging = true;
     this.state.startX = e.type === 'touchstart' ? e.touches[0].pageX : e.pageX;
-    this.state.currentTrack = e.currentTarget;
-    this.state.scrollLeft = this.state.currentTrack.scrollLeft;
-    this.state.currentTrack.style.cursor = 'grabbing';
+    this.state.scrollLeft = this.track.scrollLeft;
+    this.track.style.cursor = 'grabbing';
   }
 
   /**
    * Обработка движения драга
    */
   handleDragMove(e) {
-    if (!this.state.isDragging || !this.state.currentTrack) return;
+    if (!this.state.isDragging) return;
 
     e.preventDefault();
     const x = e.type === 'touchmove' ? e.touches[0].pageX : e.pageX;
     const walk = (x - this.state.startX) * 2;
-    this.state.currentTrack.scrollLeft = this.state.scrollLeft - walk;
+    this.track.scrollLeft = this.state.scrollLeft - walk;
   }
 
   /**
    * Обработка окончания драга
    */
   handleDragEnd() {
-    if (this.state.currentTrack) {
-      this.state.currentTrack.style.cursor = 'grab';
-    }
     this.state.isDragging = false;
-    this.state.currentTrack = null;
+    this.track.style.cursor = 'grab';
   }
 
   /**

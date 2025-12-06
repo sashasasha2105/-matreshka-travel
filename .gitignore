@@ -7,3 +7,9 @@ server.py
 
 # Аналитика - приватные ключи
 analytics.config.js
+
+# Server logs
+server.log
+server_stdout.log
+server_stderr.log
+server.pid

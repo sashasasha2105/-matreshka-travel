@@ -55,6 +55,12 @@
   /* Smooth scrollbar */
   scrollbar-width: thin;
   scrollbar-color: rgba(99, 102, 241, 0.3) rgba(255, 255, 255, 0.05);
+
+  /* УЛУЧШЕННЫЙ ТАЧ-СКРОЛЛИНГ ДЛЯ МОБИЛЬНЫХ */
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  scroll-behavior: smooth;
 }
 
 .package-modal-content::-webkit-scrollbar {
@@ -264,6 +270,42 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
+}
+
+/* МОБИЛЬНАЯ ВЕРСИЯ - ГОРИЗОНТАЛЬНЫЙ СКРОЛЛ */
+@media (max-width: 768px) {
+  .package-partners-grid {
+    display: flex !important;
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    /* Убираем grid, делаем flex для лучшего свайпа */
+  }
+
+  .package-partner-card {
+    flex: 0 0 85%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  /* Скрываем scrollbar но оставляем функциональность */
+  .package-partners-grid::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .package-partners-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+  }
+
+  .package-partners-grid::-webkit-scrollbar-thumb {
+    background: rgba(99, 102, 241, 0.3);
+    border-radius: 2px;
+  }
 }
 
 .package-partner-card {

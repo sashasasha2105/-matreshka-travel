@@ -678,9 +678,6 @@ function showRegionDetails(regionId) {
             // Обновляем breadcrumbs
             updateBreadcrumbs(region.name);
 
-            // Заполняем достопримечательности
-            loadAttractions(region.attractions);
-
             // Загружаем партнеров
             loadPartners(region.partners);
 
@@ -710,70 +707,6 @@ function showRegionDetails(regionId) {
             hideLoader();
         }
     }, 800);
-}
-
-// Функция загрузки достопримечательностей (скрытое описание с кнопкой раскрыть)
-function loadAttractions(attractions) {
-    console.log('🏛️ loadAttractions вызвана с:', attractions);
-    const attractionsList = document.getElementById('attractionsList');
-    console.log('📍 attractionsList элемент:', attractionsList);
-
-    if (!attractionsList) {
-        console.error('❌ attractionsList не найден!');
-        return;
-    }
-
-    if (!attractions || attractions.length === 0) {
-        console.warn('⚠️ Нет достопримечательностей для отображения');
-        attractionsList.innerHTML = '<p style="color: rgba(255, 255, 255, 0.7); padding: 20px;">Достопримечательности не найдены</p>';
-        return;
-    }
-
-    console.log(`✅ Загружаем ${attractions.length} достопримечательностей`);
-    attractionsList.innerHTML = '';
-    attractions.forEach((attraction, index) => {
-        const li = document.createElement('li');
-        li.className = 'attraction-item ripple';
-        const uniqueId = `attraction-${index}`;
-        li.innerHTML = `
-            <div class="attraction-header">
-                <span class="attraction-name">${attraction.name}</span>
-                <button class="action-btn route-btn" onclick="openRoute('${attraction.name}')">
-                    <span class="route-icon">🗺️</span>
-                    <span class="route-text">Маршрут</span>
-                </button>
-            </div>
-            <div class="attraction-info-auto" id="${uniqueId}" style="display: none;">${attraction.info}</div>
-            <button class="toggle-description-btn" onclick="toggleAttractionDescription('${uniqueId}', this)">
-                <span class="toggle-icon">▼</span>
-                <span class="toggle-text">Раскрыть описание</span>
-            </button>
-        `;
-        li.style.opacity = '0';
-        li.style.transform = 'translateX(-30px)';
-        attractionsList.appendChild(li);
-
-        // Анимация появления через CSS
-        li.style.animation = `fadeInLeft 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${index * 100}ms forwards`;
-    });
-}
-
-// Функция переключения видимости описания достопримечательности
-function toggleAttractionDescription(elementId, button) {
-    const infoElement = document.getElementById(elementId);
-    const icon = button.querySelector('.toggle-icon');
-    const text = button.querySelector('.toggle-text');
-
-    if (infoElement.style.display === 'none') {
-        infoElement.style.display = 'block';
-        infoElement.style.animation = 'fadeInUp 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
-        icon.textContent = '▲';
-        text.textContent = 'Скрыть описание';
-    } else {
-        infoElement.style.display = 'none';
-        icon.textContent = '▼';
-        text.textContent = 'Раскрыть описание';
-    }
 }
 
 // Функция категоризации партнеров

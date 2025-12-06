@@ -391,12 +391,22 @@ function updateLoadMoreButton() {
         const nextBatchSize = Math.min(remainingRegions, REGIONS_PER_PAGE);
 
         loadMoreBtn.innerHTML = `
-            <button class="load-more-btn" onclick="loadMoreRegions()">
+            <button class="load-more-btn">
                 <span class="load-more-icon">⬇️</span>
                 <span class="load-more-text">Показать еще ${nextBatchSize} ${nextBatchSize === 1 ? 'регион' : nextBatchSize < 5 ? 'региона' : 'регионов'}</span>
                 <span class="load-more-count">(осталось ${remainingRegions})</span>
             </button>
         `;
+
+        // ПРАВИЛЬНО: добавляем обработчик события
+        const btn = loadMoreBtn.querySelector('.load-more-btn');
+        if (btn) {
+            // Удаляем старый обработчик если есть
+            btn.replaceWith(btn.cloneNode(true));
+            const newBtn = loadMoreBtn.querySelector('.load-more-btn');
+            newBtn.addEventListener('click', loadMoreRegions);
+        }
+
         loadMoreBtn.style.display = 'block';
     } else {
         loadMoreBtn.style.display = 'none';

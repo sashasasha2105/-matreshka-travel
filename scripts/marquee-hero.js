@@ -232,11 +232,34 @@ window.addEventListener('resize', () => {
 });
 
 // Инициализация при полной загрузке страницы
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        // Небольшая задержка для гарантии загрузки стилей
-        setTimeout(initMarqueeHero, 100);
-    });
+function safeInitMarquee() {
+    // Проверяем, что grid существует
+    const grid = document.getElementById('marqueeGridMain');
+    if (!grid) {
+        console.warn('⚠️ Marquee grid не найден, повторная попытка через 200ms');
+        setTimeout(safeInitMarquee, 200);
+        return;
+    }
+
+    // Проверяем, что стили загружены (проверяем, применен ли display: grid)
+    const gridStyle = window.getComputedStyle(grid);
+    if (gridStyle.display !== 'grid') {
+        console.warn('⚠️ CSS для marquee еще не загружен, повторная попытка через 200ms');
+        setTimeout(safeInitMarquee, 200);
+        return;
+    }
+
+    console.log('✅ CSS загружен, инициализируем marquee');
+    initMarqueeHero();
+}
+
+// Используем load вместо DOMContentLoaded для гарантии загрузки CSS
+if (document.readyState === 'complete') {
+    // Страница уже полностью загружена
+    setTimeout(safeInitMarquee, 100);
 } else {
-    setTimeout(initMarqueeHero, 100);
+    // Ждем полной загрузки всех ресурсов (включая CSS)
+    window.addEventListener('load', () => {
+        setTimeout(safeInitMarquee, 100);
+    });
 }

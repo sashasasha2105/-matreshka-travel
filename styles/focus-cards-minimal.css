@@ -17,17 +17,42 @@
    FOCUS CARDS GRID
    ======================================== */
 .focus-cards-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+  /* МОБИЛЬНАЯ: горизонтальный скролл */
+  display: flex;
+  overflow-x: auto;
   gap: 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  padding: 0.5rem;
+
+  /* УЛУЧШЕННЫЙ СВАЙП для мобильных */
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity; /* proximity вместо mandatory - более легкий свайп */
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
+
+  /* Мгновенная реакция */
+  touch-action: pan-x;
+  user-select: none;
+  -webkit-user-drag: none;
+
+  /* Скрываем scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
+.focus-cards-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* ДЕСКТОП: grid layout */
 @media (min-width: 640px) {
   .focus-cards-grid {
+    display: grid;
     grid-template-columns: repeat(2, 1fr);
+    overflow-x: visible;
+    scroll-snap-type: none;
   }
 }
 
@@ -45,7 +70,12 @@
   height: 20rem;
   border-radius: 1.5rem;
   overflow: hidden;
-  cursor: pointer;
+  cursor: default; /* Убран pointer для мобильных */
+
+  /* МОБИЛЬНАЯ: фиксированная ширина для горизонтального скролла */
+  flex: 0 0 75vw;
+  max-width: 350px;
+  min-width: 280px;
 
   /* Стиль как у date picker button */
   background: rgba(23, 23, 23, 0.5);
@@ -59,6 +89,16 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* SNAP для легкого свайпа */
+  scroll-snap-align: center;
+}
+
+@media (min-width: 640px) {
+  .focus-card {
+    flex: 1 1 auto; /* Возвращаем flex для grid */
+    cursor: pointer; /* Возвращаем pointer для десктопа */
+  }
 }
 
 @media (min-width: 768px) {
@@ -67,13 +107,15 @@
   }
 }
 
-/* Hover state - аккуратный как у date picker */
-.focus-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow:
-    0 10px 40px rgba(99, 102, 241, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+/* Hover state - ТОЛЬКО НА ДЕСКТОПЕ */
+@media (hover: hover) and (pointer: fine) {
+  .focus-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow:
+      0 10px 40px rgba(99, 102, 241, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
 }
 
 /* Focus эффект - blur для других карточек */
@@ -92,11 +134,17 @@
   object-fit: cover;
   position: absolute;
   inset: 0;
-  transition: transform 0.3s ease;
 }
 
-.focus-card:hover .focus-card-image {
-  transform: scale(1.05);
+/* Zoom ТОЛЬКО НА ДЕСКТОПЕ */
+@media (hover: hover) and (pointer: fine) {
+  .focus-card-image {
+    transition: transform 0.3s ease;
+  }
+
+  .focus-card:hover .focus-card-image {
+    transform: scale(1.05);
+  }
 }
 
 /* ========================================

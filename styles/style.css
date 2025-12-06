@@ -601,11 +601,11 @@ body {
 }
 
 .region-about, .section-content p {
-    font-size: 1.1rem;
+    font-size: 0.7rem; /* Уменьшено с 1.1rem для компактности */
     color: #f5f5f5;
-    line-height: 1.9;
+    line-height: 1.6;
     text-align: left;
-    padding: 20px;
+    padding: 15px;
     background: rgba(255, 204, 0, 0.03);
     border-left: 4px solid rgba(255, 204, 0, 0.4);
     border-radius: 8px;

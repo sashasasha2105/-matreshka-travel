@@ -55,10 +55,14 @@
   gap: 1.5rem;
   overflow-x: auto;
   scroll-behavior: smooth;
-  padding: 1rem 0 2rem;
+  padding: 1rem 0.75rem 2rem;
+
+  /* УЛУЧШЕННЫЙ СВАЙП */
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
 
   /* Скрываем скроллбар на WebKit */
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE and Edge */
 }
@@ -73,8 +77,13 @@
 .apple-card {
   position: relative;
   flex: 0 0 auto;
-  width: 320px;
+
+  /* МОБИЛЬНАЯ: 2 карточки рядом - 45% ширины экрана */
+  width: 45vw;
+  max-width: 350px;
+  min-width: 280px;
   height: 400px;
+
   border-radius: 1.5rem;
   overflow: hidden;
   cursor: pointer;
@@ -91,6 +100,10 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* SNAP К ЦЕНТРУ */
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
 }
 
 @media (min-width: 768px) {

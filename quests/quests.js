@@ -41,13 +41,36 @@
             paidRegions.forEach(paidRegion => {
                 const regionData = window.RUSSIA_REGIONS_DATA?.[paidRegion.id];
 
-                if (!regionData || !regionData.attractions) return;
+                if (!regionData) return;
 
-                // Берем до 3 достопримечательностей для заданий
-                const attractions = regionData.attractions.slice(0, 3);
+                // ПРИОРИТЕТ: Используем challenges если они есть, иначе берем attractions
+                let tasksSource = [];
 
-                attractions.forEach((attraction, index) => {
-                    const questId = `${paidRegion.id}_${index}`;
+                if (regionData.challenges && regionData.challenges.length > 0) {
+                    // Используем специальные челленджи
+                    console.log(`🎯 Используем challenges для ${regionData.name}`);
+                    tasksSource = regionData.challenges.map(challenge => ({
+                        name: challenge.name,
+                        description: challenge.description,
+                        challengeId: challenge.id
+                    }));
+                } else if (regionData.attractions && regionData.attractions.length > 0) {
+                    // Фоллбэк на attractions (для регионов без специальных заданий)
+                    console.log(`📍 Используем attractions для ${regionData.name}`);
+                    tasksSource = regionData.attractions.slice(0, 3).map((attraction, index) => ({
+                        name: attraction.name,
+                        description: `Найди и сфотографируй достопримечательность "${attraction.name}"`,
+                        challengeId: `attraction_${index}`
+                    }));
+                }
+
+                if (tasksSource.length === 0) {
+                    console.warn(`⚠️ Нет заданий для ${regionData.name}`);
+                    return;
+                }
+
+                tasksSource.forEach((task) => {
+                    const questId = `${paidRegion.id}_${task.challengeId}`;
 
                     // Проверяем, не выполнено ли уже задание
                     const isCompleted = this.completedQuests.includes(questId);
@@ -61,9 +84,9 @@
                         id: questId,
                         regionId: paidRegion.id,
                         regionName: regionData.name,
-                        title: `Сфотографируй ${attraction.name}`,
-                        description: `Найди и сфотографируй достопримечательность "${attraction.name}" в городе ${regionData.name}`,
-                        attraction: attraction.name,
+                        title: `Сфотографируйте ${task.name}`,
+                        description: task.description,
+                        attraction: task.name,
                         partner: partner,
                         rewardText: partner ? `QR-код на бонус в "${partner.name}"` : 'QR-код на бонус',
                         status: isCompleted ? 'completed' : 'available',

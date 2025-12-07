@@ -187,10 +187,11 @@
 }
 
 .region-subtitle {
-    font-size: 18px;
-    color: rgba(244, 228, 193, 0.8);
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.95);
     font-weight: 400;
     letter-spacing: 0.5px;
+    line-height: 1.6;
 }
 
 /* ========================================
@@ -591,7 +592,7 @@
     }
 
     .region-subtitle {
-        font-size: 16px;
+        font-size: 18px;
     }
 
     .region-image-container {

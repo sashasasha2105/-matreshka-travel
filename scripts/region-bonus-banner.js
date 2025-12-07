@@ -122,11 +122,20 @@
 
     // Показать плашку
     function showRegionBonusBanner() {
+        console.log('🏆 Попытка показать плашку бонуса');
+
         const bonusActive = localStorage.getItem('regionBonusActive');
         const regionName = localStorage.getItem('regionBonusRegion');
         const bonusJustActivated = sessionStorage.getItem('bonusJustActivated');
 
-        if (!bonusActive || !regionName) return;
+        console.log('🏆 bonusActive:', bonusActive);
+        console.log('🏆 regionName:', regionName);
+        console.log('🏆 bonusJustActivated:', bonusJustActivated);
+
+        if (!bonusActive || !regionName) {
+            console.log('❌ Бонус не активен или регион не выбран');
+            return;
+        }
 
         // Проверяем, не истек ли бонус
         const daysRemaining = getDaysRemaining();
@@ -153,7 +162,11 @@
 
         // Находим карусель
         const carousel = document.getElementById('applePackagesCarousel');
-        if (!carousel) return;
+        if (!carousel) {
+            console.error('❌ Карусель не найдена!');
+            return;
+        }
+        console.log('✅ Карусель найдена:', carousel);
 
         // Создаем плашку
         const bannerHTML = `
@@ -188,12 +201,19 @@
 
         // Вставляем плашку после карусели
         carousel.insertAdjacentHTML('afterend', bannerHTML);
+        console.log('✅ Плашка вставлена в DOM');
 
         // Анимация появления
         const banner = document.getElementById('regionBonusBanner');
-        setTimeout(() => {
-            banner.classList.add('visible');
-        }, 100);
+        if (banner) {
+            console.log('✅ Плашка найдена, запускаем анимацию');
+            setTimeout(() => {
+                banner.classList.add('visible');
+                console.log('✅ Плашка стала видимой');
+            }, 100);
+        } else {
+            console.error('❌ Плашка не найдена после вставки!');
+        }
 
         // Функция закрытия
         function closeBanner() {
@@ -207,14 +227,12 @@
         const closeBtn = document.getElementById('bonusBannerClose');
         closeBtn.addEventListener('click', closeBanner);
 
-        // Автозакрытие через 5 секунд только если бонус только что активирован
-        if (bonusJustActivated) {
-            setTimeout(() => {
-                if (document.getElementById('regionBonusBanner')) {
-                    closeBanner();
-                }
-            }, 5000);
-        }
+        // ВСЕГДА автозакрытие через 5 секунд
+        setTimeout(() => {
+            if (document.getElementById('regionBonusBanner')) {
+                closeBanner();
+            }
+        }, 5000);
     }
 
     // Вспомогательная функция для склонения слова "день"
@@ -229,7 +247,16 @@
         const bonusActive = localStorage.getItem('regionBonusActive');
         if (bonusActive) {
             // Даем время карусели загрузиться
-            setTimeout(showRegionBonusBanner, 1000);
+            const checkCarousel = setInterval(() => {
+                const carousel = document.getElementById('applePackagesCarousel');
+                if (carousel) {
+                    clearInterval(checkCarousel);
+                    setTimeout(showRegionBonusBanner, 500);
+                }
+            }, 100);
+
+            // Таймаут на случай если карусель не найдена
+            setTimeout(() => clearInterval(checkCarousel), 5000);
         }
     }
 

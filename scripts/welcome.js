@@ -156,16 +156,19 @@ continueBtn.addEventListener('click', () => {
         // Закрываем overlay вместо редиректа
         const overlay = document.getElementById('welcomeOverlay');
         if (overlay) {
+            // Отключаем pointer-events сразу
+            overlay.style.pointerEvents = 'none';
             overlay.style.opacity = '0';
             overlay.style.transition = 'opacity 0.5s ease-out';
+
+            // СРАЗУ разблокируем прокрутку body
+            document.body.style.overflow = '';
 
             // Скроллим главную страницу вверх
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             setTimeout(() => {
                 overlay.remove();
-                // Разблокируем прокрутку body
-                document.body.style.overflow = '';
                 // Показываем бонусную плашку
                 if (window.showRegionBonusBanner) {
                     window.showRegionBonusBanner();
@@ -185,12 +188,16 @@ skipBtn.addEventListener('click', () => {
     // Закрываем overlay
     const overlay = document.getElementById('welcomeOverlay');
     if (overlay) {
+        // Отключаем pointer-events сразу
+        overlay.style.pointerEvents = 'none';
         overlay.style.opacity = '0';
         overlay.style.transition = 'opacity 0.5s ease-out';
+
+        // СРАЗУ разблокируем прокрутку body
+        document.body.style.overflow = '';
+
         setTimeout(() => {
             overlay.remove();
-            // Разблокируем прокрутку body
-            document.body.style.overflow = '';
         }, 500);
     } else {
         // Fallback если не overlay режим

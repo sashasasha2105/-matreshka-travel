@@ -4,18 +4,9 @@
 
     // Проверяем, был ли только что выбран регион
     function checkAndShowWelcomeBonus() {
-        const userRegion = localStorage.getItem('userRegion');
-        const bonusShown = sessionStorage.getItem('welcomeBonusShown');
-        const justCompleted = sessionStorage.getItem('justCompletedWelcome');
-
-        // Показываем только если регион выбран, бонус еще не показан и только что завершили welcome
-        if (userRegion && !bonusShown && justCompleted) {
-            setTimeout(() => {
-                showWelcomeBonusModal(userRegion);
-                sessionStorage.setItem('welcomeBonusShown', 'true');
-                sessionStorage.removeItem('justCompletedWelcome');
-            }, 500);
-        }
+        // ОТКЛЮЧЕНО: Модальное окно больше не показывается
+        // Бонус активируется автоматически при выборе региона
+        // Плашка показывается через region-bonus-banner.js
     }
 
     // Получить иконку региона

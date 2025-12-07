@@ -96,7 +96,7 @@
                             <span class="bonus-banner-status">Активен</span>
                         </div>
                         <div class="bonus-banner-text">
-                            Все купоны и скидки доступны на <strong>${daysRemaining} ${getDaysText(daysRemaining)}</strong>
+                            Выдан пакет региона со скидками и digital-челленджами на <strong>${daysRemaining} ${getDaysText(daysRemaining)}</strong>
                         </div>
                     </div>
 

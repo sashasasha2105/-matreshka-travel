@@ -156,6 +156,8 @@ continueBtn.addEventListener('click', () => {
         // Закрываем overlay вместо редиректа
         const overlay = document.getElementById('welcomeOverlay');
         if (overlay) {
+            console.log('🔥 ЗАКРЫВАЕМ OVERLAY');
+
             // Отключаем pointer-events сразу
             overlay.style.pointerEvents = 'none';
             overlay.style.opacity = '0';
@@ -163,12 +165,34 @@ continueBtn.addEventListener('click', () => {
 
             // СРАЗУ разблокируем прокрутку body
             document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.documentElement.style.overflow = '';
+
+            console.log('✅ Overflow разблокирован');
 
             // Скроллим главную страницу вверх
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             setTimeout(() => {
+                console.log('🗑️ УДАЛЯЕМ OVERLAY');
                 overlay.remove();
+
+                // Финальная очистка - убираем все возможные блокировки
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                document.body.style.height = '';
+                document.documentElement.style.overflow = '';
+
+                // Удаляем все оставшиеся particles и glow если есть
+                document.querySelectorAll('.particles, .glow').forEach(el => {
+                    if (!el.closest('.welcome-screen')) {
+                        el.remove();
+                        console.log('🧹 Удален потерянный элемент:', el.className);
+                    }
+                });
+
+                console.log('✅ OVERLAY УДАЛЕН, страница разблокирована');
+
                 // Показываем бонусную плашку
                 if (window.showRegionBonusBanner) {
                     window.showRegionBonusBanner();
@@ -188,6 +212,8 @@ skipBtn.addEventListener('click', () => {
     // Закрываем overlay
     const overlay = document.getElementById('welcomeOverlay');
     if (overlay) {
+        console.log('🔥 ПРОПУСКАЕМ - закрываем overlay');
+
         // Отключаем pointer-events сразу
         overlay.style.pointerEvents = 'none';
         overlay.style.opacity = '0';
@@ -195,9 +221,22 @@ skipBtn.addEventListener('click', () => {
 
         // СРАЗУ разблокируем прокрутку body
         document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.documentElement.style.overflow = '';
 
         setTimeout(() => {
+            console.log('🗑️ УДАЛЯЕМ OVERLAY (пропуск)');
             overlay.remove();
+
+            // Финальная очистка
+            document.body.style.overflow = '';
+            document.body.style.position = '';
+            document.documentElement.style.overflow = '';
+
+            // Удаляем particles и glow
+            document.querySelectorAll('.particles, .glow').forEach(el => el.remove());
+
+            console.log('✅ Страница разблокирована');
         }, 500);
     } else {
         // Fallback если не overlay режим

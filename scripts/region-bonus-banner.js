@@ -160,13 +160,13 @@
 
         const regionIcon = getRegionIcon(regionName);
 
-        // Находим карусель
-        const carousel = document.getElementById('applePackagesCarousel');
-        if (!carousel) {
-            console.error('❌ Карусель не найдена!');
+        // Находим date picker section (плашка будет после него)
+        const datePicker = document.querySelector('.date-picker-section');
+        if (!datePicker) {
+            console.error('❌ Date picker section не найдена!');
             return;
         }
-        console.log('✅ Карусель найдена:', carousel);
+        console.log('✅ Date picker найден:', datePicker);
 
         // Создаем плашку
         const bannerHTML = `
@@ -199,9 +199,9 @@
             </div>
         `;
 
-        // Вставляем плашку после карусели
-        carousel.insertAdjacentHTML('afterend', bannerHTML);
-        console.log('✅ Плашка вставлена в DOM');
+        // Вставляем плашку после date picker
+        datePicker.insertAdjacentHTML('afterend', bannerHTML);
+        console.log('✅ Плашка вставлена после date picker');
 
         // Анимация появления
         const banner = document.getElementById('regionBonusBanner');
@@ -246,17 +246,17 @@
     function checkAndShowBanner() {
         const bonusActive = localStorage.getItem('regionBonusActive');
         if (bonusActive) {
-            // Даем время карусели загрузиться
-            const checkCarousel = setInterval(() => {
-                const carousel = document.getElementById('applePackagesCarousel');
-                if (carousel) {
-                    clearInterval(checkCarousel);
+            // Даем время date picker загрузиться
+            const checkDatePicker = setInterval(() => {
+                const datePicker = document.querySelector('.date-picker-section');
+                if (datePicker) {
+                    clearInterval(checkDatePicker);
                     setTimeout(showRegionBonusBanner, 500);
                 }
             }, 100);
 
-            // Таймаут на случай если карусель не найдена
-            setTimeout(() => clearInterval(checkCarousel), 5000);
+            // Таймаут на случай если date picker не найден
+            setTimeout(() => clearInterval(checkDatePicker), 5000);
         }
     }
 

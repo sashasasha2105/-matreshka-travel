@@ -94,14 +94,21 @@
                             bottom: 0;
                             z-index: 100000;
                             background: linear-gradient(135deg, #0a0118 0%, #16213e 50%, #0a0118 100%);
+                            overflow-y: auto;
                         `;
                         overlay.innerHTML = welcomeBody;
+
+                        // Скроллим главную страницу вверх сразу
+                        window.scrollTo(0, 0);
 
                         // Добавляем стили welcome
                         const link = document.createElement('link');
                         link.rel = 'stylesheet';
                         link.href = 'styles/welcome.css';
                         document.head.appendChild(link);
+
+                        // Блокируем прокрутку body
+                        document.body.style.overflow = 'hidden';
 
                         // Добавляем overlay на страницу
                         document.body.appendChild(overlay);

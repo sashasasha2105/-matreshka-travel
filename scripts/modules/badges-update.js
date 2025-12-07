@@ -149,3 +149,4 @@
 
     console.log('✅ Система обновления badges инициализирована');
 })();
+https://sashasasha2105.github.io/-matreshka-travel/

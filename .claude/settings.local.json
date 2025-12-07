@@ -131,7 +131,19 @@
       "WebFetch(domain:icolorpalette.com)",
       "WebFetch(domain:colorswall.com)",
       "Bash(gh api:*)",
-      "Bash(git revert:*)"
+      "Bash(git revert:*)",
+      "Bash(paste:*)",
+      "Bash(echo:*)",
+      "Bash(launchctl unload:*)",
+      "Bash(launchctl load:*)",
+      "Bash(launchctl list:*)",
+      "Bash(./manage_server.sh restart:*)",
+      "Bash(./manage_bot.sh:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(git restore:*)",
+      "Bash(gh repo view:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []

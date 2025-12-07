@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать в Матрёшку - Демо</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0118 0%, #16213e 50%, #0a0118 100%);
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Animated background particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(99, 102, 241, 0.6);
+            border-radius: 50%;
+            animation: float linear infinite;
+            box-shadow: 0 0 10px rgba(99, 102, 241, 0.8);
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Glow effect in center */
+        .glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(60px);
+            animation: pulse 4s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        /* Welcome screen container */
+        .welcome-screen {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Logo and title */
+        .welcome-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: slideDown 1s ease-out 0.3s backwards;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 6rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 20px rgba(255, 107, 107, 0.5));
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffffff 0%, #8b5cf6 50%, #6366f1 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+        }
+
+        /* Main content card */
+        .welcome-card {
+            background: rgba(23, 23, 23, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            animation: scaleIn 1s ease-out 0.5s backwards;
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .card-description {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* Custom select dropdown */
+        .region-selector {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .select-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .select-button {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .select-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .select-button:hover::before {
+            opacity: 1;
+        }
+
+        .select-button:hover {
+            border-color: rgba(99, 102, 241, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+        }
+
+        .select-button.active {
+            border-color: rgba(99, 102, 241, 0.8);
+        }
+
+        .select-text {
+            position: relative;
+            z-index: 1;
+        }
+
+        .select-text.placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .select-arrow {
+            position: relative;
+            z-index: 1;
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .select-button.active .select-arrow {
+            transform: rotate(180deg);
+        }
+
+        /* Dropdown menu */
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 0.5rem);
+            left: 0;
+            right: 0;
+            background: rgba(23, 23, 23, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 0.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
+
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        /* Custom scrollbar */
+        .dropdown-menu::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .dropdown-menu::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .dropdown-menu::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 4px;
+        }
+
+        .dropdown-menu::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+
+        /* Search input */
+        .search-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: white;
+            font-size: 0.875rem;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(99, 102, 241, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Dropdown items */
+        .dropdown-item {
+            padding: 0.875rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dropdown-item:hover {
+            background: rgba(99, 102, 241, 0.2);
+            color: white;
+            transform: translateX(4px);
+        }
+
+        .dropdown-item.selected {
+            background: rgba(99, 102, 241, 0.3);
+            color: white;
+            font-weight: 600;
+        }
+
+        .region-icon {
+            font-size: 1.25rem;
+        }
+
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Success animation */
+        @keyframes successPulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .success {
+            animation: successPulse 0.3s ease;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 2rem;
+            }
+
+            .logo {
+                font-size: 4rem;
+            }
+
+            .welcome-card {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="particles" id="particles"></div>
+    <div class="glow"></div>
+
+    <!-- Welcome screen -->
+    <div class="welcome-screen">
+        <div class="welcome-header">
+            <div class="logo">🪆</div>
+            <h1 class="welcome-title">Матрёшка</h1>
+            <p class="welcome-subtitle">Путешествуй по России</p>
+        </div>
+
+        <div class="welcome-card">
+            <h2 class="card-title">Добро пожаловать!</h2>
+            <p class="card-description">Выберите свой регион, чтобы получить персонализированные рекомендации</p>
+
+            <!-- Region selector -->
+            <div class="region-selector">
+                <label class="select-label">Ваш регион</label>
+                <button class="select-button" id="selectButton">
+                    <span class="select-text placeholder" id="selectText">Выберите регион...</span>
+                    <span class="select-arrow">▼</span>
+                </button>
+
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <input
+                        type="text"
+                        class="search-input"
+                        id="searchInput"
+                        placeholder="🔍 Поиск региона..."
+                    >
+                    <div id="regionsList"></div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="continueBtn" disabled>
+                    <span>Продолжить</span>
+                    <span>→</span>
+                </button>
+                <button class="btn btn-secondary" id="skipBtn">
+                    Пропустить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Russian regions data
+        const regions = [
+            { name: 'Москва', icon: '🏛️' },
+            { name: 'Санкт-Петербург', icon: '🌉' },
+            { name: 'Московская область', icon: '🏘️' },
+            { name: 'Краснодарский край', icon: '🌴' },
+            { name: 'Республика Татарстан', icon: '🕌' },
+            { name: 'Свердловская область', icon: '🏔️' },
+            { name: 'Новосибирская область', icon: '🌲' },
+            { name: 'Ростовская область', icon: '🌾' },
+            { name: 'Республика Башкортостан', icon: '🏞️' },
+            { name: 'Красноярский край', icon: '❄️' },
+            { name: 'Приморский край', icon: '🌊' },
+            { name: 'Пермский край', icon: '⛰️' },
+            { name: 'Волгоградская область', icon: '🏛️' },
+            { name: 'Челябинская область', icon: '🏭' },
+            { name: 'Самарская область', icon: '🚀' },
+            { name: 'Нижегородская область', icon: '🎭' },
+            { name: 'Республика Дагестан', icon: '🗻' },
+            { name: 'Ставропольский край', icon: '⛲' },
+            { name: 'Иркутская область', icon: '🦌' },
+            { name: 'Саратовская область', icon: '🌻' },
+            { name: 'Тюменская область', icon: '🛢️' },
+            { name: 'Кемеровская область', icon: '⛏️' },
+            { name: 'Алтайский край', icon: '🏔️' },
+            { name: 'Хабаровский край', icon: '🐅' },
+            { name: 'Омская область', icon: '🏛️' },
+            { name: 'Республика Крым', icon: '🏖️' },
+            { name: 'Калининградская область', icon: '🏰' },
+            { name: 'Воронежская область', icon: '🌳' },
+            { name: 'Ленинградская область', icon: '🏡' },
+            { name: 'Тульская область', icon: '🎨' }
+        ].sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+
+        let selectedRegion = null;
+
+        // DOM elements
+        const selectButton = document.getElementById('selectButton');
+        const selectText = document.getElementById('selectText');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const searchInput = document.getElementById('searchInput');
+        const regionsList = document.getElementById('regionsList');
+        const continueBtn = document.getElementById('continueBtn');
+        const skipBtn = document.getElementById('skipBtn');
+
+        // Render regions list
+        function renderRegions(filter = '') {
+            const filtered = regions.filter(region =>
+                region.name.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            regionsList.innerHTML = filtered.map(region => `
+                <div class="dropdown-item ${selectedRegion === region.name ? 'selected' : ''}"
+                     data-region="${region.name}">
+                    <span class="region-icon">${region.icon}</span>
+                    <span>${region.name}</span>
+                </div>
+            `).join('');
+
+            // Add click handlers
+            regionsList.querySelectorAll('.dropdown-item').forEach(item => {
+                item.addEventListener('click', () => selectRegion(item.dataset.region));
+            });
+        }
+
+        // Select region
+        function selectRegion(regionName) {
+            selectedRegion = regionName;
+            const region = regions.find(r => r.name === regionName);
+
+            selectText.textContent = `${region.icon} ${region.name}`;
+            selectText.classList.remove('placeholder');
+
+            closeDropdown();
+            continueBtn.disabled = false;
+            continueBtn.classList.add('success');
+            setTimeout(() => continueBtn.classList.remove('success'), 300);
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            const isActive = dropdownMenu.classList.toggle('active');
+            selectButton.classList.toggle('active');
+
+            if (isActive) {
+                searchInput.focus();
+                searchInput.value = '';
+                renderRegions();
+            }
+        }
+
+        // Close dropdown
+        function closeDropdown() {
+            dropdownMenu.classList.remove('active');
+            selectButton.classList.remove('active');
+        }
+
+        // Event listeners
+        selectButton.addEventListener('click', toggleDropdown);
+
+        searchInput.addEventListener('input', (e) => {
+            renderRegions(e.target.value);
+        });
+
+        searchInput.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!selectButton.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                closeDropdown();
+            }
+        });
+
+        // Continue button
+        continueBtn.addEventListener('click', () => {
+            if (selectedRegion) {
+                // Save selection to localStorage
+                localStorage.setItem('userRegion', selectedRegion);
+
+                // Redirect to main site
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Skip button
+        skipBtn.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize
+        renderRegions();
+        createParticles();
+    </script>
+</body>
+</html>

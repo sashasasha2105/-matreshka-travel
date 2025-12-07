@@ -158,8 +158,14 @@ continueBtn.addEventListener('click', () => {
         if (overlay) {
             overlay.style.opacity = '0';
             overlay.style.transition = 'opacity 0.5s ease-out';
+
+            // Скроллим главную страницу вверх
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
             setTimeout(() => {
                 overlay.remove();
+                // Разблокируем прокрутку body
+                document.body.style.overflow = '';
                 // Показываем бонусную плашку
                 if (window.showRegionBonusBanner) {
                     window.showRegionBonusBanner();
@@ -181,7 +187,11 @@ skipBtn.addEventListener('click', () => {
     if (overlay) {
         overlay.style.opacity = '0';
         overlay.style.transition = 'opacity 0.5s ease-out';
-        setTimeout(() => overlay.remove(), 500);
+        setTimeout(() => {
+            overlay.remove();
+            // Разблокируем прокрутку body
+            document.body.style.overflow = '';
+        }, 500);
     } else {
         // Fallback если не overlay режим
         window.location.href = 'index.html';

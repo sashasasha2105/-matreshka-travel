@@ -53,10 +53,78 @@
         return Math.max(0, diffDays);
     }
 
+    // Активировать регион как оплаченный
+    function activateRegionBonus(regionName) {
+        // Инициализируем paidRegions если нужно
+        if (typeof window.paidRegions === 'undefined') {
+            window.paidRegions = [];
+            const saved = localStorage.getItem('paidRegions');
+            if (saved) {
+                try {
+                    window.paidRegions = JSON.parse(saved);
+                } catch (e) {
+                    window.paidRegions = [];
+                }
+            }
+        }
+
+        // Находим ID региона по имени
+        const regionId = findRegionIdByName(regionName);
+        if (!regionId) {
+            console.error('Регион не найден:', regionName);
+            return;
+        }
+
+        // Проверяем, не добавлен ли уже
+        const existingRegion = window.paidRegions.find(r => r.id === regionId);
+        if (existingRegion) {
+            console.log('Регион уже активирован:', regionName);
+            return;
+        }
+
+        // Добавляем регион в оплаченные
+        const expiresDate = new Date();
+        expiresDate.setDate(expiresDate.getDate() + 30);
+
+        window.paidRegions.push({
+            id: regionId,
+            purchaseDate: new Date().toISOString(),
+            expiresAt: expiresDate.toISOString()
+        });
+
+        localStorage.setItem('paidRegions', JSON.stringify(window.paidRegions));
+        console.log('✅ Регион активирован:', regionName, regionId);
+
+        // Обновляем задания и корзину
+        if (window.questsSystem) {
+            window.questsSystem.generateQuests();
+            window.questsSystem.renderQuests();
+            window.questsSystem.updateQuestsBadge();
+        }
+
+        if (window.matryoshkaCart) {
+            window.matryoshkaCart.loadPaidRegions();
+            window.matryoshkaCart.render();
+        }
+    }
+
+    // Найти ID региона по имени
+    function findRegionIdByName(regionName) {
+        if (!window.RUSSIA_REGIONS_DATA) return null;
+
+        for (const [id, data] of Object.entries(window.RUSSIA_REGIONS_DATA)) {
+            if (data.name === regionName) {
+                return id;
+            }
+        }
+        return null;
+    }
+
     // Показать плашку
     function showRegionBonusBanner() {
         const bonusActive = localStorage.getItem('regionBonusActive');
         const regionName = localStorage.getItem('regionBonusRegion');
+        const bonusJustActivated = sessionStorage.getItem('bonusJustActivated');
 
         if (!bonusActive || !regionName) return;
 
@@ -73,6 +141,12 @@
         // Проверяем, нет ли уже плашки
         if (document.getElementById('regionBonusBanner')) {
             return;
+        }
+
+        // Активируем регион если только что получен бонус
+        if (bonusJustActivated) {
+            activateRegionBonus(regionName);
+            sessionStorage.removeItem('bonusJustActivated');
         }
 
         const regionIcon = getRegionIcon(regionName);
@@ -121,14 +195,26 @@
             banner.classList.add('visible');
         }, 100);
 
-        // Обработчик закрытия
-        const closeBtn = document.getElementById('bonusBannerClose');
-        closeBtn.addEventListener('click', () => {
+        // Функция закрытия
+        function closeBanner() {
             banner.classList.remove('visible');
             setTimeout(() => {
                 banner.remove();
             }, 300);
-        });
+        }
+
+        // Обработчик закрытия по кнопке
+        const closeBtn = document.getElementById('bonusBannerClose');
+        closeBtn.addEventListener('click', closeBanner);
+
+        // Автозакрытие через 5 секунд только если бонус только что активирован
+        if (bonusJustActivated) {
+            setTimeout(() => {
+                if (document.getElementById('regionBonusBanner')) {
+                    closeBanner();
+                }
+            }, 5000);
+        }
     }
 
     // Вспомогательная функция для склонения слова "день"

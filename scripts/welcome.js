@@ -150,6 +150,9 @@ continueBtn.addEventListener('click', () => {
         localStorage.setItem('regionBonusActivated', activationDate.toISOString());
         localStorage.setItem('regionBonusExpires', expirationDate.toISOString());
 
+        // Устанавливаем флаг что бонус только что активирован
+        sessionStorage.setItem('bonusJustActivated', 'true');
+
         // Redirect to main site
         window.location.href = 'index.html';
     }

@@ -178,12 +178,9 @@
 
             closeModal();
 
-            // Прокручиваем к секции с турами региона (если она есть)
+            // Показываем информационную плашку о доступных купонах
             setTimeout(() => {
-                const regionsSection = document.querySelector('.regions-section');
-                if (regionsSection) {
-                    regionsSection.scrollIntoView({ behavior: 'smooth' });
-                }
+                showRegionBonusBanner();
             }, 500);
         });
 

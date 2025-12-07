@@ -1,0 +1,271 @@
+/**
+ * REGION BONUS BANNER
+ * Плашка с информацией о доступных купонах региона
+ * Стиль 1в1 как у Apple Cards Carousel
+ */
+
+.region-bonus-banner {
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.region-bonus-banner.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.bonus-banner-content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+    border-radius: 1.5rem;
+    overflow: hidden;
+
+    /* Стиль как у карусели */
+    background: rgba(23, 23, 23, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Animated gradient background */
+.bonus-banner-content::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        135deg,
+        rgba(99, 102, 241, 0.1) 0%,
+        rgba(139, 92, 246, 0.1) 50%,
+        rgba(99, 102, 241, 0.1) 100%
+    );
+    background-size: 200% 200%;
+    animation: gradientShift 4s ease infinite;
+    opacity: 0.5;
+}
+
+@keyframes gradientShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Icon wrapper */
+.bonus-banner-icon-wrapper {
+    position: relative;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.bonus-banner-icon {
+    font-size: 3rem;
+    filter: drop-shadow(0 4px 12px rgba(99, 102, 241, 0.4));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+.bonus-banner-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    font-size: 1.25rem;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 2px 8px rgba(255, 204, 0, 0.6));
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* Info section */
+.bonus-banner-info {
+    flex: 1;
+    min-width: 0;
+    z-index: 1;
+}
+
+.bonus-banner-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.bonus-banner-region {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    letter-spacing: -0.01em;
+}
+
+.bonus-banner-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(22, 163, 74, 0.2));
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #86efac;
+}
+
+.bonus-banner-text {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.bonus-banner-text strong {
+    color: rgba(255, 255, 255, 0.95);
+    font-weight: 600;
+}
+
+/* Discount badge */
+.bonus-banner-discount {
+    flex-shrink: 0;
+    text-align: center;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    background: linear-gradient(135deg, rgba(255, 107, 107, 0.2), rgba(255, 204, 0, 0.2));
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    z-index: 1;
+}
+
+.bonus-discount-value {
+    font-size: 2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ff6b6b, #ffcc00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.bonus-discount-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Close button */
+.bonus-banner-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 2;
+    line-height: 1;
+    padding: 0;
+}
+
+.bonus-banner-close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: rotate(90deg);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .bonus-banner-content {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1.5rem 1.5rem;
+        gap: 1rem;
+    }
+
+    .bonus-banner-icon-wrapper {
+        margin-bottom: 0.5rem;
+    }
+
+    .bonus-banner-icon {
+        font-size: 2.5rem;
+    }
+
+    .bonus-banner-title {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .bonus-banner-region {
+        font-size: 1.125rem;
+    }
+
+    .bonus-banner-text {
+        font-size: 0.875rem;
+    }
+
+    .bonus-banner-discount {
+        width: 100%;
+        padding: 0.875rem 1.25rem;
+    }
+
+    .bonus-discount-value {
+        font-size: 1.75rem;
+    }
+
+    .bonus-banner-close {
+        top: 0.5rem;
+        right: 0.5rem;
+    }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .bonus-banner-content {
+        gap: 1.25rem;
+        padding: 1.25rem 1.75rem;
+    }
+
+    .bonus-banner-icon {
+        font-size: 2.75rem;
+    }
+
+    .bonus-banner-region {
+        font-size: 1.125rem;
+    }
+}

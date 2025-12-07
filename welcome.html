@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать в Матрёшку</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles/welcome.css">
+</head>
+<body>
+    <!-- Background effects -->
+    <div class="particles" id="particles"></div>
+    <div class="glow"></div>
+
+    <!-- Welcome screen -->
+    <div class="welcome-screen">
+        <div class="welcome-header">
+            <div class="logo">🪆</div>
+            <h1 class="welcome-title">Матрёшка</h1>
+            <p class="welcome-subtitle">Путешествуй по России</p>
+        </div>
+
+        <div class="welcome-card">
+            <h2 class="card-title">Добро пожаловать!</h2>
+            <p class="card-description">Выберите свой регион, чтобы получить персонализированные рекомендации</p>
+
+            <!-- Region selector -->
+            <div class="region-selector">
+                <label class="select-label">Ваш регион</label>
+                <button class="select-button" id="selectButton">
+                    <span class="select-text placeholder" id="selectText">Выберите регион...</span>
+                    <span class="select-arrow">▼</span>
+                </button>
+
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <input
+                        type="text"
+                        class="search-input"
+                        id="searchInput"
+                        placeholder="🔍 Поиск региона..."
+                    >
+                    <div id="regionsList"></div>
+                </div>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-primary" id="continueBtn" disabled>
+                    <span>Продолжить</span>
+                    <span>→</span>
+                </button>
+                <button class="btn btn-secondary" id="skipBtn">
+                    Пропустить
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/welcome.js"></script>
+</body>
+</html>

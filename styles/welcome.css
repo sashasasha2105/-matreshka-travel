@@ -14,7 +14,7 @@ body {
 
 /* Animated background particles */
 .particles {
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
@@ -52,7 +52,7 @@ body {
 
 /* Glow effect in center */
 .glow {
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

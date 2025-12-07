@@ -199,9 +199,9 @@
             </div>
         `;
 
-        // Вставляем плашку после date picker
-        datePicker.insertAdjacentHTML('afterend', bannerHTML);
-        console.log('✅ Плашка вставлена после date picker');
+        // Вставляем плашку ПЕРЕД date picker
+        datePicker.insertAdjacentHTML('beforebegin', bannerHTML);
+        console.log('✅ Плашка вставлена перед date picker');
 
         // Анимация появления
         const banner = document.getElementById('regionBonusBanner');

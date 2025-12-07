@@ -179,6 +179,37 @@ function createParticles() {
     }
 }
 
+// Preload главной страницы и изображений карусели
+function preloadMainPage() {
+    console.log('🚀 Начинаем preload главной страницы...');
+
+    // Создаем невидимый iframe для загрузки главной страницы
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = 'index.html';
+    document.body.appendChild(iframe);
+
+    // Preload изображений для карусели пакетов
+    const packageImages = [
+        'assets/images/packages/golden-ring.webp',
+        'assets/images/packages/baikal.webp',
+        'assets/images/packages/caucasus.webp',
+        'assets/images/packages/crimea.webp',
+        'assets/images/packages/altai.webp',
+        'assets/images/packages/karelia.webp'
+    ];
+
+    packageImages.forEach(src => {
+        const img = new Image();
+        img.src = src;
+    });
+
+    console.log('✅ Preload запущен');
+}
+
 // Initialize
 renderRegions();
 createParticles();
+
+// Запускаем preload через 1 секунду после загрузки
+setTimeout(preloadMainPage, 1000);

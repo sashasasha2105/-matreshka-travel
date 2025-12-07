@@ -181,13 +181,7 @@ function createParticles() {
 
 // Preload главной страницы и изображений карусели
 function preloadMainPage() {
-    console.log('🚀 Начинаем preload главной страницы...');
-
-    // Создаем невидимый iframe для загрузки главной страницы
-    const iframe = document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = 'index.html';
-    document.body.appendChild(iframe);
+    console.log('🚀 АГРЕССИВНЫЙ preload главной страницы...');
 
     // Preload изображений для карусели пакетов
     const packageImages = [
@@ -199,17 +193,37 @@ function preloadMainPage() {
         'assets/images/packages/karelia.webp'
     ];
 
-    packageImages.forEach(src => {
+    // Preload изображений marquee hero (главная карусель сверху)
+    const marqueeImages = [
+        'assets/images/hero/moscow.webp',
+        'assets/images/hero/spb.webp',
+        'assets/images/hero/kazan.webp',
+        'assets/images/hero/sochi.webp',
+        'assets/images/hero/crimea.webp',
+        'assets/images/hero/baikal.webp'
+    ];
+
+    // Загружаем все изображения параллельно
+    [...packageImages, ...marqueeImages].forEach(src => {
         const img = new Image();
         img.src = src;
     });
 
-    console.log('✅ Preload запущен');
+    // Создаем невидимый iframe для полной загрузки главной страницы
+    setTimeout(() => {
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = 'index.html';
+        document.body.appendChild(iframe);
+        console.log('✅ iframe с главной страницей загружается в фоне');
+    }, 500);
+
+    console.log('✅ Preload запущен - загружаем все ресурсы главной страницы');
 }
 
 // Initialize
 renderRegions();
 createParticles();
 
-// Запускаем preload через 1 секунду после загрузки
-setTimeout(preloadMainPage, 1000);
+// Запускаем preload СРАЗУ (агрессивная загрузка главной страницы в фоне)
+preloadMainPage();

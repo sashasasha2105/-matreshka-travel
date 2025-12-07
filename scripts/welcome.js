@@ -140,6 +140,9 @@ continueBtn.addEventListener('click', () => {
         localStorage.setItem('userRegion', selectedRegion);
         localStorage.setItem('welcomeCompleted', 'true');
 
+        // Устанавливаем флаг для показа бонусного модального окна
+        sessionStorage.setItem('justCompletedWelcome', 'true');
+
         // Redirect to main site
         window.location.href = 'index.html';
     }

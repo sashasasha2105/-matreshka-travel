@@ -68,11 +68,50 @@
     <!-- Cache Buster - ПЕРВЫМ для очистки кэша -->
     <script src="scripts/cache-buster.js"></script>
 
-    <!-- Welcome Screen Redirect - проверка первого входа -->
+    <!-- Welcome Screen Overlay - показываем поверх главной страницы -->
     <script>
         // Проверяем, был ли пройден welcome screen
         if (!localStorage.getItem('welcomeCompleted')) {
-            window.location.href = 'welcome.html';
+            // НЕ редиректим, а покажем overlay после загрузки страницы
+            document.addEventListener('DOMContentLoaded', () => {
+                // Загружаем welcome overlay
+                fetch('welcome.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        // Извлекаем body из welcome.html
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const welcomeBody = doc.body.innerHTML;
+
+                        // Создаем overlay контейнер
+                        const overlay = document.createElement('div');
+                        overlay.id = 'welcomeOverlay';
+                        overlay.style.cssText = `
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            z-index: 100000;
+                            background: linear-gradient(135deg, #0a0118 0%, #16213e 50%, #0a0118 100%);
+                        `;
+                        overlay.innerHTML = welcomeBody;
+
+                        // Добавляем стили welcome
+                        const link = document.createElement('link');
+                        link.rel = 'stylesheet';
+                        link.href = 'styles/welcome.css';
+                        document.head.appendChild(link);
+
+                        // Добавляем overlay на страницу
+                        document.body.appendChild(overlay);
+
+                        // Загружаем скрипт welcome
+                        const script = document.createElement('script');
+                        script.src = 'scripts/welcome.js';
+                        document.body.appendChild(script);
+                    });
+            });
         }
     </script>
 

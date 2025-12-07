@@ -153,15 +153,39 @@ continueBtn.addEventListener('click', () => {
         // Устанавливаем флаг что бонус только что активирован
         sessionStorage.setItem('bonusJustActivated', 'true');
 
-        // Redirect to main site
-        window.location.href = 'index.html';
+        // Закрываем overlay вместо редиректа
+        const overlay = document.getElementById('welcomeOverlay');
+        if (overlay) {
+            overlay.style.opacity = '0';
+            overlay.style.transition = 'opacity 0.5s ease-out';
+            setTimeout(() => {
+                overlay.remove();
+                // Показываем бонусную плашку
+                if (window.showRegionBonusBanner) {
+                    window.showRegionBonusBanner();
+                }
+            }, 500);
+        } else {
+            // Fallback если не overlay режим
+            window.location.href = 'index.html';
+        }
     }
 });
 
 // Skip button
 skipBtn.addEventListener('click', () => {
     localStorage.setItem('welcomeCompleted', 'true');
-    window.location.href = 'index.html';
+
+    // Закрываем overlay
+    const overlay = document.getElementById('welcomeOverlay');
+    if (overlay) {
+        overlay.style.opacity = '0';
+        overlay.style.transition = 'opacity 0.5s ease-out';
+        setTimeout(() => overlay.remove(), 500);
+    } else {
+        // Fallback если не overlay режим
+        window.location.href = 'index.html';
+    }
 });
 
 // Create floating particles
@@ -179,51 +203,6 @@ function createParticles() {
     }
 }
 
-// Preload главной страницы и изображений карусели
-function preloadMainPage() {
-    console.log('🚀 АГРЕССИВНЫЙ preload главной страницы...');
-
-    // Preload изображений для карусели пакетов
-    const packageImages = [
-        'assets/images/packages/golden-ring.webp',
-        'assets/images/packages/baikal.webp',
-        'assets/images/packages/caucasus.webp',
-        'assets/images/packages/crimea.webp',
-        'assets/images/packages/altai.webp',
-        'assets/images/packages/karelia.webp'
-    ];
-
-    // Preload изображений marquee hero (главная карусель сверху)
-    const marqueeImages = [
-        'assets/images/hero/moscow.webp',
-        'assets/images/hero/spb.webp',
-        'assets/images/hero/kazan.webp',
-        'assets/images/hero/sochi.webp',
-        'assets/images/hero/crimea.webp',
-        'assets/images/hero/baikal.webp'
-    ];
-
-    // Загружаем все изображения параллельно
-    [...packageImages, ...marqueeImages].forEach(src => {
-        const img = new Image();
-        img.src = src;
-    });
-
-    // Создаем невидимый iframe для полной загрузки главной страницы
-    setTimeout(() => {
-        const iframe = document.createElement('iframe');
-        iframe.style.display = 'none';
-        iframe.src = 'index.html';
-        document.body.appendChild(iframe);
-        console.log('✅ iframe с главной страницей загружается в фоне');
-    }, 500);
-
-    console.log('✅ Preload запущен - загружаем все ресурсы главной страницы');
-}
-
 // Initialize
 renderRegions();
 createParticles();
-
-// Запускаем preload СРАЗУ (агрессивная загрузка главной страницы в фоне)
-preloadMainPage();

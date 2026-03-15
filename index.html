@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -7,7 +8,6 @@
     <meta name="theme-color" content="#0f0520">
     <meta name="description" content="Матрешка - откройте для себя красоту и разнообразие России. Путешествуйте по регионам, выполняйте задания, получайте награды.">
 
-    <!-- Cache Control для WebView -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -15,118 +15,88 @@
     <title>Матрешка - Путешествуй по России</title>
 
 
-    <!-- Специфичные модули -->
     <link rel="stylesheet" href="profile/profile.css?v=999">
     <link rel="stylesheet" href="feed/feed.css?v=999">
     <link rel="stylesheet" href="quests/quests.css?v=999">
     <link rel="stylesheet" href="qr/qr.css?v=999">
     <link rel="stylesheet" href="maps/maps2gis_new.css?v=999">
 
-    <!-- 🚀 ОПТИМИЗИРОВАННЫЙ CSS ЗАГРУЖАЕТСЯ ПОСЛЕДНИМ - Russian Heritage Theme -->
     <link rel="stylesheet" href="styles/matreshka-optimized.css?v=999">
 
-    <!-- 🎨 ACETERNITY UI + LIQUID GLASS EFFECTS -->
     <link rel="stylesheet" href="styles/aceternity-effects.css?v=999">
     <link rel="stylesheet" href="styles/liquid-glass.css?v=999">
 
-    <!-- 🏛️ PREMIUM REGION DETAILS STYLES -->
     <link rel="stylesheet" href="styles/region-details-premium.css?v=999">
 
-    <!-- 🎠 MARQUEE HERO STYLES -->
     <link rel="stylesheet" href="styles/marquee-hero.css?v=999">
 
-    <!-- Premium Date Picker Styles -->
     <link rel="stylesheet" href="components/TripDatePicker/TripDatePickerSection.css">
 
-    <!-- Minimal Focus Cards Styles -->
     <link rel="stylesheet" href="styles/focus-cards-minimal.css">
 
-    <!-- 🍎 Apple Cards Carousel Styles -->
     <link rel="stylesheet" href="styles/apple-cards-carousel.css">
 
-    <!-- 🍎 Package Modal Minimal Styles -->
     <link rel="stylesheet" href="styles/package-modal-minimal.css">
 
-    <!-- 🎨 Animated Tooltip Styles -->
-    <link rel="stylesheet" href="styles/animated-tooltip.css">
-
-    <!-- 🔍 Search Minimal Styles -->
     <link rel="stylesheet" href="styles/search-minimal.css">
 
-    <!-- 🃏 Card Stack Styles -->
     <link rel="stylesheet" href="styles/card-stack.css">
 
-    <!-- 🏪 Partner Cards Minimal Styles -->
     <link rel="stylesheet" href="styles/partner-cards-minimal.css">
 
-    <!-- 🎁 Welcome Bonus Modal Styles -->
     <link rel="stylesheet" href="styles/welcome-bonus-modal.css">
 
-    <!-- 🏆 Region Bonus Banner Styles -->
     <link rel="stylesheet" href="styles/region-bonus-banner.css">
 
-    <!-- Cache Buster - ПЕРВЫМ для очистки кэша -->
+    <style>
+        /* Глобальное исправление блокировки скролла */
+        body, html {
+            overflow: auto !important;
+            height: auto !important;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Скрытые секции не должны перехватывать клики */
+        #regionDetails:not(.active),
+        #profileSection:not(.active),
+        #cartSection:not(.active),
+        #questsSection:not(.active) {
+            display: none !important;
+            pointer-events: none !important;
+        }
+
+        /* 🎨 Стилизация кнопки "Показать еще регионы" */
+        .regions-section button:not(.search-clear),
+        #regionsGrid ~ button {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+            color: #ffffff !important;
+            padding: 14px 28px !important;
+            border-radius: 14px !important;
+            font-family: 'Unbounded', 'Inter', sans-serif !important;
+            font-size: 14px !important;
+            font-weight: 500 !important;
+            cursor: pointer !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            display: block !important;
+            margin: 30px auto 10px auto !important;
+            backdrop-filter: blur(10px) !important;
+            -webkit-backdrop-filter: blur(10px) !important;
+            text-transform: none !important;
+        }
+
+        .regions-section button:not(.search-clear):hover,
+        #regionsGrid ~ button:hover {
+            background: rgba(255, 255, 255, 0.15) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
+        }
+    </style>
+
     <script src="scripts/cache-buster.js"></script>
 
-    <!-- Welcome Screen Overlay - показываем поверх главной страницы -->
-    <script>
-        // Проверяем, был ли пройден welcome screen
-        if (!localStorage.getItem('welcomeCompleted')) {
-            // НЕ редиректим, а покажем overlay после загрузки страницы
-            document.addEventListener('DOMContentLoaded', () => {
-                // Загружаем welcome overlay
-                fetch('welcome.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        // Извлекаем body из welcome.html
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        const welcomeBody = doc.body.innerHTML;
-
-                        // Создаем overlay контейнер
-                        const overlay = document.createElement('div');
-                        overlay.id = 'welcomeOverlay';
-                        overlay.style.cssText = `
-                            position: fixed;
-                            top: 0;
-                            left: 0;
-                            right: 0;
-                            bottom: 0;
-                            z-index: 100000;
-                            background: linear-gradient(135deg, #0a0118 0%, #16213e 50%, #0a0118 100%);
-                            overflow-y: auto;
-                            overflow-x: hidden;
-                        `;
-                        overlay.innerHTML = welcomeBody;
-
-                        // Скроллим главную страницу вверх сразу
-                        window.scrollTo(0, 0);
-
-                        // Добавляем стили welcome
-                        const link = document.createElement('link');
-                        link.rel = 'stylesheet';
-                        link.href = 'styles/welcome.css';
-                        document.head.appendChild(link);
-
-                        // Блокируем прокрутку body
-                        document.body.style.overflow = 'hidden';
-
-                        // Добавляем overlay на страницу
-                        document.body.appendChild(overlay);
-
-                        // Загружаем скрипт welcome
-                        const script = document.createElement('script');
-                        script.src = 'scripts/welcome.js';
-                        document.body.appendChild(script);
-                    });
-            });
-        }
-    </script>
-
-    <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
 
-    <!-- Performance Optimizer - критично для загрузки изображений -->
     <script src="scripts/components/performance-optimizer.js" defer></script>
 
     <script src="scripts/core/navigation.js" defer></script>
@@ -135,17 +105,13 @@
 </head>
 <body>
     <div class="container">
-        <!-- Главная страница с регионами -->
         <div id="mainSection">
-            <!-- 🎠 3D Marquee Hero Section -->
             <section class="marquee-hero-section">
                 <div class="marquee-demo-wrapper">
                     <div class="marquee-container-main">
                         <div class="marquee-grid-main" id="marqueeGridMain">
-                            <!-- Колонки с изображениями добавятся через JS -->
-                        </div>
+                            </div>
 
-                        <!-- Текст поверх карусели -->
                         <div class="marquee-overlay-text">
                             <h1 class="marquee-overlay-title">
                                 Исследуйте<br>Россию
@@ -156,17 +122,14 @@
                 </div>
             </section>
 
-            <!-- 🎨 Premium Date Picker Section -->
             <div class="date-picker-section">
                 <div id="premiumDatePicker"></div>
             </div>
 
-            <!-- Заголовок "Куда отправимся?" -->
             <div class="destination-header">
                 <h2 class="destination-title">Куда отправимся?</h2>
             </div>
 
-            <!-- Поиск регионов -->
             <div class="search-section" data-animate>
                 <div class="search-container">
                     <div class="search-icon">🔍</div>
@@ -182,21 +145,17 @@
                 </div>
             </div>
 
-            <!-- 🎯 Minimal Focus Cards - стиль date picker -->
             <section class="regions-section">
                 <div id="regionsGrid"></div>
             </section>
 
-            <!-- 🍎 Apple Cards Carousel - Готовые пакеты путешествий -->
             <div id="applePackagesCarousel"></div>
 
-            <!-- 🔥 УДАЛЕНО: Лента путешествий с главной страницы (доступна через нижнюю навигацию) -->
         </div>
 
-        <!-- Детали региона -->
         <div id="regionDetails" class="region-details">
             <div class="region-details-header">
-                <button id="backBtn" class="back-btn">
+                <button id="backBtn" class="back-btn" onclick="showMainSection()">
                     ← Назад
                 </button>
                 <button class="user-profile-btn" onclick="showProfile()">
@@ -205,7 +164,6 @@
                 </button>
             </div>
 
-            <!-- Breadcrumbs навигация -->
             <nav class="breadcrumbs" id="breadcrumbs" aria-label="Навигация">
                 <a href="#" class="breadcrumb-item" onclick="showMainSection(); return false;">Главная</a>
                 <span class="breadcrumb-separator">›</span>
@@ -232,8 +190,7 @@
                 <h2 class="section-title"><span>🍽️</span> Партнеры</h2>
                 <div class="section-content">
                     <div id="partnersGrid" class="partners-grid">
-                        <!-- Партнеры будут загружены здесь -->
-                    </div>
+                        </div>
                 </div>
             </div>
 
@@ -250,59 +207,39 @@
 
         </div>
 
-        <!-- Профиль -->
         <div id="profileSection" class="profile-section" style="display: none;">
-            <button id="profileBackBtn" class="back-btn">
+            <button id="profileBackBtn" class="back-btn" onclick="showMainSection()">
                 ← Назад
             </button>
 
             <div class="profile-content">
-                <!-- Сюда загрузится профиль -->
-            </div>
+                </div>
         </div>
 
-        <!-- Корзина (Мои покупки) -->
         <div id="cartSection" class="cart-section" style="display: none;">
-            <button id="cartBackBtn" class="back-btn">
+            <button id="cartBackBtn" class="back-btn" onclick="showMainSection()">
                 ← Назад
             </button>
 
             <div class="cart-content">
-                <!-- Сюда загрузится корзина -->
-            </div>
+                </div>
         </div>
 
-        <!-- Задания -->
         <div id="questsSection" class="quests-section" style="display: none;">
-            <button id="questsBackBtn" class="back-btn">
+            <button id="questsBackBtn" class="back-btn" onclick="showMainSection()">
                 ← Назад
             </button>
 
             <div class="quests-content">
-                <!-- Сюда загрузятся задания -->
-            </div>
+                </div>
         </div>
 
-        <!-- Полная лента путешествий (скрыта по умолчанию) -->
         <div id="fullFeedContainer" style="display: none; min-height: 100vh; padding-bottom: 100px;">
-            <!-- Сюда будет рендериться полная лента -->
-        </div>
+            </div>
 
-        <!-- Лоадер -->
         <div id="loader" class="loader">
             <div class="loader-spinner"></div>
             <div id="loaderText" class="loader-text">Загрузка...</div>
-        </div>
-
-        <!-- 🎨 Секция Команда - Animated Tooltip -->
-        <div class="team-section" data-animate>
-            <div class="team-header">
-                <h2 class="team-title">
-                    <span class="team-icon">👥</span>
-                    Наша команда
-                </h2>
-            </div>
-            <div id="animatedTooltipContainer"></div>
         </div>
 
         <div class="footer">
@@ -310,7 +247,6 @@
         </div>
     </div>
 
-    <!-- Нижняя навигация -->
     <nav class="bottom-nav" id="bottomNav">
         <button class="nav-item" onclick="showMainSection()" data-page="main">
             <div class="nav-icon">🏠</div>
@@ -337,28 +273,37 @@
     </nav>
 
     <script>
+        // Функция для исправления скролла при возврате на главную
+        window.showMainSection = function() {
+            const sections = ['regionDetails', 'profileSection', 'cartSection', 'questsSection', 'fullFeedContainer', 'loader'];
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.style.display = 'none';
+                    el.classList.remove('active');
+                }
+            });
+            const mainSection = document.getElementById('mainSection');
+            if(mainSection) mainSection.style.display = 'block';
+
+            document.body.style.overflow = 'auto';
+            document.documentElement.style.overflow = 'auto';
+            window.scrollTo(0, 0);
+        };
+
         // Имитация глобальной функции addToGlobalFeed (без переопределения существующей)
         if (typeof window.addToGlobalFeed !== 'function') {
             window.addToGlobalFeed = function(travel) {
                 console.log('🌟 Путешествие добавлено в ленту:', travel);
             };
         }
-        
+
         // Функция сохранения дат поездки
         function saveTravelDates() {
-            const startDate = document.getElementById('travelStartDate').value;
-            const endDate = document.getElementById('travelEndDate').value;
+            const startDate = document.getElementById('travelStartDate')?.value;
+            const endDate = document.getElementById('travelEndDate')?.value;
 
-            if (!startDate || !endDate) {
-                showToast('❗ Пожалуйста, выберите обе даты', 3000);
-                return;
-            }
-
-            // Проверяем что дата окончания не раньше начала
-            if (new Date(endDate) < new Date(startDate)) {
-                showToast('❗ Дата окончания не может быть раньше даты начала', 3000);
-                return;
-            }
+            if (!startDate || !endDate) return;
 
             // Сохраняем в localStorage
             localStorage.setItem('travelDates', JSON.stringify({
@@ -367,11 +312,6 @@
                 savedAt: new Date().toISOString()
             }));
 
-            // Форматируем даты для отображения
-            const startFormatted = new Date(startDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
-            const endFormatted = new Date(endDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
-
-            showToast(`✅ Даты сохранены: ${startFormatted} - ${endFormatted}`, 4000);
             console.log('📅 Даты поездки сохранены:', { startDate, endDate });
         }
 
@@ -381,7 +321,7 @@
             const clearBtn = document.querySelector('.search-clear');
             searchInput.value = '';
             clearBtn.style.display = 'none';
-            searchRegions('');
+            if (typeof searchRegions === 'function') searchRegions('');
         }
 
         // Обновляем отображение кнопки очистки при вводе
@@ -397,80 +337,53 @@
 
         // Загружаем сохраненные даты при инициализации
         document.addEventListener('DOMContentLoaded', function() {
+            // Восстанавливаем скролл на старте
+            document.body.style.overflow = 'auto';
+
             const searchInput = document.getElementById('regionSearch');
             if (searchInput) {
                 searchInput.addEventListener('input', updateSearchUI);
             }
-
-            // Загружаем сохраненные даты
-            const savedDates = localStorage.getItem('travelDates');
-            if (savedDates) {
-                try {
-                    const dates = JSON.parse(savedDates);
-                    document.getElementById('travelStartDate').value = dates.startDate;
-                    document.getElementById('travelEndDate').value = dates.endDate;
-                    console.log('📅 Загружены сохраненные даты:', dates);
-                } catch (e) {
-                    console.error('Ошибка загрузки дат:', e);
-                }
-            }
         });
     </script>
-    <!-- Подключаем официальный MapGL API -->
+
     <script src="https://mapgl.2gis.com/api/js/v1" async defer></script>
 
-    <!-- QR Code Library -->
     <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js" async defer></script>
 
-    <!-- 🎨 GSAP для анимаций + Draggable для liquid glass -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Draggable.min.js"></script>
 
-    <!-- ТОЛЬКО КРИТИЧНЫЕ ДЛЯ ГЛАВНОЙ -->
     <script src="assets/data/regions.js"></script>
     <script src="assets/data/packages.js"></script>
     <script src="scripts/modules/packages.js" defer></script>
     <script src="scripts/script.js" defer></script>
     <script src="cart/cart.js" defer></script>
 
-    <!-- ОСТАЛЬНЫЕ ГРУЗЯТСЯ ПО ТРЕБОВАНИЮ -->
     <script src="qr/qr.js" defer></script>
     <script src="maps/maps2gis_new.js" defer></script>
     <script src="profile/profile.js" defer></script>
     <script src="feed/feed.js" defer></script>
     <script src="quests/quests.js" defer></script>
 
-    <!-- 🎨 LIQUID GLASS + ACETERNITY EFFECTS -->
     <script src="scripts/liquid-glass.js" defer></script>
 
-    <!-- 🎠 Marquee Hero Script -->
     <script src="scripts/marquee-hero.js" defer></script>
 
-    <!-- 🎨 Premium Date Picker Script -->
     <script src="scripts/date-picker-premium.js"></script>
 
-    <!-- 🎯 Minimal Focus Cards Script -->
     <script src="scripts/focus-cards-minimal.js"></script>
 
-    <!-- 🍎 Apple Cards Carousel Script -->
     <script src="scripts/apple-cards-carousel.js"></script>
 
-    <!-- 🎨 Animated Tooltip Script -->
-    <script src="scripts/animated-tooltip.js"></script>
-
-    <!-- 🃏 Card Stack Script -->
     <script src="scripts/card-stack.js"></script>
 
-    <!-- 🎁 Welcome Bonus Modal Script -->
     <script src="scripts/welcome-bonus-modal.js"></script>
 
-    <!-- 🏆 Region Bonus Banner Script -->
     <script src="scripts/region-bonus-banner.js"></script>
 
-    <!-- SVG ФИЛЬТРЫ ДЛЯ LIQUID GLASS ЭФФЕКТА -->
     <svg class="sr-only" xmlns="http://www.w3.org/2000/svg">
         <defs>
-            <!-- GOO FILTER (жидкий эффект) -->
             <filter id="goo">
                 <feGaussianBlur result="blur" in="SourceGraphic" stdDeviation="13"></feGaussianBlur>
                 <feColorMatrix
@@ -487,7 +400,6 @@
                 <feComposite result="composite" in="matrix" operator="atop"></feComposite>
             </filter>
 
-            <!-- KNOCKOUT FILTER (маска) -->
             <filter id="knockout" colorInterpolationFilters="sRGB">
                 <feColorMatrix
                     result="knocked"
@@ -509,7 +421,6 @@
                 </feComponentTransfer>
             </filter>
 
-            <!-- REMOVE BLACK FILTER (удаление черного) -->
             <filter id="remove-black" color-interpolation-filters="sRGB">
                 <feColorMatrix
                     type="matrix"
@@ -530,75 +441,47 @@
         </defs>
     </svg>
 
-    <!-- 🎨 ИНИЦИАЛИЗАЦИЯ PREMIUM DATE PICKER -->
     <script>
     // Инициализация Premium Date Picker после загрузки DOM
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🎨 Инициализация Premium Date Picker...');
-
         // Создание компонента
-        const premiumDatePicker = new PremiumDatePicker({
-            containerId: 'premiumDatePicker',
-            title: '',
-            buttonText: 'Выбрать даты',
-            showEndDate: true,
-            onDateSelect: (startDate, endDate) => {
-                console.log('✅ Даты выбраны:', { startDate, endDate });
-
-                // Сохранение в localStorage
-                localStorage.setItem('matreshka_trip_dates', JSON.stringify({
-                    startDate,
-                    endDate,
-                    timestamp: Date.now()
-                }));
-
-                // Вызов существующей функции для совместимости
-                if (typeof saveTravelDates === 'function') {
-                    saveTravelDates(startDate, endDate);
+        if (typeof PremiumDatePicker === 'function') {
+            const premiumDatePicker = new PremiumDatePicker({
+                containerId: 'premiumDatePicker',
+                title: '',
+                buttonText: 'Выбрать даты',
+                showEndDate: true,
+                onDateSelect: (startDate, endDate) => {
+                    // Сохранение в localStorage
+                    localStorage.setItem('matreshka_trip_dates', JSON.stringify({
+                        startDate,
+                        endDate,
+                        timestamp: Date.now()
+                    }));
                 }
+            });
 
-                console.log('💾 Даты сохранены в localStorage');
-            }
-        });
+            // Восстановление сохраненных дат при загрузке
+            try {
+                const savedDates = localStorage.getItem('matreshka_trip_dates');
+                if (savedDates) {
+                    const { startDate, endDate, timestamp } = JSON.parse(savedDates);
 
-        // Восстановление сохраненных дат при загрузке
-        try {
-            const savedDates = localStorage.getItem('matreshka_trip_dates');
-            if (savedDates) {
-                const { startDate, endDate, timestamp } = JSON.parse(savedDates);
-
-                // Проверяем что даты не старше 30 дней
-                const daysSinceSelection = (Date.now() - timestamp) / (1000 * 60 * 60 * 24);
-                if (daysSinceSelection < 30) {
-                    premiumDatePicker.setDates(startDate, endDate);
-                    console.log('📦 Восстановлены сохраненные даты');
-                } else {
-                    console.log('⏰ Сохраненные даты устарели');
+                    // Проверяем что даты не старше 30 дней
+                    const daysSinceSelection = (Date.now() - timestamp) / (1000 * 60 * 60 * 24);
+                    if (daysSinceSelection < 30) {
+                        premiumDatePicker.setDates(startDate, endDate);
+                    }
                 }
+            } catch (e) {
+                console.warn('⚠️ Ошибка восстановления дат:', e);
             }
-        } catch (e) {
-            console.warn('⚠️ Ошибка восстановления дат:', e);
+
+            // Делаем доступным глобально
+            window.premiumDatePicker = premiumDatePicker;
         }
-
-        // Делаем доступным глобально для других скриптов
-        window.premiumDatePicker = premiumDatePicker;
-
-        console.log('✅ Premium Date Picker инициализирован');
     });
-
-    // Функция для совместимости с существующим кодом
-    function saveTravelDates(startDate, endDate) {
-        console.log('💾 Сохранение дат:', { startDate, endDate });
-
-        // Здесь можно добавить отправку на сервер
-        // fetch('/api/save-dates', { ... });
-    }
     </script>
-
-    <!--
-        🎯 ИНИЦИАЛИЗАЦИЯ MINIMAL FOCUS CARDS
-        Теперь выполняется через loadRegions() в scripts/script.js
-        при загрузке страницы (DOMContentLoaded)
-    -->
 </body>
 </html>
+

@@ -5,7 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="dd47a965-f12a-4a93-aeef-bdfe1913fef0" name="Changes" comment="  Commit Messag">
+      <change afterPath="$PROJECT_DIR$/27-92a.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/27-92b.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/5_A_qwdqwd_62ruo.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/9we21.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/школково.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_12_2025,_11_57_[Changes]1/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_12_2025__11_57__Changes_1.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,16 +52,22 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ACTIVE_CLOUD_PROJECT_ACCOUNT": "effertzeloise1291997@gmail.com",
+    "ACTIVE_CLOUD_PROJECT_ID": "serene-segment-489123-d6",
+    "ACTIVE_CLOUD_PROJECT_NAME": "My Project 7623",
+    "ACTIVE_CLOUD_PROJECT_NUMBER": "75045723635",
+    "Python.школково.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "com.google.cloudcode.ide_session_index": "20260315_0005",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/alexbrizkiy/PycharmProjects/PythonProject20/city_photos"
+    "last_opened_file_path": "/Users/alexbrizkiy/PycharmProjects/PythonProject20"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/city_photos" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/city_photos" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/TeamPhotos" />

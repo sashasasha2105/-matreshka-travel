@@ -49,20 +49,20 @@
     <link rel="stylesheet" href="styles/region-bonus-banner.css">
 
     <style>
-        /* Глобальное исправление блокировки скролла */
+/* Глобальное исправление блокировки скролла */
         body, html {
             overflow: auto !important;
             height: auto !important;
             -webkit-overflow-scrolling: touch;
         }
 
-        /* Скрытые секции не должны перехватывать клики */
-        #regionDetails:not(.active),
-        #profileSection:not(.active),
-        #cartSection:not(.active),
-        #questsSection:not(.active) {
-            display: none !important;
-            pointer-events: none !important;
+        /* Скрываем секции по умолчанию (БЕЗ !important, чтобы скрипт мог их открыть) */
+        #regionDetails,
+        #profileSection,
+        #cartSection,
+        #questsSection,
+        #fullFeedContainer {
+            display: none;
         }
 
         /* 🎨 Стилизация кнопки "Показать еще регионы" */

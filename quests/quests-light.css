@@ -1,0 +1,139 @@
+/*
+  QUESTS — Minimalist Override
+*/
+
+.quests-section {
+  background: var(--c-bg) !important;
+  padding: var(--s-6) var(--s-4) !important;
+  padding-bottom: 120px !important;
+}
+
+.quests-content {
+  max-width: 560px !important;
+  margin: 0 auto !important;
+  padding-top: var(--s-4) !important;
+}
+
+.quests-title {
+  background: none !important;
+  -webkit-text-fill-color: var(--c-text) !important;
+  color: var(--c-text) !important;
+  font-family: var(--font) !important;
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+  letter-spacing: -0.02em !important;
+}
+
+.quests-subtitle { color: var(--c-text-3) !important; font-size: 0.85rem !important; }
+
+.quests-info {
+  background: var(--c-surface) !important;
+  border: 1px solid var(--c-border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: none !important;
+  padding: var(--s-5) !important;
+}
+
+.quests-info-title { color: var(--c-text) !important; font-weight: 600 !important; font-size: 0.9rem !important; }
+.quests-info-text { color: var(--c-text-2) !important; font-size: 0.85rem !important; }
+
+.quests-reward {
+  background: var(--c-surface-2) !important;
+  border: 1px solid var(--c-border) !important;
+  border-radius: var(--r-sm) !important;
+}
+
+.reward-text { color: var(--c-text) !important; font-weight: 500 !important; font-size: 0.85rem !important; }
+
+.quest-card {
+  background: var(--c-surface) !important;
+  border: 1px solid var(--c-border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: none !important;
+  padding: var(--s-5) !important;
+}
+
+.quest-card::before { display: none !important; }
+
+.quest-card:hover {
+  border-color: var(--c-border-2) !important;
+  box-shadow: var(--shadow-xs) !important;
+  transform: translateY(-2px) !important;
+}
+
+.quest-title {
+  color: var(--c-text) !important;
+  font-family: var(--font) !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+}
+
+.quest-location { color: var(--c-text-3) !important; font-size: 0.8rem !important; }
+.quest-description { color: var(--c-text-2) !important; font-size: 0.85rem !important; line-height: 1.6 !important; }
+
+.quest-status.available {
+  background: var(--c-surface-2) !important;
+  color: var(--c-text) !important;
+  border: 1px solid var(--c-border-2) !important;
+  font-size: 0.7rem !important;
+}
+
+.quest-status.completed {
+  background: rgba(45,106,79,0.06) !important;
+  color: var(--c-success) !important;
+  border: 1px solid rgba(45,106,79,0.2) !important;
+  font-size: 0.7rem !important;
+}
+
+.quest-reward-badge {
+  background: var(--c-surface-2) !important;
+  border: 1px solid var(--c-border) !important;
+  border-radius: var(--r-sm) !important;
+}
+
+.quest-reward-badge .reward-text { color: var(--c-text-2) !important; font-size: 0.8rem !important; }
+
+.quest-btn-primary {
+  background: var(--c-accent) !important;
+  color: #fff !important;
+  border-radius: var(--r-full) !important;
+  font-size: 0.8rem !important;
+  font-weight: 500 !important;
+}
+
+.quest-btn-primary:hover { background: var(--c-text) !important; box-shadow: none !important; }
+
+.quest-btn-secondary {
+  background: transparent !important;
+  color: var(--c-text-2) !important;
+  border: 1px solid var(--c-border-2) !important;
+  border-radius: var(--r-full) !important;
+  font-size: 0.8rem !important;
+}
+
+.quests-empty-text { color: var(--c-text-2) !important; }
+.quests-empty-hint { color: var(--c-text-3) !important; }
+
+/* Photo upload modal */
+.photo-upload-content {
+  background: var(--c-surface) !important;
+  border: 1px solid var(--c-border) !important;
+  border-radius: var(--r-lg) !important;
+}
+
+.photo-upload-title { color: var(--c-text) !important; font-weight: 600 !important; }
+.photo-upload-subtitle { color: var(--c-text-2) !important; }
+
+.photo-upload-zone {
+  border-color: var(--c-border-2) !important;
+  background: var(--c-surface-2) !important;
+}
+
+.photo-upload-zone:hover { border-color: var(--c-accent) !important; }
+.upload-text { color: var(--c-text) !important; }
+.upload-hint { color: var(--c-text-3) !important; }
+.photo-upload-close { background: var(--c-surface-2) !important; color: var(--c-text-3) !important; }
+
+.quest-qr-container { background: var(--c-surface-2) !important; border: 1px solid var(--c-border) !important; border-radius: var(--r-md) !important; }
+.quest-qr-title { color: var(--c-text) !important; font-weight: 600 !important; }
+.quest-qr-info { color: var(--c-text-2) !important; }

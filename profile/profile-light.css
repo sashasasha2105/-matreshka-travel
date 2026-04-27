@@ -1,0 +1,275 @@
+/*
+  PROFILE — Minimalist Override
+*/
+
+.profile-section {
+  background: var(--c-bg) !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding: var(--s-6) var(--s-4) !important;
+  padding-bottom: 120px !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+}
+
+.profile-section::before { display: none !important; }
+.profile-content { max-width: 560px; margin: 0 auto; }
+
+.profile-header {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: var(--s-6) 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-bottom: 1px solid var(--c-border) !important;
+  margin-bottom: var(--s-6) !important;
+}
+
+.profile-main-info {
+  flex-direction: row !important;
+  align-items: center !important;
+  text-align: left !important;
+  gap: var(--s-5) !important;
+}
+
+.profile-avatar {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 50% !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.profile-name {
+  font-family: var(--font) !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: var(--c-text) !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--c-text) !important;
+  text-shadow: none !important;
+  letter-spacing: -0.02em !important;
+}
+
+.profile-username {
+  color: var(--c-text-3) !important;
+  font-size: 0.8rem !important;
+  background: none !important;
+  border: none !important;
+}
+
+.profile-bio {
+  color: var(--c-text-2) !important;
+  font-size: 0.85rem !important;
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  line-height: 1.6 !important;
+}
+
+/* Stats */
+.profile-stats-modern,
+.profile-stats {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: var(--s-4) 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-bottom: 1px solid var(--c-border) !important;
+  margin-bottom: var(--s-6) !important;
+}
+
+.stat-card-modern,
+.profile-stat {
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: var(--s-3) 0 !important;
+  box-shadow: none !important;
+}
+
+.stat-value-modern,
+.profile-stat-value {
+  color: var(--c-text) !important;
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--c-text) !important;
+}
+
+.stat-label-modern,
+.profile-stat-label { color: var(--c-text-3) !important; font-size: 0.75rem !important; font-weight: 400 !important; }
+.stat-description-modern { color: var(--c-text-3) !important; font-size: 0.7rem !important; }
+
+/* Travel Gallery */
+.travel-gallery-section {
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: var(--s-4) 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-bottom: 1px solid var(--c-border) !important;
+  margin-bottom: var(--s-6) !important;
+}
+
+.gallery-title {
+  color: var(--c-text) !important;
+  font-family: var(--font) !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  background: none !important;
+  -webkit-text-fill-color: var(--c-text) !important;
+  letter-spacing: -0.01em !important;
+}
+
+.add-travel-btn {
+  background: var(--c-accent) !important;
+  border: none !important;
+  color: #fff !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  box-shadow: none !important;
+  font-size: 0.85rem !important;
+}
+
+.travel-card {
+  background: var(--c-surface) !important;
+  border: 1px solid var(--c-border) !important;
+  border-radius: var(--r-md) !important;
+  box-shadow: none !important;
+}
+
+.travel-card-title { color: var(--c-text) !important; font-weight: 600 !important; font-size: 0.9rem !important; }
+.travel-card-text { color: var(--c-text-2) !important; font-size: 0.8rem !important; }
+.travel-card-footer { border-top: 1px solid var(--c-border) !important; }
+
+.like-btn {
+  background: transparent !important;
+  border: 1px solid var(--c-border) !important;
+  border-radius: var(--r-full) !important;
+  color: var(--c-text-3) !important;
+}
+
+.like-btn.liked {
+  background: var(--c-surface-2) !important;
+  border-color: var(--c-border-2) !important;
+  color: var(--c-text) !important;
+}
+
+.no-travels {
+  background: transparent !important;
+  border: 1px dashed var(--c-border) !important;
+  border-radius: var(--r-md) !important;
+  padding: var(--s-10) !important;
+  color: var(--c-text-3) !important;
+}
+
+.no-travels p { color: var(--c-text-2) !important; }
+.no-travels small { color: var(--c-text-3) !important; }
+
+/* Support */
+.profile-actions-modern { margin-bottom: var(--s-4) !important; }
+
+.support-btn-modern {
+  background: transparent !important;
+  border: 1px solid var(--c-border-2) !important;
+  border-radius: var(--r-md) !important;
+  padding: var(--s-4) var(--s-5) !important;
+  color: var(--c-text) !important;
+  font-family: var(--font) !important;
+  font-weight: 500 !important;
+  font-size: 0.85rem !important;
+  width: 100% !important;
+  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--s-3) !important;
+  transition: var(--t-med) !important;
+  box-shadow: none !important;
+}
+
+.support-btn-modern:hover {
+  background: var(--c-surface-2) !important;
+  transform: translateY(-1px) !important;
+}
+
+.support-arrow { margin-left: auto !important; color: var(--c-text-3) !important; }
+
+/* Modals */
+.travel-modal, .modern-modal {
+  background: rgba(0,0,0,0.3) !important;
+  backdrop-filter: blur(2px) !important;
+}
+
+.modal-content, .travel-add-modal, .support-modal-content {
+  background: var(--c-surface) !important;
+  border: 1px solid var(--c-border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--shadow-lg) !important;
+  color: var(--c-text) !important;
+}
+
+.modal-header, .modern-modal-header { border-bottom: 1px solid var(--c-border) !important; background: transparent !important; }
+.modal-title { color: var(--c-text) !important; background: none !important; -webkit-text-fill-color: var(--c-text) !important; font-weight: 600 !important; }
+.modal-close, .modern-close { background: var(--c-surface-2) !important; border: 1px solid var(--c-border) !important; color: var(--c-text-3) !important; }
+
+.form-input, .form-textarea {
+  background: var(--c-surface-2) !important;
+  border: 1px solid var(--c-border) !important;
+  color: var(--c-text) !important;
+  border-radius: var(--r-sm) !important;
+  font-family: var(--font) !important;
+}
+
+.form-input:focus, .form-textarea:focus { border-color: var(--c-accent) !important; box-shadow: none !important; }
+.form-label { color: var(--c-text-2) !important; font-size: 0.75rem !important; font-weight: 500 !important; }
+
+.modal-btn { border-radius: var(--r-full) !important; font-weight: 500 !important; font-family: var(--font) !important; font-size: 0.8rem !important; }
+.modal-btn.cancel { background: var(--c-surface-2) !important; border: 1px solid var(--c-border) !important; color: var(--c-text-2) !important; }
+.modal-btn.publish { background: var(--c-accent) !important; color: #fff !important; border: none !important; }
+
+.photo-upload-area {
+  background: var(--c-surface-2) !important;
+  border: 1px dashed var(--c-border-2) !important;
+  border-radius: var(--r-md) !important;
+  color: var(--c-text-3) !important;
+}
+
+.photo-upload-area:hover { border-color: var(--c-accent) !important; }
+.upload-title { color: var(--c-text) !important; }
+.upload-subtitle { color: var(--c-text-3) !important; }
+
+.profile-edit-btn {
+  background: transparent !important;
+  border: 1px solid var(--c-border-2) !important;
+  color: var(--c-text-2) !important;
+  backdrop-filter: none !important;
+}
+
+.profile-edit-btn:hover { background: var(--c-surface-2) !important; box-shadow: none !important; }
+
+/* Coupons / Packages */
+.coupons-section, .packages-section {
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--c-border) !important;
+  border-radius: 0 !important;
+  padding: var(--s-4) 0 !important;
+  box-shadow: none !important;
+  margin-bottom: var(--s-6) !important;
+}
+
+.coupons-title, .packages-title { color: var(--c-text) !important; background: none !important; -webkit-text-fill-color: var(--c-text) !important; font-weight: 600 !important; }
+.coupon-card, .profile-package-card { background: var(--c-surface) !important; border: 1px solid var(--c-border) !important; border-radius: var(--r-md) !important; }
+.coupon-name, .profile-package-name { color: var(--c-text) !important; }
+.coupon-type { color: var(--c-text-3) !important; }
+.coupon-qr-btn { background: var(--c-accent) !important; color: #fff !important; border: none !important; border-radius: var(--r-full) !important; }
+
+.badge-active { background: rgba(45,106,79,0.08) !important; color: var(--c-success) !important; }
+.badge-warning { background: rgba(184,134,11,0.08) !important; color: var(--c-warning) !important; }

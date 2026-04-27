@@ -143,7 +143,8 @@
       "Bash(npm uninstall:*)",
       "Bash(git restore:*)",
       "Bash(gh repo view:*)",
-      "Bash(git merge:*)"
+      "Bash(git merge:*)",
+      "Bash(xargs -I{} basename {})"
     ],
     "deny": [],
     "ask": []

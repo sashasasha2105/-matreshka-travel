@@ -1,557 +1,289 @@
-/**
- * 🏪 PARTNER CARDS MINIMAL
- * Минималистичные карточки партнёров - ВСЕ в сетке
- * Согласовано с новым дизайном
- */
+/*
+  PARTNER CARDS — Minimalist
+*/
 
-/* ========================================
-   GRID CONTAINER
-   ======================================== */
-#partnersGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  padding: 1rem 0;
-  width: 100%;
-}
-
-/* ========================================
-   PARTNER CARD
-   ======================================== */
 .partner-card-minimal {
-  background: rgba(23, 23, 23, 0.95);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
-
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 1.5rem;
-
-  box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-
-  padding: 2rem;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--s-5);
   cursor: pointer;
-
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
+  transition: var(--t-med);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--s-3);
 }
 
 .partner-card-minimal:hover {
-  border-color: rgba(99, 102, 241, 0.5);
-  box-shadow:
-    0 20px 60px rgba(99, 102, 241, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  transform: translateY(-4px);
+  border-color: var(--c-border-2);
+  box-shadow: var(--shadow-sm);
+  transform: translateY(-2px);
 }
 
-/* ========================================
-   CARD HEADER
-   ======================================== */
 .partner-card-minimal .card-header {
   display: flex;
   align-items: flex-start;
-  gap: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  gap: var(--s-3);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--c-border);
 }
 
-.partner-card-minimal .card-emoji {
-  font-size: 3rem;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.partner-card-minimal .card-info {
-  flex: 1;
-  min-width: 0;
-}
+.partner-card-minimal .card-emoji { display: none; }
+.partner-card-minimal .card-info { flex: 1; min-width: 0; }
 
 .partner-card-minimal .card-name {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.01em;
-  line-height: 1.2;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--c-text);
+  margin-bottom: 2px;
+  line-height: 1.3;
 }
 
 .partner-card-minimal .card-designation {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: rgba(99, 102, 241, 0.9);
+  letter-spacing: 0.04em;
+  color: var(--c-text-3);
 }
 
 .partner-card-minimal .card-rating {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  gap: 4px;
+  margin-top: var(--s-1);
+  font-size: 0.75rem;
+  color: var(--c-text-2);
 }
 
-/* ========================================
-   CARD CONTENT
-   ======================================== */
 .partner-card-minimal .card-content {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--c-text-2);
   flex: 1;
 }
 
 .partner-card-minimal .card-highlight {
-  font-weight: 700;
-  background: rgba(99, 102, 241, 0.2);
-  color: rgba(99, 102, 241, 0.95);
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.25rem;
+  font-weight: 600;
+  color: var(--c-text);
+  background: none;
+  padding: 0;
 }
 
-/* ========================================
-   CARD OFFER
-   ======================================== */
 .partner-card-minimal .card-offer {
-  background: rgba(99, 102, 241, 0.1);
-  border: 1px solid rgba(99, 102, 241, 0.2);
-  border-radius: 1rem;
-  padding: 1rem;
-
+  background: var(--c-surface-2);
+  border: none;
+  border-left: 2px solid var(--c-accent);
+  border-radius: var(--r-sm);
+  padding: var(--s-3);
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--s-3);
 }
 
-.partner-card-minimal .card-offer-icon {
-  font-size: 1.5rem;
-  line-height: 1;
-}
-
+.partner-card-minimal .card-offer-icon { display: none; }
 .partner-card-minimal .card-offer-text {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.95);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--c-text);
   line-height: 1.4;
 }
 
-/* ========================================
-   CARD ACTIONS
-   ======================================== */
 .partner-card-minimal .card-actions {
   display: flex;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
+  gap: var(--s-2);
+  margin-top: var(--s-1);
 }
 
 .partner-route-btn-minimal,
 .partner-qr-btn-minimal {
   flex: 1;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-
-  font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-
+  background: transparent;
+  border: 1px solid var(--c-border-2);
+  border-radius: var(--r-sm);
+  padding: var(--s-2) var(--s-3);
+  font-family: var(--font);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--c-text-2);
   cursor: pointer;
-  transition: all 0.3s ease;
-
+  transition: var(--t-med);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: var(--s-1);
 }
 
 .partner-route-btn-minimal:hover,
 .partner-qr-btn-minimal:hover {
-  background: rgba(99, 102, 241, 0.2);
-  border-color: rgba(99, 102, 241, 0.4);
-  transform: translateY(-2px);
+  background: var(--c-accent);
+  border-color: var(--c-accent);
+  color: #fff;
+  transform: translateY(-1px);
 }
 
 .partner-qr-btn-minimal.disabled {
-  opacity: 0.5;
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
 .partner-qr-btn-minimal.disabled:hover {
   transform: none;
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: transparent;
+  border-color: var(--c-border-2);
+  color: var(--c-text-3);
 }
 
-/* ========================================
-   АДАПТИВНОСТЬ
-   ======================================== */
-@media (max-width: 768px) {
-  #partnersGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .partner-card-minimal {
-    padding: 1.5rem;
-  }
-
-  .partner-card-minimal .card-emoji {
-    font-size: 2.5rem;
-  }
-
-  .partner-card-minimal .card-name {
-    font-size: 1.125rem;
-  }
-
-  .partner-card-minimal .card-content {
-    font-size: 0.9rem;
-  }
-
-  .partner-card-minimal .card-actions {
-    flex-direction: column;
-  }
-
-  .partner-route-btn-minimal,
-  .partner-qr-btn-minimal {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .partner-card-minimal {
-    padding: 1.25rem;
-  }
-
-  .partner-card-minimal .card-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .partner-card-minimal .card-emoji {
-    font-size: 2rem;
-  }
-}
-
-/* ========================================
-   ACCESSIBILITY
-   ======================================== */
-.partner-card-minimal:focus-visible {
-  outline: 2px solid rgba(99, 102, 241, 0.5);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .partner-card-minimal {
-    transition: none;
-  }
-}
-
-/* ========================================
-   КНОПКИ ОПЛАТЫ И ДЕМО-ПОКУПКИ
-   ======================================== */
-
-/* Контейнер */
+/* Payment */
 #partnersGrid .partners-buttons-container {
   grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding: 2rem;
-
-  background: rgba(23, 23, 23, 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
-
-  box-shadow:
-    0 10px 40px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  gap: var(--s-3);
+  margin-top: var(--s-6);
+  padding: var(--s-6);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
 }
 
-/* Кнопка оплаты */
 #partnersGrid .partners-pay-btn {
-  padding: 1rem 2rem;
-  background: rgba(99, 102, 241, 0.15);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  border-radius: 1rem;
-  color: rgba(255, 255, 255, 0.95);
-  font-family: 'Inter', sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
+  padding: var(--s-3) var(--s-6);
+  background: var(--c-accent);
+  border: none;
+  border-radius: var(--r-full);
+  color: #fff;
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--t-med);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+  gap: var(--s-2);
 }
 
 #partnersGrid .partners-pay-btn:hover {
-  background: rgba(99, 102, 241, 0.25);
-  border-color: rgba(99, 102, 241, 0.5);
-  box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
-  transform: translateY(-2px);
+  background: var(--c-text);
+  transform: translateY(-1px);
 }
 
-/* Кнопка демо-покупки - STATEFUL */
 #partnersGrid .partners-demo-btn {
-  padding: 0.875rem 1.75rem;
-  background: rgba(23, 23, 23, 0.5);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  color: rgba(255, 255, 255, 0.9);
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
-  font-size: 0.9rem;
+  padding: var(--s-3) var(--s-6);
+  background: transparent;
+  border: 1px solid var(--c-border-2);
+  border-radius: var(--r-full);
+  color: var(--c-text-2);
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: var(--t-med);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.625rem;
+  gap: var(--s-2);
 }
 
 #partnersGrid .partners-demo-btn:hover:not(:disabled) {
-  background: rgba(23, 23, 23, 0.8);
-  border-color: rgba(99, 102, 241, 0.3);
-  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
-  transform: translateY(-2px);
+  background: var(--c-surface-2);
+  transform: translateY(-1px);
 }
 
-#partnersGrid .partners-demo-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.8;
-}
+#partnersGrid .partners-demo-btn:disabled { cursor: not-allowed; opacity: 0.4; }
+#partnersGrid .partners-demo-btn.success { background: rgba(45,106,79,0.06); border-color: var(--c-success); }
+#partnersGrid .partners-demo-btn.error { background: rgba(193,41,46,0.06); border-color: var(--c-error); }
 
-/* Loading */
-#partnersGrid .partners-demo-btn.loading {
-  background: rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.3);
-}
-
-#partnersGrid .partners-demo-btn.loading .demo-btn-icon {
-  animation: demo-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes demo-pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.1);
-  }
-}
-
-/* Success */
-#partnersGrid .partners-demo-btn.success {
-  background: rgba(34, 197, 94, 0.15);
-  border-color: rgba(34, 197, 94, 0.4);
-}
-
-#partnersGrid .partners-demo-btn.success .demo-btn-icon {
-  animation: demo-bounce 0.6s ease;
-}
-
-@keyframes demo-bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
-}
-
-/* Error */
-#partnersGrid .partners-demo-btn.error {
-  background: rgba(239, 68, 68, 0.15);
-  border-color: rgba(239, 68, 68, 0.4);
-}
-
-#partnersGrid .partners-demo-btn.error .demo-btn-icon {
-  animation: demo-shake 0.5s ease;
-}
-
-@keyframes demo-shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-5px);
-  }
-  75% {
-    transform: translateX(5px);
-  }
-}
-
-/* ========================================
-   АККОРДЕОНЫ КАТЕГОРИЙ ПАРТНЕРОВ
-   ======================================== */
-
-/* Контейнер аккордеона */
+/* Accordion */
 .partners-accordion {
-  margin-bottom: 1.5rem;
-  background: rgba(23, 23, 23, 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
+  margin-bottom: var(--s-3);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: var(--t-med);
 }
 
-.partners-accordion:hover {
-  border-color: rgba(99, 102, 241, 0.3);
-}
+.partners-accordion:hover { border-color: var(--c-border-2); }
 
-/* Заголовок аккордеона */
 .partners-accordion-header {
-  padding: 1.5rem 2rem;
+  padding: var(--s-4) var(--s-5);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  transition: all 0.3s ease;
+  transition: var(--t-med);
   user-select: none;
 }
 
-.partners-accordion-header:hover {
-  background: rgba(99, 102, 241, 0.05);
-}
+.partners-accordion-header:hover { background: var(--c-surface-2); }
 
 .partners-accordion-header.active {
-  background: rgba(99, 102, 241, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--c-surface-2);
+  border-bottom: 1px solid var(--c-border);
 }
 
-/* Левая часть заголовка */
-.accordion-title {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.accordion-emoji {
-  font-size: 2rem;
-  line-height: 1;
-}
+.accordion-title { display: flex; align-items: center; gap: var(--s-3); }
+.accordion-emoji { display: none; }
 
 .accordion-text {
-  font-family: 'Inter', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
-  letter-spacing: -0.02em;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--c-text);
+  letter-spacing: -0.01em;
 }
 
 .accordion-count {
-  background: rgba(99, 102, 241, 0.2);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  border-radius: 50%;
-  width: 2rem;
-  height: 2rem;
+  background: var(--c-surface-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-full);
+  width: 1.5rem;
+  height: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--c-text-2);
 }
 
-/* Стрелка */
 .accordion-arrow {
-  font-size: 1.25rem;
-  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  color: var(--c-text-3);
   transition: transform 0.3s ease;
 }
 
 .partners-accordion-header.active .accordion-arrow {
   transform: rotate(180deg);
-  color: rgba(99, 102, 241, 0.9);
+  color: var(--c-text);
 }
 
-/* Контент аккордеона */
 .partners-accordion-content {
-  padding: 2rem;
+  padding: var(--s-4);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  background: rgba(15, 15, 15, 0.3);
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--s-3);
+  background: var(--c-bg);
 }
 
-/* Переопределяем grid для partnersGrid при использовании аккордеонов */
 #partnersGrid {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding: 1rem 0;
+  padding: var(--s-2) 0;
 }
 
-/* Адаптивность для аккордеонов */
 @media (max-width: 768px) {
-  .partners-accordion-header {
-    padding: 1.25rem 1.5rem;
-  }
-
-  .accordion-text {
-    font-size: 1.25rem;
-  }
-
-  .accordion-emoji {
-    font-size: 1.75rem;
-  }
-
-  .accordion-count {
-    width: 1.75rem;
-    height: 1.75rem;
-    font-size: 0.8rem;
-  }
-
-  .partners-accordion-content {
-    padding: 1.5rem;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
+  .partner-card-minimal { padding: var(--s-4); }
+  .partner-card-minimal .card-name { font-size: 0.85rem; }
+  .partner-card-minimal .card-actions { flex-direction: column; }
+  .partners-accordion-content { grid-template-columns: 1fr; padding: var(--s-3); }
 }
 
-@media (max-width: 480px) {
-  .partners-accordion-header {
-    padding: 1rem 1.25rem;
-  }
-
-  .accordion-title {
-    gap: 0.75rem;
-  }
-
-  .accordion-text {
-    font-size: 1.125rem;
-  }
-
-  .accordion-emoji {
-    font-size: 1.5rem;
-  }
-
-  .partners-accordion-content {
-    padding: 1.25rem;
-  }
+.partner-card-minimal:focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 2px;
 }

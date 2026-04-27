@@ -349,7 +349,8 @@ ${data.package_id ? `📦 <b>ID пакета:</b> ${data.package_id}\n` : ''}
 // Создаём глобальный экземпляр аналитики
 window.matryoshkaAnalytics = new MatryoshkaAnalytics();
 
-// Автоматически отслеживаем запуск при загрузке
+// Автоматическое отслеживание отключено для ускорения загрузки
+/*
 document.addEventListener('DOMContentLoaded', function() {
     const analytics = window.matryoshkaAnalytics;
 
@@ -362,6 +363,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 });
+*/
 
 // Экспортируем для использования в других модулях
 if (typeof module !== 'undefined' && module.exports) {

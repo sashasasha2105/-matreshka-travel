@@ -20,7 +20,7 @@
         }
 
         init() {
-            console.log('🎯 Инициализация системы заданий');
+            console.log('Инициализация системы заданий');
             this.generateQuests();
             this.updateQuestsBadge();
         }
@@ -33,7 +33,7 @@
             const paidRegions = window.paidRegions || [];
 
             if (paidRegions.length === 0) {
-                console.log('📭 Нет оплаченных регионов - нет заданий');
+                console.log('Нет оплаченных регионов - нет заданий');
                 return;
             }
 
@@ -48,7 +48,7 @@
 
                 if (regionData.challenges && regionData.challenges.length > 0) {
                     // Используем специальные челленджи
-                    console.log(`🎯 Используем challenges для ${regionData.name}`);
+                    console.log(`Используем challenges для ${regionData.name}`);
                     tasksSource = regionData.challenges.map(challenge => ({
                         name: challenge.name,
                         description: challenge.description,
@@ -201,19 +201,18 @@
 
             container.innerHTML = `
                 <div class="quests-header">
-                    <div class="quests-title">🎯 Игровые задания</div>
+                    <div class="quests-title">Игровые задания</div>
                     <div class="quests-subtitle">Фотографируй достопримечательности и получай QR-коды на бонусы</div>
                 </div>
 
                 <div class="quests-info">
-                    <div class="quests-info-title">📸 Как это работает?</div>
+                    <div class="quests-info-title">Как это работает?</div>
                     <div class="quests-info-text">
                         После покупки пакета региона вам становятся доступны задания -
                         сфотографируйте указанные достопримечательности и получите
                         QR-код на бонус в заведении партнеров!
                     </div>
                     <div class="quests-reward">
-                        <span class="reward-icon">🎁</span>
                         <span class="reward-text">За каждое задание: QR-код на бонус</span>
                     </div>
                 </div>
@@ -231,7 +230,6 @@
             if (this.quests.length === 0) {
                 return `
                     <div class="quests-empty">
-                        <div class="quests-empty-icon">🎯</div>
                         <div class="quests-empty-text">Пока нет доступных заданий</div>
                         <div class="quests-empty-hint">Купите пакет региона, чтобы получить задания</div>
                     </div>
@@ -245,9 +243,9 @@
         renderQuestCard(quest) {
             const statusClass = quest.status;
             const statusText = {
-                'available': '✨ Доступно',
-                'completed': '✅ Выполнено',
-                'locked': '🔒 Закрыто'
+                'available': 'Доступно',
+                'completed': 'Выполнено',
+                'locked': 'Закрыто'
             }[quest.status];
 
             const completedInfo = quest.status === 'completed' && quest.completedDate
@@ -262,10 +260,10 @@
                 ? `
                     <div class="quest-actions">
                         <button class="quest-btn quest-btn-primary" onclick="window.matryoshkaQuests.openPhotoUpload('${quest.id}')">
-                            📸 Загрузить фото
+                            Загрузить фото
                         </button>
                         <button class="quest-btn quest-btn-secondary" onclick="openRoute('${quest.attraction}')">
-                            🗺️ На карте
+                            На карте
                         </button>
                     </div>
                 `
@@ -273,7 +271,7 @@
                 ? `
                     <div class="quest-actions">
                         <button class="quest-btn quest-btn-success" disabled>
-                            ✅ Задание выполнено
+                            Задание выполнено
                         </button>
                     </div>
                 `
@@ -284,23 +282,22 @@
                     <div class="quest-header">
                         <div class="quest-title-row">
                             <div class="quest-title">${quest.title}</div>
-                            <div class="quest-location">📍 ${quest.regionName}</div>
+                            <div class="quest-location">${quest.regionName}</div>
                         </div>
                         <div class="quest-status ${statusClass}">${statusText}</div>
                     </div>
                     <div class="quest-description">${quest.description}</div>
                     <div class="quest-reward-badge">
-                        <span class="reward-icon">🎁</span>
                         <span class="reward-text">${quest.rewardText}</span>
                     </div>
                     ${completedInfo}
                     ${photoPreview}
                     ${quest.qrCode ? `
                         <div class="quest-qr-container">
-                            <div class="quest-qr-title">✅ Ваш QR-код на бонус:</div>
+                            <div class="quest-qr-title">Ваш QR-код на бонус:</div>
                             <img src="${quest.qrCode}" class="quest-qr-code" alt="QR код">
                             <div class="quest-qr-info">
-                                ${quest.partner ? `📍 ${quest.partner.name}<br>${quest.partner.emoji} ${quest.partner.type}` : ''}
+                                ${quest.partner ? `${quest.partner.name}<br>${quest.partner.type}` : ''}
                             </div>
                             <button class="quest-btn quest-btn-primary" onclick="window.matryoshkaQuests.showQRFullscreen('${quest.id}')">
                                 🔍 Показать QR-код
@@ -339,7 +336,6 @@
                     </div>
 
                     <div class="photo-upload-zone" id="photoUploadZone">
-                        <div class="upload-icon">📷</div>
                         <div class="upload-text">Нажмите или перетащите фото</div>
                         <div class="upload-hint">JPG, PNG до 5MB</div>
                         <input type="file" id="photoFileInput" accept="image/*" style="display: none;">
@@ -561,7 +557,7 @@
                             </div>
                         ` : ''}
                         <div class="qr-instructions">
-                            📱 Покажите этот QR-код сотруднику заведения для получения бонуса
+                            Покажите этот QR-код сотруднику заведения для получения бонуса
                         </div>
                     </div>
                 </div>

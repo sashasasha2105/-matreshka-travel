@@ -5,7 +5,7 @@
 
 class Matryoshka2GISMaps {
     constructor() {
-        this.apiKey = '51b6e320-2abc-48c9-9c06-fc3e3f9fd155';
+        this.apiKey = '0d133aaf-6260-4a0a-b147-a243458e8052';
         this.mapInstance = null;
         this.markers = [];
         this.currentPopup = null;

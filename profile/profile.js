@@ -21,7 +21,7 @@ class MatryoshkaProfile {
      * Загрузка данных профиля из IndexedDB
      */
     async loadFromStorage() {
-        console.log('📖 Загружаем данные профиля из IndexedDB...');
+        console.log('Загружаем данные профиля из IndexedDB...');
         try {
             // Инициализируем базу данных если еще не инициализирована
             if (!window.matryoshkaStorage.db) {
@@ -32,7 +32,7 @@ class MatryoshkaProfile {
             const savedProfile = await window.matryoshkaStorage.getProfile();
             if (savedProfile) {
                 this.profileData = { ...this.profileData, ...savedProfile };
-                console.log('✅ Профиль загружен');
+                console.log('Профиль загружен');
             }
 
             // Загружаем путешествия
@@ -40,8 +40,8 @@ class MatryoshkaProfile {
             console.log('✅ Загружено путешествий:', this.travelStories.length);
 
             if (this.travelStories.length > 0) {
-                console.log('🖼️ Первое путешествие:', this.travelStories[0].title);
-                console.log('🖼️ Изображений:', this.travelStories[0].images?.length);
+                console.log('Первое путешествие:', this.travelStories[0].title);
+                console.log('Изображений:', this.travelStories[0].images?.length);
             }
         } catch (error) {
             console.error('❌ Ошибка загрузки данных:', error);
@@ -52,7 +52,7 @@ class MatryoshkaProfile {
      * Сохранение данных профиля в IndexedDB
      */
     async saveToStorage() {
-        console.log('💾 Сохраняем данные профиля в IndexedDB...');
+        console.log('Сохраняем данные профиля в IndexedDB...');
         try {
             // Сохраняем профиль
             await window.matryoshkaStorage.saveProfile(this.profileData);
@@ -62,17 +62,17 @@ class MatryoshkaProfile {
                 await window.matryoshkaStorage.saveTravel(travel);
             }
 
-            console.log('✅ Все данные сохранены в IndexedDB');
+            console.log('Все данные сохранены в IndexedDB');
 
             // Показываем статистику
             const stats = await window.matryoshkaStorage.getStorageSize();
-            console.log('📊 Статистика хранилища:');
+            console.log('Статистика хранилища:');
             console.log('  - Путешествий:', stats.travels);
             console.log('  - Фотографий:', stats.photos);
             console.log('  - Размер:', stats.sizeMB.toFixed(2), 'MB');
         } catch (error) {
-            console.error('❌ Ошибка сохранения:', error);
-            this.showToast('❌ Ошибка сохранения данных');
+            console.error('Ошибка сохранения:', error);
+            this.showToast('Ошибка сохранения данных');
         }
     }
 
@@ -80,7 +80,7 @@ class MatryoshkaProfile {
      * Инициализация профиля с анимациями
      */
     async initProfile() {
-        console.log('🪆 Инициализация профиля Матрешка...');
+        console.log('Инициализация профиля Матрешка...');
 
         // Загружаем данные из IndexedDB
         if (!this.isInitialized) {
@@ -92,7 +92,7 @@ class MatryoshkaProfile {
         this.initAnimations();
         this.initInteractions();
 
-        console.log('✅ Профиль Матрешка инициализирован');
+        console.log('Профиль Матрешка инициализирован');
     }
 
     /**
@@ -1276,7 +1276,7 @@ class MatryoshkaProfile {
         if (likeCount) likeCount.textContent = travel.likes;
 
         // Сохраняем изменения
-        this.saveToLocalStorage();
+        await this.saveToStorage();
 
         // Убираем анимацию после завершения
         setTimeout(() => {
@@ -1602,16 +1602,16 @@ class MatryoshkaProfile {
 }
 
 // Глобальная инициализация
-let matryoshkaProfile = null;
+window.matryoshkaProfile = null;
 
 function initProfile() {
-    matryoshkaProfile = new MatryoshkaProfile();
-    matryoshkaProfile.initProfile();
+    window.matryoshkaProfile = new MatryoshkaProfile();
+    window.matryoshkaProfile.initProfile();
 }
 
 function loadProfileData() {
-    if (matryoshkaProfile) {
-        matryoshkaProfile.loadProfileData();
+    if (window.matryoshkaProfile) {
+        window.matryoshkaProfile.loadProfileData();
     }
 }
 

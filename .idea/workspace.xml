@@ -4,18 +4,132 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="dd47a965-f12a-4a93-aeef-bdfe1913fef0" name="Changes" comment="  Commit Messag" />
+    <list default="true" id="512c2e07-05a6-48b2-b6fc-f3018a6b281c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/novosibirsk.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.claude/settings.local.json" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/settings.local.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/PythonProject20.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonProject20.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_12_2025,_11_57_[Changes]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_12_2025__11_57__Changes_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/27-92a.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/27-92b.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/5_A_qwdqwd_62ruo.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/9we21.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ACETERNITY_DEMO.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ACETERNITY_INTEGRATION_GUIDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ACETERNITY_QUICKSTART.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ACETERNITY_README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ACETERNITY_SEARCH_GUIDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/AUTOSTART_README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/COLOR_PALETTES.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DEMO_INSTRUCTIONS.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/DESIGN_REVIEW.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/FOCUS_CARDS_INTEGRATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/INTEGRATION_GUIDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/OPTIMIZATION_REPORT.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/QUICK_START.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/REACT_LOADER_INTEGRATION.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/REACT_MIGRATION_GUIDE.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SUPABASE_SETUP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TELEGRAM_BOT_FIX.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aceternity_WORKING.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/aceternity_showcase.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/data/packages.js" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/data/packages.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/data/regions.js" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/data/regions.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/TeamPhotos/Антонова Юлия.png" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/TeamPhotos/Антонова Юлия.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/TeamPhotos/Говоруха Егор.png" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/TeamPhotos/Говоруха Егор.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/TeamPhotos/Флёр Михаил.png" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/TeamPhotos/Флёр Михаил.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/TeamPhotos/Цыпкайкин Александр.png" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/TeamPhotos/Цыпкайкин Александр.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/1614355077_html_c2a765adeec0a9fd.png" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/1614355077_html_c2a765adeec0a9fd.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Ecater.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Ecater.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/GOLDRING.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/GOLDRING.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/IMG_9134.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/IMG_9134.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/IMG_9135.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/IMG_9135.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/IMG_9136.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/IMG_9136.PNG" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/IMG_9137.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/IMG_9137.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/IMG_9138.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/IMG_9138.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Moscow.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Moscow.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Piter.png" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Piter.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/__medium_утр.jpg.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/__medium_утр.jpg.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/d9730678-c2bc-5182-9e7a-651023c57620.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/d9730678-c2bc-5182-9e7a-651023c57620.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/img.png" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/img.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/kazan.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/kazan.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/novosibirsk.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/ .claude/skills/frontend-design /Skill.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/sochi.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/sochi.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Волгоградская республика.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Волгоградская республика.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Главное фото.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Главное фото.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Дагестан.jpeg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Дагестан.jpeg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Иркутская область.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Иркутская область.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Кабардино-Балкария.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Кабардино-Балкария.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Калининград.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Калининград.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Калининградская республика.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Калининградская республика.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Костромская область.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Костромская область.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Краснодар.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Краснодар.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Нижегородская область.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Нижегородская область.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Снимок экрана 2025-10-07 в 13.34.49.png" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Снимок экрана 2025-10-07 в 13.34.49.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Челябинская область.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Челябинская область.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Чечня.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Чечня.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/Ярославская область.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/Ярославская область.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/байкал.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/байкал.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/вологда.avif" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/вологда.avif" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/екб.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/екб.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/ингушетия.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/ингушетия.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/кавказ.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/кавказ.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/кострома.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/кострома.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/нижний новгород.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/нижний новгород.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/ставрополь.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/ставрополь.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/челябинск.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/челябинск.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/images/city_photos/ярославль.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/.claude/assets/images/city_photos/ярославль.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cart/cart.js" beforeDir="false" afterPath="$PROJECT_DIR$/cart/cart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/TripDatePicker/TripDatePickerSection.css" beforeDir="false" afterPath="$PROJECT_DIR$/components/TripDatePicker/TripDatePickerSection.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/aceternity/_template.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_3d_marquee.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_aceternity_components.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_aceternity_search.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_apple_cards.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_date_picker.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_focus_cards.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_focus_minimal.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_focus_single.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_packages_aceternity.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo_region_minimal.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/feed/feed-supabase.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maps/maps2gis_new.js" beforeDir="false" afterPath="$PROJECT_DIR$/maps/maps2gis_new.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/maps/organization_card.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/maps/organization_card.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/photo_database.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/profile/profile-aceternity.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/profile/profile.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/profile/profile.js" beforeDir="false" afterPath="$PROJECT_DIR$/profile/profile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/quests/quests.js" beforeDir="false" afterPath="$PROJECT_DIR$/quests/quests.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtime.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/components/liquid-nav.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/core/navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/core/navigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/modules/analytics.js" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/modules/analytics.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/apple-cards-carousel.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/apple-cards-carousel.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/focus-cards-minimal.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/focus-cards-minimal.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/marquee-hero.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/marquee-hero.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/matreshka-optimized.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/matreshka-optimized.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/partner-cards-minimal.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/partner-cards-minimal.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/redesign-2025.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/redesign-2025.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/region-details-premium.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/region-details-premium.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/styles/search-minimal.css" beforeDir="false" afterPath="$PROJECT_DIR$/styles/search-minimal.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_loader.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_loader_react.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_simple.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_ultra_simple.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/welcome_demo.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/школково.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Python Script" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -33,36 +147,25 @@
   }
 }</component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 1
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 6
 }</component>
-  <component name="ProjectId" id="3316FTaBKbemeG0tuyySVpqrdmM" />
+  <component name="ProjectId" id="3CntnTAzYJyhfQDtKCS1ReOUrrV" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "ACTIVE_CLOUD_PROJECT_ACCOUNT": "effertzeloise1291997@gmail.com",
-    "ACTIVE_CLOUD_PROJECT_ID": "serene-segment-489123-d6",
-    "ACTIVE_CLOUD_PROJECT_NAME": "My Project 7623",
-    "ACTIVE_CLOUD_PROJECT_NUMBER": "75045723635",
-    "Python.школково.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "com.google.cloudcode.ide_session_index": "20260315_0005",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "/Users/alexbrizkiy/PycharmProjects/PythonProject20"
+    "com.google.cloudcode.ide_session_index": "20260427_0007",
+    "git-widget-placeholder": "main"
   }
 }]]></component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/city_photos" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/TeamPhotos" />
-      <recent name="$PROJECT_DIR$/city_photos" />
-      <recent name="$PROJECT_DIR$/profile" />
+      <recent name="$PROJECT_DIR$/.claude" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -75,25 +178,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="dd47a965-f12a-4a93-aeef-bdfe1913fef0" name="Changes" comment="" />
-      <created>1758472127160</created>
+      <changelist id="512c2e07-05a6-48b2-b6fc-f3018a6b281c" name="Changes" comment="" />
+      <created>1777033329209</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1758472127160</updated>
+      <updated>1777033329209</updated>
     </task>
-    <task id="LOCAL-00001" summary="  Commit Messag">
-      <option name="closed" value="true" />
-      <created>1773599371376</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1773599371376</updated>
-    </task>
-    <option name="localTasksCounter" value="2" />
     <servers />
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="  Commit Messag" />
-    <option name="LAST_COMMIT_MESSAGE" value="  Commit Messag" />
   </component>
 </project>

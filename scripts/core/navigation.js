@@ -16,11 +16,9 @@ window.showMainSection = function() {
 };
 
 window.showFeed = function() {
-    console.log('🌍 showFeed вызвана');
+    console.log('ℹ️ Лента удалена — переходим на главную');
     if (window.MatryoshkaNavigation) {
-        window.MatryoshkaNavigation.navigate('feed');
-    } else {
-        console.error('❌ MatryoshkaNavigation еще не готова');
+        window.MatryoshkaNavigation.navigate('main');
     }
 };
 
@@ -86,7 +84,6 @@ console.log('✅ Глобальные функции навигации опре
         // Список всех секций
         sections: {
             main: 'mainSection',
-            feed: 'fullFeedContainer',
             profile: 'profileSection',
             cart: 'cartSection',
             quests: 'questsSection',
@@ -107,6 +104,7 @@ console.log('✅ Глобальные функции навигации опре
             const section = document.getElementById(sectionId);
 
             if (section) {
+                section.classList.remove('hidden');
                 section.style.display = 'block';
                 console.log(`✅ Показана секция: ${sectionId}`);
             } else {
@@ -140,6 +138,7 @@ console.log('✅ Глобальные функции навигации опре
             Object.values(this.sections).forEach(sectionId => {
                 const section = document.getElementById(sectionId);
                 if (section) {
+                    section.classList.add('hidden');
                     section.style.display = 'none';
                 }
             });
@@ -253,9 +252,7 @@ console.log('✅ Глобальные функции навигации опре
                     }
                     break;
 
-                case 'feed':
-                    this.loadFeed();
-                    break;
+
 
                 case 'main':
                     if (typeof loadMainFeedSection === 'function') {

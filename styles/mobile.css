@@ -1,0 +1,412 @@
+/*
+  МАТРЕШКА · Mobile Responsive
+  ─────────────────────────────────────────────
+  Breakpoints:
+    768px — планшеты / крупные телефоны
+    480px — небольшие телефоны
+    360px — очень маленькие экраны (320–360px)
+*/
+
+/* ─────────────────────────────────────────────
+   768px — ПЛАНШЕТЫ / КРУПНЫЕ ТЕЛЕФОНЫ
+───────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* Layout */
+  .container {
+    padding: var(--s5) var(--s4) !important;
+    padding-bottom: 110px !important;
+  }
+
+  /* Hero marquee */
+  .marquee-container-main {
+    height: 340px !important;
+  }
+
+  .marquee-overlay-text {
+    padding: var(--s6) !important;
+  }
+
+  .marquee-overlay-text::before {
+    left: var(--s6) !important;
+    bottom: var(--s6) !important;
+    height: 60px !important;
+  }
+
+  .marquee-overlay-title {
+    font-size: clamp(2rem, 8vw, 3rem) !important;
+    padding-left: var(--s4) !important;
+  }
+
+  .marquee-overlay-subtitle {
+    padding-left: var(--s4) !important;
+  }
+
+  /* Bottom nav — скрываем лейблы неактивных */
+  .nav-label { display: none !important; }
+  .nav-item.active .nav-label { display: inline !important; }
+  .nav-item { padding: 10px 14px !important; }
+
+  /* Region cards grid */
+  .focus-cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+    gap: var(--s3) !important;
+  }
+
+  .focus-card { height: 280px !important; }
+
+  /* Profile / Quests / Cart padding */
+  .profile-section,
+  .quests-section,
+  .cart-section {
+    padding: var(--s5) var(--s4) 110px !important;
+  }
+
+  /* Modals — side padding */
+  .modal-content,
+  .modern-modal-content,
+  .photo-upload-content {
+    padding: var(--s6) !important;
+    border-radius: var(--r-xl) !important;
+  }
+
+  /* Region details header */
+  .region-details-header {
+    padding: var(--s3) var(--s4) !important;
+    gap: var(--s2) !important;
+  }
+
+  .back-btn, .user-profile-btn {
+    padding: 8px 12px !important;
+    font-size: .75rem !important;
+  }
+
+  /* Partners buttons block */
+  .partners-buttons-container {
+    padding: var(--s4) !important;
+  }
+
+  /* Apple carousel section */
+  .apple-carousel-section {
+    padding: var(--s4) 0 !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   480px — НЕБОЛЬШИЕ ТЕЛЕФОНЫ
+───────────────────────────────────────────── */
+@media (max-width: 480px) {
+
+  /* Layout */
+  .container {
+    padding: var(--s4) var(--s3) !important;
+    padding-bottom: 100px !important;
+  }
+
+  /* Hero */
+  .marquee-container-main {
+    height: 300px !important;
+  }
+
+  .marquee-overlay-title {
+    font-size: clamp(1.8rem, 10vw, 2.4rem) !important;
+  }
+
+  /* Focus cards — 1 колонка */
+  .focus-cards-grid {
+    grid-template-columns: 1fr !important;
+    gap: var(--s3) !important;
+  }
+
+  .focus-card { height: 260px !important; }
+
+  /* Bottom nav — скрываем ВСЕ лейблы */
+  .nav-label,
+  .nav-item.active .nav-label {
+    display: none !important;
+  }
+
+  .nav-item { padding: 9px 13px !important; }
+
+  .bottom-nav {
+    padding: 4px !important;
+    max-width: calc(100vw - 32px) !important;
+  }
+
+  /* Profile */
+  .profile-section,
+  .quests-section,
+  .cart-section {
+    padding: var(--s4) var(--s3) 100px !important;
+  }
+
+  .profile-content,
+  .quests-content,
+  .cart-content {
+    max-width: 100% !important;
+  }
+
+  .profile-name { font-size: 1.4rem !important; }
+
+  .profile-stats {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .profile-stat-value { font-size: 1.8rem !important; }
+
+  /* Quests title */
+  .quests-title {
+    font-size: clamp(1.6rem, 8vw, 2rem) !important;
+  }
+
+  /* Quest cards */
+  .quest-actions { flex-direction: column !important; }
+  .quest-btn { padding: 13px var(--s4) !important; }
+
+  /* Cart */
+  .cart-title {
+    font-size: clamp(1.4rem, 7vw, 1.8rem) !important;
+  }
+
+  /* Payment modal — стопка вместо 2 колонок */
+  .payment-form-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .payment-modal-content {
+    padding: var(--s6) var(--s4) var(--s8) !important;
+  }
+
+  .payment-modal-title {
+    font-size: 1.35rem !important;
+  }
+
+  .payment-modal-price {
+    font-size: 1.8rem !important;
+  }
+
+  /* Modals */
+  .modal-content,
+  .modern-modal-content,
+  .photo-upload-content {
+    padding: var(--s5) var(--s3) !important;
+    border-radius: var(--r-xl) var(--r-xl) 0 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  /* Package modal */
+  .package-modal-content {
+    margin: 0 !important;
+    border-radius: var(--r-xl) var(--r-xl) 0 0 !important;
+  }
+
+  /* Region details */
+  .region-title {
+    font-size: clamp(1.6rem, 7vw, 2.2rem) !important;
+  }
+
+  /* Partners cards buttons — стопка */
+  .partner-card-minimal .card-actions,
+  .partner-buttons {
+    flex-direction: column !important;
+  }
+
+  .partner-route-btn-minimal,
+  .partner-qr-btn-minimal {
+    width: 100% !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  /* Pay button */
+  .partners-pay-btn {
+    font-size: .85rem !important;
+    padding: 13px var(--s4) !important;
+  }
+
+  /* Load more button */
+  .load-more-btn {
+    padding: 14px var(--s5) !important;
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Search */
+  .destination-title {
+    font-size: clamp(1.3rem, 6vw, 1.6rem) !important;
+  }
+
+  /* Section titles */
+  .section-title,
+  .partners-section-title,
+  .places-title,
+  .packages-title {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   360px — ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ
+───────────────────────────────────────────── */
+@media (max-width: 360px) {
+
+  /* Layout */
+  .container {
+    padding: var(--s3) var(--s2) !important;
+    padding-bottom: 95px !important;
+  }
+
+  /* Hero */
+  .marquee-container-main {
+    height: 260px !important;
+  }
+
+  .marquee-overlay-text {
+    padding: var(--s4) !important;
+  }
+
+  .marquee-overlay-text::before {
+    height: 44px !important;
+    left: var(--s4) !important;
+    bottom: var(--s4) !important;
+  }
+
+  .marquee-overlay-title {
+    font-size: 1.7rem !important;
+    padding-left: var(--s3) !important;
+  }
+
+  /* Bottom nav — минимальный размер */
+  .bottom-nav {
+    max-width: calc(100vw - 16px) !important;
+    padding: 3px !important;
+  }
+
+  .nav-item { padding: 8px 10px !important; }
+
+  .nav-icon-svg {
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  /* Profile */
+  .profile-section,
+  .quests-section,
+  .cart-section {
+    padding: var(--s3) var(--s2) 95px !important;
+  }
+
+  .profile-main-info {
+    gap: var(--s3) !important;
+  }
+
+  .profile-avatar {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .profile-name { font-size: 1.2rem !important; }
+
+  /* Stats — 1 колонка на самых маленьких */
+  .profile-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .profile-stat:last-child {
+    grid-column: 1 !important;
+  }
+
+  .profile-stat-value { font-size: 1.6rem !important; }
+
+  /* Quest cards */
+  .quest-card { padding: var(--s4) !important; }
+
+  .quest-title { font-size: .9rem !important; }
+
+  /* Modals */
+  .modal-content,
+  .modern-modal-content,
+  .photo-upload-content {
+    padding: var(--s4) var(--s3) !important;
+  }
+
+  /* Payment modal */
+  .payment-modal-content {
+    padding: var(--s5) var(--s3) var(--s6) !important;
+  }
+
+  .payment-modal-title { font-size: 1.2rem !important; }
+  .payment-modal-price { font-size: 1.6rem !important; }
+
+  /* Buttons */
+  .partners-pay-btn,
+  .partners-demo-btn {
+    font-size: .8rem !important;
+    padding: 12px var(--s3) !important;
+  }
+
+  /* Focus cards */
+  .focus-card { height: 240px !important; }
+
+  .focus-card-title { font-size: 1.2rem !important; }
+
+  /* Search */
+  .search-container { padding: 10px var(--s3) !important; }
+
+  /* Section titles */
+  .section-title,
+  .partners-section-title,
+  .places-title,
+  .packages-title {
+    font-size: 1rem !important;
+  }
+
+  /* Region title */
+  .region-title { font-size: 1.4rem !important; }
+
+  /* QR modal */
+  .qr-modal-content {
+    padding: var(--s4) var(--s3) !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   TOUCH / INTERACTION
+───────────────────────────────────────────── */
+@media (hover: none) and (pointer: coarse) {
+  /* Отключаем hover-эффекты на тач-устройствах */
+  .focus-card:hover {
+    transform: none !important;
+    box-shadow: var(--sh0) !important;
+    border-color: var(--line) !important;
+  }
+
+  .focus-card:hover::after { transform: scaleX(0) !important; }
+  .focus-card:hover .focus-card-image { transform: none !important; }
+
+  .apple-card:hover { transform: none !important; }
+
+  .partner-card-minimal:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Активное состояние (нажатие) для тач */
+  .focus-card:active {
+    transform: scale(0.97) !important;
+    transition: transform 0.1s !important;
+  }
+
+  .quest-card:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.1s !important;
+  }
+
+  /* Минимальный размер тач-целей — 44px */
+  .nav-item { min-height: 44px !important; }
+  .back-btn, .user-profile-btn { min-height: 44px !important; }
+  .quest-btn { min-height: 48px !important; }
+  .action-btn { min-height: 48px !important; }
+  .search-clear { width: 36px !important; height: 36px !important; }
+}

@@ -1,0 +1,337 @@
+/* === Кнопка оплаты === */
+.partners-pay-btn {
+    padding: 1rem 2rem;
+    background: rgba(99, 102, 241, 0.15);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 1rem;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+}
+
+.partners-pay-btn:hover {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+}
+
+.pay-btn-icon {
+    font-size: 1.25rem;
+}
+
+.pay-btn-price {
+    margin-left: 0.5rem;
+    font-size: 1rem;
+    padding: 0.25rem 0.75rem;
+    background: rgba(99, 102, 241, 0.3);
+    border-radius: 0.5rem;
+}
+
+/* === Кнопка демо-покупки === */
+.partners-demo-btn {
+    padding: 0.875rem 1.75rem;
+    background: rgba(23, 23, 23, 0.5);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.partners-demo-btn:hover:not(:disabled) {
+    background: rgba(23, 23, 23, 0.8);
+    border-color: rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+}
+
+.partners-demo-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.partners-demo-btn.loading {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: rgba(99, 102, 241, 0.3);
+}
+
+.partners-demo-btn.loading .demo-btn-icon {
+    animation: demoBtnPulse 1.5s ease-in-out infinite;
+}
+
+.partners-demo-btn.success {
+    background: rgba(34, 197, 94, 0.15);
+    border-color: rgba(34, 197, 94, 0.4);
+}
+
+.partners-demo-btn.success .demo-btn-icon {
+    animation: demoBtnBounce 0.6s ease;
+}
+
+.partners-demo-btn.error {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.partners-demo-btn.error .demo-btn-icon {
+    animation: demoBtnShake 0.5s ease;
+}
+
+.demo-btn-icon {
+    font-size: 1.125rem;
+    transition: all 0.3s ease;
+}
+
+@keyframes demoBtnPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+@keyframes demoBtnBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes demoBtnShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+/* === Модальное окно оплаты === */
+.payment-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.payment-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.payment-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+}
+
+.payment-modal-content {
+    position: relative;
+    background: linear-gradient(135deg, rgba(15, 5, 32, 0.98), rgba(26, 26, 46, 0.98));
+    border: 2px solid rgba(76, 175, 80, 0.3);
+    border-radius: 24px;
+    padding: 40px 35px 35px;
+    max-width: 450px;
+    width: 90%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(76, 175, 80, 0.15);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.payment-modal.active .payment-modal-content {
+    transform: scale(1);
+}
+
+.payment-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 107, 107, 0.2);
+    border: 1px solid rgba(255, 107, 107, 0.4);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.payment-modal-close:hover {
+    background: rgba(255, 107, 107, 0.8);
+    border-color: rgba(255, 107, 107, 0.8);
+    transform: rotate(90deg);
+}
+
+.payment-modal-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.payment-modal-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #4CAF50;
+    margin: 0 0 10px 0;
+}
+
+.payment-modal-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 0 15px 0;
+}
+
+.payment-modal-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffcc00;
+    margin: 10px 0 0 0;
+}
+
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.payment-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.payment-form-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+}
+
+.payment-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.payment-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: white;
+    font-size: 1rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.payment-input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(76, 175, 80, 0.5);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.payment-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.payment-submit-btn {
+    padding: 16px 32px;
+    background: linear-gradient(135deg, #4CAF50, #45a049);
+    border: none;
+    border-radius: 14px;
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+    margin-top: 10px;
+}
+
+.payment-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(76, 175, 80, 0.5);
+    background: linear-gradient(135deg, #45a049, #3d8b40);
+}
+
+.payment-submit-btn:active {
+    transform: translateY(0);
+}
+
+.payment-submit-icon {
+    font-size: 1.3rem;
+}
+
+@media (max-width: 768px) {
+    .partners-qr-btn-common,
+    .partners-pay-btn,
+    .partners-demo-btn {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .payment-modal-content {
+        padding: 35px 20px 25px;
+        width: 95%;
+    }
+
+    .payment-modal-title {
+        font-size: 1.5rem;
+    }
+
+    .payment-modal-subtitle {
+        font-size: 1rem;
+    }
+
+    .payment-modal-price {
+        font-size: 1.7rem;
+    }
+
+    .payment-form-row {
+        grid-template-columns: 1.5fr 1fr;
+        gap: 10px;
+    }
+
+    .payment-input {
+        padding: 12px 14px;
+        font-size: 0.95rem;
+    }
+
+    .payment-submit-btn {
+        padding: 14px 24px;
+        font-size: 1rem;
+    }
+}

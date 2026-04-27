@@ -13,7 +13,7 @@ class MatryoshkaCart {
      * Инициализация корзины
      */
     initCart() {
-        console.log('🛒 Корзина Матрешка инициализирована');
+        console.log('Корзина Матрешка инициализирована');
         this.loadCartData();
         this.updateCartBadge();
     }
@@ -22,7 +22,7 @@ class MatryoshkaCart {
      * Загрузка данных корзины
      */
     loadCartData() {
-        console.log('📋 loadCartData() вызван');
+        console.log('loadCartData() вызван');
 
         const cartContent = document.querySelector('.cart-content');
 
@@ -39,13 +39,11 @@ class MatryoshkaCart {
 
         cartContent.innerHTML = `
             <div class="cart-header" data-animate="fadeInUp">
-                <h2 class="cart-title">
-                    <span>🛒</span> Мои покупки
-                </h2>
+                <h2 class="cart-title">Мои покупки</h2>
                 <p class="cart-subtitle">Активные пакеты и купоны</p>
                 ${this.purchasedPackages.length > 0 || this.paidRegions.length > 0 ? `
                     <button class="cart-clear-btn" onclick="matryoshkaCart.clearAll()" style="margin-top: 10px; padding: 8px 16px; background: #ff4444; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                        🗑️ Очистить корзину
+                        Очистить корзину
                     </button>
                 ` : ''}
             </div>
@@ -55,7 +53,6 @@ class MatryoshkaCart {
 
             ${this.purchasedPackages.length === 0 && this.paidRegions.length === 0 ? `
                 <div class="cart-empty">
-                    <div class="cart-empty-icon">🛍️</div>
                     <div class="cart-empty-text">Корзина пуста</div>
                     <div class="cart-empty-subtext">Купите пакеты или регионы для получения купонов</div>
                 </div>
@@ -70,7 +67,7 @@ class MatryoshkaCart {
      * Загрузка купленных пакетов
      */
     loadPurchasedPackages() {
-        console.log('🔄 loadPurchasedPackages() ВЫЗВАНА');
+        console.log('loadPurchasedPackages() ВЫЗВАНА');
         try {
             const saved = localStorage.getItem('purchasedPackages');
 
@@ -88,7 +85,7 @@ class MatryoshkaCart {
                     return isValid;
                 });
 
-                console.log('✅ Активных пакетов после фильтрации:', this.purchasedPackages.length);
+                console.log('Активных пакетов после фильтрации:', this.purchasedPackages.length);
 
                 // Сохраняем обновленный список
                 localStorage.setItem('purchasedPackages', JSON.stringify(this.purchasedPackages));
@@ -96,7 +93,7 @@ class MatryoshkaCart {
                 console.log('📦 localStorage пуст, пакетов нет');
             }
         } catch (e) {
-            console.error('❌ Ошибка загрузки пакетов:', e);
+            console.error('Ошибка загрузки пакетов:', e);
             this.purchasedPackages = [];
         }
     }

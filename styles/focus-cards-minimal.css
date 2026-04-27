@@ -1,132 +1,57 @@
 /**
- * 🎨 MINIMAL FOCUS CARDS
- * Стиль согласован с date picker - тёмный, минималистичный, без золота
- * Единая дизайн-система с компонентом выбора дат
+ * 🎨 FOCUS CARDS — Pinterest-Style Light Theme
+ * Clean, airy card grid with warm shadows
  */
 
-/* ========================================
-   СЕКЦИЯ РЕГИОНОВ
-   ======================================== */
 .regions-section {
   width: 100%;
-  padding: 2rem 1.5rem;
-  margin: 3rem 0;
+  padding: 0;
+  margin: var(--space-4) 0;
 }
 
 /* ========================================
    FOCUS CARDS GRID
    ======================================== */
 .focus-cards-grid {
-  /* МОБИЛЬНАЯ: горизонтальный скролл */
-  display: flex;
-  overflow-x: auto;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-6);
   max-width: 1200px;
   margin: 0 auto;
-  width: 100%;
-  padding: 0.5rem;
-
-  /* УЛУЧШЕННЫЙ СВАЙП для мобильных */
-  -webkit-overflow-scrolling: touch;
-  scroll-snap-type: x proximity; /* proximity вместо mandatory - более легкий свайп */
-  overscroll-behavior-x: contain;
-  scroll-behavior: smooth;
-
-  /* Мгновенная реакция */
-  touch-action: pan-x;
-  user-select: none;
-  -webkit-user-drag: none;
-
-  /* Скрываем scrollbar */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.focus-cards-grid::-webkit-scrollbar {
-  display: none;
-}
-
-/* ДЕСКТОП: grid layout */
-@media (min-width: 640px) {
-  .focus-cards-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    overflow-x: visible;
-    scroll-snap-type: none;
-  }
-}
-
-@media (min-width: 1024px) {
-  .focus-cards-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  padding: var(--space-2);
 }
 
 /* ========================================
-   КАРТОЧКА РЕГИОНА
+   FOCUS CARD
    ======================================== */
 .focus-card {
   position: relative;
-  height: 20rem;
-  border-radius: 1.5rem;
+  height: 340px;
+  border-radius: var(--radius-xl);
   overflow: hidden;
-  cursor: default; /* Убран pointer для мобильных */
-
-  /* МОБИЛЬНАЯ: фиксированная ширина для горизонтального скролла */
-  flex: 0 0 75vw;
-  max-width: 350px;
-  min-width: 280px;
-
-  /* Стиль как у date picker button */
-  background: rgba(23, 23, 23, 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-
-  border: 1px solid rgba(255, 255, 255, 0.1);
-
-  box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* SNAP для легкого свайпа */
-  scroll-snap-align: center;
+  background: var(--color-surface);
+  border: none;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.4s var(--ease-out);
+  cursor: pointer;
+  transform-origin: center center;
 }
 
-@media (min-width: 640px) {
-  .focus-card {
-    flex: 1 1 auto; /* Возвращаем flex для grid */
-    cursor: pointer; /* Возвращаем pointer для десктопа */
-  }
+.focus-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.12);
+  z-index: 10;
 }
 
-@media (min-width: 768px) {
-  .focus-card {
-    height: 24rem;
-  }
-}
-
-/* Hover state - ТОЛЬКО НА ДЕСКТОПЕ */
-@media (hover: hover) and (pointer: fine) {
-  .focus-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(99, 102, 241, 0.4);
-    box-shadow:
-      0 10px 40px rgba(99, 102, 241, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  }
-}
-
-/* Focus эффект - blur для других карточек */
+/* Focus effect for non-hovered cards */
 .focus-card.blurred {
-  filter: blur(4px);
-  transform: scale(0.98);
-  opacity: 0.6;
+  filter: blur(4px) grayscale(0.3);
+  transform: scale(0.97);
+  opacity: 0.5;
 }
 
 /* ========================================
-   ИЗОБРАЖЕНИЕ
+   IMAGE & OVERLAY
    ======================================== */
 .focus-card-image {
   width: 100%;
@@ -134,147 +59,75 @@
   object-fit: cover;
   position: absolute;
   inset: 0;
+  transition: transform 0.7s var(--ease-out);
 }
 
-/* Zoom ТОЛЬКО НА ДЕСКТОПЕ */
-@media (hover: hover) and (pointer: fine) {
-  .focus-card-image {
-    transition: transform 0.3s ease;
-  }
-
-  .focus-card:hover .focus-card-image {
-    transform: scale(1.05);
-  }
+.focus-card:hover .focus-card-image {
+  transform: scale(1.08);
 }
 
-/* ========================================
-   OVERLAY - появляется при hover
-   ======================================== */
 .focus-card-overlay {
   position: absolute;
   inset: 0;
-
-  /* Градиент как у date picker popover */
   background: linear-gradient(
     to top,
-    rgba(15, 5, 32, 0.95) 0%,
-    rgba(15, 5, 32, 0.8) 40%,
-    rgba(15, 5, 32, 0.3) 70%,
+    rgba(0, 0, 0, 0.65) 0%,
+    rgba(0, 0, 0, 0.1) 50%,
     transparent 100%
   );
-
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 2rem 1.5rem;
-
-  /* ВСЕГДА ВИДИМЫЙ для мобильного приложения */
-  opacity: 1;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
+  padding: var(--space-6);
+  z-index: 2;
 }
 
 /* ========================================
-   КОНТЕНТ КАРТОЧКИ
+   CONTENT
    ======================================== */
 .focus-card-title {
-  /* Шрифт как у date picker */
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 1.5rem;
+  font-family: var(--font-heading);
+  font-size: 1.6rem;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.01em;
-}
-
-@media (min-width: 768px) {
-  .focus-card-title {
-    font-size: 1.75rem;
-  }
+  color: #fff;
+  margin-bottom: var(--space-2);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
 .focus-card-description {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-size: 0.9rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255,255,255,0.85);
   line-height: 1.5;
-  margin-bottom: 0.75rem;
+  margin-bottom: var(--space-3);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .focus-card-meta {
   display: flex;
-  gap: 1rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  gap: var(--space-3);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
 }
 
 .focus-card-meta span {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: var(--space-1);
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(8px);
 }
 
 /* ========================================
-   LOADING STATE
+   MOBILE
    ======================================== */
-.focus-card.loading {
-  background: linear-gradient(
-    90deg,
-    rgba(23, 23, 23, 0.5) 25%,
-    rgba(255, 255, 255, 0.05) 50%,
-    rgba(23, 23, 23, 0.5) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* ========================================
-   АДАПТИВНОСТЬ
-   ======================================== */
-@media (max-width: 640px) {
-  .focus-card {
-    height: 18rem;
-  }
-
-  .focus-card-title {
-    font-size: 1.25rem;
-  }
-
-  .focus-card-description {
-    font-size: 0.85rem;
-  }
-
-  .focus-card-overlay {
-    padding: 1.5rem 1rem;
-  }
-}
-
-/* ========================================
-   ACCESSIBILITY
-   ======================================== */
-.focus-card:focus-visible {
-  outline: 2px solid rgba(99, 102, 241, 0.5);
-  outline-offset: 2px;
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .focus-card,
-  .focus-card-image,
-  .focus-card-overlay {
-    transition: none;
-    animation: none;
-  }
+@media (max-width: 768px) {
+  .focus-card { height: 280px; }
+  .focus-card-title { font-size: 1.4rem; }
+  .focus-cards-grid { grid-template-columns: 1fr; gap: var(--space-4); }
 }

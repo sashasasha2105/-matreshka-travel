@@ -91,21 +91,35 @@ class MinimalFocusCards {
   attachEventListeners() {
     const cards = this.container.querySelectorAll('.focus-card');
 
+    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
     cards.forEach((card, index) => {
-      // Mouse enter - активируем focus эффект
-      card.addEventListener('mouseenter', () => {
-        this.handleCardHover(index);
-      });
+      if (!isTouch) {
+        // Hover-эффекты только на не-тач устройствах
+        card.addEventListener('mouseenter', () => {
+          this.handleCardHover(index);
+        });
+        card.addEventListener('mouseleave', () => {
+          this.handleCardLeave();
+        });
+      }
 
-      // Mouse leave - убираем focus эффект
-      card.addEventListener('mouseleave', () => {
-        this.handleCardLeave();
-      });
-
-      // Click - вызываем колбэк
-      card.addEventListener('click', () => {
-        this.handleCardClick(this.state.cards[index], index);
-      });
+      // Тач: срабатываем на touchend чтобы не ждать 300ms и не терять цель
+      if (isTouch) {
+        let touchMoved = false;
+        card.addEventListener('touchstart', () => { touchMoved = false; }, { passive: true });
+        card.addEventListener('touchmove', () => { touchMoved = true; }, { passive: true });
+        card.addEventListener('touchend', (e) => {
+          if (!touchMoved) {
+            e.preventDefault();
+            this.handleCardClick(this.state.cards[index], index);
+          }
+        });
+      } else {
+        card.addEventListener('click', () => {
+          this.handleCardClick(this.state.cards[index], index);
+        });
+      }
 
       // Keyboard support
       card.addEventListener('keydown', (e) => {

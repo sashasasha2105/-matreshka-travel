@@ -8,6 +8,48 @@
 */
 
 /* ─────────────────────────────────────────────
+   HERO TEXT — вместо marquee
+───────────────────────────────────────────── */
+.app-hero-text {
+  text-align: center;
+  padding: var(--s10) var(--s4) var(--s6);
+}
+
+.app-hero-title {
+  font-family: var(--font-display) !important;
+  font-size: clamp(1.8rem, 6vw, 3rem) !important;
+  font-weight: 700 !important;
+  color: var(--ink) !important;
+  -webkit-text-fill-color: var(--ink) !important;
+  background: none !important;
+  text-transform: uppercase !important;
+  letter-spacing: .03em !important;
+  line-height: 1.15 !important;
+  text-shadow: none !important;
+  filter: none !important;
+  animation: none !important;
+}
+
+/* ─────────────────────────────────────────────
+   REGION CARDS — фикс тапа на мобильном
+───────────────────────────────────────────── */
+.focus-card {
+  touch-action: manipulation !important;
+  -webkit-tap-highlight-color: transparent !important;
+  cursor: pointer !important;
+}
+
+/* На тач-устройствах убираем blur-эффект чтобы тап не терял цель */
+@media (hover: none) and (pointer: coarse) {
+  .focus-card.blurred {
+    filter: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
    768px — ПЛАНШЕТЫ / КРУПНЫЕ ТЕЛЕФОНЫ
 ───────────────────────────────────────────── */
 @media (max-width: 768px) {

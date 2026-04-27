@@ -919,10 +919,6 @@ function loadPartners(partners) {
         buttonsContainer.className = 'partners-buttons-container';
         buttonsContainer.style.marginTop = '2rem';
         buttonsContainer.innerHTML = `
-            <button class="partners-pay-btn" onclick="showPaymentModal()">
-                <span class="pay-btn-text">Оплатить пакет региона</span>
-                <span class="pay-btn-price">300 ₽</span>
-            </button>
             <button class="partners-demo-btn" id="demoPurchaseBtn">
                 <span class="demo-btn-icon">🎭</span>
                 <span class="demo-btn-text">Демо-покупка</span>

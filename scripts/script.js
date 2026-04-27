@@ -19,7 +19,7 @@ if (tg) {
         tg.setHeaderColor('secondary_bg_color');
     }
     if (tg.setBackgroundColor) {
-        tg.setBackgroundColor('#0f0520');
+        tg.setBackgroundColor('#FCFCFD');
     }
 
     // Готовность приложения
@@ -56,8 +56,8 @@ if (tg) {
 // Глобальная лента путешествий (пустая по умолчанию)
 let globalTravelFeed = [];
 
-// 🔥 СИСТЕМА УПРАВЛЕНИЯ СОСТОЯНИЕМ ВКЛАДОК
-let currentActiveSection = 'main'; // main, feed, profile, cart, quests
+// Система управления состоянием вкладок
+let currentActiveSection = 'main'; // main, profile, cart, quests
 
 // Сохранение текущей вкладки в sessionStorage
 function saveCurrentSection(sectionName) {
@@ -428,10 +428,8 @@ function loadMoreRegions() {
         </div>
     `;
 
-    // Имитируем загрузку для плавности
-    setTimeout(() => {
-        loadRegions();
-    }, 800);
+    // Загружаем сразу
+    loadRegions();
 }
 
 // Функция загрузки ленты путешествий в стиле VK
@@ -561,20 +559,23 @@ function showToast(message, duration = 3000) {
 
     Object.assign(toast.style, {
         position: 'fixed',
-        bottom: '20px',
+        bottom: '100px',
         left: '50%',
         transform: 'translateX(-50%)',
-        background: 'linear-gradient(135deg, #ffcc00, #ff8e53)',
-        color: '#1a1a2e',
-        padding: '12px 24px',
-        borderRadius: '12px',
-        fontWeight: '600',
-        fontSize: '14px',
+        background: '#1E1E24',
+        color: '#FCFCFD',
+        padding: '10px 20px',
+        borderRadius: '6px',
+        fontWeight: '500',
+        fontSize: '13px',
         zIndex: '10000',
-        boxShadow: '0 8px 32px rgba(255, 204, 0, 0.3)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+        border: 'none',
         animation: 'fadeInUp 0.3s ease-out',
-        maxWidth: '90%',
-        textAlign: 'center'
+        maxWidth: '85%',
+        textAlign: 'center',
+        fontFamily: 'Inter, -apple-system, sans-serif',
+        letterSpacing: '0'
     });
 
     document.body.appendChild(toast);
@@ -612,7 +613,7 @@ function addToGlobalFeed(travel) {
     const newPost = {
         id: Date.now(),
         author: userName,
-        avatar: '👤',
+        avatar: '',
         time: 'только что',
         title: travel.title,
         image: travel.image,
@@ -625,7 +626,7 @@ function addToGlobalFeed(travel) {
     // Перезагружаем ленту
     loadTravelFeed();
 
-    console.log('🌟 Путешествие добавлено в ленту:', newPost);
+    console.log('Путешествие добавлено в ленту:', newPost);
 }
 
 // ========================================
@@ -658,73 +659,101 @@ function showRegionDetails(regionId) {
     // Сохраняем ID текущего региона
     window.currentRegionId = regionId;
 
-    // Показываем лоадер
-    showLoader('Загрузка информации о регионе...');
-
-    setTimeout(() => {
-        try {
-            // Скрываем главную страницу
+    try {
+        // Используем новую систему навигации
+        if (window.MatryoshkaNavigation) {
+            window.MatryoshkaNavigation.navigate('regionDetails');
+        } else {
             const mainSection = document.getElementById('mainSection');
             if (mainSection) mainSection.style.display = 'none';
-
-            // Показываем детали региона
             const detailsSection = document.getElementById('regionDetails');
-            if (detailsSection) detailsSection.style.display = 'block';
-
-            // Скрываем команду
-            updateTeamVisibility();
-
-            // Заполняем данные
-            const regionTitle = document.getElementById('regionTitle');
-            const regionDescription = document.getElementById('regionDescription');
-            const regionImage = document.getElementById('regionImage');
-            const regionAbout = document.getElementById('regionAbout');
-
-            if (regionTitle) regionTitle.innerHTML = `${region.emoji} ${region.name}`;
-            if (regionDescription) regionDescription.textContent = region.description;
-            if (regionImage) regionImage.src = region.image;
-            if (regionAbout) regionAbout.textContent = region.about;
-
-            // Обновляем breadcrumbs
-            updateBreadcrumbs(region.name);
-
-            // Загружаем партнеров
-            loadPartners(region.partners);
-
-            // Загружаем интерактивную карту 2GIS
-            load2GISMap(region).catch(mapError => {
-                console.warn('⚠️ Ошибка загрузки карты:', mapError);
-                // Fallback к старой системе
-                loadMapFallback(region);
-            });
-
-            hideLoader();
-
-            // Показываем BackButton в Telegram
-            if (tg && tg.BackButton) {
-                tg.BackButton.show();
+            if (detailsSection) {
+                detailsSection.classList.remove('hidden');
+                detailsSection.style.display = 'block';
             }
-
-            // Уведомление Telegram
-            if (tg && tg.HapticFeedback) {
-                tg.HapticFeedback.impactOccurred('light');
-            }
-
-            // Скроллим наверх
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        } catch (error) {
-            console.error('❌ Ошибка отображения региона:', error);
-            hideLoader();
         }
-    }, 800);
+
+        const detailsSection = document.getElementById('regionDetails');
+        if (!detailsSection) return;
+
+        // Build the full template
+        detailsSection.innerHTML = `
+            <div class="region-details-header">
+                <button class="back-btn" id="backBtn" onclick="goBack()">← Назад</button>
+                <div class="breadcrumbs">
+                    <a class="breadcrumb-item" onclick="goBack()">Главная</a>
+                    <span class="breadcrumb-separator">›</span>
+                    <span class="breadcrumb-item active" id="breadcrumbRegion">${region.name}</span>
+                </div>
+            </div>
+
+            <div class="region-header">
+                <h1 class="region-title" id="regionTitle">${region.name}</h1>
+                <p class="region-subtitle" id="regionDescription">${region.description}</p>
+            </div>
+
+            <div class="region-image-container">
+                <img class="region-image" id="regionImage" src="${region.image}" alt="${region.name}" loading="eager">
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">О регионе</h2>
+                <div class="section-content">
+                    <div class="region-about" id="regionAbout">${region.about}</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Партнеры и скидки</h2>
+                <div class="section-content" id="partnersGrid"></div>
+            </div>
+
+            <div class="section">
+                <h2 class="section-title">Карта</h2>
+                <div class="map-container" id="mapContainer">
+                    <div class="map-placeholder" style="display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--c-text-3);font-size:0.8rem;">
+                        Загрузка карты...
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Скрываем команду
+        updateTeamVisibility();
+
+        // Загружаем партнеров
+        loadPartners(region.partners);
+
+        // Загружаем интерактивную карту 2GIS
+        load2GISMap(region).catch(mapError => {
+            console.warn('Ошибка загрузки карты:', mapError);
+            loadMapFallback(region);
+        });
+
+        // Показываем BackButton в Telegram
+        if (tg && tg.BackButton) {
+            tg.BackButton.show();
+        }
+
+        // Уведомление Telegram
+        if (tg && tg.HapticFeedback) {
+            tg.HapticFeedback.impactOccurred('light');
+        }
+
+        // Скроллим наверх
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error) {
+        console.error('❌ Ошибка отображения региона:', error);
+    }
 }
+
 
 // Функция категоризации партнеров
 function categorizePartners(partners) {
     const categories = {
-        food: { title: 'Еда', emoji: '🍽️', partners: [] },
-        entertainment: { title: 'Развлечения', emoji: '🎉', partners: [] },
-        souvenirs: { title: 'Сувениры', emoji: '🎁', partners: [] }
+        food: { title: 'Еда и напитки', emoji: '', partners: [] },
+        entertainment: { title: 'Развлечения', emoji: '', partners: [] },
+        souvenirs: { title: 'Сувениры и подарки', emoji: '', partners: [] }
     };
 
     // Ключевые слова для определения категорий
@@ -810,34 +839,29 @@ function loadPartners(partners) {
         // Создаем кнопку QR для каждого партнера
         const qrButtonHTML = isPaid
             ? `<button class="partner-qr-btn-minimal" onclick='showPartnerQRByName("${partner.name.replace(/'/g, "\\'")}","${partner.emoji}")'>
-                   <span class="qr-btn-icon">📱</span>
-                   <span class="qr-btn-text">Показать QR</span>
+                   <span class="qr-btn-text">QR-код</span>
                </button>`
             : `<button class="partner-qr-btn-minimal disabled" disabled title="Оплатите доступ для получения QR-кода">
-                   <span class="qr-btn-icon">🔒</span>
-                   <span class="qr-btn-text">Показать QR</span>
+                   <span class="qr-btn-text">QR-код</span>
                </button>`;
 
         card.innerHTML = `
             <div class="card-header">
-                <div class="card-emoji">${partner.emoji || '🏪'}</div>
                 <div class="card-info">
                     <div class="card-name">${partner.name}</div>
                     <div class="card-designation">${partner.type}</div>
-                    ${partner.rating ? `<div class="card-rating">⭐ ${partner.rating}</div>` : ''}
+                    ${partner.rating ? `<div class="card-rating">${partner.rating}</div>` : ''}
                 </div>
             </div>
             <div class="card-content">${descriptionWithHighlight}</div>
             ${partner.specialOffer ? `
                 <div class="card-offer">
-                    <div class="card-offer-icon">🎁</div>
                     <div class="card-offer-text">${partner.specialOffer}</div>
                 </div>
             ` : ''}
             <div class="card-actions">
                 <button class="partner-route-btn-minimal" data-partner-index="${index}">
-                    <span class="route-icon">🗺️</span>
-                    <span class="route-text">Маршрут и инфо</span>
+                    <span class="route-text">Маршрут</span>
                 </button>
                 ${qrButtonHTML}
             </div>
@@ -896,12 +920,11 @@ function loadPartners(partners) {
         buttonsContainer.style.marginTop = '2rem';
         buttonsContainer.innerHTML = `
             <button class="partners-pay-btn" onclick="showPaymentModal()">
-                <span class="pay-btn-icon">💳</span>
                 <span class="pay-btn-text">Оплатить пакет региона</span>
                 <span class="pay-btn-price">300 ₽</span>
             </button>
             <button class="partners-demo-btn" id="demoPurchaseBtn">
-                <span class="demo-btn-icon">✨</span>
+                <span class="demo-btn-icon">🎭</span>
                 <span class="demo-btn-text">Демо-покупка</span>
             </button>
         `;
@@ -1421,7 +1444,7 @@ function processPayment(event) {
         closePaymentModal();
 
         // Показываем уведомление об успешной оплате
-        showToast('✅ Оплата прошла успешно!', 3000);
+        showToast('Оплата прошла успешно', 3000);
 
         // Перезагружаем партнеров для обновления кнопок
         if (regionData && regionData.partners) {
@@ -1458,27 +1481,23 @@ async function handleDemoPurchaseStateful(event) {
     if (btn.disabled) return;
 
     // Сохраняем оригинальный текст
-    const originalText = textSpan.textContent;
-    const originalIcon = iconSpan.textContent;
+    const originalText = textSpan ? textSpan.textContent : 'Демо-покупка';
+    const originalIcon = iconSpan ? iconSpan.textContent : '🎭';
 
     // Переключаем в состояние загрузки
     btn.disabled = true;
     btn.classList.add('loading');
-    iconSpan.textContent = '⏳';
-    textSpan.textContent = 'Обработка...';
+    if (iconSpan) iconSpan.textContent = '⏳';
+    if (textSpan) textSpan.textContent = 'Обработка...';
 
     try {
-        // Имитация API запроса (4 секунды как в примере)
-        await new Promise(resolve => setTimeout(resolve, 4000));
-
-        // Успешная покупка
-        btn.classList.remove('loading');
+        // Мгновенная оплата без задержек
         btn.classList.add('success');
-        iconSpan.textContent = '✅';
-        textSpan.textContent = 'Оплачено!';
+        iconSpan.textContent = '';
+        textSpan.textContent = 'Оплачено';
 
         // Показываем уведомление
-        showToast('✅ Оплата прошла успешно! (Демо)', 3000);
+        showToast('Оплата прошла успешно', 3000);
 
         // Выполняем логику покупки
         const currentRegionId = getCurrentRegionId();
@@ -1489,9 +1508,7 @@ async function handleDemoPurchaseStateful(event) {
 
         // Перезагружаем партнеров для обновления кнопок
         if (regionData && regionData.partners) {
-            setTimeout(() => {
-                loadPartners(regionData.partners);
-            }, 2000);
+            loadPartners(regionData.partners);
         }
 
         // Обновляем корзину
@@ -1532,7 +1549,7 @@ function demoPurchase() {
     markRegionAsPaid(currentRegionId);
 
     // Показываем уведомление
-    showToast('✅ Оплата прошла успешно! (Демо)', 3000);
+    showToast('Оплата прошла успешно (Демо)', 3000);
 
     // Перезагружаем партнеров для обновления кнопок
     if (regionData && regionData.partners) {
@@ -1683,28 +1700,27 @@ document.addEventListener('DOMContentLoaded', function() {
     loadRegions();
 
     // 🍎 ИНИЦИАЛИЗАЦИЯ APPLE CARDS CAROUSEL для пакетов
-    setTimeout(() => {
-        if (window.TRAVEL_PACKAGES && window.AppleCardsCarousel) {
-            const packagesCarousel = new AppleCardsCarousel({
-                containerId: 'applePackagesCarousel',
-                title: 'Готовые пакеты путешествий',
-                cards: window.TRAVEL_PACKAGES,
-                showNavButtons: true,
-                showDots: false,
-                onCardClick: (card) => {
-                    console.log('🍎 Клик на пакет:', card.name);
-                    // Вызываем существующую функцию показа деталей пакета
-                    if (typeof showPackageModal === 'function') {
-                        showPackageModal(card.id);
-                    }
+    // Инициализация компонентов без задержки
+    if (window.TRAVEL_PACKAGES && window.AppleCardsCarousel) {
+        const packagesCarousel = new AppleCardsCarousel({
+            containerId: 'applePackagesCarousel',
+            title: 'Готовые пакеты путешествий',
+            cards: window.TRAVEL_PACKAGES,
+            showNavButtons: true,
+            showDots: false,
+            onCardClick: (card) => {
+                console.log('🍎 Клик на пакет:', card.name);
+                // Вызываем существующую функцию показа деталей пакета
+                if (typeof showPackageModal === 'function') {
+                    showPackageModal(card.id);
                 }
-            });
-            window.applePackagesCarousel = packagesCarousel;
-            console.log('✅ Apple Cards Carousel инициализирован с', window.TRAVEL_PACKAGES.length, 'пакетами');
-        } else {
-            console.error('❌ TRAVEL_PACKAGES или AppleCardsCarousel не найдены');
-        }
-    }, 1000);
+            }
+        });
+        window.applePackagesCarousel = packagesCarousel;
+        console.log('✅ Apple Cards Carousel инициализирован с', window.TRAVEL_PACKAGES.length, 'пакетами');
+    } else {
+        console.error('❌ TRAVEL_PACKAGES или AppleCardsCarousel не найдены');
+    }
 
     // 🎨 ИНИЦИАЛИЗАЦИЯ ANIMATED TOOLTIP для команды
     if (window.AnimatedTooltip) {
@@ -1746,10 +1762,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 🔥 УДАЛЕНО: Лента путешествий больше не загружается на главную страницу
 
-    // 🔥 ВОССТАНАВЛИВАЕМ ПОСЛЕДНЮЮ АКТИВНУЮ ВКЛАДКУ
-    setTimeout(() => {
-        restoreActiveSection();
-    }, 500);
+    // 🔥 ВОССТАНАВЛИВАЕМ ПОСЛЕДНЮЮ АКТИВНУЮ ВКЛАДКУ СРАЗУ
+    restoreActiveSection();
 
     // Обработчик кнопки "Назад"
     const backBtn = document.getElementById('backBtn');

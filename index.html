@@ -4,484 +4,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="color-scheme" content="dark">
-    <meta name="theme-color" content="#0f0520">
-    <meta name="description" content="Матрешка - откройте для себя красоту и разнообразие России. Путешествуйте по регионам, выполняйте задания, получайте награды.">
+    <meta name="color-scheme" content="light">
+    <meta name="theme-color" content="#FCFCFD">
+    <meta name="description" content="Матрешка — откройте для себя красоту и разнообразие России. Путешествуйте по регионам, выполняйте задания, получайте награды.">
 
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <title>Матрешка — Путешествуй по России</title>
 
-    <title>Матрешка - Путешествуй по России</title>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles/global.css?v=3000">
+    <link rel="stylesheet" href="styles/matreshka-optimized.css?v=3000">
+    <link rel="stylesheet" href="styles/marquee-hero.css?v=3000">
+    <link rel="stylesheet" href="components/TripDatePicker/TripDatePickerSection.css?v=3000">
+    <link rel="stylesheet" href="styles/focus-cards-minimal.css?v=3000">
+    <link rel="stylesheet" href="styles/apple-cards-carousel.css?v=3000">
+    <link rel="stylesheet" href="styles/region-details-premium.css?v=3000">
+    <link rel="stylesheet" href="styles/partner-cards-minimal.css?v=3000">
+    <link rel="stylesheet" href="profile/profile.css?v=3000">
+    <link rel="stylesheet" href="profile/profile-light.css?v=3000">
+    <link rel="stylesheet" href="quests/quests.css?v=3000">
+    <link rel="stylesheet" href="quests/quests-light.css?v=3000">
+    <link rel="stylesheet" href="qr/qr.css?v=3000">
+    <link rel="stylesheet" href="maps/maps2gis_new.css?v=3000">
+    <link rel="stylesheet" href="styles/liquid-glass.css?v=3000">
+    <link rel="stylesheet" href="styles/payment-modal.css?v=3000">
+    <link rel="stylesheet" href="profile/modern-modal.css?v=3000">
+    <link rel="stylesheet" href="styles/redesign-2025.css?v=2">
 
-
-    <link rel="stylesheet" href="profile/profile.css?v=999">
-    <link rel="stylesheet" href="feed/feed.css?v=999">
-    <link rel="stylesheet" href="quests/quests.css?v=999">
-    <link rel="stylesheet" href="qr/qr.css?v=999">
-    <link rel="stylesheet" href="maps/maps2gis_new.css?v=999">
-
-    <link rel="stylesheet" href="styles/matreshka-optimized.css?v=999">
-
-    <link rel="stylesheet" href="styles/aceternity-effects.css?v=999">
-    <link rel="stylesheet" href="styles/liquid-glass.css?v=999">
-
-    <link rel="stylesheet" href="styles/region-details-premium.css?v=999">
-
-    <link rel="stylesheet" href="styles/marquee-hero.css?v=999">
-
-    <link rel="stylesheet" href="components/TripDatePicker/TripDatePickerSection.css">
-
-    <link rel="stylesheet" href="styles/focus-cards-minimal.css">
-
-    <link rel="stylesheet" href="styles/apple-cards-carousel.css">
-
-    <link rel="stylesheet" href="styles/package-modal-minimal.css">
-
-    <link rel="stylesheet" href="styles/search-minimal.css">
-
-    <link rel="stylesheet" href="styles/card-stack.css">
-
-    <link rel="stylesheet" href="styles/partner-cards-minimal.css">
-
-    <link rel="stylesheet" href="styles/welcome-bonus-modal.css">
-
-    <link rel="stylesheet" href="styles/region-bonus-banner.css">
-
-    <style>
-/* Глобальное исправление блокировки скролла */
-        body, html {
-            overflow: auto !important;
-            height: auto !important;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Скрываем секции по умолчанию (БЕЗ !important, чтобы скрипт мог их открыть) */
-        #regionDetails,
-        #profileSection,
-        #cartSection,
-        #questsSection,
-        #fullFeedContainer {
-            display: none;
-        }
-
-        /* 🎨 Стилизация кнопки "Показать еще регионы" */
-        .regions-section button:not(.search-clear),
-        #regionsGrid ~ button {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
-            color: #ffffff !important;
-            padding: 14px 28px !important;
-            border-radius: 14px !important;
-            font-family: 'Unbounded', 'Inter', sans-serif !important;
-            font-size: 14px !important;
-            font-weight: 500 !important;
-            cursor: pointer !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            display: block !important;
-            margin: 30px auto 10px auto !important;
-            backdrop-filter: blur(10px) !important;
-            -webkit-backdrop-filter: blur(10px) !important;
-            text-transform: none !important;
-        }
-
-        .regions-section button:not(.search-clear):hover,
-        #regionsGrid ~ button:hover {
-            background: rgba(255, 255, 255, 0.15) !important;
-            transform: translateY(-2px) !important;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), inset 0 0 0 1px rgba(255, 255, 255, 0.3) !important;
-        }
-    </style>
-
-    <script src="scripts/cache-buster.js"></script>
-
+    <!-- External Scripts -->
     <script src="https://telegram.org/js/telegram-web-app.js" async defer></script>
-
-    <script src="scripts/components/performance-optimizer.js" defer></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Draggable.min.js"></script>
+    <script src="https://mapgl.2gis.com/api/js/v1" async defer></script>
+    
+    <!-- Core Application Scripts -->
     <script src="scripts/core/navigation.js" defer></script>
     <script src="scripts/core/modal-manager.js" defer></script>
     <script src="scripts/core/storage.js" defer></script>
+    <script src="scripts/core/travel-database.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <div id="mainSection">
-            <section class="marquee-hero-section">
+    <div class="container main-layout">
+        <!-- Main Application Section -->
+        <main id="mainSection">
+            <section class="marquee-hero-section" data-animate>
                 <div class="marquee-demo-wrapper">
                     <div class="marquee-container-main">
-                        <div class="marquee-grid-main" id="marqueeGridMain">
-                            </div>
-
+                        <div class="marquee-grid-main" id="marqueeGridMain"></div>
                         <div class="marquee-overlay-text">
-                            <h1 class="marquee-overlay-title">
-                                Исследуйте<br>Россию
-                            </h1>
-                            <p class="marquee-overlay-subtitle">вместе с Матрешкой</p>
+                            <h1 class="marquee-overlay-title">Исследуйте<br>Россию</h1>
+                            <p class="marquee-overlay-subtitle">с Матрешкой</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <div class="date-picker-section">
+            <section class="date-picker-section" data-animate>
                 <div id="premiumDatePicker"></div>
-            </div>
+            </section>
 
-            <div class="destination-header">
-                <h2 class="destination-title">Куда отправимся?</h2>
-            </div>
-
-            <div class="search-section" data-animate>
+            <section class="search-section" data-animate>
+                <div class="destination-header">
+                    <h2 class="destination-title">Направления</h2>
+                </div>
                 <div class="search-container">
-                    <div class="search-icon">🔍</div>
+                    <svg class="search-icon-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     <input
                         type="text"
                         id="regionSearch"
                         class="search-input"
-                        placeholder="Найти регион или город..."
+                        placeholder="Поиск региона или города"
                         oninput="searchRegions(this.value)"
                         autocomplete="off"
                     >
-                    <button class="search-clear" onclick="clearSearch()" style="display: none;">✕</button>
+                    <button class="search-clear" onclick="clearSearch()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
                 </div>
-            </div>
+            </section>
 
-            <section class="regions-section">
+            <section class="regions-section" data-animate>
                 <div id="regionsGrid"></div>
             </section>
 
-            <div id="applePackagesCarousel"></div>
+            <section id="applePackagesCarousel" data-animate></section>
+        </main>
 
-        </div>
+        <!-- Details & Modals -->
+        <section id="regionDetails" class="region-details hidden"></section>
+        <section id="profileSection" class="profile-section hidden">
+            <div class="profile-content"></div>
+        </section>
+        <section id="cartSection" class="cart-section hidden">
+            <div class="cart-content"></div>
+        </section>
+        <section id="questsSection" class="quests-section hidden">
+            <div class="quests-content"></div>
+        </section>
 
-        <div id="regionDetails" class="region-details">
-            <div class="region-details-header">
-                <button id="backBtn" class="back-btn" onclick="showMainSection()">
-                    ← Назад
-                </button>
-                <button class="user-profile-btn" onclick="showProfile()">
-                    <div class="profile-icon">👤</div>
-                    <span class="profile-text">Профиль</span>
-                </button>
-            </div>
-
-            <nav class="breadcrumbs" id="breadcrumbs" aria-label="Навигация">
-                <a href="#" class="breadcrumb-item" onclick="showMainSection(); return false;">Главная</a>
-                <span class="breadcrumb-separator">›</span>
-                <span class="breadcrumb-item active" id="breadcrumbRegion">Регион</span>
-            </nav>
-
-            <div class="region-header">
-                <div class="region-title" id="regionTitle">Загрузка...</div>
-                <div class="region-subtitle" id="regionDescription">Загрузка описания...</div>
-            </div>
-
-            <div class="region-image-container">
-                <img id="regionImage" src="" alt="Фото региона" class="region-image" loading="lazy">
-            </div>
-
-            <div class="section">
-                <h2 class="section-title"><span>ℹ️</span> О регионе</h2>
-                <div class="section-content">
-                    <p id="regionAbout" class="region-about">Загрузка информации...</p>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title"><span>🍽️</span> Партнеры</h2>
-                <div class="section-content">
-                    <div id="partnersGrid" class="partners-grid">
-                        </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <h2 class="section-title"><span>🗺️</span> Карта партнеров</h2>
-                <div class="section-content">
-                    <div id="mapContainer" class="map-container">
-                        <div class="map-placeholder">
-                            <p class="map-text">Дальнейшая интеграция Y.api</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <div id="profileSection" class="profile-section" style="display: none;">
-            <button id="profileBackBtn" class="back-btn" onclick="showMainSection()">
-                ← Назад
-            </button>
-
-            <div class="profile-content">
-                </div>
-        </div>
-
-        <div id="cartSection" class="cart-section" style="display: none;">
-            <button id="cartBackBtn" class="back-btn" onclick="showMainSection()">
-                ← Назад
-            </button>
-
-            <div class="cart-content">
-                </div>
-        </div>
-
-        <div id="questsSection" class="quests-section" style="display: none;">
-            <button id="questsBackBtn" class="back-btn" onclick="showMainSection()">
-                ← Назад
-            </button>
-
-            <div class="quests-content">
-                </div>
-        </div>
-
-        <div id="fullFeedContainer" style="display: none; min-height: 100vh; padding-bottom: 100px;">
-            </div>
-
+        <!-- Loader -->
         <div id="loader" class="loader">
-            <div class="loader-spinner"></div>
-            <div id="loaderText" class="loader-text">Загрузка...</div>
-        </div>
-
-        <div class="footer">
-            © 2025 Матрешка — Путешествуй по России 🇷🇺
+            <div class="loader-content">
+                <div class="loader-spinner"></div>
+                <div id="loaderText" class="loader-text">Загрузка</div>
+            </div>
         </div>
     </div>
 
+    <!-- Bottom Navigation -->
     <nav class="bottom-nav" id="bottomNav">
-        <button class="nav-item" onclick="showMainSection()" data-page="main">
-            <div class="nav-icon">🏠</div>
+        <button class="nav-item active" onclick="showMainSection()" data-page="main">
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <div class="nav-label">Главная</div>
         </button>
-        <button class="nav-item" onclick="showFeed()" data-page="feed">
-            <div class="nav-icon">🌍</div>
-            <div class="nav-label">Лента</div>
-        </button>
         <button class="nav-item" onclick="showProfile()" data-page="profile">
-            <div class="nav-icon">👤</div>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             <div class="nav-label">Профиль</div>
         </button>
         <button class="nav-item" onclick="showQuests()" data-page="quests">
-            <div class="nav-icon">🎯</div>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
             <div class="nav-label">Задания</div>
             <span class="quests-badge" id="questsBadge">0</span>
         </button>
         <button class="nav-item" onclick="showCart()" data-page="cart">
-            <div class="nav-icon">🛒</div>
-            <div class="nav-label">Корзина</div>
+            <svg class="nav-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <div class="nav-label">Покупки</div>
             <span class="cart-badge" id="cartBadge">0</span>
         </button>
     </nav>
 
-    <script>
-        // Функция для исправления скролла при возврате на главную
-        window.showMainSection = function() {
-            const sections = ['regionDetails', 'profileSection', 'cartSection', 'questsSection', 'fullFeedContainer', 'loader'];
-            sections.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.style.display = 'none';
-                    el.classList.remove('active');
-                }
-            });
-            const mainSection = document.getElementById('mainSection');
-            if(mainSection) mainSection.style.display = 'block';
-
-            document.body.style.overflow = 'auto';
-            document.documentElement.style.overflow = 'auto';
-            window.scrollTo(0, 0);
-        };
-
-        // Имитация глобальной функции addToGlobalFeed (без переопределения существующей)
-        if (typeof window.addToGlobalFeed !== 'function') {
-            window.addToGlobalFeed = function(travel) {
-                console.log('🌟 Путешествие добавлено в ленту:', travel);
-            };
-        }
-
-        // Функция сохранения дат поездки
-        function saveTravelDates() {
-            const startDate = document.getElementById('travelStartDate')?.value;
-            const endDate = document.getElementById('travelEndDate')?.value;
-
-            if (!startDate || !endDate) return;
-
-            // Сохраняем в localStorage
-            localStorage.setItem('travelDates', JSON.stringify({
-                startDate: startDate,
-                endDate: endDate,
-                savedAt: new Date().toISOString()
-            }));
-
-            console.log('📅 Даты поездки сохранены:', { startDate, endDate });
-        }
-
-        // Функция очистки поиска
-        function clearSearch() {
-            const searchInput = document.getElementById('regionSearch');
-            const clearBtn = document.querySelector('.search-clear');
-            searchInput.value = '';
-            clearBtn.style.display = 'none';
-            if (typeof searchRegions === 'function') searchRegions('');
-        }
-
-        // Обновляем отображение кнопки очистки при вводе
-        function updateSearchUI() {
-            const searchInput = document.getElementById('regionSearch');
-            const clearBtn = document.querySelector('.search-clear');
-            if (searchInput.value.trim()) {
-                clearBtn.style.display = 'block';
-            } else {
-                clearBtn.style.display = 'none';
-            }
-        }
-
-        // Загружаем сохраненные даты при инициализации
-        document.addEventListener('DOMContentLoaded', function() {
-            // Восстанавливаем скролл на старте
-            document.body.style.overflow = 'auto';
-
-            const searchInput = document.getElementById('regionSearch');
-            if (searchInput) {
-                searchInput.addEventListener('input', updateSearchUI);
-            }
-        });
-    </script>
-
-    <script src="https://mapgl.2gis.com/api/js/v1" async defer></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js" async defer></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/Draggable.min.js"></script>
-
+    <!-- App Logic Scripts -->
     <script src="assets/data/regions.js"></script>
     <script src="assets/data/packages.js"></script>
     <script src="scripts/modules/packages.js" defer></script>
     <script src="scripts/script.js" defer></script>
     <script src="cart/cart.js" defer></script>
-
     <script src="qr/qr.js" defer></script>
     <script src="maps/maps2gis_new.js" defer></script>
     <script src="profile/profile.js" defer></script>
+    <script src="profile/avatar_fix.js" defer></script>
     <script src="feed/feed.js" defer></script>
     <script src="quests/quests.js" defer></script>
-
     <script src="scripts/liquid-glass.js" defer></script>
-
     <script src="scripts/marquee-hero.js" defer></script>
-
-    <script src="scripts/date-picker-premium.js"></script>
-
-    <script src="scripts/focus-cards-minimal.js"></script>
-
-    <script src="scripts/apple-cards-carousel.js"></script>
-
-    <script src="scripts/card-stack.js"></script>
-
-    <script src="scripts/welcome-bonus-modal.js"></script>
-
-    <script src="scripts/region-bonus-banner.js"></script>
-
-    <svg class="sr-only" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <filter id="goo">
-                <feGaussianBlur result="blur" in="SourceGraphic" stdDeviation="13"></feGaussianBlur>
-                <feColorMatrix
-                    result="matrix"
-                    in="blur"
-                    values="
-                        1 0 0 0 0
-                        0 1 0 0 0
-                        0 0 1 0 0
-                        0 0 0 13 -10
-                    "
-                    type="matrix"
-                ></feColorMatrix>
-                <feComposite result="composite" in="matrix" operator="atop"></feComposite>
-            </filter>
-
-            <filter id="knockout" colorInterpolationFilters="sRGB">
-                <feColorMatrix
-                    result="knocked"
-                    type="matrix"
-                    values="1 0 0 0 0
-                            0 1 0 0 0
-                            0 0 1 0 0
-                            -1 -1 -1 1 0"
-                />
-                <feComponentTransfer>
-                    <feFuncR type="linear" slope="3" intercept="-1" />
-                    <feFuncG type="linear" slope="3" intercept="-1" />
-                    <feFuncB type="linear" slope="3" intercept="-1" />
-                </feComponentTransfer>
-                <feComponentTransfer>
-                    <feFuncR type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
-                    <feFuncG type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
-                    <feFuncB type="table" tableValues="0 0 0 0 0 1 1 1 1 1" />
-                </feComponentTransfer>
-            </filter>
-
-            <filter id="remove-black" color-interpolation-filters="sRGB">
-                <feColorMatrix
-                    type="matrix"
-                    values="1 0 0 0 0
-                              0 1 0 0 0
-                              0 0 1 0 0
-                              -255 -255 -255 0 1"
-                    result="black-pixels"
-                />
-                <feMorphology
-                    in="black-pixels"
-                    operator="dilate"
-                    radius="0.5"
-                    result="smoothed"
-                />
-                <feComposite in="SourceGraphic" in2="smoothed" operator="out" />
-            </filter>
-        </defs>
-    </svg>
+    <script src="scripts/date-picker-premium.js" defer></script>
+    <script src="scripts/focus-cards-minimal.js" defer></script>
+    <script src="scripts/apple-cards-carousel.js" defer></script>
 
     <script>
-    // Инициализация Premium Date Picker после загрузки DOM
     document.addEventListener('DOMContentLoaded', function() {
-        // Создание компонента
         if (typeof PremiumDatePicker === 'function') {
-            const premiumDatePicker = new PremiumDatePicker({
+            window.premiumDatePicker = new PremiumDatePicker({
                 containerId: 'premiumDatePicker',
-                title: '',
+                title: 'Даты поездки',
                 buttonText: 'Выбрать даты',
-                showEndDate: true,
-                onDateSelect: (startDate, endDate) => {
-                    // Сохранение в localStorage
-                    localStorage.setItem('matreshka_trip_dates', JSON.stringify({
-                        startDate,
-                        endDate,
-                        timestamp: Date.now()
-                    }));
+                onDateSelect: (start, end) => {
+                    localStorage.setItem('matreshka_trip_dates', JSON.stringify({start, end, ts: Date.now()}));
                 }
             });
-
-            // Восстановление сохраненных дат при загрузке
-            try {
-                const savedDates = localStorage.getItem('matreshka_trip_dates');
-                if (savedDates) {
-                    const { startDate, endDate, timestamp } = JSON.parse(savedDates);
-
-                    // Проверяем что даты не старше 30 дней
-                    const daysSinceSelection = (Date.now() - timestamp) / (1000 * 60 * 60 * 24);
-                    if (daysSinceSelection < 30) {
-                        premiumDatePicker.setDates(startDate, endDate);
-                    }
-                }
-            } catch (e) {
-                console.warn('⚠️ Ошибка восстановления дат:', e);
-            }
-
-            // Делаем доступным глобально
-            window.premiumDatePicker = premiumDatePicker;
         }
+        
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader) loader.classList.remove('active');
+        }, 1500);
     });
+
+    function clearSearch() {
+        const input = document.getElementById('regionSearch');
+        if (input) {
+            input.value = '';
+            if (typeof searchRegions === 'function') {
+                searchRegions('');
+            }
+        }
+    }
     </script>
 </body>
 </html>
-

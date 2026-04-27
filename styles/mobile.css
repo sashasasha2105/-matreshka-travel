@@ -24,22 +24,22 @@
   }
 
   .marquee-overlay-text {
-    padding: var(--s6) !important;
+    padding: var(--s5) !important;
   }
 
   .marquee-overlay-text::before {
-    left: var(--s6) !important;
-    bottom: var(--s6) !important;
-    height: 60px !important;
+    left: var(--s5) !important;
+    bottom: var(--s5) !important;
+    height: 50px !important;
   }
 
   .marquee-overlay-title {
-    font-size: clamp(2rem, 8vw, 3rem) !important;
-    padding-left: var(--s4) !important;
+    font-size: clamp(1.8rem, 7vw, 2.8rem) !important;
+    padding-left: var(--s3) !important;
   }
 
   .marquee-overlay-subtitle {
-    padding-left: var(--s4) !important;
+    padding-left: var(--s3) !important;
   }
 
   /* Bottom nav — скрываем лейблы неактивных */
@@ -108,8 +108,23 @@
     height: 300px !important;
   }
 
+  .marquee-overlay-text {
+    padding: var(--s4) !important;
+  }
+
+  .marquee-overlay-text::before {
+    left: var(--s4) !important;
+    bottom: var(--s4) !important;
+    height: 44px !important;
+  }
+
   .marquee-overlay-title {
-    font-size: clamp(1.8rem, 10vw, 2.4rem) !important;
+    font-size: clamp(1.6rem, 9vw, 2.2rem) !important;
+    padding-left: var(--s2) !important;
+  }
+
+  .marquee-overlay-subtitle {
+    padding-left: var(--s2) !important;
   }
 
   /* Focus cards — 1 колонка */
@@ -273,8 +288,12 @@
   }
 
   .marquee-overlay-title {
-    font-size: 1.7rem !important;
-    padding-left: var(--s3) !important;
+    font-size: 1.6rem !important;
+    padding-left: var(--s2) !important;
+  }
+
+  .marquee-overlay-subtitle {
+    padding-left: var(--s2) !important;
   }
 
   /* Bottom nav — минимальный размер */
